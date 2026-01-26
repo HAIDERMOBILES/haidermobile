@@ -3,256 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Haider Mobiles | Elite Accessories Store</title>
+<title>Haider Mobiles | Swipe Collections</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-:root { --gold: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); --gold-text: #d4af37; --bg: #050505; --card-bg: rgba(255, 255, 255, 0.03); --border: rgba(212, 175, 55, 0.2); }
-* { box-sizing: border-box; transition: 0.4s; font-family: 'Poppins', sans-serif; }
-body { margin: 0; background: var(--bg); color: #fff; overflow-x: hidden; }
-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 6%; background: rgba(0,0,0,0.85); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
-.logo-container { display: flex; align-items: center; gap: 15px; }
-.logo-container img { height: 45px; border-radius: 50%; border: 2px solid #d4af37; }
-.store-name { font-weight: 800; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.5rem; }
-.brand-nav { display: flex; justify-content: center; gap: 12px; padding: 20px; overflow-x: auto; background: #000; border-bottom: 1px solid #111; }
-.brand-chip { padding: 8px 22px; border: 1px solid var(--border); border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; color: #aaa; }
-.brand-chip.active { background: var(--gold); color: #000; border-color: transparent; }
-.container { max-width: 1400px; margin: auto; padding: 30px 20px; }
-.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 25px; padding: 20px; text-align: center; position: relative; display: flex; flex-direction: column; height: 100%; }
-.badge { position: absolute; top: 15px; left: 15px; background: #25D366; color: #000; font-size: 10px; font-weight: 800; padding: 5px 12px; border-radius: 20px; }
-.card img { width: 100%; height: 240px; object-fit: contain; margin-bottom: 15px; }
-.card h3 { font-size: 1rem; margin: 8px 0; height: 50px; overflow: hidden; }
-.card .price { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 15px; display: block; }
-.action-buttons { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
-.btn-order { background: var(--gold); color: #000; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 13px; }
-.btn-view { border: 1px solid var(--border); color: var(--gold-text); padding: 10px; border-radius: 12px; text-decoration: none; font-size: 12px; font-weight: 600; }
+:root { --gold: #d4af37; --bg: #050505; --card-bg: #111; --border: rgba(212, 175, 55, 0.2); }
+body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+
+header { padding: 15px 6%; background: #000; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+.store-name { font-weight: 800; color: var(--gold); font-size: 1.2rem; }
+
+/* Category Section Styling */
+.category-section { padding: 20px 0 10px 20px; }
+.category-title { font-size: 18px; font-weight: 800; color: var(--gold); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
+.category-title::after { content: ''; flex: 1; height: 1px; background: var(--border); margin-right: 20px; }
+
+/* Swipe Wrapper */
+.swipe-container { 
+    display: flex; 
+    overflow-x: auto; 
+    gap: 15px; 
+    padding-bottom: 15px; 
+    scrollbar-width: none; /* Firefox */
+}
+.swipe-container::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+
+/* Product Card */
+.card { 
+    min-width: 200px; 
+    max-width: 200px; 
+    background: var(--card-bg); 
+    border-radius: 20px; 
+    padding: 15px; 
+    border: 1px solid #222; 
+    text-align: center;
+}
+.card img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
+.card h3 { font-size: 12px; height: 35px; overflow: hidden; margin: 5px 0; font-weight: 400; }
+.price { color: var(--gold); font-weight: 800; font-size: 16px; display: block; margin-bottom: 10px; }
+
+.btn-view { 
+    display: block; 
+    background: var(--gold); 
+    color: #000; 
+    text-decoration: none; 
+    font-size: 11px; 
+    font-weight: 800; 
+    padding: 8px; 
+    border-radius: 8px; 
+}
+
+/* Glassy Dropdown Style (Top Nav) */
+.glass-nav { display: flex; gap: 10px; padding: 10px 20px; background: rgba(255,255,255,0.02); backdrop-filter: blur(10px); overflow-x: auto; }
+.nav-btn { padding: 6px 15px; border-radius: 20px; border: 1px solid var(--border); font-size: 12px; white-space: nowrap; cursor: pointer; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-container">
-    <img src="logo.jpg" alt="Haider Mobiles">
-    <span class="store-name">HAIDER MOBILES</span>
-  </div>
-  <input type="text" placeholder="Search..." id="search" onkeyup="filterProducts()" style="background:rgba(255,255,255,0.05); border:1px solid #333; color:#fff; padding:8px 15px; border-radius:20px; outline:none; width: 150px;">
+  <span class="store-name">HAIDER MOBILES</span>
+  <input type="text" id="search" onkeyup="searchGlobal()" placeholder="Search..." style="background:#111; border:1px solid #333; color:#fff; padding:8px 12px; border-radius:20px; width:120px;">
 </header>
 
-<div class="brand-nav">
-  <div class="brand-chip active" onclick="filterBrand('all', this)">All Collections</div>
-  <div class="brand-chip" onclick="filterBrand('Geman', this)">Geman</div>
-  <div class="brand-chip" onclick="filterBrand('RoyalX', this)">RoyalX</div>
-  <div class="brand-chip" onclick="filterBrand('Strike', this)">Strike</div>
-  <div class="brand-chip" onclick="filterBrand('Jcell', this)">Jcell</div>
-</div>
+<div id="sections-wrapper"></div>
 
-<div class="container">
-  <div class="product-grid" id="mainGrid">
-    
-    <div class="card" data-brand="Geman">
-      <img src="G9.jpeg">
-      <h3>Quick Charger Kit G97</h3>
-      <span class="price">Rs 850</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order G97">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=G97">VIEW DETAILS</a>
-      </div>
-    </div>
 
-    <div class="card" data-brand="Geman">
-      <img src="G10.jpeg">
-      <h3>Super Fast G110 (22.5W)</h3>
-      <span class="price">Rs 1,670</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order G110">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=G110">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="Geman">
-      <img src="G11.jpeg">
-      <h3>Safe Charging Adapter G211S</h3>
-      <span class="price">Rs 880</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order G211S">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=G211S">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="Geman">
-      <img src="G12.jpeg">
-      <h3>Elite Data Cable GC-10</h3>
-      <span class="price">Rs 550</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order GC-10">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=GC10">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="Geman">
-      <img src="G13.jpeg">
-      <h3>Braided Cable GC-09 (6A)</h3>
-      <span class="price">Rs 450</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order GC-09">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=GC09">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="Geman">
-      <img src="G14.jpeg">
-      <h3>Travel Charger G96 Dual</h3>
-      <span class="price">Rs 850</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order G96">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=G96">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <img src="34.jpeg">
-      <h3>Fast Charging Cable RC-310</h3>
-      <span class="price">Rs 1,299</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RC-310">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RC310">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <img src="32.jpeg">
-      <h3>Type-C Handfree RH-6</h3>
-      <span class="price">Rs 900</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RH-6">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RH6">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <img src="30.jpeg">
-      <h3>Premium Handfree RH-15</h3>
-      <span class="price">Rs 450</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RH-15">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RH15">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <img src="33.jpeg">
-      <h3>Pure Sound Handfree RH-5</h3>
-      <span class="price">Rs 350</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RH-5">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RH5">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <div class="badge">HOT</div>
-      <img src="3.jpg">
-      <h3>Wireless Speaker RS-25</h3>
-      <span class="price">Rs 1,850</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RS-25">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RS25">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <div class="badge">MINI</div>
-      <img src="4.jpg">
-      <h3>Musicbox Speaker RS-55</h3>
-      <span class="price">Rs 2,050</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RS-55">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RS55">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <img src="27.jpeg">
-      <h3>Soundbar Wireless RS-4500</h3>
-      <span class="price">Rs 5,500</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RS-4500">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RS4500">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <img src="7.jpg">
-      <h3>RBT-820 Wireless Earbuds</h3>
-      <span class="price">Rs 3,500</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RBT-820">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RBT820">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="RoyalX">
-      <div class="badge">GAMING</div>
-      <img src="8.jpg">
-      <h3>RBT-400 Metal Earbuds</h3>
-      <span class="price">Rs 5,250</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order RBT-400">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RBT400">VIEW DETAILS</a>
-      </div>
-    </div>
-
-    <div class="card" data-brand="Jcell">
-      <img src="1.jpg">
-      <h3>RBT-815 Hybrid ANC</h3>
-      <span class="price">Rs 4,200</span>
-      <div class="action-buttons">
-        <a class="btn-order" href="https://wa.me/923279518790?text=Order Jcell 815">ORDER ON WHATSAPP</a>
-        <a class="btn-view" href="product.html?id=RBT815">VIEW DETAILS</a>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <script>
-function filterBrand(brand, el) {
-  document.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.card').forEach(card => {
-    card.style.display = (brand === 'all' || card.dataset.brand === brand) ? 'flex' : 'none';
-  });
-}
+let allProducts = [];
 
-function filterProducts() {
-  let q = document.getElementById("search").value.toLowerCase();
-  document.querySelectorAll(".card").forEach(c => {
-    c.style.display = c.innerText.toLowerCase().includes(q) ? "flex" : "none";
-  });
-}
-
-// Admin Panel dynamic products
-async function loadDynamicItems() {
-  const grid = document.getElementById('mainGrid');
-  try {
+async function loadData() {
     const res = await fetch('data.json');
-    const items = await res.json();
-    items.forEach(p => {
-      grid.innerHTML += `
-        <div class="card" data-brand="${p.brand}">
-          <div class="badge">NEW</div>
-          <img src="${p.img}">
-          <h3>${p.name}</h3>
-          <span class="price">${p.price}</span>
-          <div class="action-buttons">
-            <a class="btn-order" href="https://wa.me/923279518790?text=Order ${p.name}">ORDER ON WHATSAPP</a>
-            <a class="btn-view" href="product.html?id=${p.id}">VIEW DETAILS</a>
-          </div>
-        </div>`;
+    allProducts = await res.json();
+    
+    // Categories Define Karein
+    const categories = [
+        { name: "Handfree & Earbuds", keywords: ["handfree", "earbud", "rbt", "rh"] },
+        { name: "Fast Chargers", keywords: ["charger", "adapter", "g97", "g110", "g96"] },
+        { name: "Charging Cables", keywords: ["cable", "rc", "gc"] },
+        { name: "Premium Speakers", keywords: ["speaker", "soundbar", "rs"] },
+        { name: "Covers & Panels", keywords: ["cover", "panel", "back"] }
+    ];
+
+    const wrapper = document.getElementById('sections-wrapper');
+    wrapper.innerHTML = ""; // Clear existing
+
+    categories.forEach(cat => {
+        // Filter products based on keywords in name
+        const filtered = allProducts.filter(p => 
+            cat.keywords.some(key => p.name.toLowerCase().includes(key))
+        );
+
+        if(filtered.length > 0) {
+            let sectionHTML = `
+                <div class="category-section">
+                    <div class="category-title">${cat.name}</div>
+                    <div class="swipe-container">
+                        ${filtered.map(p => `
+                            <div class="card">
+                                <img src="${p.img}">
+                                <h3>${p.name}</h3>
+                                <span class="price">${p.price}</span>
+                                <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            wrapper.innerHTML += sectionHTML;
+        }
     });
-  } catch(e) { console.log("No new data."); }
 }
-window.onload = loadDynamicItems;
+
+function searchGlobal() {
+    let q = document.getElementById('search').value.toLowerCase();
+    if(q === "") { loadData(); return; }
+    
+    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q));
+    const wrapper = document.getElementById('sections-wrapper');
+    wrapper.innerHTML = `
+        <div class="category-section">
+            <div class="category-title">Search Results</div>
+            <div class="product-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-right:20px;">
+                ${filtered.map(p => `
+                    <div class="card" style="min-width:unset; max-width:unset;">
+                        <img src="${p.img}">
+                        <h3>${p.name}</h3>
+                        <span class="price">${p.price}</span>
+                        <a href="product.html?id=${p.id}" class="btn-view">VIEW</a>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+window.onload = loadData;
 </script>
 </body>
 </html>
