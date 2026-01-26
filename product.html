@@ -10,96 +10,44 @@
         * { box-sizing: border-box; transition: 0.3s; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; }
         
-        /* Glassy Header */
-        header { 
-            padding: 15px; 
-            text-align: center; 
-            border-bottom: 1px solid var(--border); 
-            background: rgba(0,0,0,0.9); 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            backdrop-filter: blur(10px);
-        }
-        .store-name { font-weight: 800; color: var(--gold); font-size: 1.2rem; letter-spacing: 1px; }
+        header { padding: 15px; text-align: center; border-bottom: 1px solid var(--border); background: #000; position: sticky; top: 0; z-index: 100; }
+        .store-name { font-weight: 800; color: var(--gold); font-size: 1.2rem; }
 
-        .container { max-width: 600px; margin: 30px auto; padding: 20px; }
+        .main-container { max-width: 1000px; margin: 20px auto; padding: 15px; }
         
-        /* Product Showcase Card */
-        .product-card { 
-            background: var(--card-bg); 
-            border-radius: 30px; 
-            border: 1px solid var(--border); 
-            padding: 25px; 
-            text-align: center; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
-        }
+        /* Layout Grid for Desktop */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); border-radius: 30px; padding: 30px; border: 1px solid var(--border); }
         
-        .img-container { 
-            background: #fff; 
-            border-radius: 20px; 
-            padding: 20px; 
-            margin-bottom: 25px; 
-            display: inline-block; 
-            width: 100%;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
-        }
-        .product-card img { width: 100%; max-height: 400px; object-fit: contain; }
-        
-        .brand-tag { 
-            color: var(--gold); 
-            font-size: 12px; 
-            text-transform: uppercase; 
-            letter-spacing: 3px; 
-            margin-bottom: 10px; 
-            display: block;
-            font-weight: 600;
-        }
-        
-        h1 { color: #fff; font-size: 1.8rem; margin: 10px 0; font-weight: 800; line-height: 1.2; }
-        
-        .price { 
-            font-size: 2.2rem; 
-            font-weight: 800; 
-            margin: 20px 0; 
-            color: var(--gold);
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-        
-        .description { color: #888; font-size: 14px; line-height: 1.6; margin-bottom: 30px; }
+        .img-box { background: #fff; border-radius: 20px; padding: 20px; text-align: center; }
+        .img-box img { width: 100%; max-height: 450px; object-fit: contain; }
 
-        /* Order Button */
-        .btn-wa { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px;
-            background: #25d366; 
-            color: white; 
-            padding: 18px; 
-            border-radius: 15px; 
-            text-decoration: none; 
-            font-weight: 800; 
-            font-size: 16px; 
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
-        }
-        .btn-wa:hover { transform: translateY(-3px); background: #20bd5a; box-shadow: 0 15px 25px rgba(37, 211, 102, 0.3); }
-        
-        .btn-back { 
-            display: inline-block; 
-            margin-top: 30px; 
-            color: #555; 
-            text-decoration: none; 
-            font-size: 13px; 
-            font-weight: 600;
-        }
-        .btn-back:hover { color: var(--gold); }
+        .info-box { display: flex; flex-direction: column; justify-content: center; }
+        .brand-tag { color: var(--gold); font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        h1 { font-size: 2rem; margin: 10px 0; color: #fff; }
+        .price { font-size: 2.5rem; font-weight: 800; color: var(--gold); margin-bottom: 20px; }
 
-        /* Mobile Adjustments */
-        @media (max-width: 480px) {
-            .container { padding: 15px; margin: 10px auto; }
-            h1 { font-size: 1.4rem; }
-            .price { font-size: 1.8rem; }
+        /* Description Section */
+        .desc-section { margin-top: 40px; padding: 20px; border-top: 1px solid #222; }
+        .desc-section h2 { color: var(--gold); font-size: 1.2rem; }
+        .specs-list { list-style: none; padding: 0; color: #aaa; font-size: 14px; }
+        .specs-list li { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .specs-list li::before { content: '✓'; color: var(--gold); font-weight: bold; }
+
+        .btn-wa { display: block; background: #25d366; color: white; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: 800; text-align: center; font-size: 18px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
+
+        /* Related Products Section */
+        .related-section { margin-top: 60px; }
+        .related-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; padding-left: 10px; border-left: 4px solid var(--gold); }
+        .related-swipe { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 20px; scrollbar-width: none; }
+        .related-swipe::-webkit-scrollbar { display: none; }
+        .small-card { min-width: 180px; background: #111; padding: 15px; border-radius: 20px; border: 1px solid #222; text-align: center; text-decoration: none; color: white; }
+        .small-card img { width: 100%; height: 120px; object-fit: contain; background: white; border-radius: 10px; padding: 5px; }
+        .small-card h3 { font-size: 12px; margin: 10px 0; height: 32px; overflow: hidden; }
+
+        @media (max-width: 768px) {
+            .product-grid { grid-template-columns: 1fr; padding: 15px; }
+            h1 { font-size: 1.5rem; }
+            .price { font-size: 2rem; }
         }
     </style>
 </head>
@@ -107,62 +55,61 @@
 
 <header><div class="store-name">HAIDER MOBILES</div></header>
 
-<div class="container" id="details">
-    <div style="text-align:center; padding: 50px;">
-        <div style="color: var(--gold);">Fetching Premium Product...</div>
+<div class="main-container">
+    <div id="product-details">
+        </div>
+
+    <div class="related-section">
+        <div class="related-title">More from Haider Mobiles</div>
+        <div class="related-swipe" id="related-container">
+            </div>
     </div>
 </div>
 
 <script>
-    // Get Product ID from URL
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
 
-    async function loadProduct() {
-        try {
-            const res = await fetch('data.json');
-            const data = await res.json();
-            
-            // Find the specific product
-            const p = data.find(item => item.id == id);
+    async function init() {
+        const res = await fetch('data.json');
+        const data = await res.json();
+        const p = data.find(item => item.id == id);
 
-            if(p) {
-                document.getElementById('details').innerHTML = `
-                    <div class="product-card">
-                        <div class="img-container">
-                            <img src="${p.img}" alt="${p.name}">
-                        </div>
-                        <span class="brand-tag">${p.brand}</span>
+        if(p) {
+            // Main Product
+            document.getElementById('product-details').innerHTML = `
+                <div class="product-grid">
+                    <div class="img-box"><img src="${p.img}"></div>
+                    <div class="info-box">
+                        <span class="brand-tag">${p.brand} Premium</span>
                         <h1>${p.name}</h1>
                         <div class="price">${p.price}</div>
-                        <p class="description">
-                            Experience premium quality with the ${p.name}. 
-                            Authentic product by ${p.brand}, now available at Haider Mobiles.
-                        </p>
-                        <a href="https://wa.me/923279518790?text=I'm interested in buying: ${p.name} (ID: ${p.id})" class="btn-wa">
-                            ORDER VIA WHATSAPP
-                        </a>
-                        <a href="index.html" class="btn-back">← Back to Collections</a>
+                        <a href="https://wa.me/923279518790?text=I want to buy: ${p.name}" class="btn-wa">BUY ON WHATSAPP</a>
+                        <div class="desc-section">
+                            <h2>Product Highlights</h2>
+                            <ul class="specs-list">
+                                <li>Original ${p.brand} High-Quality build</li>
+                                <li>Premium Sound/Fast Charging output</li>
+                                <li>Durable and Long-lasting material</li>
+                                <li>Tested for Quality Assurance</li>
+                            </ul>
+                        </div>
                     </div>
-                `;
-            } else {
-                document.getElementById('details').innerHTML = `
-                    <div class="product-card">
-                        <h1>Product Not Found</h1>
-                        <p>Sorry, the item you are looking for is no longer available.</p>
-                        <a href="index.html" class="btn-wa" style="background: var(--gold); color: #000;">Return to Store</a>
-                    </div>
-                `;
-            }
-        } catch(error) {
-            console.error("Error loading product:", error);
-            document.getElementById('details').innerHTML = "<p style='text-align:center'>Connection Error. Please try again.</p>";
+                </div>
+            `;
+
+            // Related Products Logic (Show other products of same brand or just others)
+            const related = data.filter(item => item.id != id).slice(0, 8);
+            document.getElementById('related-container').innerHTML = related.map(r => `
+                <a href="product.html?id=${r.id}" class="small-card">
+                    <img src="${r.img}">
+                    <h3>${r.name}</h3>
+                    <div style="color:var(--gold); font-weight:800;">${r.price}</div>
+                </a>
+            `).join('');
         }
     }
-
-    // Initialize
-    window.onload = loadProduct;
+    window.onload = init;
 </script>
-
 </body>
 </html>
