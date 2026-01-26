@@ -10,98 +10,56 @@
 * { box-sizing: border-box; transition: 0.3s; }
 body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
 
-/* --- FIXED HEADER WITH LOGIN/REG --- */
-.top-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(15px);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 15px;
-}
+/* --- HEADER --- */
+.top-header { position: sticky; top: 0; z-index: 1000; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); padding: 12px 15px; }
+.header-main { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+.store-name { font-weight: 800; color: var(--gold); font-size: 1.2rem; }
+.search-box { background: rgba(255,255,255,0.08); border: 1px solid #333; color: #fff; padding: 7px 15px; border-radius: 20px; width: 30%; outline: none; font-size: 13px; }
 
-.header-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-}
-
-.store-name { font-weight: 800; color: var(--gold); font-size: 1rem; letter-spacing: 0.5px; }
-
-.search-box {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid #333;
-    color: #fff;
-    padding: 7px 12px;
-    border-radius: 20px;
-    width: 35%;
-    outline: none;
-    font-size: 12px;
-}
-
-.auth-buttons { display: flex; gap: 6px; }
-.btn-auth {
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 10px;
-    font-weight: 800;
-    text-decoration: none;
-    text-transform: uppercase;
-    display: inline-block;
-}
+/* Auth Buttons */
+.auth-buttons { display: flex; gap: 8px; }
+.btn-auth { padding: 7px 14px; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
 .login-btn { border: 1px solid var(--gold); color: var(--gold); }
 .reg-btn { background: var(--gold); color: #000; }
 
-/* --- BRAND NAVIGATION --- */
-.brand-nav {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 5px;
-    scrollbar-width: none;
-}
+/* --- BRAND CHIPS --- */
+.brand-nav { display: flex; gap: 10px; overflow-x: auto; padding: 5px 0; scrollbar-width: none; }
 .brand-nav::-webkit-scrollbar { display: none; }
-.brand-chip {
-    padding: 5px 15px;
-    background: rgba(212, 175, 55, 0.05);
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    font-size: 11px;
-    white-space: nowrap;
-    color: #aaa;
-    cursor: pointer;
-}
+.brand-chip { padding: 6px 18px; background: rgba(212, 175, 55, 0.05); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; color: #888; }
 .brand-chip:hover { color: var(--gold); border-color: var(--gold); }
 
-/* --- PRODUCT SECTIONS --- */
-.brand-section { padding: 25px 0 5px 15px; }
-.brand-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; color: #fff; border-left: 4px solid var(--gold); padding-left: 10px; }
-.brand-title span { color: var(--gold); }
+/* --- RESPONSIVE LAYOUT LOGIC --- */
+.brand-section { padding: 30px 6%; }
+.brand-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; border-left: 5px solid var(--gold); padding-left: 15px; }
 
-.swipe-container { 
-    display: flex; 
-    overflow-x: auto; 
-    gap: 12px; 
-    padding-bottom: 20px; 
-    scroll-behavior: smooth;
+/* Desktop: Grid View */
+.product-container { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 25px; 
 }
-.swipe-container::-webkit-scrollbar { display: none; }
 
-.card { 
-    min-width: 190px; 
-    background: var(--card-bg); 
-    border-radius: 18px; 
-    padding: 15px; 
-    border: 1px solid #222; 
-    text-align: center;
+/* Mobile: Swipe View */
+@media (max-width: 768px) {
+    .brand-section { padding: 20px 0 10px 15px; }
+    .product-container { 
+        display: flex; 
+        overflow-x: auto; 
+        gap: 15px; 
+        padding-bottom: 15px; 
+        scroll-behavior: smooth;
+    }
+    .product-container::-webkit-scrollbar { display: none; }
+    .card { min-width: 200px; }
+    .search-box { width: 40%; }
 }
-.card img { width: 100%; height: 150px; object-fit: contain; background: #fff; border-radius: 12px; padding: 8px; margin-bottom: 10px; }
-.card h3 { font-size: 12px; height: 35px; overflow: hidden; margin: 8px 0; color: #ddd; font-weight: 400; }
-.price { color: #fff; font-weight: 800; font-size: 16px; display: block; margin-bottom: 10px; }
-.btn-view { display: block; background: var(--gold); color: #000; text-decoration: none; font-size: 11px; font-weight: 800; padding: 8px; border-radius: 8px; }
+
+/* --- CARD STYLE --- */
+.card { background: var(--card-bg); border-radius: 20px; padding: 18px; border: 1px solid #222; text-align: center; }
+.card img { width: 100%; height: 200px; object-fit: contain; background: #fff; border-radius: 15px; padding: 10px; margin-bottom: 15px; }
+.card h3 { font-size: 14px; height: 40px; overflow: hidden; margin: 10px 0; color: #ddd; }
+.price { color: #fff; font-weight: 800; font-size: 18px; display: block; margin-bottom: 15px; }
+.btn-view { display: block; background: var(--gold); color: #000; text-decoration: none; font-size: 12px; font-weight: 800; padding: 10px; border-radius: 10px; }
 
 </style>
 </head>
@@ -116,12 +74,11 @@ body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sa
             <a href="register.html" class="btn-auth reg-btn">Register</a>
         </div>
     </div>
-    <div class="brand-nav" id="brand-chips">
-        </div>
+    <div class="brand-nav" id="brand-chips"></div>
 </div>
 
 <div id="brand-wrapper">
-    <p style="padding: 40px; text-align: center; color: #555;">Connecting to store...</p>
+    <p style="text-align:center; padding:50px;">Loading Store...</p>
 </div>
 
 <script>
@@ -137,7 +94,7 @@ async function loadData() {
         const chipContainer = document.getElementById('brand-chips');
         
         wrapper.innerHTML = ""; 
-        chipContainer.innerHTML = `<div class="brand-chip" onclick="window.scrollTo(0,0)">All</div>`;
+        chipContainer.innerHTML = `<div class="brand-chip" onclick="window.scrollTo(0,0)">All Collections</div>`;
 
         brands.forEach(brandName => {
             const brandProducts = allProducts.filter(p => p.brand === brandName);
@@ -146,8 +103,8 @@ async function loadData() {
 
                 let sectionHTML = `
                     <div class="brand-section" id="section-${brandName}">
-                        <div class="brand-title"><span>${brandName}</span> PREMIUM</div>
-                        <div class="swipe-container">
+                        <div class="brand-title">${brandName} <span>Collection</span></div>
+                        <div class="product-container">
                             ${brandProducts.map(p => `
                                 <div class="card">
                                     <img src="${p.img}">
@@ -162,9 +119,7 @@ async function loadData() {
                 wrapper.innerHTML += sectionHTML;
             }
         });
-    } catch (e) {
-        document.getElementById('brand-wrapper').innerHTML = "<p style='text-align:center'>Error: data.json not found!</p>";
-    }
+    } catch (e) { console.error(e); }
 }
 
 function searchGlobal() {
@@ -176,9 +131,9 @@ function searchGlobal() {
     wrapper.innerHTML = `
         <div class="brand-section">
             <div class="brand-title">Search Results: <span>${q}</span></div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; padding-right:15px;">
+            <div class="product-container" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
                 ${filtered.map(p => `
-                    <div class="card" style="min-width:unset;">
+                    <div class="card">
                         <img src="${p.img}">
                         <h3>${p.name}</h3>
                         <span class="price">${p.price}</span>
