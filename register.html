@@ -9,73 +9,61 @@
     <style>
         :root { --gold: #d4af37; --bg: #050505; }
         body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        
         .reg-box { background: #111; padding: 35px; border-radius: 30px; border: 1px solid rgba(212, 175, 55, 0.2); text-align: center; width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.9); }
-        h2 { font-weight: 800; color: var(--gold); font-size: 1.8rem; margin-bottom: 5px; }
-        p { color: #666; font-size: 13px; margin-bottom: 25px; }
-
-        /* Social Register Buttons */
-        .social-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-        .s-btn { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; transition: 0.3s; }
-        
+        h2 { font-weight: 800; color: var(--gold); font-size: 1.8rem; margin-bottom: 25px; }
+        .s-btn { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; margin-bottom: 10px; border: none; width: 100%; transition: 0.3s; }
         .g-btn { background: #fff; color: #000; }
-        .f-btn { background: #1877F2; color: #fff; }
-        .i-btn { background: #000; color: #fff; border: 1px solid #333; }
-
-        .divider { margin: 25px 0; display: flex; align-items: center; color: #333; font-size: 11px; font-weight: bold; }
+        .divider { margin: 20px 0; display: flex; align-items: center; color: #333; font-size: 11px; font-weight: bold; }
         .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #222; margin: 0 10px; }
-
-        /* Input Fields */
-        input { width: 100%; padding: 14px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 12px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--gold); }
-        
-        .btn-reg { background: var(--gold); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px; margin-top: 10px; text-transform: uppercase; }
-        
-        .login-link { margin-top: 25px; font-size: 13px; color: #555; }
-        .login-link a { color: var(--gold); text-decoration: none; font-weight: 600; }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 12px; outline: none; text-align: center; }
+        .btn-reg { background: var(--gold); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px; text-transform: uppercase; }
     </style>
 </head>
 <body>
-
     <div class="reg-box">
-        <h2>Join the Elite</h2>
-        <p>Create your Haider Mobiles account</p>
-
-        <div class="social-group">
-            <div class="s-btn g-btn" onclick="socialAction('Google')">
-                <i class="fab fa-google"></i> Continue with Google
-            </div>
-            <div class="s-btn f-btn" onclick="socialAction('Facebook')">
-                <i class="fab fa-facebook-f"></i> Continue with Facebook
-            </div>
-            <div class="s-btn i-btn" onclick="socialAction('iCloud')">
-                <i class="fab fa-apple"></i> Continue with iCloud
-            </div>
-        </div>
-
+        <h2>Join Haider Mobiles</h2>
+        <button class="s-btn g-btn" id="googleBtn"><i class="fab fa-google"></i> Continue with Google</button>
         <div class="divider">OR USE EMAIL</div>
-
-        <input type="text" placeholder="Full Name">
-        <input type="email" placeholder="Email Address">
-        <input type="password" placeholder="Create Password">
-        
-        <button class="btn-reg" onclick="registerUser()">Create Account</button>
-
-        <div class="login-link">
-            Already a member? <a href="login.html">Login Now</a>
-        </div>
+        <input type="email" id="regEmail" placeholder="Email Address">
+        <input type="password" id="regPass" placeholder="Create Password">
+        <button class="btn-reg" id="regBtn">Create Account</button>
+        <p style="margin-top:20px; font-size:13px; color:#666;">Already a member? <a href="login.html" style="color:var(--gold); text-decoration:none;">Login here</a></p>
     </div>
 
-    <script>
-        function socialAction(p) {
-            alert(p + " API connecting... \nBhai, Social Registration ke liye Firebase setup karna padega. Kya main steps bataon?");
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        function registerUser() {
-            alert("Registration successful! (Demo Only)");
-            window.location.href = "index.html";
-        }
+        const firebaseConfig = {
+            apiKey: "PASTE_HERE",
+            authDomain: "PASTE_HERE",
+            projectId: "PASTE_HERE",
+            storageBucket: "PASTE_HERE",
+            messagingSenderId: "PASTE_HERE",
+            appId: "PASTE_HERE"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Email Sign Up
+        document.getElementById('regBtn').onclick = async () => {
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                alert("Account Created!"); window.location.href="index.html";
+            } catch (e) { alert(e.message); }
+        };
+
+        // Google Sign Up
+        document.getElementById('googleBtn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+                window.location.href="index.html";
+            } catch (e) { alert(e.message); }
+        };
     </script>
-
 </body>
 </html>
