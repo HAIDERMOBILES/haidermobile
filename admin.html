@@ -3,117 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Admin Panel</title>
+    <title>Admin Panel | Haider Mobiles</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --bg: #050505; }
-        body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .admin-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.3); padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { color: var(--gold); text-align: center; font-weight: 800; margin-bottom: 25px; letter-spacing: 1px; }
-        label { font-size: 11px; color: var(--gold); font-weight: 600; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 20px; background: #111; border: 1px solid #222; color: #fff; border-radius: 10px; outline: none; box-sizing: border-box; }
-        input:focus { border-color: var(--gold); }
-        button { background: linear-gradient(135deg, #d4af37 0%, #f9f295 100%); color: #000; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 14px; }
-        button:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212,175,55,0.3); }
-        #status { text-align: center; margin-top: 15px; font-size: 13px; font-weight: 600; min-height: 20px; }
+        :root { --gold: #d4af37; --bg: #050505; --card: #111; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: var(--gold); text-align: center; font-weight: 800; }
+        
+        /* Form Style */
+        .admin-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 40px; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        
+        /* Product List Style */
+        .product-item { display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 5px solid var(--gold); }
+        .product-item img { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; background: white; }
+        .del-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="admin-card">
-    <h2>HAIDER ADMIN</h2>
+<div class="container">
+    <h1>HAIDER MOBILES ADMIN</h1>
     
-    <label>GitHub Token</label>
-    <input type="password" id="token" placeholder="Paste your Token here">
+    <div class="admin-box">
+        <h3>Add New Product</h3>
+        <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 15 Pro)">
+        <input type="text" id="pBrand" placeholder="Brand Name (e.g. Apple)">
+        <input type="text" id="pPrice" placeholder="Price (e.g. RS 350,000)">
+        <input type="text" id="pImg" placeholder="Image URL (Link)">
+        <button id="addBtn">UPLOAD PRODUCT</button>
+    </div>
 
-    <label>Product Name</label>
-    <input type="text" id="p-name" placeholder="e.g. RoyalX Bass Handfree">
-
-    <label>Price (with Rs)</label>
-    <input type="text" id="p-price" placeholder="e.g. Rs 450">
-
-    <label>Select Brand</label>
-    <select id="p-brand">
-        <option value="Geman">Geman</option>
-        <option value="RoyalX">RoyalX</option>
-        <option value="Strike">Strike</option>
-        <option value="Jcell">Jcell</option>
-    </select>
-
-    <label>Image Name (e.g. 35.jpeg)</label>
-    <input type="text" id="p-img" placeholder="Exact image name on GitHub">
-
-    <button onclick="uploadToGithub()">🚀 PUSH TO WEBSITE</button>
-    <div id="status"></div>
+    <h3>Inventory List</h3>
+    <div id="productList">
+        </div>
 </div>
 
-<script>
-async function uploadToGithub() {
-    const token = document.getElementById('token').value;
-    const status = document.getElementById('status');
-    const repo = "haidermobiles/haidermobile"; 
-    const path = "data.json";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    if(!token) { alert("Pehle Token toh dalein!"); return; }
-    
-    status.innerText = "⏳ Connecting to GitHub...";
-    status.style.color = "#d4af37";
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        storageBucket: "web-app-4f3a1.firebasestorage.app",
+        messagingSenderId: "222099203820",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
 
-    try {
-        // 1. data.json file fetch karna
-        const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-            headers: { Authorization: `token ${token}` }
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // --- 1. Add Product ---
+    document.getElementById('addBtn').onclick = () => {
+        const name = document.getElementById('pName').value;
+        const brand = document.getElementById('pBrand').value;
+        const price = document.getElementById('pPrice').value;
+        const img = document.getElementById('pImg').value;
+
+        if(name && price && img) {
+            const newProdRef = push(ref(db, 'products'));
+            set(newProdRef, {
+                id: Date.now(),
+                name: name,
+                brand: brand,
+                price: price,
+                img: img
+            }).then(() => {
+                alert("Product Added!");
+                document.querySelectorAll('input').forEach(i => i.value = "");
+            });
+        } else { alert("Please fill all fields!"); }
+    };
+
+    // --- 2. Load & Display Products ---
+    onValue(ref(db, 'products'), (snapshot) => {
+        const list = document.getElementById('productList');
+        list.innerHTML = "";
+        snapshot.forEach((child) => {
+            const p = child.val();
+            list.innerHTML += `
+                <div class="product-item">
+                    <img src="${p.img}">
+                    <div>
+                        <b>${p.name}</b><br>
+                        <small>${p.price}</small>
+                    </div>
+                    <button class="del-btn" onclick="deleteProduct('${child.key}')">Delete</button>
+                </div>
+            `;
         });
+    });
 
-        if(!res.ok) throw new Error("Database file (data.json) nahi mili!");
-
-        const fileData = await res.json();
-        const sha = fileData.sha;
-        const currentContent = JSON.parse(atob(fileData.content));
-
-        // 2. Naya product data create karna
-        const newProduct = {
-            id: "ID-" + Date.now(),
-            name: document.getElementById('p-name').value,
-            price: document.getElementById('p-price').value,
-            brand: document.getElementById('p-brand').value,
-            img: document.getElementById('p-img').value
-        };
-
-        // 3. New product ko list mein sabse upar rakhna
-        currentContent.unshift(newProduct);
-
-        // 4. Update wapis GitHub par bhejna
-        const update = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-            method: 'PUT',
-            headers: { 
-                Authorization: `token ${token}`,
-                'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify({
-                message: `Added ${newProduct.name}`,
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
-                sha: sha
-            })
-        });
-
-        if(update.ok) {
-            status.style.color = "#25D366";
-            status.innerText = "✅ Mubarak! Product live ho gaya.";
-            // Inputs clear karna
-            document.getElementById('p-name').value = "";
-            document.getElementById('p-price').value = "";
-            document.getElementById('p-img').value = "";
-        } else {
-            const errorData = await update.json();
-            status.innerText = "❌ Error: " + errorData.message;
+    // --- 3. Delete Function ---
+    window.deleteProduct = (key) => {
+        if(confirm("Delete this product?")) {
+            remove(ref(db, 'products/' + key));
         }
-    } catch (err) {
-        status.style.color = "#ff4444";
-        status.innerText = "❌ Connection Failed! Token ya Path check karein.";
-        console.error(err);
-    }
-}
+    };
 </script>
+
 </body>
 </html>
