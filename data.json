@@ -1,138 +1,121 @@
 [
   {
     "id": "ID-1769413949545",
-    "name": "RBT-600 Wireless Earbuds | 24H Long Battery Life Rs.4,999.00 Regular price Rs.5,999.00",
-    "price": "4999",
+    "name": "RBT-600 Wireless Earbuds | 24H Long Battery Life",
+    "price": "Rs 4,999",
     "brand": "RoyalX",
     "img": "28.jpeg"
-  }
- ]
-
-
-[
-  { "id": "G97",
+  },
+  {
+    "id": "G97",
     "name": "Quick Charger Kit G97",
     "price": "Rs 850",
     "brand": "Geman",
-    "img": "G9.jpeg" },
-  ]
-
-[ 
-   { "id": "G110",
-     "name": "Super Fast G110 (22.5W)",
-     "price": "Rs 1,670",
-     "brand": "Geman",
-     "img": "G10.jpeg" },
- ]
-
-[
-{ "id": "G211S",
-  "name": "Safe Charging Adapter G211S",
-  "price": "Rs 880",
-  "brand": "Geman",
-  "img": "G11.jpeg" }
- ]
-
-[
-  { "id": "GC10",
-    "name": "Elite Data Cable GC-10",
-    \"price": "Rs 550",
+    "img": "G9.jpeg"
+  },
+  {
+    "id": "G110",
+    "name": "Super Fast G110 (22.5W)",
+    "price": "Rs 1,670",
     "brand": "Geman",
-    "img": "G12.jpeg" }
- ]
-
-[
-  { "id": "GC09",
+    "img": "G10.jpeg"
+  },
+  {
+    "id": "G211S",
+    "name": "Safe Charging Adapter G211S",
+    "price": "Rs 880",
+    "brand": "Geman",
+    "img": "G11.jpeg"
+  },
+  {
+    "id": "GC10",
+    "name": "Elite Data Cable GC-10",
+    "price": "Rs 550",
+    "brand": "Geman",
+    "img": "G12.jpeg"
+  },
+  {
+    "id": "GC09",
     "name": "Braided Cable GC-09 (6A)",
     "price": "Rs 450",
     "brand": "Geman",
-    "img": "G13.jpeg" }
-  ]
-
- [
-   { "id": "G96",
-     "name": "Travel Charger G96 Dual",
-     "price": "Rs 850",
-     "brand": "Geman",
-     "img": "G14.jpeg" }
- ]
-
-[
-  { "id": "RC310",
+    "img": "G13.jpeg"
+  },
+  {
+    "id": "G96",
+    "name": "Travel Charger G96 Dual",
+    "price": "Rs 850",
+    "brand": "Geman",
+    "img": "G14.jpeg"
+  },
+  {
+    "id": "RC310",
     "name": "Fast Charging Cable RC-310",
     "price": "Rs 1,299",
     "brand": "RoyalX",
-    "img": "34.jpeg" },
- ]
-
-[
-  { "id": "RH6",
+    "img": "34.jpeg"
+  },
+  {
+    "id": "RH6",
     "name": "Type-C Handfree RH-6",
-    "price": "Rs 900", 
+    "price": "Rs 900",
     "brand": "RoyalX",
-    "img": "32.jpeg" }
- ]
-
-[
-  { "id": "RH15",
+    "img": "32.jpeg"
+  },
+  {
+    "id": "RH15",
     "name": "Premium Handfree RH-15",
     "price": "Rs 450",
     "brand": "RoyalX",
-    "img": "30.jpeg" }
- ]
-
-[
-  { "id": "RH5", 
+    "img": "30.jpeg"
+  },
+  {
+    "id": "RH5",
     "name": "Pure Sound Handfree RH-5",
-    "price": "Rs 350", 
-    "brand": "RoyalX", 
-    "img": "33.jpeg" }
- ]
-
-[ 
-  { "id": "RS25", 
+    "price": "Rs 350",
+    "brand": "RoyalX",
+    "img": "33.jpeg"
+  },
+  {
+    "id": "RS25",
     "name": "Wireless Speaker RS-25",
-    "price": "Rs 1,850", 
-    "brand": "RoyalX", 
-    "img": "3.jpg" }
- ]
-
-[
-  { "id": "RS55", 
-    "name": "Musicbox Speaker RS-55", 
-    "price": "Rs 2,050", 
-    "brand": "RoyalX", 
-    "img": "4.jpg" }
- ]
-
-[
-  { "id": "RS4500", 
-    "name": "Soundbar Wireless RS-4500", 
-    "price": "Rs 5,500", 
-    "brand": "RoyalX", 
-    "img": "27.jpeg" }
- ]
-
-[
-  { "id": "RBT820", 
-     "name": "RBT-820 Wireless Earbuds", 
-    "price": "Rs 3,500", 
-    "brand": "RoyalX", 
-    "img": "7.jpg" }
- ]
-
-[
-  { "id": "RBT400", 
-    "name": "RBT-400 Metal Earbuds", 
-    "price": "Rs 5,250", 
-    "brand": "RoyalX", 
-    "img": "8.jpg" }
- ]
-
-[ 
-  { "id": "RBT815", 
-    "name": "RBT-815 Hybrid ANC", 
-    "price": "Rs 4,200", 
-    "brand": "Jcell", 
-    "img": "1.jpg" }
+    "price": "Rs 1,850",
+    "brand": "RoyalX",
+    "img": "3.jpg"
+  },
+  {
+    "id": "RS55",
+    "name": "Musicbox Speaker RS-55",
+    "price": "Rs 2,050",
+    "brand": "RoyalX",
+    "img": "4.jpg"
+  },
+  {
+    "id": "RS4500",
+    "name": "Soundbar Wireless RS-4500",
+    "price": "Rs 5,500",
+    "brand": "RoyalX",
+    "img": "27.jpeg"
+  },
+  {
+    "id": "RBT820",
+    "name": "RBT-820 Wireless Earbuds",
+    "price": "Rs 3,500",
+    "brand": "RoyalX",
+    "img": "7.jpg"
+  },
+  {
+    "id": "RBT400",
+    "name": "RBT-400 Metal Earbuds",
+    "price": "Rs 5,250",
+    "brand": "RoyalX",
+    "img": "8.jpg"
+  },
+  {
+    "id": "RBT815",
+    "name": "RBT-815 Hybrid ANC",
+    "price": "Rs 4,200",
+    "brand": "Jcell",
+    "img": "1.jpg"
+  }
 ]
