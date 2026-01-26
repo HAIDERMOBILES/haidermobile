@@ -51,7 +51,7 @@
 async function uploadToGithub() {
     const token = document.getElementById('token').value;
     const status = document.getElementById('status');
-    const repo = "haidermobiles/haidermobile"; // Aapka sahi Path
+    const repo = "haidermobiles/haidermobile"; 
     const path = "data.json";
 
     if(!token) { alert("Pehle Token toh dalein!"); return; }
@@ -60,19 +60,18 @@ async function uploadToGithub() {
     status.style.color = "#d4af37";
 
     try {
-        // 1. Pehle data.json ki mojooda file uthao
+        // 1. data.json file fetch karna
         const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
             headers: { Authorization: `token ${token}` }
         });
 
-        if(!res.ok) throw new Error("Could not find data.json");
+        if(!res.ok) throw new Error("Database file (data.json) nahi mili!");
 
         const fileData = await res.json();
         const sha = fileData.sha;
-        // Base64 decode karke content nikalna
         const currentContent = JSON.parse(atob(fileData.content));
 
-        // 2. Naya product banao
+        // 2. Naya product data create karna
         const newProduct = {
             id: "ID-" + Date.now(),
             name: document.getElementById('p-name').value,
@@ -81,10 +80,10 @@ async function uploadToGithub() {
             img: document.getElementById('p-img').value
         };
 
-        // 3. Naya product sabse upar add karo
+        // 3. New product ko list mein sabse upar rakhna
         currentContent.unshift(newProduct);
 
-        // 4. Wapis GitHub par save karo
+        // 4. Update wapis GitHub par bhejna
         const update = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
             method: 'PUT',
             headers: { 
@@ -93,4 +92,28 @@ async function uploadToGithub() {
             },
             body: JSON.stringify({
                 message: `Added ${newProduct.name}`,
-                content: b
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
+                sha: sha
+            })
+        });
+
+        if(update.ok) {
+            status.style.color = "#25D366";
+            status.innerText = "✅ Mubarak! Product live ho gaya.";
+            // Inputs clear karna
+            document.getElementById('p-name').value = "";
+            document.getElementById('p-price').value = "";
+            document.getElementById('p-img').value = "";
+        } else {
+            const errorData = await update.json();
+            status.innerText = "❌ Error: " + errorData.message;
+        }
+    } catch (err) {
+        status.style.color = "#ff4444";
+        status.innerText = "❌ Connection Failed! Token ya Path check karein.";
+        console.error(err);
+    }
+}
+</script>
+</body>
+</html>
