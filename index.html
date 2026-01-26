@@ -354,6 +354,60 @@ function filterProducts() {
   });
 }
 </script>
+<script>
+// 1. Purana Filter Function (Jo pehle se tha)
+function filterBrand(brand, el) {
+  document.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    if(brand === 'all' || card.getAttribute('data-brand') === brand) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
 
+// 2. Purana Search Function (Jo pehle se tha)
+function filterProducts() {
+  let q = document.getElementById("search").value.toLowerCase();
+  document.querySelectorAll(".card").forEach(c => {
+    c.style.display = c.innerText.toLowerCase().includes(q) ? "flex" : "none";
+  });
+}
+
+// 3. NAYA LOGIC: Admin Panel se aaye naye products add karna
+async function loadNewProducts() {
+    const grid = document.getElementById('mainGrid');
+    try {
+        const response = await fetch('data.json');
+        const dynamicProducts = await response.json();
+        
+        // Har naye product ke liye card bana kar grid mein shamil karna
+        dynamicProducts.forEach(p => {
+            const cardHTML = `
+                <div class="card" data-brand="${p.brand}">
+                    <div class="badge">NEW</div>
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300?text=Image+Pending'">
+                    <span class="brand-tag">${p.brand} Premium</span>
+                    <h3>${p.name}</h3>
+                    <span class="price">${p.price}</span>
+                    <div class="action-buttons">
+                        <a class="btn-order" href="https://wa.me/923279518790?text=I want to order ${p.name}">ORDER ON WHATSAPP</a>
+                        <a class="btn-view" href="product.html?id=${p.id}">VIEW DETAILS</a>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += cardHTML; // += ka matlab hai purane products ke BAAD add karo
+        });
+    } catch (error) {
+        console.log("No new products found in data.json yet.");
+    }
+}
+
+// Page load hote hi naye products check karo
+window.addEventListener('DOMContentLoaded', loadNewProducts);
+</script>
 </body>
 </html>
