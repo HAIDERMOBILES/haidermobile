@@ -3,116 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Details | Haider Mobiles Luxury</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Product Details | Haider Mobiles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --gold: #d4af37; 
-            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fef1b2 50%, #d4af37 100%);
-            --bg: #000; 
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(212, 175, 55, 0.15); 
-        }
-
-        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
-        body { 
-            margin: 0; background: var(--bg); color: white; 
-            font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Luxury Background Glow */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 80% 20%, #1a150a 0%, #000 60%);
-            z-index: -1;
-        }
-
-        .master-container {
-            max-width: 1100px; width: 92%; background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(20px); border: 1px solid var(--border);
-            border-radius: 40px; display: flex; flex-wrap: wrap; overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.9); margin: 40px 0;
-        }
-
-        /* Left Side: Product Image */
-        .visual-side { 
-            flex: 1.2; min-width: 350px; background: #fff; padding: 60px; 
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-        .visual-side img { 
-            max-width: 100%; max-height: 500px; object-fit: contain;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
-        }
-        .visual-side::after {
-            content: "PREMIUM STOCK"; position: absolute; top: 30px; left: 30px;
-            font-size: 10px; font-weight: 800; color: #000; opacity: 0.2; letter-spacing: 3px;
-        }
-
-        /* Right Side: Product Info */
-        .content-side { flex: 1; min-width: 350px; padding: 60px; position: relative; }
+        :root { --gold: #d4af37; --red: #e44d26; --bg: #f8f9fa; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: #222; }
         
-        .brand-label { 
-            background: var(--gold-gradient); -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; font-weight: 800; 
-            font-size: 14px; letter-spacing: 4px; text-transform: uppercase;
-        }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .product-main { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
-        h1 { font-size: 42px; font-weight: 800; margin: 15px 0; letter-spacing: -1px; }
+        /* Left: Images Section */
+        .image-gallery { position: sticky; top: 100px; }
+        .main-img-container { width: 100%; height: 450px; background: #fff; border: 1px solid #eee; border-radius: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .main-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; transition: 0.3s; }
         
-        .price-box { 
-            font-size: 36px; font-weight: 800; color: #fff; margin: 30px 0;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .price-box::before { content: ""; width: 40px; height: 2px; background: var(--gold); }
+        .thumbnail-row { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
+        .thumb { width: 70px; height: 70px; border: 2px solid #eee; border-radius: 8px; cursor: pointer; padding: 5px; background: #fff; object-fit: contain; }
+        .thumb:hover, .thumb.active { border-color: var(--gold); }
 
-        .description { color: #888; line-height: 1.8; font-size: 15px; margin-bottom: 40px; }
-
-        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 50px; }
-        .feature-item { 
-            font-size: 13px; color: #bbb; display: flex; align-items: center; gap: 10px; 
-        }
-        .feature-item i { color: var(--gold); }
-
-        /* Action Buttons */
-        .action-area { display: flex; flex-direction: column; gap: 15px; }
+        /* Right: Info Section */
+        .info-section { padding-left: 20px; }
+        .brand-badge { background: #fff5d7; color: #94761d; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 800; }
+        h1 { font-size: 32px; margin: 15px 0 10px; font-weight: 800; color: #111; }
         
-        .btn-whatsapp { 
-            background: #25d366; color: #fff; text-decoration: none; 
-            text-align: center; padding: 22px; border-radius: 20px; font-weight: 800; 
-            font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.2);
-        }
-        .btn-whatsapp:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(37, 211, 102, 0.4); }
+        .price-area { margin: 20px 0; }
+        .current-price { font-size: 30px; font-weight: 800; color: #000; }
+        .old-price { font-size: 18px; text-decoration: line-through; color: #888; margin-left: 10px; }
+        .discount-tag { background: var(--red); color: #fff; padding: 3px 10px; border-radius: 5px; font-size: 14px; margin-left: 10px; }
 
-        .btn-back {
-            text-align: center; color: #555; text-decoration: none; font-size: 13px;
-            font-weight: 600; margin-top: 10px;
-        }
-        .btn-back:hover { color: var(--gold); }
+        .company-box { background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 12px; margin: 25px 0; }
+        .company-box h4 { margin: 0 0 10px; color: var(--gold); }
+        .company-box p { font-size: 14px; color: #666; margin: 0; line-height: 1.6; }
 
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .master-container { width: 100%; border-radius: 0; margin: 0; border: none; }
-            .content-side { padding: 40px 30px; }
-            .visual-side { padding: 40px; min-width: 100%; }
-            h1 { font-size: 32px; }
+        .buy-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 18px; margin-top: 20px; transition: 0.3s; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
+        .buy-btn:hover { transform: translateY(-3px); background: #1ebd5b; }
+
+        /* Related Products Section */
+        .related-title { margin: 50px 0 20px; font-size: 24px; font-weight: 800; }
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .rel-card { background: #fff; padding: 15px; border-radius: 15px; border: 1px solid #eee; text-align: center; text-decoration: none; color: inherit; transition: 0.3s; }
+        .rel-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .rel-card img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
+        .rel-card h4 { margin: 5px 0; font-size: 14px; }
+
+        @media (max-width: 900px) {
+            .product-main { grid-template-columns: 1fr; }
+            .info-section { padding-left: 0; }
         }
     </style>
 </head>
 <body>
 
-<div id="loader" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:9999; display:flex; align-items:center; justify-content:center;">
-    <div style="width:40px; height:40px; border:2px solid #111; border-top-color:var(--gold); border-radius:50%; animation:spin 1s linear infinite;"></div>
-</div>
-
-<div id="main-content" class="master-container" style="display:none;">
+<div class="container">
+    <div class="product-main" id="product-data">
+        <p style="text-align:center; padding:50px;">Loading product details...</p>
     </div>
+
+    <h3 class="related-title">People also viewed</h3>
+    <div class="related-grid" id="related-products">
+        </div>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, get, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -130,52 +84,84 @@
     const productId = urlParams.get('id');
 
     if (productId) {
+        // Fetch Main Product
         get(ref(db, `products/${productId}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 const p = snapshot.val();
-                document.getElementById('main-content').innerHTML = `
-                    <div class="visual-side">
-                        <img src="${p.img}" alt="${p.name}">
+                
+                // Demo ke liye discount calculation (Agar data mein nahi hai toh 10% auto)
+                const priceNum = parseInt(p.price.replace(/\D/g,''));
+                const oldPrice = Math.floor(priceNum * 1.15); // 15% extra for old price
+                
+                document.getElementById('product-data').innerHTML = `
+                    <div class="image-gallery">
+                        <div class="main-img-container">
+                            <img src="${p.img}" id="mainView">
+                        </div>
+                        <div class="thumbnail-row">
+                            <img src="${p.img}" class="thumb active" onclick="changeImg('${p.img}', this)">
+                            <img src="${p.img}" class="thumb" style="filter: hue-rotate(90deg);" onclick="changeImg(this.src, this)">
+                            <img src="${p.img}" class="thumb" style="filter: grayscale(1);" onclick="changeImg(this.src, this)">
+                        </div>
                     </div>
-                    <div class="content-side">
-                        <div class="brand-label">${p.brand}</div>
+                    <div class="info-section">
+                        <span class="brand-badge">${p.brand} Official</span>
                         <h1>${p.name}</h1>
+                        <div class="price-area">
+                            <span class="current-price">${p.price}</span>
+                            <span class="old-price">Rs. ${oldPrice.toLocaleString()}</span>
+                            <span class="discount-tag">Save 15%</span>
+                        </div>
                         
-                        <div class="price-box">${p.price}</div>
-                        
-                        <p class="description">
-                            Experience the pinnacle of mobile technology. This ${p.brand} ${p.name} 
-                            comes with an official 1-year warranty and premium build quality, 
-                            available exclusively at Haider Mobiles.
-                        </p>
-
-                        <div class="feature-grid">
-                            <div class="feature-item">● PTA Approved</div>
-                            <div class="feature-item">● Official Warranty</div>
-                            <div class="feature-item">● Original Box</div>
-                            <div class="feature-item">● 24h Delivery</div>
+                        <div class="company-box">
+                            <h4>About ${p.brand}</h4>
+                            <p>${p.brand} is known for its cutting-edge technology and premium build quality. This device is PTA approved and comes with an official brand warranty of 12 months.</p>
                         </div>
 
-                        <div class="action-area">
-                            <a href="https://wa.me/923000000000?text=Assalam-o-Alaikum, I want to purchase the ${p.name}. Please share availability." 
-                               class="btn-whatsapp">
-                               BUY NOW VIA WHATSAPP
-                            </a>
-                            <a href="index.html" class="btn-back">← BACK TO COLLECTIONS</a>
+                        <div style="margin:20px 0; font-size:14px; color:#555;">
+                            <b>✓</b> FREE Home Delivery <br>
+                            <b>✓</b> 7 Days Replacement Policy <br>
+                            <b>✓</b> Cash on Delivery Available
                         </div>
+
+                        <a href="https://wa.me/923000000000?text=I want to buy ${p.name}" class="buy-btn">ORDER VIA WHATSAPP</a>
                     </div>
                 `;
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
-            } else {
-                window.location.href = "index.html";
+
+                loadRelated(p.brand);
             }
         });
-    } else {
-        window.location.href = "index.html";
+    }
+
+    // Function to change main image
+    window.changeImg = (src, el) => {
+        document.getElementById('mainView').src = src;
+        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+    };
+
+    // Load Related Products
+    function loadRelated(currentBrand) {
+        get(ref(db, 'products')).then((snapshot) => {
+            const data = snapshot.val();
+            const list = Object.entries(data).filter(([id, p]) => p.brand === currentBrand && id !== productId).slice(0, 4);
+            const container = document.getElementById('related-products');
+            
+            if(list.length === 0) {
+                container.innerHTML = "<p>No related products found.</p>";
+                return;
+            }
+
+            container.innerHTML = list.map(([id, p]) => `
+                <a href="product.html?id=${id}" class="rel-card">
+                    <img src="${p.img}">
+                    <h4>${p.name}</h4>
+                    <span style="color:var(--gold); font-weight:bold;">${p.price}</span>
+                </a>
+            `).join('');
+        });
     }
 </script>
 
-<style> @keyframes spin { to { transform: rotate(360deg); } } </style>
 </body>
 </html>
