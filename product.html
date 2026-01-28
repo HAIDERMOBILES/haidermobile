@@ -3,49 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details | Haider Mobiles</title>
+    <title>Haider Mobiles | Product Detail</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --bg: #fdfdfd; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: #222; }
-        .container { max-width: 1100px; margin: 20px auto; padding: 15px; }
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        :root { --gold: #d4af37; --bg: #0b0b0b; --card: #161616; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: white; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
 
-        /* Left side: Images */
-        .image-box { position: sticky; top: 20px; text-align: center; }
-        .main-img { width: 100%; max-height: 450px; object-fit: contain; border: 1px solid #eee; border-radius: 15px; padding: 10px; }
-        .thumb-row { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
-        .thumb { width: 60px; height: 60px; border: 2px solid #eee; border-radius: 8px; cursor: pointer; object-fit: contain; background: white; padding: 5px; }
-        .thumb.active { border-color: var(--gold); }
+        /* Main Product Section */
+        .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid #222; }
+        .img-view { width: 100%; border-radius: 15px; background: white; padding: 10px; height: 400px; object-fit: contain; }
+        
+        .price-row { display: flex; align-items: center; gap: 15px; margin: 20px 0; }
+        .new-price { font-size: 32px; font-weight: 800; color: var(--gold); }
+        .old-price { text-decoration: line-through; color: #666; font-size: 18px; }
 
-        /* Right side: Info */
-        .info-box { padding: 10px; }
-        .badge { background: #fef4d1; color: #8a6d1c; padding: 5px 12px; border-radius: 50px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
-        h1 { font-size: 32px; margin: 15px 0 5px; color: #111; }
-        .price-tag { display: flex; align-items: center; gap: 15px; margin: 20px 0; }
-        .now { font-size: 28px; font-weight: 800; color: #000; }
-        .old { font-size: 18px; text-decoration: line-through; color: #999; }
-        .disc { background: #e44d26; color: white; padding: 4px 10px; border-radius: 6px; font-size: 14px; font-weight: bold; }
+        .specs-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .specs-table td { padding: 12px; border-bottom: 1px solid #222; font-size: 14px; }
+        .specs-table td:first-child { color: #888; width: 40%; }
 
-        .company-detail { background: #fafafa; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin: 25px 0; }
-        .company-detail h4 { margin: 0 0 10px; color: var(--gold); }
-        .company-detail p { font-size: 14px; color: #555; line-height: 1.6; margin: 0; }
+        .buy-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 800; margin-top: 25px; transition: 0.3s; }
+        .buy-btn:hover { background: #1ebd5b; transform: translateY(-3px); }
 
-        .buy-now { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 18px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); transition: 0.3s; }
-        .buy-now:hover { transform: translateY(-3px); background: #1ebd5b; }
+        /* Related Products Section */
+        .related-section { margin-top: 60px; }
+        .section-title { font-size: 24px; font-weight: 800; margin-bottom: 25px; border-left: 5px solid var(--gold); padding-left: 15px; }
+        .product-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .rel-card { background: var(--card); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
+        .rel-card:hover { border-color: var(--gold); }
+        .rel-card img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
 
-        @media (max-width: 800px) { .main-grid { grid-template-columns: 1fr; } .image-box { position: relative; top: 0; } }
+        @media (max-width: 768px) { .product-main { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="container" id="content">
-    <p style="text-align:center; padding:100px;">Fetching Product Data...</p>
+<div class="container">
+    <div id="product-details">
+        </div>
+
+    <div class="related-section">
+        <h2 class="section-title">Explore More Items</h2>
+        <div id="related-list" class="product-scroll">
+            </div>
+    </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -59,43 +65,33 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
 
+    // 1. Load Main Product
     if (productId) {
         get(ref(db, `products/${productId}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 const p = snapshot.val();
-                document.getElementById('content').innerHTML = `
-                    <div class="main-grid">
-                        <div class="image-box">
-                            <img src="${p.img}" class="main-img" id="mainImg">
-                            <div class="thumb-row">
-                                <img src="${p.img}" class="thumb active" onclick="updateImg('${p.img}', this)">
-                                ${p.img2 ? `<img src="${p.img2}" class="thumb" onclick="updateImg('${p.img2}', this)">` : ''}
-                            </div>
-                        </div>
-                        <div class="info-box">
-                            <span class="badge">${p.brand || 'Original'}</span>
-                            <h1>${p.name}</h1>
-                            <div class="price-tag">
-                                <span class="now">${p.price}</span>
-                                ${p.oldPrice ? `<span class="old">${p.oldPrice}</span>` : ''}
-                                ${p.oldPrice ? `<span class="disc">OFF</span>` : ''}
+                document.getElementById('product-details').innerHTML = `
+                    <div class="product-main">
+                        <img src="${p.img}" class="img-view">
+                        <div>
+                            <span style="color:var(--gold); font-weight:bold;">${p.brand || 'Original'}</span>
+                            <h1 style="margin:5px 0;">${p.name}</h1>
+                            <div class="price-row">
+                                <span class="new-price">${p.price}</span>
+                                ${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}
                             </div>
                             
-                            <div class="company-detail">
-                                <h4>Product Overview</h4>
-                                <p>${p.description || "Premium quality product available at Haider Mobiles. Trusted by thousands for authentic accessories and devices."}</p>
-                            </div>
+                            <table class="specs-table">
+                                <tr><td>Condition</td><td>10/10 Fresh Stock</td></tr>
+                                <tr><td>Warranty</td><td>7 Days Checking</td></tr>
+                                <tr><td>Delivery</td><td>Cash on Delivery</td></tr>
+                                <tr><td>Description</td><td>${p.description || 'Premium quality product.'}</td></tr>
+                            </table>
 
-                            <ul style="font-size:14px; color:#666; padding-left:20px;">
-                                <li>Official Brand Warranty</li>
-                                <li>PTA Approved (For Mobiles)</li>
-                                <li>Fast Delivery across Pakistan</li>
-                            </ul>
-
-                            <a href="https://wa.me/923000000000?text=I want to buy: ${p.name}" class="buy-now">ORDER ON WHATSAPP</a>
+                            <a href="https://wa.me/923000000000?text=I want to buy ${p.name}" class="buy-btn">ORDER VIA WHATSAPP</a>
                         </div>
                     </div>
                 `;
@@ -103,11 +99,23 @@
         });
     }
 
-    window.updateImg = (src, el) => {
-        document.getElementById('mainImg').src = src;
-        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-    };
+    // 2. Load More Products
+    onValue(ref(db, 'products'), (snapshot) => {
+        const list = document.getElementById('related-list');
+        list.innerHTML = "";
+        snapshot.forEach((child) => {
+            if (child.key !== productId) { // Current product ko list mein na dikhaye
+                const p = child.val();
+                list.innerHTML += `
+                    <a href="product.html?id=${child.key}" class="rel-card">
+                        <img src="${p.img}">
+                        <div style="font-weight:600;">${p.name}</div>
+                        <div style="color:var(--gold);">${p.price}</div>
+                    </a>
+                `;
+            }
+        });
+    });
 </script>
 </body>
 </html>
