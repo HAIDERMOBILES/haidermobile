@@ -9,12 +9,15 @@
 <style>
 :root { 
     --gold: #d4af37; 
+    --gold-bright: #ffdf00;
     --bg: #000000; 
     --card-bg: #0a0a0a; 
+    --glass: rgba(255, 255, 255, 0.03);
     --border: rgba(212, 175, 55, 0.15); 
+    --apple-blue: #0066cc;
 }
 
-/* --- LIGHTING & SCROLL ANIMATIONS --- */
+* { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 body { 
     margin: 0; 
     background: var(--bg); 
@@ -22,7 +25,8 @@ body {
     font-family: 'Poppins', sans-serif; 
     overflow-x: hidden; 
     padding-top: 70px;
-    transition: background 1.2s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth BG change */
+    /* Scroll background change effect */
+    transition: background 1s ease;
 }
 
 /* --- NAVBAR --- */
@@ -36,42 +40,70 @@ body {
 .header-main { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
 .store-name { font-weight: 800; color: var(--gold); font-size: 1.4rem; text-decoration: none; letter-spacing: 1px; }
 
-/* --- PRODUCT GRID & CARDS --- */
-.product-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+.search-container { position: relative; width: 35%; }
+.search-box { 
+    width: 100%; background: var(--glass); border: 1px solid #222; color: #fff; 
+    padding: 8px 15px 8px 35px; border-radius: 20px; outline: none; font-size: 13px;
+}
+.search-container i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666; font-size: 12px; }
 
-/* Edge Lighting Effect */
+/* --- TOOLS --- */
+.nav-tools { display: flex; align-items: center; gap: 20px; }
+.nav-icons { display: flex; gap: 18px; font-size: 18px; align-items: center; }
+.nav-icons i { cursor: pointer; color: #f5f5f7; }
+.nav-icons i:hover { color: var(--gold); }
+
+.cart-icon-wrapper { position: relative; cursor: pointer; }
+.badge { 
+    position: absolute; top: -8px; right: -8px; background: var(--apple-blue); 
+    color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; 
+    border-radius: 50%; display: none; 
+}
+
+/* --- BRAND CHIPS --- */
+.brand-nav { display: flex; gap: 12px; overflow-x: auto; padding: 15px 5%; scrollbar-width: none; background: #000; }
+.brand-chip { padding: 6px 20px; background: var(--glass); border: 1px solid #222; border-radius: 50px; font-size: 12px; cursor: pointer; color: #aaa; white-space: nowrap; }
+.brand-chip.active { color: #000; background: var(--gold); border-color: var(--gold); font-weight: 600; }
+
+/* --- PRODUCT GRID --- */
+.brand-section { padding: 30px 5%; }
+.brand-title { font-size: 22px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
+.brand-title::after { content: ''; height: 1px; flex: 1; background: var(--border); }
+.product-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
+
+/* --- ADDED LIGHTING EFFECTS --- */
 .card { 
     background: var(--card-bg); 
     border-radius: 20px; 
-    padding: 20px; 
-    position: relative;
+    padding: 15px; 
     border: 1px solid #1a1a1a; 
-    text-align: center;
-    transition: transform 0.4s ease, background 0.4s ease;
+    text-align: center; 
+    position: relative; /* Zaroori hai lighting positioning ke liye */
     z-index: 1;
 }
 
-/* Glow Animation Layer */
+/* Edge Lighting (Border Glow) */
 .card::before {
     content: "";
     position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    top: -1px; left: -1px; right: -1px; bottom: -1px;
     background: linear-gradient(45deg, transparent, var(--gold), transparent, var(--gold));
     background-size: 400%;
+    border-radius: 21px;
     z-index: -1;
-    border-radius: 22px;
     opacity: 0;
-    transition: opacity 0.5s ease;
-    filter: blur(8px);
+    filter: blur(5px);
+    transition: 0.5s;
 }
 
-.card:hover { transform: translateY(-10px); }
+/* Side Lighting (Soft Glow behind card) */
+.card:hover { transform: translateY(-10px); border-color: var(--gold); }
 .card:hover::before { 
     opacity: 1; 
-    animation: rotate-lighting 3s linear infinite; 
+    animation: borderRotate 4s linear infinite; 
 }
 
-@keyframes rotate-lighting {
+@keyframes borderRotate {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
@@ -80,39 +112,40 @@ body {
 .card img { 
     width: 100%; height: 200px; object-fit: contain; 
     background: #fff; border-radius: 15px; 
-    margin-bottom: 15px; padding: 15px; 
+    margin-bottom: 15px; padding: 10px; 
+    transition: 0.5s;
 }
-
-/* Search Box Fix */
-.search-container { position: relative; width: 35%; }
-.search-box { 
-    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid #222; color: #fff; 
-    padding: 10px 15px 10px 40px; border-radius: 20px; outline: none;
-}
-
-/* Brand Chips Custom Scroll */
-.brand-nav { display: flex; gap: 12px; overflow-x: auto; padding: 15px 5%; scrollbar-width: none; background: transparent; }
-.brand-chip { padding: 8px 25px; background: rgba(255,255,255,0.05); border: 1px solid #222; border-radius: 50px; cursor: pointer; white-space: nowrap; }
-.brand-chip.active { background: var(--gold); color: #000; font-weight: bold; }
+.card:hover img { transform: scale(1.05); }
 
 .price { color: var(--gold); font-weight: 800; font-size: 20px; display: block; margin-bottom: 15px; }
-.btn-view { display: block; background: #fff; color: #000; text-decoration: none; font-size: 12px; font-weight: 800; padding: 12px; border-radius: 12px; }
+.btn-view { 
+    display: block; background: #fff; color: #000; 
+    text-decoration: none; font-size: 12px; font-weight: 800; 
+    padding: 10px; border-radius: 12px; 
+    transition: 0.3s;
+}
+.btn-view:hover { background: var(--gold); color: #000; }
+
+@media (max-width: 768px) { .search-container { display: none; } }
 </style>
 </head>
-<body id="dynamicBody">
+<body id="mainBody">
 
 <div class="top-header">
     <div class="header-main">
         <a href="index.html" class="store-name">HAIDER</a>
+        
         <div class="search-container">
-            <i class="fa fa-search" style="position: absolute; left: 15px; top: 12px; color: #666;"></i>
+            <i class="fa fa-search"></i>
             <input type="text" id="search" class="search-box" placeholder="Search devices...">
         </div>
+
         <div class="nav-tools">
             <div class="nav-icons" id="auth-area">
+                <i class="fa fa-user-plus" title="Register" onclick="location.href='login.html?action=signup'"></i>
                 <i class="fa fa-user" title="Login" onclick="location.href='login.html'"></i>
             </div>
-            <div class="cart-icon-wrapper" onclick="location.href='cart.html'" style="margin-left:15px;">
+            <div class="cart-icon-wrapper" onclick="location.href='cart.html'">
                 <i class="fa fa-shopping-bag" style="font-size: 20px;"></i>
                 <span class="badge" id="cart-count">0</span>
             </div>
@@ -126,88 +159,4 @@ body {
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        storageBucket: "web-app-4f3a1.firebasestorage.app",
-        messagingSenderId: "222099203820",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-
-    // --- 1. DYNAMIC SCROLL BACKGROUND ---
-    window.addEventListener('scroll', () => {
-        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        const body = document.getElementById('dynamicBody');
-        
-        if (scrollPercent < 20) body.style.backgroundColor = "#000000"; // Pitch Black
-        else if (scrollPercent < 50) body.style.backgroundColor = "#0a0d14"; // Dark Midnight Blue
-        else if (scrollPercent < 80) body.style.backgroundColor = "#120a0a"; // Dark Wine
-        else body.style.backgroundColor = "#0d120a"; // Dark Forest
-    });
-
-    // --- 2. AUTH & PRODUCTS (Aapka Purana Logic Optimized) ---
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            document.getElementById('auth-area').innerHTML = `<i class="fa fa-circle-user" style="color:var(--gold); font-size:22px;" onclick="location.href='dashboard.html'"></i>`;
-        }
-    });
-
-    const wrapper = document.getElementById('brand-wrapper');
-    const chipContainer = document.getElementById('brand-chips');
-
-    onValue(ref(db, 'products'), (snapshot) => {
-        if (!snapshot.exists()) return;
-        const data = snapshot.val();
-        const allProducts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-        const brands = [...new Set(allProducts.map(p => p.brand))];
-
-        chipContainer.innerHTML = `<div class="brand-chip active" onclick="location.reload()">All</div>`;
-        wrapper.innerHTML = "";
-
-        brands.forEach(brandName => {
-            const chip = document.createElement('div');
-            chip.className = 'brand-chip';
-            chip.innerText = brandName;
-            chip.onclick = () => document.getElementById(`section-${brandName}`).scrollIntoView({behavior: 'smooth', block: 'center'});
-            chipContainer.appendChild(chip);
-
-            const brandProducts = allProducts.filter(p => p.brand === brandName);
-            wrapper.innerHTML += `
-                <div class="brand-section" id="section-${brandName}">
-                    <div class="brand-title" style="padding: 0 5%; font-size: 22px; font-weight: 800; margin: 40px 0 20px; color:var(--gold); border-left: 4px solid var(--gold); padding-left: 15px;">
-                        ${brandName.toUpperCase()}
-                    </div>
-                    <div class="product-container" style="padding: 0 5%;">
-                        ${brandProducts.map(p => `
-                            <div class="card">
-                                <img src="${p.img}">
-                                <h3 style="font-size:16px; margin:10px 0;">${p.name}</h3>
-                                <span class="price">${p.price}</span>
-                                <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        });
-    });
-
-    // Search Fix
-    document.getElementById('search').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('.card').forEach(card => {
-            const name = card.querySelector('h3').innerText.toLowerCase();
-            card.style.display = name.includes(term) ? "block" : "none";
-        });
-    });
-</script>
-</body>
-</html>
+    import { getDatabase, ref, onValue } from "
