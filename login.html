@@ -4,15 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haider Mobiles | Account</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .auth-card { background: #111; padding: 40px; border-radius: 20px; border: 1px solid #333; width: 350px; text-align: center; }
-        h2 { color: #d4af37; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; background: #0066cc; border: none; color: #fff; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-        .btn-alt { background: none; border: 1px solid #444; margin-top: 15px; color: #888; font-size: 14px; cursor: pointer; }
-        .error-msg { color: #ff4444; font-size: 13px; margin-top: 10px; display: none; }
+        :root { --gold: #d4af37; --bg: #000; --card: #111; --input: #050505; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .auth-card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid #333; width: 100%; max-width: 500px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        h2 { color: var(--gold); margin-bottom: 25px; font-weight: 800; letter-spacing: 1px; }
+        
+        /* Grid for Multi-fields */
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
+        .full-width { grid-column: span 2; }
+        
+        label { font-size: 11px; color: var(--gold); margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input { width: 100%; padding: 12px; margin: 5px 0 15px; border-radius: 10px; border: 1px solid #222; background: var(--input); color: #fff; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
+        
+        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; color: #000; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 10px; font-size: 16px; transition: 0.3s; }
+        .btn:hover { background: #b8962d; transform: translateY(-2px); }
+        
+        .btn-alt { margin-top: 20px; color: #888; font-size: 14px; cursor: pointer; text-decoration: underline; }
+        .error-msg { color: #ff4444; font-size: 13px; margin-bottom: 15px; background: rgba(255,68,68,0.1); padding: 10px; border-radius: 8px; display: none; }
+
+        @media (max-width: 500px) { .input-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
     </style>
 </head>
 <body>
@@ -21,9 +36,41 @@
     <h2 id="title">Login</h2>
     <div id="errorBox" class="error-msg"></div>
     
-    <input type="text" id="userName" placeholder="Full Name" style="display: none;">
-    <input type="email" id="userEmail" placeholder="Email Address">
-    <input type="password" id="userPass" placeholder="Password (Min 6 chars)">
+    <div class="input-grid">
+        <div class="signup-field" style="display: none;">
+            <label>First Name</label>
+            <input type="text" id="regFirst" placeholder="Haider">
+        </div>
+        <div class="signup-field" style="display: none;">
+            <label>Last Name</label>
+            <input type="text" id="regLast" placeholder="Ali">
+        </div>
+        <div class="signup-field full-width" style="display: none;">
+            <label>Mobile Number</label>
+            <input type="text" id="regPhone" placeholder="03xxxxxxxxx">
+        </div>
+        <div class="signup-field" style="display: none;">
+            <label>Birth Date</label>
+            <input type="date" id="regDob">
+        </div>
+        <div class="signup-field" style="display: none;">
+            <label>CNIC (ID Card)</label>
+            <input type="text" id="regCnic" placeholder="xxxxx-xxxxxxx-x">
+        </div>
+        <div class="signup-field full-width" style="display: none;">
+            <label>Home Address</label>
+            <input type="text" id="regAddress" placeholder="Street, City, Area">
+        </div>
+
+        <div class="full-width">
+            <label>Email Address</label>
+            <input type="email" id="userEmail" placeholder="yourname@email.com">
+        </div>
+        <div class="full-width">
+            <label>Password</label>
+            <input type="password" id="userPass" placeholder="••••••••">
+        </div>
+    </div>
     
     <button class="btn" id="mainBtn">Login</button>
     <div class="btn-alt" id="toggleBtn">Create New Account</div>
@@ -31,12 +78,14 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
         authDomain: "web-app-4f3a1.firebaseapp.com",
         projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
         storageBucket: "web-app-4f3a1.firebasestorage.app",
         messagingSenderId: "222099203820",
         appId: "1:222099203820:web:778e204d2960181dfba7c9"
@@ -44,29 +93,24 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getDatabase(app);
 
     let isLogin = true;
 
     const title = document.getElementById('title');
-    const nameInput = document.getElementById('userName');
+    const signupFields = document.querySelectorAll('.signup-field');
     const emailInput = document.getElementById('userEmail');
     const passInput = document.getElementById('userPass');
     const mainBtn = document.getElementById('mainBtn');
     const toggleBtn = document.getElementById('toggleBtn');
     const errorBox = document.getElementById('errorBox');
 
-    // --- SMART LOGIC: Check if URL says "signup" ---
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('action') === 'signup') {
-        setSignupMode();
-    }
-
     function setSignupMode() {
         isLogin = false;
         title.innerText = "Register";
-        mainBtn.innerText = "Sign Up";
+        mainBtn.innerText = "Register Now";
         toggleBtn.innerText = "Already have an account? Login";
-        nameInput.style.display = "block";
+        signupFields.forEach(f => f.style.display = "block");
     }
 
     function setLoginMode() {
@@ -74,7 +118,7 @@
         title.innerText = "Login";
         mainBtn.innerText = "Login";
         toggleBtn.innerText = "Create New Account";
-        nameInput.style.display = "none";
+        signupFields.forEach(f => f.style.display = "none");
     }
 
     toggleBtn.onclick = () => {
@@ -85,25 +129,55 @@
     mainBtn.onclick = async () => {
         const email = emailInput.value;
         const pass = passInput.value;
-        const name = nameInput.value;
-
         errorBox.style.display = "none";
-        if(!email || !pass) { alert("Please fill all fields"); return; }
 
-        try {
-            if (isLogin) {
+        if (isLogin) {
+            // LOGIN LOGIC
+            try {
                 await signInWithEmailAndPassword(auth, email, pass);
-                alert("Welcome back!");
-                window.location.href = "index.html";
-            } else {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                await updateProfile(userCredential.user, { displayName: name });
-                alert("Account Created!");
-                window.location.href = "index.html";
+                window.location.href = "dashboard.html";
+            } catch (error) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "Galti: Password ya Email galat hai!";
             }
-        } catch (error) {
-            errorBox.style.display = "block";
-            errorBox.innerText = error.message;
+        } else {
+            // SIGNUP LOGIC
+            const first = document.getElementById('regFirst').value;
+            const last = document.getElementById('regLast').value;
+            const phone = document.getElementById('regPhone').value;
+            const dob = document.getElementById('regDob').value;
+            const cnic = document.getElementById('regCnic').value;
+            const addr = document.getElementById('regAddress').value;
+
+            if(!first || !phone || !cnic) {
+                alert("Meherbani karke saari maloomat bharein!");
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+
+                // Save extra data to Database
+                await set(ref(db, 'users/' + user.uid), {
+                    name: first + " " + last,
+                    phone: phone,
+                    dob: dob,
+                    cnic: cnic,
+                    address: addr,
+                    email: email,
+                    joined: new Date().toLocaleDateString()
+                });
+
+                // Send Verification
+                await sendEmailVerification(user);
+                
+                alert("Account Ban Gaya! Email verify karein.");
+                window.location.href = "dashboard.html";
+            } catch (error) {
+                errorBox.style.display = "block";
+                errorBox.innerText = error.message;
+            }
         }
     };
 </script>
