@@ -1,191 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Haider Mobiles | Premium Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<style>
-:root { 
-    --gold: #d4af37; 
-    --gold-bright: #ffdf00;
-    --bg: #000000; 
-    --card-bg: #0a0a0a; 
-    --glass: rgba(255, 255, 255, 0.03);
-    --border: rgba(212, 175, 55, 0.15); 
-    --apple-blue: #0066cc;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haider Mobiles | Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root { --gold: #d4af37; --bg: #000; --card: #111; }
+        body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; }
+        
+        /* Header & Navigation */
+        nav { display: flex; justify-content: space-between; padding: 20px; background: #0a0a0a; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
+        .logo { color: var(--gold); font-weight: 800; font-size: 22px; text-decoration: none; }
+        
+        /* Product Grid */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        
+        .product-card { background: var(--card); border-radius: 15px; padding: 15px; border: 1px solid #222; transition: 0.3s; text-align: center; }
+        .product-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .product-card img { width: 100%; height: 200px; object-fit: contain; border-radius: 10px; margin-bottom: 15px; }
+        .product-card h3 { font-size: 18px; margin: 10px 0; color: #fff; }
+        .product-card .price { color: var(--gold); font-weight: 700; font-size: 20px; margin-bottom: 15px; }
+        
+        .buy-btn { width: 100%; background: var(--gold); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .buy-btn:hover { background: #fff; }
 
-* { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; padding-top: 70px; }
-
-/* --- NAVBAR --- */
-.top-header { 
-    position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; 
-    background: rgba(0, 0, 0, 0.85); 
-    backdrop-filter: blur(20px); 
-    border-bottom: 1px solid var(--border); 
-    padding: 10px 5%;
-}
-.header-main { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
-.store-name { font-weight: 800; color: var(--gold); font-size: 1.4rem; text-decoration: none; letter-spacing: 1px; }
-
-.search-container { position: relative; width: 35%; }
-.search-box { 
-    width: 100%; background: var(--glass); border: 1px solid #222; color: #fff; 
-    padding: 8px 15px 8px 35px; border-radius: 20px; outline: none; font-size: 13px;
-}
-.search-container i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666; font-size: 12px; }
-
-/* --- TOOLS --- */
-.nav-tools { display: flex; align-items: center; gap: 20px; }
-.nav-icons { display: flex; gap: 18px; font-size: 18px; align-items: center; }
-.nav-icons i { cursor: pointer; color: #f5f5f7; }
-.nav-icons i:hover { color: var(--gold); }
-
-.cart-icon-wrapper { position: relative; cursor: pointer; }
-.badge { 
-    position: absolute; top: -8px; right: -8px; background: var(--apple-blue); 
-    color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; 
-    border-radius: 50%; display: none; 
-}
-
-/* --- BRAND CHIPS --- */
-.brand-nav { display: flex; gap: 12px; overflow-x: auto; padding: 15px 5%; scrollbar-width: none; background: #000; }
-.brand-chip { padding: 6px 20px; background: var(--glass); border: 1px solid #222; border-radius: 50px; font-size: 12px; cursor: pointer; color: #aaa; white-space: nowrap; }
-.brand-chip.active { color: #000; background: var(--gold); border-color: var(--gold); font-weight: 600; }
-
-/* --- PRODUCT GRID --- */
-.brand-section { padding: 30px 5%; }
-.brand-title { font-size: 22px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
-.brand-title::after { content: ''; height: 1px; flex: 1; background: var(--border); }
-.product-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
-
-.card { background: var(--card-bg); border-radius: 20px; padding: 15px; border: 1px solid #1a1a1a; text-align: center; }
-.card img { width: 100%; height: 200px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 15px; padding: 10px; }
-.price { color: var(--gold); font-weight: 800; font-size: 20px; display: block; margin-bottom: 15px; }
-.btn-view { display: block; background: #fff; color: #000; text-decoration: none; font-size: 12px; font-weight: 800; padding: 10px; border-radius: 12px; }
-
-@media (max-width: 768px) { .search-container { display: none; } }
-</style>
+        #loading { text-align: center; font-size: 20px; color: var(--gold); padding: 50px; }
+    </style>
 </head>
 <body>
 
-<div class="top-header">
-    <div class="header-main">
-        <a href="index.html" class="store-name">HAIDER</a>
-        
-        <div class="search-container">
-            <i class="fa fa-search"></i>
-            <input type="text" id="search" class="search-box" placeholder="Search devices...">
-        </div>
-
-        <div class="nav-tools">
-            <div class="nav-icons" id="auth-area">
-                <i class="fa fa-user-plus" title="Register" onclick="location.href='login.html?action=signup'"></i>
-                <i class="fa fa-user" title="Login" onclick="location.href='login.html'"></i>
-            </div>
-            <div class="cart-icon-wrapper" onclick="location.href='cart.html'">
-                <i class="fa fa-shopping-bag" style="font-size: 20px;"></i>
-                <span class="badge" id="cart-count">0</span>
-            </div>
-        </div>
+<nav>
+    <a href="index.html" class="logo">HAIDER MOBILES</a>
+    <div class="nav-links">
+        <a href="dashboard.html" style="color:#fff; text-decoration:none; margin-right:20px;"><i class="fa fa-user"></i> Profile</a>
+        <a href="cart.html" style="color:var(--gold); text-decoration:none;"><i class="fa fa-shopping-cart"></i> Cart</a>
     </div>
+</nav>
+
+<div class="container">
+    <h2 style="text-align: center; margin-bottom: 40px; letter-spacing: 2px;">LATEST SMARTPHONES</h2>
+    
+    <div id="loading">Loading Mobiles...</div>
+    <div class="product-grid" id="productDisplay"></div>
 </div>
 
-<div class="brand-nav" id="brand-chips"></div>
-<div id="brand-wrapper"></div>
-
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
         authDomain: "web-app-4f3a1.firebaseapp.com",
         projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
         storageBucket: "web-app-4f3a1.firebasestorage.app",
         messagingSenderId: "222099203820",
         appId: "1:222099203820:web:778e204d2960181dfba7c9"
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // 1. Auth Status Check
-    onAuthStateChanged(auth, (user) => {
-        const authArea = document.getElementById('auth-area');
-        if (user) {
-            // Agar login hai toh user icon dashboard par le jayega
-            authArea.innerHTML = `
-                <div onclick="location.href='dashboard.html'" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
-                    <i class="fa fa-circle-user" style="color:var(--gold); font-size:22px;"></i>
-                    <span style="font-size:12px; font-weight:600; color:#fff;">Account</span>
-                </div>
-            `;
-        }
-    });
-
-    // 2. Cart Badge Logic
-    const updateCartBadge = () => {
-        const cart = JSON.parse(localStorage.getItem('haider_cart')) || [];
-        const badge = document.getElementById('cart-count');
-        if(cart.length > 0) {
-            badge.style.display = 'block';
-            badge.innerText = cart.length;
-        }
-    };
-    updateCartBadge();
-
-    // 3. Load Products
-    const wrapper = document.getElementById('brand-wrapper');
-    const chipContainer = document.getElementById('brand-chips');
+    // Dynamic Product Loading Logic
+    const productDisplay = document.getElementById('productDisplay');
+    const loadingDiv = document.getElementById('loading');
 
     onValue(ref(db, 'products'), (snapshot) => {
-        if (!snapshot.exists()) return;
-        const data = snapshot.val();
-        const allProducts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-        const brands = [...new Set(allProducts.map(p => p.brand))];
-
-        chipContainer.innerHTML = `<div class="brand-chip active" onclick="location.reload()">All</div>`;
-        wrapper.innerHTML = "";
-
-        brands.forEach(brandName => {
-            const chip = document.createElement('div');
-            chip.className = 'brand-chip';
-            chip.innerText = brandName;
-            chip.onclick = () => document.getElementById(`section-${brandName}`).scrollIntoView({behavior: 'smooth', block: 'center'});
-            chipContainer.appendChild(chip);
-
-            const brandProducts = allProducts.filter(p => p.brand === brandName);
-            wrapper.innerHTML += `
-                <div class="brand-section" id="section-${brandName}">
-                    <div class="brand-title">${brandName.toUpperCase()}</div>
-                    <div class="product-container">
-                        ${brandProducts.map(p => `
-                            <div class="card">
-                                <img src="${p.img}">
-                                <h3>${p.name}</h3>
-                                <span class="price">${p.price}</span>
-                                <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
-                            </div>
-                        `).join('')}
+        productDisplay.innerHTML = "";
+        loadingDiv.style.display = "none";
+        
+        if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+                const product = childSnapshot.val();
+                const productId = childSnapshot.key;
+                
+                productDisplay.innerHTML += `
+                    <div class="product-card">
+                        <img src="${product.img}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price}</p>
+                        <button class="buy-btn" onclick="addToCart('${productId}', '${product.name}', '${product.price}', '${product.img}')">
+                            <i class="fa fa-cart-plus"></i> ADD TO CART
+                        </button>
                     </div>
-                </div>
-            `;
-        });
+                `;
+            });
+        } else {
+            loadingDiv.innerText = "No products available yet!";
+            loadingDiv.style.display = "block";
+        }
     });
 
-    // Search
-    document.getElementById('search').oninput = (e) => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('.card').forEach(card => {
-            card.style.display = card.querySelector('h3').innerText.toLowerCase().includes(term) ? "block" : "none";
-        });
+    // Simple Cart Logic (Example)
+    window.addToCart = (id, name, price, img) => {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.push({ id, name, price, img });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert(name + " added to cart!");
     };
 </script>
+
 </body>
 </html>
