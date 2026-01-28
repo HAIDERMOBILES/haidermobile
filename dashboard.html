@@ -1,106 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account | Haider Mobiles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        :root { --gold: #d4af37; --bg: #050505; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; }
-        .wrapper { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        
-        /* Profile Image Header */
-        .profile-header { text-align: center; margin-bottom: 40px; }
-        .img-container { position: relative; width: 120px; height: 120px; margin: 0 auto 15px; }
-        .img-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold); }
-        .edit-img { position: absolute; bottom: 5px; right: 5px; background: var(--gold); color: #000; padding: 8px; border-radius: 50%; cursor: pointer; font-size: 12px; }
-
-        .tabs { display: flex; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
-        .tab-btn { padding: 10px 20px; cursor: pointer; color: #888; border-bottom: 2px solid transparent; }
-        .tab-btn.active { color: var(--gold); border-color: var(--gold); font-weight: 600; }
-
-        .content-section { background: var(--glass); border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); display: none; }
-        .content-section.active { display: block; }
-
-        /* Order History Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; color: #888; font-size: 12px; padding: 10px; border-bottom: 1px solid var(--border); }
-        td { padding: 15px 10px; border-bottom: 1px solid #111; font-size: 14px; }
-        .order-tag { background: rgba(0, 255, 0, 0.1); color: #00ff00; padding: 4px 10px; border-radius: 50px; font-size: 11px; }
-
-        .input-box { margin-bottom: 20px; }
-        .input-box label { display: block; font-size: 12px; color: #888; margin-bottom: 8px; }
-        .input-box input { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; outline: none; }
-        
-        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px 30px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; }
-        .logout-btn { display: block; text-align: center; margin-top: 20px; color: #ff4444; cursor: pointer; font-size: 14px; }
-    </style>
-</head>
-<body>
-
-<div class="wrapper">
-    <div class="profile-header">
-        <div class="img-container">
-            <img id="userAvatar" src="https://via.placeholder.com/150" alt="Profile">
-            <label for="imgUpload" class="edit-img"><i class="fa fa-camera"></i></label>
-            <input type="file" id="imgUpload" style="display:none" onchange="uploadProfilePic(this)">
-        </div>
-        <h2 id="userNameHeader">Haider User</h2>
-        <p id="userEmailHeader" style="color: #888; font-size: 14px;"></p>
-    </div>
-
-    <div class="tabs">
-        <div class="tab-btn active" onclick="openTab(event, 'settings')">Settings</div>
-        <div class="tab-btn" onclick="openTab(event, 'orders')">My Orders</div>
-    </div>
-
-    <div id="settings" class="content-section active">
-        <div class="input-box">
-            <label>Full Name</label>
-            <input type="text" id="dbName">
-        </div>
-        <div class="input-box">
-            <label>Mobile Number</label>
-            <input type="text" id="dbPhone">
-        </div>
-        <div class="input-box">
-            <label>Change Email (Requires Re-login)</label>
-            <input type="email" id="dbEmail">
-        </div>
-        <div class="input-box">
-            <label>New Password</label>
-            <input type="password" id="dbPass" placeholder="Leave blank to keep same">
-        </div>
-        <button class="btn-gold" onclick="updateProfile()">Update Profile</button>
-    </div>
-
-    <div id="orders" class="content-section">
-        <h3>Order History</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ORDER ID</th>
-                    <th>DATE</th>
-                    <th>PRODUCT</th>
-                    <th>PRICE</th>
-                    <th>STATUS</th>
-                </tr>
-            </thead>
-            <tbody id="orderList">
-                <tr><td colspan="5" style="text-align:center; padding:40px;">No orders found yet.</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="logout-btn" onclick="handleLogout()"><i class="fa fa-sign-out-alt"></i> Logout</div>
-</div>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, updatePassword, updateEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, onValue, update, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -121,7 +22,7 @@
             document.getElementById('userEmailHeader').innerText = user.email;
             document.getElementById('dbEmail').value = user.email;
             
-            // Load DB Info
+            // 1. Load Profile Info
             onValue(ref(db, 'users/' + user.uid), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -132,43 +33,71 @@
                 }
             });
 
-            // Load Orders (Placeholder logic)
-            // Note: Orders list fetch karne ke liye humein orders table banana hoga DB mein.
+            // 2. Load Real Orders from Database
+            onValue(ref(db, 'users/' + user.uid + '/orders'), (snapshot) => {
+                const orderList = document.getElementById('orderList');
+                if (snapshot.exists()) {
+                    orderList.innerHTML = "";
+                    snapshot.forEach((child) => {
+                        const order = child.val();
+                        orderList.innerHTML += `
+                            <tr>
+                                <td>#${child.key.slice(-5).toUpperCase()}</td>
+                                <td>${order.date}</td>
+                                <td>${order.items}</td>
+                                <td style="color:var(--gold)">${order.total}</td>
+                                <td><span class="order-tag">${order.status}</span></td>
+                            </tr>
+                        `;
+                    });
+                }
+            });
         } else {
             window.location.href = "login.html";
         }
     });
 
-    window.openTab = (evt, tabName) => {
-        var i, content, tabbtns;
-        content = document.getElementsByClassName("content-section");
-        for (i = 0; i < content.length; i++) { content[i].style.display = "none"; content[i].classList.remove("active"); }
-        tabbtns = document.getElementsByClassName("tab-btn");
-        for (i = 0; i < tabbtns.length; i++) { tabbtns[i].classList.remove("active"); }
-        document.getElementById(tabName).style.display = "block";
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    }
-
+    // Picture Upload Fix
     window.uploadProfilePic = async (input) => {
-        // Picture ke liye hum ImgBB hi use karenge asaan system ke liye
         const file = input.files[0];
+        if(!file) return;
+
         const formData = new FormData();
         formData.append('image', file);
 
-        alert("Uploading picture...");
-        // API Key of ImgBB (Aap apni b laga sakte hain)
-        fetch('https://api.imgbb.com/1/upload?key=638680e66838a53e6b2160655d04588d', {
-            method: 'POST',
-            body: formData
-        }).then(res => res.json()).then(data => {
-            const url = data.data.display_url;
-            update(ref(db, 'users/' + auth.currentUser.uid), { pic: url });
-            document.getElementById('userAvatar').src = url;
-            alert("Picture Updated!");
-        });
+        document.getElementById('userAvatar').style.opacity = "0.5";
+        
+        try {
+            const response = await fetch('https://api.imgbb.com/1/upload?key=638680e66838a53e6b2160655d04588d', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            
+            if(data.success) {
+                const url = data.data.display_url;
+                await update(ref(db, 'users/' + auth.currentUser.uid), { pic: url });
+                document.getElementById('userAvatar').src = url;
+                alert("✅ Picture Updated!");
+            }
+        } catch (e) {
+            alert("Upload failed. Check internet!");
+        } finally {
+            document.getElementById('userAvatar').style.opacity = "1";
+        }
     }
 
+    // Tab Logic
+    window.openTab = (evt, tabName) => {
+        const contents = document.querySelectorAll(".content-section");
+        const btns = document.querySelectorAll(".tab-btn");
+        contents.forEach(c => c.style.display = "none");
+        btns.forEach(b => b.classList.remove("active"));
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.classList.add("active");
+    }
+
+    // Profile Update Logic
     window.updateProfile = async () => {
         const user = auth.currentUser;
         const name = document.getElementById('dbName').value;
@@ -180,12 +109,11 @@
             await update(ref(db, 'users/' + user.uid), { name, phone });
             if(email !== user.email) await updateEmail(user, email);
             if(pass !== "") await updatePassword(user, pass);
-            alert("Success: Details Updated!");
-        } catch (e) { alert("Security: Please logout and login again to change sensitive info."); }
+            alert("✨ Details Updated!");
+        } catch (e) {
+            alert("For Security: Please logout and login again to change Email/Password.");
+        }
     }
 
     window.handleLogout = () => { signOut(auth).then(() => window.location.href = "index.html"); }
-
 </script>
-</body>
-</html>
