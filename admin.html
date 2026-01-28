@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | ImgBB Admin</title>
+    <title>Haider Mobiles | Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --bg: #050505; --card: #111; }
@@ -11,13 +11,14 @@
         .container { max-width: 900px; margin: 0 auto; }
         .admin-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 30px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
         textarea { grid-column: span 2; height: 100px; }
-        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 15px; color: #000; }
+        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 15px; color: #000; transition: 0.3s; }
+        button:hover { background: #fff; }
         .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #222; }
         .product-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: contain; background: white; }
         .del-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
-        .hint { font-size: 12px; color: #888; margin-top: -5px; margin-bottom: 10px; display: block; }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } textarea { grid-column: span 1; } }
     </style>
 </head>
 <body>
@@ -26,19 +27,20 @@
     <h1 style="color:var(--gold); text-align:center;">HAIDER MOBILES ADMIN</h1>
     
     <div class="admin-box">
+        <h3 style="margin-top:0;">Add New Product</h3>
         <div class="form-grid">
-            <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 15 Pro)">
-            <input type="text" id="pBrand" placeholder="Brand (e.g. Apple)">
-            <input type="text" id="pPrice" placeholder="Current Price (e.g. Rs. 350,000)">
-            <input type="text" id="pOldPrice" placeholder="Old Price / Without Discount">
-            <input type="text" id="pImg" placeholder="Paste ImgBB Direct Link here">
-            <span class="hint">ImgBB se <b>Direct Link</b> copy karke yahan paste karein.</span>
-            <textarea id="pDesc" placeholder="Company Details & Specifications..."></textarea>
+            <input type="text" id="pName" placeholder="Product Name">
+            <input type="text" id="pBrand" placeholder="Brand Name">
+            <input type="text" id="pPrice" placeholder="Current Price (e.g. Rs. 500)">
+            <input type="text" id="pOldPrice" placeholder="Old Price (Optional)">
+            <input type="text" id="pImg" placeholder="Paste ImgBB Direct Link Here">
+            <input type="text" id="pImg2" placeholder="Second Image Link (Optional)">
+            <textarea id="pDesc" placeholder="Product Details/Company Description..."></textarea>
         </div>
-        <button id="addBtn">ADD TO STORE</button>
+        <button id="addBtn">UPLOAD TO FIREBASE</button>
     </div>
 
-    <h3>Inventory List</h3>
+    <h3>Inventory Status</h3>
     <div id="productList"></div>
 </div>
 
@@ -48,4 +50,61 @@
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        storageBucket: "web-app-4f3a1.firebasestorage.app",
+        messagingSenderId: "222099203820",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Add Product Logic
+    document.getElementById('addBtn').onclick = () => {
+        const name = document.getElementById('pName').value;
+        const brand = document.getElementById('pBrand').value;
+        const price = document.getElementById('pPrice').value;
+        const oldPrice = document.getElementById('pOldPrice').value;
+        const img = document.getElementById('pImg').value;
+        const img2 = document.getElementById('pImg2').value;
+        const desc = document.getElementById('pDesc').value;
+
+        if(name && price && img) {
+            const newRef = push(ref(db, 'products'));
+            set(newRef, {
+                name, brand, price, oldPrice, img, img2,
+                description: desc || "Premium Quality Accessory"
+            }).then(() => {
+                alert("✅ Added!");
+                document.querySelectorAll('input, textarea').forEach(i => i.value = "");
+            }).catch(e => alert("Error: " + e.message));
+        } else {
+            alert("Please fill Name, Price and Image Link!");
+        }
+    };
+
+    // Load List
+    onValue(ref(db, 'products'), (snapshot) => {
+        const list = document.getElementById('productList');
+        list.innerHTML = "";
+        snapshot.forEach((child) => {
+            const p = child.val();
+            list.innerHTML += `
+                <div class="product-item">
+                    <img src="${p.img}">
+                    <div style="flex:1">
+                        <b>${p.name}</b><br>
+                        <small style="color:var(--gold)">${p.price}</small>
+                    </div>
+                    <button class="del-btn" onclick="deleteProduct('${child.key}')">Delete</button>
+                </div>`;
+        });
+    });
+
+    window.deleteProduct = (key) => {
+        if(confirm("Are you sure?")) remove(ref(db, 'products/' + key));
+    };
+</script>
+</body>
+</html>
