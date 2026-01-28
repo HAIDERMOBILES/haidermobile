@@ -1,7 +1,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, updatePassword, updateEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getDatabase, ref, onValue, update, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -17,12 +17,13 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
+    // 1. Check User & Load Data
     onAuthStateChanged(auth, (user) => {
         if (user) {
             document.getElementById('userEmailHeader').innerText = user.email;
             document.getElementById('dbEmail').value = user.email;
             
-            // 1. Load Profile Info
+            // Profile Info Load Karein
             onValue(ref(db, 'users/' + user.uid), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -33,7 +34,7 @@
                 }
             });
 
-            // 2. Load Real Orders from Database
+            // Orders Load Karein
             onValue(ref(db, 'users/' + user.uid + '/orders'), (snapshot) => {
                 const orderList = document.getElementById('orderList');
                 if (snapshot.exists()) {
@@ -45,10 +46,9 @@
                                 <td>#${child.key.slice(-5).toUpperCase()}</td>
                                 <td>${order.date}</td>
                                 <td>${order.items}</td>
-                                <td style="color:var(--gold)">${order.total}</td>
+                                <td style="color:#d4af37">${order.total}</td>
                                 <td><span class="order-tag">${order.status}</span></td>
-                            </tr>
-                        `;
+                            </tr>`;
                     });
                 }
             });
@@ -57,47 +57,44 @@
         }
     });
 
-    // Picture Upload Fix
+    // 2. Tab Switch Fix
+    window.openTab = (evt, tabName) => {
+        const sections = document.getElementsByClassName("content-section");
+        for (let s of sections) { s.style.display = "none"; s.classList.remove("active"); }
+        
+        const btns = document.getElementsByClassName("tab-btn");
+        for (let b of btns) { b.classList.remove("active"); }
+        
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    // 3. Picture Upload Fix
     window.uploadProfilePic = async (input) => {
         const file = input.files[0];
         if(!file) return;
 
         const formData = new FormData();
         formData.append('image', file);
+        alert("Uploading...");
 
-        document.getElementById('userAvatar').style.opacity = "0.5";
-        
         try {
-            const response = await fetch('https://api.imgbb.com/1/upload?key=638680e66838a53e6b2160655d04588d', {
+            const res = await fetch('https://api.imgbb.com/1/upload?key=638680e66838a53e6b2160655d04588d', {
                 method: 'POST',
                 body: formData
             });
-            const data = await response.json();
-            
+            const data = await res.json();
             if(data.success) {
                 const url = data.data.display_url;
                 await update(ref(db, 'users/' + auth.currentUser.uid), { pic: url });
                 document.getElementById('userAvatar').src = url;
-                alert("✅ Picture Updated!");
+                alert("✅ Success!");
             }
-        } catch (e) {
-            alert("Upload failed. Check internet!");
-        } finally {
-            document.getElementById('userAvatar').style.opacity = "1";
-        }
+        } catch (e) { alert("Upload error!"); }
     }
 
-    // Tab Logic
-    window.openTab = (evt, tabName) => {
-        const contents = document.querySelectorAll(".content-section");
-        const btns = document.querySelectorAll(".tab-btn");
-        contents.forEach(c => c.style.display = "none");
-        btns.forEach(b => b.classList.remove("active"));
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.classList.add("active");
-    }
-
-    // Profile Update Logic
+    // 4. Update Profile Fix
     window.updateProfile = async () => {
         const user = auth.currentUser;
         const name = document.getElementById('dbName').value;
@@ -109,11 +106,12 @@
             await update(ref(db, 'users/' + user.uid), { name, phone });
             if(email !== user.email) await updateEmail(user, email);
             if(pass !== "") await updatePassword(user, pass);
-            alert("✨ Details Updated!");
-        } catch (e) {
-            alert("For Security: Please logout and login again to change Email/Password.");
-        }
+            alert("✨ Profile Updated!");
+        } catch (e) { alert("For security, please re-login to change Email/Password."); }
     }
 
-    window.handleLogout = () => { signOut(auth).then(() => window.location.href = "index.html"); }
+    // 5. Logout Fix
+    window.handleLogout = () => {
+        signOut(auth).then(() => window.location.href = "index.html");
+    }
 </script>
