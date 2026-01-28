@@ -7,38 +7,51 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --bg: #0b0b0b; --card: #161616; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: white; line-height: 1.5; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: white; }
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-
-        /* Main Product Card */
-        .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #222; margin-bottom: 40px; }
-        .img-container { background: white; border-radius: 15px; padding: 15px; display: flex; align-items: center; justify-content: center; height: 400px; }
+        
+        .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #333; }
+        .img-container { background: white; border-radius: 15px; padding: 15px; height: 350px; display: flex; align-items: center; justify-content: center; }
         .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        .info-side { display: flex; flex-direction: column; }
-        .brand-name { color: var(--gold); font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        h1 { font-size: 28px; margin: 10px 0; color: #fff; }
-        
-        .price-box { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
-        .price-now { font-size: 30px; font-weight: 800; color: var(--gold); }
-        .price-old { text-decoration: line-through; color: #666; font-size: 18px; }
+        .price-now { font-size: 32px; font-weight: 800; color: var(--gold); margin: 10px 0; display: block; }
+        .old-price { text-decoration: line-through; color: #666; margin-left: 10px; font-size: 18px; }
 
-        /* Specs Grid */
         .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .spec-item { background: #222; padding: 10px 15px; border-radius: 10px; border-left: 3px solid var(--gold); }
+        .spec-item { background: #222; padding: 10px; border-radius: 10px; border-left: 3px solid var(--gold); }
         .spec-label { font-size: 10px; color: #888; display: block; text-transform: uppercase; }
-        .spec-value { font-size: 13px; font-weight: 600; }
 
-        .desc-text { font-size: 14px; color: #ccc; border-top: 1px solid #333; padding-top: 15px; margin-top: 10px; }
+        .buy-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 800; margin-top: 20px; }
         
-        .buy-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 800; margin-top: 30px; transition: 0.3s; }
-        .buy-btn:hover { background: #1ebd5b; transform: translateY(-2px); }
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
+        .rel-card { background: var(--card); padding: 10px; border-radius: 12px; border: 1px solid #222; text-decoration: none; color: white; text-align: center; }
+        .rel-card img { width: 100%; height: 120px; object-fit: contain; background: white; border-radius: 8px; }
 
-        /* Related Products */
-        .related-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; color: #fff; border-left: 4px solid var(--gold); padding-left: 15px; }
-        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .related-card { background: var(--card); padding: 15px; border-radius: 15px; text-decoration: none; color: white; border: 1px solid #222; text-align: center; transition: 0.3s; }
-        .related-card:hover { border-color: var(--gold); }
-        .related-card img { width: 100%; height: 130px; object-fit: contain; margin-bottom: 10px; background: white; border-radius: 10px; padding: 5px; }
+        @media (max-width: 768px) { .product-main { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
 
-        @media (max-width: 768px) { .product-main { grid-template-columns: 1fr; } .img-container { height: 300px; } }
+<div class="container">
+    <div id="display-area">
+        <h2 id="loading-text" style="text-align:center; padding:50px;">⚡ Connecting to Store...</h2>
+    </div>
+
+    <h3 style="margin-top:40px; border-left: 4px solid var(--gold); padding-left:15px;">More Products</h3>
+    <div id="related-list" class="related-grid"></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        storageBucket: "web-app-4f3a1.firebasestorage.app",
+        messagingSenderId: "222099203820",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initialize
