@@ -3,47 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Firebase Admin</title>
+    <title>Haider Mobiles | ImgBB Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --bg: #050505; --card: #111; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; }
-        .admin-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2); }
+        .admin-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 30px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; }
-        textarea { grid-column: span 2; height: 80px; }
-        .upload-area { grid-column: span 2; border: 2px dashed #333; padding: 20px; text-align: center; border-radius: 12px; cursor: pointer; position: relative; }
-        #fileBtn { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-        #progBar { width: 0%; height: 4px; background: var(--gold); margin-top: 10px; transition: 0.3s; }
-        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 15px; }
-        button:disabled { background: #444; color: #777; cursor: not-allowed; }
-        .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px solid #222; }
-        .product-item img { width: 50px; height: 50px; border-radius: 8px; background: white; object-fit: contain; }
+        textarea { grid-column: span 2; height: 100px; }
+        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 15px; color: #000; }
+        .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #222; }
+        .product-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: contain; background: white; }
+        .del-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
+        .hint { font-size: 12px; color: #888; margin-top: -5px; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="color:var(--gold); text-align:center;">FIREBASE ADMIN PRO</h1>
+    <h1 style="color:var(--gold); text-align:center;">HAIDER MOBILES ADMIN</h1>
+    
     <div class="admin-box">
         <div class="form-grid">
-            <input type="text" id="pName" placeholder="Product Name">
-            <input type="text" id="pBrand" placeholder="Brand">
-            <input type="text" id="pPrice" placeholder="Price">
-            <input type="text" id="pOldPrice" placeholder="Old Price">
-            <div class="upload-area">
-                <span id="statusText">📸 Click to Upload from Gallery</span>
-                <input type="file" id="fileBtn" accept="image/*">
-                <div id="progBar"></div>
-            </div>
-            <textarea id="pDesc" placeholder="Description/Specs..."></textarea>
+            <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 15 Pro)">
+            <input type="text" id="pBrand" placeholder="Brand (e.g. Apple)">
+            <input type="text" id="pPrice" placeholder="Current Price (e.g. Rs. 350,000)">
+            <input type="text" id="pOldPrice" placeholder="Old Price / Without Discount">
+            <input type="text" id="pImg" placeholder="Paste ImgBB Direct Link here">
+            <span class="hint">ImgBB se <b>Direct Link</b> copy karke yahan paste karein.</span>
+            <textarea id="pDesc" placeholder="Company Details & Specifications..."></textarea>
         </div>
-        <button id="saveBtn" disabled>WAITING FOR IMAGE...</button>
+        <button id="addBtn">ADD TO STORE</button>
     </div>
+
+    <h3>Inventory List</h3>
     <div id="productList"></div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, push
+    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4
