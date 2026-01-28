@@ -18,6 +18,8 @@
 }
 
 * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* --- DYNAMIC BACKGROUND COLOR --- */
 body { 
     margin: 0; 
     background: var(--bg); 
@@ -25,8 +27,7 @@ body {
     font-family: 'Poppins', sans-serif; 
     overflow-x: hidden; 
     padding-top: 70px;
-    /* Scroll background change effect */
-    transition: background 1s ease;
+    transition: background 1.2s ease; /* Background transition for scrolling */
 }
 
 /* --- NAVBAR --- */
@@ -61,75 +62,62 @@ body {
 }
 
 /* --- BRAND CHIPS --- */
-.brand-nav { display: flex; gap: 12px; overflow-x: auto; padding: 15px 5%; scrollbar-width: none; background: #000; }
+.brand-nav { display: flex; gap: 12px; overflow-x: auto; padding: 15px 5%; scrollbar-width: none; background: transparent; }
 .brand-chip { padding: 6px 20px; background: var(--glass); border: 1px solid #222; border-radius: 50px; font-size: 12px; cursor: pointer; color: #aaa; white-space: nowrap; }
 .brand-chip.active { color: #000; background: var(--gold); border-color: var(--gold); font-weight: 600; }
 
-/* --- PRODUCT GRID --- */
+/* --- PRODUCT GRID & LIGHTING --- */
 .brand-section { padding: 30px 5%; }
 .brand-title { font-size: 22px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
 .brand-title::after { content: ''; height: 1px; flex: 1; background: var(--border); }
 .product-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
 
-/* --- ADDED LIGHTING EFFECTS --- */
+/* Edge Lighting Card */
 .card { 
     background: var(--card-bg); 
     border-radius: 20px; 
     padding: 15px; 
     border: 1px solid #1a1a1a; 
-    text-align: center; 
-    position: relative; /* Zaroori hai lighting positioning ke liye */
-    z-index: 1;
+    text-align: center;
+    position: relative; /* Fixed for pseudo-element */
+    overflow: visible;
 }
 
-/* Edge Lighting (Border Glow) */
+/* Gold Edge Glow on Hover */
 .card::before {
     content: "";
     position: absolute;
-    top: -1px; left: -1px; right: -1px; bottom: -1px;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
     background: linear-gradient(45deg, transparent, var(--gold), transparent, var(--gold));
     background-size: 400%;
-    border-radius: 21px;
     z-index: -1;
+    border-radius: 22px;
     opacity: 0;
-    filter: blur(5px);
     transition: 0.5s;
+    filter: blur(8px);
 }
 
-/* Side Lighting (Soft Glow behind card) */
-.card:hover { transform: translateY(-10px); border-color: var(--gold); }
+.card:hover { transform: translateY(-8px); }
 .card:hover::before { 
     opacity: 1; 
-    animation: borderRotate 4s linear infinite; 
+    animation: rotate-lighting 3s linear infinite; 
 }
 
-@keyframes borderRotate {
+@keyframes rotate-lighting {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-.card img { 
-    width: 100%; height: 200px; object-fit: contain; 
-    background: #fff; border-radius: 15px; 
-    margin-bottom: 15px; padding: 10px; 
-    transition: 0.5s;
-}
-.card:hover img { transform: scale(1.05); }
-
+.card img { width: 100%; height: 200px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 15px; padding: 10px; }
 .price { color: var(--gold); font-weight: 800; font-size: 20px; display: block; margin-bottom: 15px; }
-.btn-view { 
-    display: block; background: #fff; color: #000; 
-    text-decoration: none; font-size: 12px; font-weight: 800; 
-    padding: 10px; border-radius: 12px; 
-    transition: 0.3s;
-}
-.btn-view:hover { background: var(--gold); color: #000; }
+.btn-view { display: block; background: #fff; color: #000; text-decoration: none; font-size: 12px; font-weight: 800; padding: 10px; border-radius: 12px; transition: 0.3s; }
+.btn-view:hover { background: var(--gold); }
 
 @media (max-width: 768px) { .search-container { display: none; } }
 </style>
 </head>
-<body id="mainBody">
+<body id="dynamicBody">
 
 <div class="top-header">
     <div class="header-main">
@@ -159,4 +147,102 @@ body {
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, onValue } from "
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        storageBucket: "web-app-4f3a1.firebasestorage.app",
+        messagingSenderId: "222099203820",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    // --- DECIDED SCROLL COLORS LOGIC ---
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        const body = document.getElementById('dynamicBody');
+        
+        if (scrollPercent < 20) body.style.backgroundColor = "#000000"; // Black
+        else if (scrollPercent < 50) body.style.backgroundColor = "#0a111a"; // Dark Blue
+        else if (scrollPercent < 80) body.style.backgroundColor = "#1a0a0a"; // Dark Maroon
+        else body.style.backgroundColor = "#0a1a0d"; // Dark Green
+    });
+
+    // 1. Auth Status Check
+    onAuthStateChanged(auth, (user) => {
+        const authArea = document.getElementById('auth-area');
+        if (user) {
+            authArea.innerHTML = `
+                <div onclick="location.href='dashboard.html'" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
+                    <i class="fa fa-circle-user" style="color:var(--gold); font-size:22px;"></i>
+                    <span style="font-size:12px; font-weight:600; color:#fff;">Account</span>
+                </div>
+            `;
+        }
+    });
+
+    // 2. Cart Badge Logic
+    const updateCartBadge = () => {
+        const cart = JSON.parse(localStorage.getItem('haider_cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if(cart.length > 0) {
+            badge.style.display = 'block';
+            badge.innerText = cart.length;
+        }
+    };
+    updateCartBadge();
+
+    // 3. Load Products
+    const wrapper = document.getElementById('brand-wrapper');
+    const chipContainer = document.getElementById('brand-chips');
+
+    onValue(ref(db, 'products'), (snapshot) => {
+        if (!snapshot.exists()) return;
+        const data = snapshot.val();
+        const allProducts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        const brands = [...new Set(allProducts.map(p => p.brand))];
+
+        chipContainer.innerHTML = `<div class="brand-chip active" onclick="location.reload()">All</div>`;
+        wrapper.innerHTML = "";
+
+        brands.forEach(brandName => {
+            const chip = document.createElement('div');
+            chip.className = 'brand-chip';
+            chip.innerText = brandName;
+            chip.onclick = () => document.getElementById(`section-${brandName}`).scrollIntoView({behavior: 'smooth', block: 'center'});
+            chipContainer.appendChild(chip);
+
+            const brandProducts = allProducts.filter(p => p.brand === brandName);
+            wrapper.innerHTML += `
+                <div class="brand-section" id="section-${brandName}">
+                    <div class="brand-title" style="color: var(--gold);">${brandName.toUpperCase()}</div>
+                    <div class="product-container">
+                        ${brandProducts.map(p => `
+                            <div class="card">
+                                <img src="${p.img}">
+                                <h3>${p.name}</h3>
+                                <span class="price">${p.price}</span>
+                                <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    // Search
+    document.getElementById('search').oninput = (e) => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.display = card.querySelector('h3').innerText.toLowerCase().includes(term) ? "block" : "none";
+        });
+    };
+</script>
+</body>
+</html>
