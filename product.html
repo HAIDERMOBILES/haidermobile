@@ -9,49 +9,76 @@
         :root { --gold: #d4af37; --bg: #0b0b0b; --card: #161616; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: white; }
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-        
         .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #333; }
         .img-container { background: white; border-radius: 15px; padding: 15px; height: 350px; display: flex; align-items: center; justify-content: center; }
         .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
         .price-now { font-size: 32px; font-weight: 800; color: var(--gold); margin: 10px 0; display: block; }
-        .old-price { text-decoration: line-through; color: #666; margin-left: 10px; font-size: 18px; }
-
         .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
         .spec-item { background: #222; padding: 10px; border-radius: 10px; border-left: 3px solid var(--gold); }
         .spec-label { font-size: 10px; color: #888; display: block; text-transform: uppercase; }
-
         .buy-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 800; margin-top: 20px; }
-        
-        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
-        .rel-card { background: var(--card); padding: 10px; border-radius: 12px; border: 1px solid #222; text-decoration: none; color: white; text-align: center; }
-        .rel-card img { width: 100%; height: 120px; object-fit: contain; background: white; border-radius: 8px; }
-
-        @media (max-width: 768px) { .product-main { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="display-area">
-        <h2 id="loading-text" style="text-align:center; padding:50px;">⚡ Connecting to Store...</h2>
+    <div id="main-content">
+        <h2 style="text-align:center; padding:100px;">⚡ Loading Product...</h2>
     </div>
-
-    <h3 style="margin-top:40px; border-left: 4px solid var(--gold); padding-left:15px;">More Products</h3>
-    <div id="related-list" class="related-grid"></div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
         authDomain: "web-app-4f3a1.firebaseapp.com",
         projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com", // Make sure this is correct
         storageBucket: "web-app-4f3a1.firebasestorage.app",
         messagingSenderId: "222099203820",
         appId: "1:222099203820:web:778e204d2960181dfba7c9"
     };
 
-    const app = initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const productId = new URLSearchParams(window.location.search).get('id');
+
+    if (productId) {
+        // Direct Path Use Karein
+        const pRef = ref(db, 'products/' + productId);
+        get(pRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const p = snapshot.val();
+                document.getElementById('main-content').innerHTML = `
+                    <div class="product-main">
+                        <div class="img-container"><img src="${p.img}"></div>
+                        <div>
+                            <span style="color:var(--gold); font-weight:800; font-size:12px;">${p.brand || 'OFFICIAL'}</span>
+                            <h1 style="margin:5px 0;">${p.name}</h1>
+                            <span class="price-now">${p.price}</span>
+                            <div class="specs-grid">
+                                <div class="spec-item"><span class="spec-label">Condition</span><b>10/10 Fresh</b></div>
+                                <div class="spec-item"><span class="spec-label">Warranty</span><b>Checking</b></div>
+                            </div>
+                            <div style="margin-top:20px; border-top:1px solid #333; padding-top:15px;">
+                                <b style="color:var(--gold)">About this item:</b>
+                                <p style="font-size:14px; color:#ccc;">${p.description || "High quality product from ImgBB Direct link."}</p>
+                            </div>
+                            <a href="https://wa.me/923000000000?text=I want to buy: ${p.name}" class="buy-btn">ORDER VIA WHATSAPP</a>
+                        </div>
+                    </div>`;
+            } else {
+                document.getElementById('main-content').innerHTML = "Product not found. ID: " + productId;
+            }
+        }).catch(err => {
+            document.getElementById('main-content').innerHTML = "Error: " + err.message;
+        });
+    } else {
+        document.getElementById('main-content').innerHTML = "No Product Selected!";
+    }
+</script>
+</body>
+</html>
