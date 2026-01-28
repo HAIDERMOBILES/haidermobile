@@ -9,136 +9,38 @@
         :root { --gold: #d4af37; --bg: #050505; --card: #111; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; }
         .container { max-width: 1000px; margin: 0 auto; }
-        
         .admin-box { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 40px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        
         input, textarea { width: 100%; padding: 14px; background: #000; border: 1px solid #333; color: #fff; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
         textarea { grid-column: span 2; height: 100px; }
-
-        /* Custom File Upload Button */
-        .file-input-wrapper { grid-column: span 2; position: relative; border: 2px dashed #333; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; }
-        .file-input-wrapper:hover { border-color: var(--gold); }
+        .file-input-wrapper { grid-column: span 2; position: relative; border: 2px dashed #333; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .file-input-wrapper:hover { border-color: var(--gold); background: rgba(212,175,55,0.05); }
         .file-input-wrapper input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-        
         #uploadProgress { width: 0%; height: 5px; background: var(--gold); border-radius: 10px; margin-top: 10px; transition: 0.3s; }
-
-        button { width: 100%; padding: 18px; background: var(--gold); border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; font-size: 16px; }
-        button:disabled { background: #444; cursor: not-allowed; }
-
-        .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 12px; }
+        button { width: 100%; padding: 18px; background: var(--gold); border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; font-size: 16px; transition: 0.3s; }
+        button:disabled { background: #444 !important; color: #888 !important; cursor: not-allowed; transform: none !important; }
+        .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #222; }
         .product-item img { width: 60px; height: 60px; border-radius: 10px; object-fit: contain; background: white; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="color:var(--gold); text-align:center;">DASHBOARD CONTROL</h1>
+    <h1 style="color:var(--gold); text-align:center; letter-spacing: 2px;">DASHBOARD CONTROL</h1>
     
     <div class="admin-box">
         <div class="form-grid">
-            <input type="text" id="pName" placeholder="Device Name">
-            <input type="text" id="pBrand" placeholder="Brand (Apple, Samsung...)">
-            <input type="text" id="pPrice" placeholder="Current Price (e.g. 150,000)">
+            <input type="text" id="pName" placeholder="Device Name (e.g. iPhone 15)">
+            <input type="text" id="pBrand" placeholder="Brand (e.g. Apple)">
+            <input type="text" id="pPrice" placeholder="Current Price (e.g. Rs. 250,000)">
             <input type="text" id="pOldPrice" placeholder="Old Price (Optional)">
             
-            <div class="file-input-wrapper">
+            <div class="file-input-wrapper" id="dropZone">
                 <span id="fileLabel">📸 Click to Upload Product Image</span>
                 <input type="file" id="pImgFile" accept="image/*">
                 <div id="uploadProgress"></div>
             </div>
 
-            <textarea id="pDesc" placeholder="Describe the device specs and warranty details..."></textarea>
+            <textarea id="pDesc" placeholder="Describe specifications, warranty, and condition..."></textarea>
         </div>
-        <button id="addBtn">UPLOAD TO DATABASE</button>
-    </div>
-
-    <h3>Inventory Status</h3>
-    <div id="productList"></div>
-</div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        storageBucket: "web-app-4f3a1.appspot.com", // storage bucket name
-        messagingSenderId: "222099203820",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const storage = getStorage(app);
-
-    let finalImageUrl = "";
-
-    // --- Image Upload Logic ---
-    document.getElementById('pImgFile').onchange = (e) => {
-        const file = e.target.files[0];
-        if(!file) return;
-
-        document.getElementById('fileLabel').innerText = "Uploading: " + file.name;
-        const storageRef = sRef(storage, 'products/' + file.name + Date.now());
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on('state_changed', 
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                document.getElementById('uploadProgress').style.width = progress + "%";
-            }, 
-            (error) => alert("Upload failed! Check Firebase Storage Rules."), 
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    finalImageUrl = downloadURL;
-                    document.getElementById('fileLabel').innerText = "✅ Image Ready!";
-                    document.getElementById('fileLabel').style.color = "#25d366";
-                });
-            }
-        );
-    };
-
-    // --- Save Product Logic ---
-    document.getElementById('addBtn').onclick = () => {
-        const name = document.getElementById('pName').value;
-        const brand = document.getElementById('pBrand').value;
-        const price = document.getElementById('pPrice').value;
-        const oldPrice = document.getElementById('pOldPrice').value;
-        const desc = document.getElementById('pDesc').value;
-
-        if(name && price && finalImageUrl) {
-            const newRef = push(ref(db, 'products'));
-            set(newRef, {
-                name, brand, price, oldPrice, 
-                img: finalImageUrl, 
-                description: desc
-            }).then(() => {
-                alert("Mobile Added Successfully!");
-                location.reload();
-            });
-        } else { alert("Please upload image and fill name/price!"); }
-    };
-
-    // Inventory Loading Logic (Same as before)
-    onValue(ref(db, 'products'), (snapshot) => {
-        const list = document.getElementById('productList');
-        list.innerHTML = "";
-        snapshot.forEach((child) => {
-            const p = child.val();
-            list.innerHTML += `
-                <div class="product-item">
-                    <img src="${p.img}">
-                    <div style="flex:1"><b>${p.name}</b><br><small>${p.price}</small></div>
-                    <button onclick="deleteProduct('${child.key}')" style="width:auto; padding:8px 15px; margin:0; background:red;">Del</button>
-                </div>`;
-        });
-    });
-
-    window.deleteProduct = (key) => { if(confirm("Delete?")) remove(ref(db, 'products/' + key)); };
-</script>
-</body>
-</html>
+        <button id="addBtn" disabled>WAITING FOR IMAGE...</
