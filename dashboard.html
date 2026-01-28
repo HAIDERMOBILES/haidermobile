@@ -3,58 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account | Haider Mobiles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Dashboard | Haider Mobiles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --apple-black: #000000; --apple-blue: #0066cc; --gold: #d4af37; --card-bg: #1c1c1e; }
-        body { font-family: 'Inter', sans-serif; background: var(--apple-black); color: #fff; margin: 0; padding-top: 60px; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        
-        .profile-card { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid #333; text-align: center; }
-        .user-icon { font-size: 60px; color: var(--gold); margin-bottom: 15px; }
-        
-        .info-group { text-align: left; margin-top: 25px; }
-        label { color: #86868b; font-size: 12px; display: block; margin-bottom: 5px; text-transform: uppercase; }
-        input { width: 100%; background: #2c2c2e; border: 1px solid #3a3a3c; padding: 12px; border-radius: 10px; color: #fff; margin-bottom: 15px; outline: none; box-sizing: border-box; }
-        
-        .update-btn { width: 100%; background: var(--apple-blue); color: #fff; border: none; padding: 15px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .update-btn:hover { background: #0077ed; }
-        
-        .logout-btn { background: none; border: 1px solid #ff4444; color: #ff4444; margin-top: 15px; width: 100%; padding: 12px; border-radius: 12px; cursor: pointer; }
-        
-        nav { position: fixed; top: 0; left: 0; width: 100%; height: 50px; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); z-index: 1000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #222; }
+        :root {
+            --gold: #d4af37;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #0066cc;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% -20%, #1a1a1a, #050505);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+
+        .dashboard-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* --- Header Section --- */
+        .db-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .db-header h1 { font-size: 28px; font-weight: 700; margin: 0; }
+        .back-store { text-decoration: none; color: var(--gold); font-size: 14px; font-weight: 500; }
+
+        /* --- Quick Stats --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-card i { color: var(--gold); margin-bottom: 10px; font-size: 20px; }
+        .stat-card p { margin: 0; font-size: 12px; color: #888; text-transform: uppercase; }
+        .stat-card h3 { margin: 5px 0 0; font-size: 16px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+
+        /* --- Main Form Section --- */
+        .profile-section {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+        }
+        .section-title { margin-bottom: 30px; font-size: 20px; font-weight: 600; border-left: 4px solid var(--gold); padding-left: 15px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+        .input-box { margin-bottom: 20px; }
+        .input-box label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; }
+        .input-box input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .input-box input:focus { border-color: var(--gold); background: rgba(255,255,255,0.07); box-shadow: 0 0 15px rgba(212,175,55,0.1); }
+
+        .btn-update {
+            background: linear-gradient(135deg, var(--gold), #b38f2d);
+            color: #000;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .btn-update:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #ff4444;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<nav><a href="index.html" style="color:#fff; text-decoration:none; font-weight:800;">HAIDER MOBILES</a></nav>
+<div class="dashboard-wrapper">
+    <div class="db-header">
+        <h1>My Account</h1>
+        <a href="index.html" class="back-store"><i class="fa fa-arrow-left"></i> Back to Store</a>
+    </div>
 
-<div class="container">
-    <div class="profile-card">
-        <i class="fa-solid fa-circle-user user-icon"></i>
-        <h2 id="welcomeText">Welcome!</h2>
-        <p id="userEmail" style="color: #86868b; font-size: 14px; margin-bottom: 30px;"></p>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fa fa-envelope"></i>
+            <p>Email Address</p>
+            <h3 id="statEmail">Loading...</h3>
+        </div>
+        <div class="stat-card">
+            <i class="fa fa-crown"></i>
+            <p>Member Status</p>
+            <h3>Premium Customer</h3>
+        </div>
+    </div>
 
-        <div class="info-group">
-            <label>Full Name</label>
-            <input type="text" id="userName" placeholder="Loading...">
-
-            <label>Mobile Number</label>
-            <input type="text" id="userPhone" placeholder="Not set">
-
-            <label>New Password (Optional)</label>
-            <input type="password" id="newPassword" placeholder="Enter new password to change">
+    <div class="profile-section">
+        <div class="section-title">Edit Profile Details</div>
+        
+        <div class="form-grid">
+            <div class="input-box">
+                <label>Full Name</label>
+                <input type="text" id="dbName" placeholder="Your Name">
+            </div>
+            <div class="input-box">
+                <label>Phone Number</label>
+                <input type="text" id="dbPhone" placeholder="+92 XXX XXXXXXX">
+            </div>
+            <div class="input-box">
+                <label>New Password</label>
+                <input type="password" id="dbPass" placeholder="••••••••">
+            </div>
+            <div class="input-box">
+                <label>Confirm Password</label>
+                <input type="password" id="dbPassConfirm" placeholder="••••••••">
+            </div>
         </div>
 
-        <button class="update-btn" onclick="updateProfile()">Update Profile</button>
-        <button class="logout-btn" onclick="logout()">Sign Out</button>
+        <button class="btn-update" onclick="updateProfile()">Save Changes</button>
+        <div class="logout-link" onclick="handleLogout()"><i class="fa fa-sign-out-alt"></i> Sign Out from Store</div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, updateProfile as updateAuthProfile, updatePassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, updatePassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
@@ -71,64 +183,24 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // Check if user is logged in
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            document.getElementById('userEmail').innerText = user.email;
-            
-            // Database se user ki extra details (phone wagera) uthana
+            document.getElementById('statEmail').innerText = user.email;
             onValue(ref(db, 'users/' + user.uid), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
-                    document.getElementById('userName').value = data.name || user.displayName || "";
-                    document.getElementById('userPhone').value = data.phone || "";
-                    document.getElementById('welcomeText').innerText = "Hi, " + (data.name || "User");
+                    document.getElementById('dbName').value = data.name || "";
+                    document.getElementById('dbPhone').value = data.phone || "";
                 }
             });
         } else {
-            // Agar login nahi hai toh login page par bhej do
             window.location.href = "login.html";
         }
     });
 
-    // Logout Function
-    window.logout = () => {
-        signOut(auth).then(() => {
-            window.location.href = "login.html";
-        });
-    };
-
-    // Update Profile Function
     window.updateProfile = async () => {
         const user = auth.currentUser;
-        const newName = document.getElementById('userName').value;
-        const newPhone = document.getElementById('userPhone').value;
-        const newPass = document.getElementById('newPassword').value;
-
-        try {
-            // 1. Update Realtime Database
-            await update(ref(db, 'users/' + user.uid), {
-                name: newName,
-                phone: newPhone
-            });
-
-            // 2. Update Firebase Auth Name
-            await updateAuthProfile(user, { displayName: newName });
-
-            // 3. Update Password if entered
-            if (newPass.length >= 6) {
-                await updatePassword(user, newPass);
-                alert("Profile and Password Updated!");
-            } else if (newPass.length > 0) {
-                alert("Password must be at least 6 characters.");
-            } else {
-                alert("Profile Updated Successfully!");
-            }
-
-        } catch (error) {
-            alert("Error updating: " + error.message);
-        }
-    };
-</script>
-</body>
-</html>
+        const name = document.getElementById('dbName').value;
+        const phone = document.getElementById('dbPhone').value;
+        const pass = document.getElementById('dbPass').value;
+        const passConfirm =
