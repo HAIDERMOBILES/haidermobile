@@ -3,42 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Haider Mobiles</title>
+    <title>Premium Admin | Haider Mobiles</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --bg: #050505; --card: #111; }
         body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        h1 { color: var(--gold); text-align: center; font-weight: 800; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: var(--gold); text-align: center; font-weight: 800; letter-spacing: 2px; }
         
-        /* Form Style */
-        .admin-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 40px; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        .admin-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
-        /* Product List Style */
-        .product-item { display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 5px solid var(--gold); }
-        .product-item img { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; background: white; }
-        .del-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
+        textarea { grid-column: span 2; height: 100px; resize: none; }
+        
+        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        button:hover { background: #fff; color: #000; }
+        
+        .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #222; }
+        .product-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: contain; background: white; padding: 5px; }
+        .info { flex-grow: 1; }
+        .del-btn { background: #ff4444; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
+
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } textarea { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>HAIDER MOBILES ADMIN</h1>
+    <h1>HAIDER MOBILES <span style="color:white; font-size: 14px; vertical-align: middle;">ADMIN PRO</span></h1>
     
     <div class="admin-box">
-        <h3>Add New Product</h3>
-        <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 15 Pro)">
-        <input type="text" id="pBrand" placeholder="Brand Name (e.g. Apple)">
-        <input type="text" id="pPrice" placeholder="Price (e.g. RS 350,000)">
-        <input type="text" id="pImg" placeholder="Image URL (Link)">
-        <button id="addBtn">UPLOAD PRODUCT</button>
+        <h3 style="margin-top:0; color:var(--gold);">Upload New Premium Product</h3>
+        <div class="form-grid">
+            <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 15 Pro Max)">
+            <input type="text" id="pBrand" placeholder="Brand Name (e.g. Apple)">
+            <input type="text" id="pPrice" placeholder="Current Price (e.g. Rs. 450,000)">
+            <input type="text" id="pOldPrice" placeholder="Old Price for Discount (Optional)">
+            <input type="text" id="pImg1" placeholder="Main Image URL">
+            <input type="text" id="pImg2" placeholder="Image 2 URL (Optional)">
+            <textarea id="pDesc" placeholder="Company Detail / Product Specifications..."></textarea>
+        </div>
+        <button id="addBtn">PUBLISH TO STORE</button>
     </div>
 
-    <h3>Inventory List</h3>
-    <div id="productList">
-        </div>
+    <h3 style="border-left: 4px solid var(--gold); padding-left: 10px;">Live Inventory</h3>
+    <div id="productList"></div>
 </div>
 
 <script type="module">
@@ -57,40 +67,53 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- 1. Add Product ---
+    // --- 1. Add Product with Correct ID Logic ---
     document.getElementById('addBtn').onclick = () => {
         const name = document.getElementById('pName').value;
         const brand = document.getElementById('pBrand').value;
         const price = document.getElementById('pPrice').value;
-        const img = document.getElementById('pImg').value;
+        const oldPrice = document.getElementById('pOldPrice').value;
+        const img1 = document.getElementById('pImg1').value;
+        const img2 = document.getElementById('pImg2').value;
+        const desc = document.getElementById('pDesc').value;
 
-        if(name && price && img) {
-            const newProdRef = push(ref(db, 'products'));
+        if(name && price && img1) {
+            const productsRef = ref(db, 'products');
+            const newProdRef = push(productsRef); // Firebase unique key generated here
+
             set(newProdRef, {
-                id: Date.now(),
                 name: name,
                 brand: brand,
                 price: price,
-                img: img
+                oldPrice: oldPrice || "",
+                img: img1,
+                img2: img2 || img1, // Agar 2nd image nahi hai toh 1st hi use hogi
+                description: desc || "Premium quality mobile available at Haider Mobiles."
             }).then(() => {
-                alert("Product Added!");
-                document.querySelectorAll('input').forEach(i => i.value = "");
-            });
-        } else { alert("Please fill all fields!"); }
+                alert("Product Published Successfully!");
+                document.querySelectorAll('input, textarea').forEach(i => i.value = "");
+            }).catch(err => alert("Error: " + err.message));
+        } else { 
+            alert("Name, Price, and Main Image are required!"); 
+        }
     };
 
     // --- 2. Load & Display Products ---
     onValue(ref(db, 'products'), (snapshot) => {
         const list = document.getElementById('productList');
         list.innerHTML = "";
+        if (!snapshot.exists()) {
+            list.innerHTML = "<p style='color:#666;'>No products in inventory.</p>";
+            return;
+        }
         snapshot.forEach((child) => {
             const p = child.val();
             list.innerHTML += `
                 <div class="product-item">
                     <img src="${p.img}">
-                    <div>
+                    <div class="info">
                         <b>${p.name}</b><br>
-                        <small>${p.price}</small>
+                        <small style="color:var(--gold)">${p.brand} | ${p.price}</small>
                     </div>
                     <button class="del-btn" onclick="deleteProduct('${child.key}')">Delete</button>
                 </div>
@@ -100,7 +123,7 @@
 
     // --- 3. Delete Function ---
     window.deleteProduct = (key) => {
-        if(confirm("Delete this product?")) {
+        if(confirm("Are you sure you want to remove this item?")) {
             remove(ref(db, 'products/' + key));
         }
     };
