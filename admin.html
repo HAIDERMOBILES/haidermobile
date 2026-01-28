@@ -3,44 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Admin Pro Max</title>
+    <title>Haider Mobiles | Free Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --bg: #050505; --card: #111; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        .admin-box { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 40px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        input, textarea { width: 100%; padding: 14px; background: #000; border: 1px solid #333; color: #fff; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .admin-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 40px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; }
         textarea { grid-column: span 2; height: 100px; }
-        .file-input-wrapper { grid-column: span 2; position: relative; border: 2px dashed #333; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .file-input-wrapper:hover { border-color: var(--gold); background: rgba(212,175,55,0.05); }
-        .file-input-wrapper input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-        #uploadProgress { width: 0%; height: 5px; background: var(--gold); border-radius: 10px; margin-top: 10px; transition: 0.3s; }
-        button { width: 100%; padding: 18px; background: var(--gold); border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; font-size: 16px; transition: 0.3s; }
-        button:disabled { background: #444 !important; color: #888 !important; cursor: not-allowed; transform: none !important; }
-        .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #222; }
-        .product-item img { width: 60px; height: 60px; border-radius: 10px; object-fit: contain; background: white; }
+        button { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 15px; color: black; }
+        .product-item { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #222; }
+        .product-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: contain; background: white; }
+        .info { flex-grow: 1; }
+        .del-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="color:var(--gold); text-align:center; letter-spacing: 2px;">DASHBOARD CONTROL</h1>
+    <h1 style="color:var(--gold); text-align:center;">ADMIN PANEL (FREE MODE)</h1>
     
     <div class="admin-box">
         <div class="form-grid">
-            <input type="text" id="pName" placeholder="Device Name (e.g. iPhone 15)">
-            <input type="text" id="pBrand" placeholder="Brand (e.g. Apple)">
-            <input type="text" id="pPrice" placeholder="Current Price (e.g. Rs. 250,000)">
+            <input type="text" id="pName" placeholder="Product Name">
+            <input type="text" id="pBrand" placeholder="Brand">
+            <input type="text" id="pPrice" placeholder="Price (Rs.)">
             <input type="text" id="pOldPrice" placeholder="Old Price (Optional)">
-            
-            <div class="file-input-wrapper" id="dropZone">
-                <span id="fileLabel">📸 Click to Upload Product Image</span>
-                <input type="file" id="pImgFile" accept="image/*">
-                <div id="uploadProgress"></div>
-            </div>
-
-            <textarea id="pDesc" placeholder="Describe specifications, warranty, and condition..."></textarea>
+            <input type="text" id="pImg" placeholder="Paste Image Link (from WhatsApp or Google)">
+            <textarea id="pDesc" placeholder="Product Specifications..."></textarea>
         </div>
-        <button id="addBtn" disabled>WAITING FOR IMAGE...</
+        <button id="addBtn">ADD PRODUCT</button>
+    </div>
+
+    <h3>Live Inventory</h3>
+    <div id="productList"></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        storageBucket: "web-app-4f3a1.firebasestorage.app",
+        messagingSenderId: "222099203820",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.getElementById('addBtn').onclick = () => {
+        const name = document.getElementById('pName').value;
+        const brand = document.getElementById('pBrand').value;
+        const price = document.getElementById('pPrice').value;
+        const oldPrice = document.getElementById('pOldPrice').value;
+        const img = document.getElementById('pImg').value;
+        const desc = document.getElementById('pDesc').value;
+
+        if(name && price && img) {
+            const newRef = push(ref(db, 'products'));
+            set(newRef, {
+                name, brand, price, oldPrice, img,
+                description: desc || "No description."
+            }).then(() => {
+                alert("Product Added!");
+                location.reload();
+            });
+        } else { alert("Fill Name, Price and Image Link!"); }
+    };
+
+    onValue(ref(db, 'products'), (snapshot) => {
+        const list = document.getElementById('productList');
+        list.innerHTML = "";
+        snapshot.forEach((child) => {
+            const p = child.val();
+            list.innerHTML += `
+                <div class="product-item">
+                    <img src="${p.img}">
+                    <div class="info"><b>${p.name}</b><br><small>${p.price}</small></div>
+                    <button class="del-btn" onclick="deleteProduct('${child.key}')">Delete</button>
+                </div>`;
+        });
+    });
+
+    window.deleteProduct = (key) => { if(confirm("Delete?")) remove(ref(db, 'products/' + key)); };
+</script>
+</body>
+</html>
