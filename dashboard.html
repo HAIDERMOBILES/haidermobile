@@ -1,117 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Haider Mobiles</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root { --gold: #d4af37; --bg: #000; --card: #111; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
+        .profile-card { background: var(--card); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid #222; }
+        #userAvatar { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--gold); padding: 5px; }
+        .order-card { background: #0a0a0a; padding: 15px; border-radius: 12px; border-left: 4px solid var(--gold); margin-top: 15px; }
+        .logout-btn { background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; margin-top: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="profile-card">
+    <img id="userAvatar" src="https://via.placeholder.com/100" alt="Profile">
+    <h2 id="userNameDisplay">Loading...</h2>
+    <p id="userEmailDisplay" style="color:#888;"></p>
+    <button onclick="window.handleLogout()" class="logout-btn">Logout</button>
+</div>
+
+<h3>My Orders</h3>
+<div id="orderHistory"></div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, updatePassword, updateEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
         authDomain: "web-app-4f3a1.firebaseapp.com",
         projectId: "web-app-4f3a1",
         databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        storageBucket: "web-app-4f3a1.firebasestorage.app",
-        messagingSenderId: "222099203820",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // 1. Check User & Load Data
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            document.getElementById('userEmailHeader').innerText = user.email;
-            document.getElementById('dbEmail').value = user.email;
+            document.getElementById('userEmailDisplay').innerText = user.email;
             
-            // Profile Info Load Karein
-            onValue(ref(db, 'users/' + user.uid), (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    document.getElementById('dbName').value = data.name || "";
-                    document.getElementById('dbPhone').value = data.phone || "";
-                    document.getElementById('userNameHeader').innerText = data.name || "User";
+            // User Data Load
+            onValue(ref(db, 'users/' + user.uid), (snap) => {
+                const data = snap.val();
+                if(data) {
+                    document.getElementById('userNameDisplay').innerText = data.name || "User";
                     if(data.pic) document.getElementById('userAvatar').src = data.pic;
                 }
             });
 
-            // Orders Load Karein
-            onValue(ref(db, 'users/' + user.uid + '/orders'), (snapshot) => {
-                const orderList = document.getElementById('orderList');
-                if (snapshot.exists()) {
-                    orderList.innerHTML = "";
-                    snapshot.forEach((child) => {
-                        const order = child.val();
-                        orderList.innerHTML += `
-                            <tr>
-                                <td>#${child.key.slice(-5).toUpperCase()}</td>
-                                <td>${order.date}</td>
-                                <td>${order.items}</td>
-                                <td style="color:#d4af37">${order.total}</td>
-                                <td><span class="order-tag">${order.status}</span></td>
-                            </tr>`;
-                    });
-                }
+            // Orders Load
+            onValue(ref(db, 'users/' + user.uid + '/orders'), (snap) => {
+                const history = document.getElementById('orderHistory');
+                history.innerHTML = "";
+                snap.forEach(child => {
+                    const order = child.val();
+                    history.innerHTML += `
+                        <div class="order-card">
+                            <div style="font-size:12px; color:#888;">${order.date}</div>
+                            <div style="margin:5px 0;">${order.items}</div>
+                            <div style="color:var(--gold); font-weight:bold;">${order.total} - ${order.status}</div>
+                        </div>`;
+                });
             });
         } else {
             window.location.href = "login.html";
         }
     });
 
-    // 2. Tab Switch Fix
-    window.openTab = (evt, tabName) => {
-        const sections = document.getElementsByClassName("content-section");
-        for (let s of sections) { s.style.display = "none"; s.classList.remove("active"); }
-        
-        const btns = document.getElementsByClassName("tab-btn");
-        for (let b of btns) { b.classList.remove("active"); }
-        
-        document.getElementById(tabName).style.display = "block";
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    }
-
-    // 3. Picture Upload Fix
-    window.uploadProfilePic = async (input) => {
-        const file = input.files[0];
-        if(!file) return;
-
-        const formData = new FormData();
-        formData.append('image', file);
-        alert("Uploading...");
-
-        try {
-            const res = await fetch('https://api.imgbb.com/1/upload?key=638680e66838a53e6b2160655d04588d', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await res.json();
-            if(data.success) {
-                const url = data.data.display_url;
-                await update(ref(db, 'users/' + auth.currentUser.uid), { pic: url });
-                document.getElementById('userAvatar').src = url;
-                alert("✅ Success!");
-            }
-        } catch (e) { alert("Upload error!"); }
-    }
-
-    // 4. Update Profile Fix
-    window.updateProfile = async () => {
-        const user = auth.currentUser;
-        const name = document.getElementById('dbName').value;
-        const phone = document.getElementById('dbPhone').value;
-        const email = document.getElementById('dbEmail').value;
-        const pass = document.getElementById('dbPass').value;
-
-        try {
-            await update(ref(db, 'users/' + user.uid), { name, phone });
-            if(email !== user.email) await updateEmail(user, email);
-            if(pass !== "") await updatePassword(user, pass);
-            alert("✨ Profile Updated!");
-        } catch (e) { alert("For security, please re-login to change Email/Password."); }
-    }
-
-    // 5. Logout Fix
     window.handleLogout = () => {
-        signOut(auth).then(() => window.location.href = "index.html");
-    }
+        signOut(auth).then(() => { window.location.href = "login.html"; });
+    };
 </script>
+</body>
+</html>
