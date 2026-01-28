@@ -22,10 +22,9 @@
         .nav-icons { display: flex; gap: 15px; color: #f5f5f7; font-size: 16px; }
         .nav-icons i { cursor: pointer; transition: 0.3s; }
         .nav-icons i:hover { color: var(--gold); }
-        .cart-icon { position: relative; }
-        .badge { position: absolute; top: -8px; right: -8px; background: var(--apple-blue); font-size: 9px; padding: 2px 5px; border-radius: 50%; }
+        .cart-icon { position: relative; cursor: pointer; }
+        .badge { position: absolute; top: -8px; right: -8px; background: var(--apple-blue); font-size: 9px; padding: 2px 5px; border-radius: 50%; display: none; }
 
-        /* Aapka Purana Style */
         #loader { text-align: center; padding: 100px; color: var(--gold); font-size: 18px; font-weight: 600; }
         .product-header { text-align: center; padding: 40px 0; }
         .brand-label { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
@@ -37,14 +36,18 @@
         .thumb-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .thumb-row img { width: 65px; height: 65px; background: #1a1a1a; border-radius: 10px; cursor: pointer; border: 2px solid transparent; padding: 5px; object-fit: contain; }
         .thumb-row img.active { border-color: var(--gold); }
+        
         .price-current { font-size: 36px; font-weight: 700; color: #fff; }
-        .price-old { font-size: 20px; color: var(--text-dim); text-decoration: line-through; margin-left: 10px; }
-        .buy-btn { display: block; background: var(--apple-blue); color: #fff; text-align: center; text-decoration: none; padding: 20px; border-radius: 14px; font-weight: 600; font-size: 18px; margin-top: 30px; }
+        
+        /* Action Buttons */
+        .action-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 30px; }
+        .add-cart-btn { background: #222; color: #fff; text-align: center; padding: 18px; border-radius: 14px; font-weight: 600; cursor: pointer; border: 1px solid #444; }
+        .buy-btn { background: var(--apple-blue); color: #fff; text-align: center; text-decoration: none; padding: 18px; border-radius: 14px; font-weight: 600; }
+
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding-bottom: 80px; }
         .apple-card { text-decoration: none; color: inherit; text-align: center; padding: 20px; background: #0f0f0f; border-radius: 20px; border: 1px solid #222; }
         footer { background: #050505; padding: 60px 20px; border-top: 1px solid #222; font-size: 13px; color: var(--text-dim); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-        @media (max-width: 600px) { h1 { font-size: 28px; } .main-img { height: 300px; } .search-box input { width: 70px; } }
     </style>
 </head>
 <body>
@@ -58,11 +61,11 @@
                 <input type="text" id="searchInput" placeholder="Search...">
             </div>
             <div class="nav-icons">
-                <i class="fa fa-user-plus" title="Register"></i>
-                <i class="fa fa-user" title="Login"></i>
-                <div class="cart-icon">
+                <i class="fa fa-user-plus" title="Register" onclick="location.href='login.html?action=signup'"></i>
+                <i class="fa fa-user" title="Login" onclick="location.href='login.html'"></i>
+                <div class="cart-icon" onclick="location.href='cart.html'">
                     <i class="fa fa-shopping-bag"></i>
-                    <span class="badge">0</span>
+                    <span class="badge" id="cartBadge">0</span>
                 </div>
             </div>
         </div>
@@ -74,94 +77,3 @@
     <div id="main-content" style="display: none;"></div>
     <h2 style="color: var(--gold); margin: 80px 0 30px; border-left: 4px solid var(--gold); padding-left: 15px;">Related Products</h2>
     <div id="product-gallery" class="product-grid"></div>
-</div>
-
-<footer>
-    <div class="container footer-grid">
-        <div><h4>HAIDER MOBILES</h4><p>Premium Quality Gadgets & Accessories.</p></div>
-        <div><h4>Quick Contact</h4><p>📞 +92 3279518790<br>✉️ support@h.store0066@icloud.com</p></div>
-        <div><h4>Our Store</h4><p>📍 Main Road Chopala Nzad Jamia Masjid.</p></div>
-        <div><h4>Map</h4><p><i class="fa-solid fa-map"></i> 32.644360, 74.326006</p></div>
-    </div>
-</footer>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        storageBucket: "web-app-4f3a1.firebasestorage.app",
-        messagingSenderId: "222099203820",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const productId = new URLSearchParams(window.location.search).get('id');
-
-    // SEARCH FUNCTION
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        document.querySelectorAll('.apple-card').forEach(card => {
-            const name = card.querySelector('h4').innerText.toLowerCase();
-            card.style.display = name.includes(query) ? 'block' : 'none';
-        });
-    });
-
-    if (productId) {
-        onValue(ref(db, 'products/' + productId), (snapshot) => {
-            const p = snapshot.val();
-            if (p) {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                const images = [p.img, p.img2, p.img3].filter(u => u && u.trim() !== "");
-                let thumbs = images.length > 1 ? images.map((u, i) => 
-                    `<img src="${u}" onerror="this.src='https://via.placeholder.com/100?text=Error'" onclick="document.getElementById('mImg').src='${u}'; document.querySelectorAll('.thumb-row img').forEach(img=>img.classList.remove('active')); this.classList.add('active')" class="${i===0?'active':''}">`
-                ).join('') : '';
-
-                document.getElementById('main-content').innerHTML = `
-                    <div class="product-header">
-                        <span class="brand-label">Official Store</span>
-                        <h1>${p.name}</h1>
-                    </div>
-                    <div class="apple-wrapper">
-                        <div class="slider-section">
-                            <div class="main-img">
-                                <img id="mImg" src="${images[0]}" onerror="this.src='https://via.placeholder.com/400?text=Image+Error'">
-                            </div>
-                            <div class="thumb-row">${thumbs}</div>
-                        </div>
-                        <div class="info-section">
-                            <div style="margin-bottom:20px;">
-                                <span class="price-current">${p.price}</span>
-                                ${p.oldPrice ? `<span class="price-old">${p.oldPrice}</span>` : ''}
-                            </div>
-                            <div class="main-desc">${p.description ? p.description.replace(/\n/g, '<br>') : 'Details coming soon...'}</div>
-                            <a href="https://wa.me/923279518790?text=I want to buy: ${p.name}" class="buy-btn">Order on WhatsApp</a>
-                        </div>
-                    </div>`;
-            }
-        });
-    }
-
-    onValue(ref(db, 'products'), (snapshot) => {
-        const gallery = document.getElementById('product-gallery');
-        gallery.innerHTML = "";
-        snapshot.forEach(child => {
-            const p = child.val();
-            if (child.key !== productId) {
-                gallery.innerHTML += `
-                    <a href="product.html?id=${child.key}" class="apple-card">
-                        <img src="${p.img}" style="width:100%; height:150px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/200?text=Image+Error'">
-                        <h4 style="margin:5px 0; color:#fff; font-size:14px;">${p.name}</h4>
-                        <div style="color:var(--gold); font-size:14px; font-weight:bold;">${p.price}</div>
-                    </a>`;
-            }
-        });
-    });
-</script>
-</body>
-</html>
