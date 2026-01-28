@@ -5,146 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haider Mobiles | Premium Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --apple-black: #000000; --apple-blue: #0066cc; --gold: #d4af37; --text-dim: #86868b; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--apple-black); color: #fff; -webkit-font-smoothing: antialiased; }
+        :root { --apple-black: #000000; --apple-blue: #0066cc; --gold: #d4af37; --text-dim: #86868b; --nav-bg: rgba(0, 0, 0, 0.8); }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--apple-black); color: #fff; -webkit-font-smoothing: antialiased; padding-top: 60px; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-        /* Loader & Error Styling */
-        #loader { text-align: center; padding: 100px; color: var(--gold); font-size: 18px; font-weight: 600; }
-        .img-error { color: #ff4444; font-size: 12px; margin-top: 10px; display: none; }
+        /* --- Apple Navbar --- */
+        nav { position: fixed; top: 0; left: 0; width: 100%; height: 50px; background: var(--nav-bg); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid #333; }
+        .nav-content { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 100%; padding: 0 20px; }
+        .logo { font-weight: 800; font-size: 18px; color: #fff; text-decoration: none; letter-spacing: -0.5px; }
+        
+        .nav-tools { display: flex; align-items: center; gap: 20px; }
+        .search-box { position: relative; display: flex; align-items: center; background: #1d1d1f; border-radius: 8px; padding: 5px 12px; }
+        .search-box input { background: none; border: none; color: #fff; font-size: 13px; outline: none; width: 150px; }
+        .search-box i { color: var(--text-dim); font-size: 12px; }
 
-        /* Header */
+        .nav-icons { display: flex; gap: 18px; font-size: 16px; color: #f5f5f7; cursor: pointer; }
+        .nav-icons i:hover { color: var(--gold); transition: 0.3s; }
+        .cart-count { background: var(--apple-blue); color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 50%; position: absolute; top: -8px; right: -8px; }
+
+        /* --- Layout & Details --- */
+        #loader { text-align: center; padding: 100px; color: var(--gold); font-size: 18px; }
         .product-header { text-align: center; padding: 40px 0; }
         .brand-label { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-        h1 { font-size: clamp(24px, 5vw, 42px); margin: 10px 0; font-weight: 800; color: #fff; }
+        h1 { font-size: clamp(24px, 5vw, 42px); margin: 10px 0; font-weight: 800; }
 
-        /* Layout */
         .apple-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; margin-bottom: 60px; }
-
-        /* Slider Section with ImgBB Fix */
         .slider-section { background: #0f0f0f; border-radius: 25px; padding: 30px; border: 1px solid #222; text-align: center; }
-        .main-img { height: 400px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; background: #000; border-radius: 15px; }
-        .main-img img { max-width: 100%; max-height: 100%; object-fit: contain; transition: 0.3s; }
-        
-        .thumb-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .thumb-row img { width: 65px; height: 65px; background: #1a1a1a; border-radius: 10px; cursor: pointer; border: 2px solid transparent; padding: 5px; object-fit: contain; }
+        .main-img { height: 400px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; background: #000; border-radius: 15px; }
+        .main-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .thumb-row { display: flex; justify-content: center; gap: 10px; }
+        .thumb-row img { width: 60px; height: 60px; background: #1a1a1a; border-radius: 10px; cursor: pointer; border: 2px solid transparent; padding: 5px; object-fit: contain; }
         .thumb-row img.active { border-color: var(--gold); }
 
-        /* Price & Info */
         .price-current { font-size: 36px; font-weight: 700; color: #fff; }
-        .price-old { font-size: 20px; color: var(--text-dim); text-decoration: line-through; margin-left: 10px; }
-        .buy-btn { display: block; background: var(--apple-blue); color: #fff; text-align: center; text-decoration: none; padding: 20px; border-radius: 14px; font-weight: 600; font-size: 18px; margin-top: 30px; transition: 0.3s; }
-        .buy-btn:hover { background: #0077ed; transform: scale(1.02); }
-        .main-desc { font-size: 16px; line-height: 1.6; color: #d2d2d7; margin-top: 25px; }
-
-        /* Related Products */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding-bottom: 80px; }
-        .apple-card { text-decoration: none; color: inherit; text-align: center; padding: 20px; background: #0f0f0f; border-radius: 20px; border: 1px solid #222; transition: 0.3s; }
-        .apple-card:hover { border-color: var(--gold); }
-        .apple-card img { width: 100%; height: 160px; object-fit: contain; margin-bottom: 10px; background: #000; border-radius: 10px; }
-
+        .buy-btn { display: block; background: var(--apple-blue); color: #fff; text-align: center; text-decoration: none; padding: 18px; border-radius: 12px; font-weight: 600; margin-top: 30px; }
+        
+        /* Footer */
         footer { background: #050505; padding: 60px 20px; border-top: 1px solid #222; font-size: 13px; color: var(--text-dim); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
 
-        @media (max-width: 600px) { h1 { font-size: 28px; } .main-img { height: 300px; } }
+        @media (max-width: 768px) { .search-box input { width: 80px; } }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="loader">✨ Loading Your Premium Gadget...</div>
-    <div id="main-content" style="display: none;"></div>
+<nav>
+    <div class="nav-content">
+        <a href="index.html" class="logo">HAIDER MOBILES</a>
+        <div class="nav-tools">
+            <div class="search-box">
+                <i class="fa fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search...">
+            </div>
+            <div class="nav-icons">
+                <i class="fa fa-user-plus" title="Register" onclick="window.location.href='register.html'"></i>
+                <i class="fa fa-sign-in-alt" title="Login" onclick="window.location.href='login.html'"></i>
+                <div style="position: relative;">
+                    <i class="fa fa-shopping-cart" title="Cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
-    <h2 style="color: var(--gold); margin: 80px 0 30px; border-left: 4px solid var(--gold); padding-left: 15px;">Related Products</h2>
+<div class="container">
+    <div id="loader">✨ Loading Premium Experience...</div>
+    <div id="main-content" style="display: none;"></div>
+    <h2 style="color: var(--gold); margin: 60px 0 30px;">Recommended for You</h2>
     <div id="product-gallery" class="product-grid"></div>
 </div>
 
 <footer>
     <div class="container footer-grid">
-        <div><h4>HAIDER MOBILES</h4><p>Premium Quality Gadgets & Accessories.</p></div>
-        <div><h4>Quick Contact</h4><p>📞 +92 3279518790<br>✉️ support@h.store0066@icloud.com</p></div>
-        <div><h4>Our Store</h4><p>📍 Main Road Chopala Nzad Jamia Masjid.</p></div>
-        <div><h4>Map</h4><p><i class="fa-solid fa-map"></i>32.644360, 74.326006</p></div>
-    </div>
-</footer>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        storageBucket: "web-app-4f3a1.firebasestorage.app",
-        messagingSenderId: "222099203820",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const productId = new URLSearchParams(window.location.search).get('id');
-
-    if (productId) {
-        onValue(ref(db, 'products/' + productId), (snapshot) => {
-            const p = snapshot.val();
-            if (p) {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-
-                // ImgBB Array Handling
-                const images = [p.img, p.img2, p.img3].filter(u => u && u.trim() !== "");
-                
-                let thumbs = images.length > 1 ? images.map((u, i) => 
-                    `<img src="${u}" onerror="this.src='https://via.placeholder.com/100?text=Error'" onclick="document.getElementById('mImg').src='${u}'; document.querySelectorAll('.thumb-row img').forEach(img=>img.classList.remove('active')); this.classList.add('active')" class="${i===0?'active':''}">`
-                ).join('') : '';
-
-                document.getElementById('main-content').innerHTML = `
-                    <div class="product-header">
-                        <span class="brand-label">Official Store</span>
-                        <h1>${p.name}</h1>
-                    </div>
-                    <div class="apple-wrapper">
-                        <div class="slider-section">
-                            <div class="main-img">
-                                <img id="mImg" src="${images[0]}" onerror="this.parentElement.innerHTML='<p style=color:red>Image Link Error (Check ImgBB Link)</p>'">
-                            </div>
-                            <div class="thumb-row">${thumbs}</div>
-                        </div>
-                        <div class="info-section">
-                            <div style="margin-bottom:20px;">
-                                <span class="price-current">${p.price}</span>
-                                ${p.oldPrice ? `<span class="price-old">${p.oldPrice}</span>` : ''}
-                            </div>
-                            <div style="color:var(--gold); font-weight:600; margin-bottom:15px; font-size:14px;">⭐⭐⭐⭐⭐ High Rated Gadget</div>
-                            <div class="main-desc">${p.description ? p.description.replace(/\n/g, '<br>') : 'Details coming soon...'}</div>
-                            <a href="https://wa.me/923279518790?text=I want to buy: ${p.name}" class="buy-btn">Order on WhatsApp</a>
-                            <p style="text-align:center; color:var(--text-dim); font-size:12px; margin-top:15px;">Fast Delivery All Over Pakistan 🇵🇰</p>
-                        </div>
-                    </div>`;
-            } else {
-                document.getElementById('loader').innerHTML = "❌ Product Not Found.";
-            }
-        });
-    }
-
-    // Related Gallery
-    onValue(ref(db, 'products'), (snapshot) => {
-        const gallery = document.getElementById('product-gallery');
-        gallery.innerHTML = "";
-        snapshot.forEach(child => {
-            const p = child.val();
-            if (child.key !== productId) {
-                gallery.innerHTML += `
-                    <a href="product.html?id=${child.key}" class="apple-card">
-                        <img src="${p.img}" onerror="this.src='https://via.placeholder.com/200?text=Image+Error'">
-                        <h4 style="margin:5px 0; color:#fff; font-size:14px;">${p.name}</h4>
-                        <div style="color:var(--gold); font-size:14px; font-weight:bold;">${p.price}</div>
-                    </a>`;
-            }
-        });
-    });
-</script>
-</body>
-</html>
+        <div><h4>HAIDER MOBILES</h4><p>Premium Gadgets & Authentic Accessories.</p></div>
+        <div><h4>Contact</h4><p>📞 +92 327 9518790<br>✉️ h.store0066@
