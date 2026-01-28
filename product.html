@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Product Detail</title>
+    <title>Haider Mobiles | Premium Product</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --bg: #0b0b0b; --card: #161616; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: white; }
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
 
-        /* Main Product Section */
-        .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid #222; }
+        /* Product Top Section */
+        .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid #222; margin-bottom: 30px; }
         .img-view { width: 100%; border-radius: 15px; background: white; padding: 10px; height: 400px; object-fit: contain; }
         
         .price-row { display: flex; align-items: center; gap: 15px; margin: 20px 0; }
         .new-price { font-size: 32px; font-weight: 800; color: var(--gold); }
         .old-price { text-decoration: line-through; color: #666; font-size: 18px; }
 
-        .specs-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .specs-table td { padding: 12px; border-bottom: 1px solid #222; font-size: 14px; }
-        .specs-table td:first-child { color: #888; width: 40%; }
+        /* 🔥 New Description & Specs Style */
+        .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+        .spec-item { background: #1f1f1f; padding: 12px; border-radius: 12px; border-left: 3px solid var(--gold); }
+        .spec-label { display: block; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .spec-value { font-size: 14px; font-weight: 600; color: #fff; }
 
-        .buy-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 800; margin-top: 25px; transition: 0.3s; }
-        .buy-btn:hover { background: #1ebd5b; transform: translateY(-3px); }
+        .detailed-desc { margin-top: 25px; padding-top: 20px; border-top: 1px solid #333; }
+        .detailed-desc h4 { color: var(--gold); margin: 0 0 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .detailed-desc p { font-size: 14px; line-height: 1.6; color: #ccc; margin: 0; }
 
-        /* Related Products Section */
-        .related-section { margin-top: 60px; }
-        .section-title { font-size: 24px; font-weight: 800; margin-bottom: 25px; border-left: 5px solid var(--gold); padding-left: 15px; }
+        .delivery-badges { display: flex; justify-content: space-around; margin-top: 25px; background: #222; padding: 15px; border-radius: 15px; border: 1px solid #333; }
+        .badge-item { font-size: 12px; font-weight: 600; text-align: center; }
+
+        .buy-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 800; margin-top: 30px; transition: 0.3s; }
+        .buy-btn:hover { background: #1ebd5b; transform: scale(1.02); }
+
+        /* Related List */
+        .section-title { font-size: 24px; font-weight: 800; margin: 40px 0 20px; border-left: 5px solid var(--gold); padding-left: 15px; }
         .product-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
         .rel-card { background: var(--card); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
-        .rel-card:hover { border-color: var(--gold); }
         .rel-card img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
 
-        @media (max-width: 768px) { .product-main { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .product-main { grid-template-columns: 1fr; } .specs-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -43,9 +50,8 @@
         </div>
 
     <div class="related-section">
-        <h2 class="section-title">Explore More Items</h2>
-        <div id="related-list" class="product-scroll">
-            </div>
+        <h2 class="section-title">Other Premium Accessories</h2>
+        <div id="related-list" class="product-scroll"></div>
     </div>
 </div>
 
@@ -68,7 +74,6 @@
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
 
-    // 1. Load Main Product
     if (productId) {
         get(ref(db, `products/${productId}`)).then((snapshot) => {
             if (snapshot.exists()) {
@@ -77,45 +82,13 @@
                     <div class="product-main">
                         <img src="${p.img}" class="img-view">
                         <div>
-                            <span style="color:var(--gold); font-weight:bold;">${p.brand || 'Original'}</span>
-                            <h1 style="margin:5px 0;">${p.name}</h1>
+                            <span style="color:var(--gold); font-weight:800; font-size:12px;">${p.brand || 'HAIDER MOBILES'}</span>
+                            <h1 style="margin:5px 0 15px;">${p.name}</h1>
+                            
                             <div class="price-row">
                                 <span class="new-price">${p.price}</span>
                                 ${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}
                             </div>
-                            
-                            <table class="specs-table">
-                                <tr><td>Condition</td><td>10/10 Fresh Stock</td></tr>
-                                <tr><td>Warranty</td><td>7 Days Checking</td></tr>
-                                <tr><td>Delivery</td><td>Cash on Delivery</td></tr>
-                                <tr><td>Description</td><td>${p.description || 'Premium quality product.'}</td></tr>
-                            </table>
 
-                            <a href="https://wa.me/923000000000?text=I want to buy ${p.name}" class="buy-btn">ORDER VIA WHATSAPP</a>
-                        </div>
-                    </div>
-                `;
-            }
-        });
-    }
-
-    // 2. Load More Products
-    onValue(ref(db, 'products'), (snapshot) => {
-        const list = document.getElementById('related-list');
-        list.innerHTML = "";
-        snapshot.forEach((child) => {
-            if (child.key !== productId) { // Current product ko list mein na dikhaye
-                const p = child.val();
-                list.innerHTML += `
-                    <a href="product.html?id=${child.key}" class="rel-card">
-                        <img src="${p.img}">
-                        <div style="font-weight:600;">${p.name}</div>
-                        <div style="color:var(--gold);">${p.price}</div>
-                    </a>
-                `;
-            }
-        });
-    });
-</script>
-</body>
-</html>
+                            <div class="specs-grid">
+                                <div class="spec-item"><span class="spec-label">Condition</span><span
