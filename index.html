@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Haider Mobiles | Premium Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
 :root { 
     --gold: #d4af37; 
@@ -13,89 +14,69 @@
     --card-bg: #0a0a0a; 
     --glass: rgba(255, 255, 255, 0.03);
     --border: rgba(212, 175, 55, 0.15); 
+    --apple-blue: #0066cc;
 }
 
 * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; padding-top: 70px; }
 
-/* --- PREMIUM HEADER --- */
+/* --- PREMIUM STICKY NAVBAR --- */
 .top-header { 
-    position: sticky; top: 0; z-index: 1000; 
-    background: rgba(0, 0, 0, 0.8); 
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; 
+    background: rgba(0, 0, 0, 0.85); 
     backdrop-filter: blur(20px); 
     border-bottom: 1px solid var(--border); 
-    padding: 15px 5%;
+    padding: 10px 5%;
 }
-.header-main { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+.header-main { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+
 .store-name { 
-    font-weight: 800; color: var(--gold); font-size: 1.5rem; 
-    letter-spacing: 1px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    font-weight: 800; color: var(--gold); font-size: 1.4rem; 
+    text-decoration: none; letter-spacing: 1px;
 }
 
+.search-container { position: relative; width: 40%; }
 .search-box { 
-    background: var(--glass); border: 1px solid #222; color: #fff; 
-    padding: 10px 20px; border-radius: 30px; width: 40%; outline: none; 
+    width: 100%; background: var(--glass); border: 1px solid #222; color: #fff; 
+    padding: 8px 15px 8px 35px; border-radius: 20px; outline: none; font-size: 13px;
 }
-.search-box:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+.search-container i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666; font-size: 12px; }
 
-/* --- AUTH BUTTONS --- */
-.auth-buttons { display: flex; gap: 12px; }
-.btn-auth { 
-    padding: 8px 20px; border-radius: 50px; font-size: 12px; 
-    font-weight: 600; text-decoration: none; text-transform: uppercase; 
+/* --- NAVBAR TOOLS --- */
+.nav-tools { display: flex; align-items: center; gap: 20px; }
+.nav-icons { display: flex; gap: 18px; font-size: 18px; align-items: center; }
+.nav-icons i { cursor: pointer; color: #f5f5f7; }
+.nav-icons i:hover { color: var(--gold); }
+
+.cart-icon-wrapper { position: relative; }
+.badge { 
+    position: absolute; top: -8px; right: -8px; background: var(--apple-blue); 
+    color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; 
+    border-radius: 50%; display: none; 
 }
-.login-btn { color: #fff; border: 1px solid #333; }
-.login-btn:hover { border-color: var(--gold); color: var(--gold); }
-.reg-btn { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
-.reg-btn:hover { transform: scale(1.05); background: var(--gold-bright); }
 
-/* --- PREMIUM BRAND NAV --- */
-.brand-nav { display: flex; gap: 15px; overflow-x: auto; padding: 20px 0 10px; scrollbar-width: none; }
+/* --- BRAND CHIPS --- */
+.brand-nav { display: flex; gap: 12px; overflow-x: auto; padding: 15px 5%; scrollbar-width: none; background: #000; }
 .brand-chip { 
-    padding: 8px 25px; background: var(--glass); border: 1px solid #222; 
-    border-radius: 50px; font-size: 13px; cursor: pointer; color: #aaa; 
+    padding: 6px 20px; background: var(--glass); border: 1px solid #222; 
+    border-radius: 50px; font-size: 12px; cursor: pointer; color: #aaa; white-space: nowrap;
 }
-.brand-chip:hover, .brand-chip.active { color: #000; background: var(--gold); border-color: var(--gold); }
+.brand-chip.active { color: #000; background: var(--gold); border-color: var(--gold); font-weight: 600; }
 
-/* --- SECTIONS --- */
-.brand-section { padding: 40px 5%; }
-.brand-title { 
-    font-size: 28px; font-weight: 800; margin-bottom: 30px; 
-    color: #fff; display: flex; align-items: center; gap: 15px;
-}
-.brand-title::after { content: ''; height: 2px; flex: 1; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0.3; }
+/* --- CARDS & GRID --- */
+.brand-section { padding: 30px 5%; }
+.brand-title { font-size: 22px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
+.brand-title::after { content: ''; height: 1px; flex: 1; background: var(--border); }
+.product-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
 
-/* --- PRODUCT GRID --- */
-.product-container { 
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; 
-}
+.card { background: var(--card-bg); border-radius: 20px; padding: 15px; border: 1px solid #1a1a1a; text-align: center; }
+.card img { width: 100%; height: 200px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 15px; padding: 10px; }
+.price { color: var(--gold); font-weight: 800; font-size: 20px; display: block; margin-bottom: 15px; }
+.btn-view { display: block; background: #fff; color: #000; text-decoration: none; font-size: 12px; font-weight: 800; padding: 10px; border-radius: 12px; }
 
-/* --- PREMIUM CARD --- */
-.card { 
-    background: var(--card-bg); border-radius: 25px; padding: 20px; 
-    border: 1px solid #1a1a1a; text-align: center; position: relative;
-}
-.card:hover { 
-    transform: translateY(-10px); border-color: var(--gold); 
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(212, 175, 55, 0.1);
-}
-.card img { 
-    width: 100%; height: 250px; object-fit: contain; 
-    background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 20px;
-}
-.card h3 { font-size: 16px; font-weight: 600; margin: 10px 0; color: #efefef; }
-.price { color: var(--gold); font-weight: 800; font-size: 22px; display: block; margin-bottom: 20px; }
-.btn-view { 
-    display: block; background: #fff; color: #000; text-decoration: none; 
-    font-size: 13px; font-weight: 800; padding: 12px; border-radius: 15px; 
-}
-.card:hover .btn-view { background: var(--gold); }
-
-/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
-    .search-box { display: none; }
-    .product-container { display: flex; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory; }
-    .card { min-width: 280px; scroll-snap-align: center; }
+    .search-container { display: none; }
+    .store-name { font-size: 1.1rem; }
 }
 </style>
 </head>
@@ -103,20 +84,32 @@ body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sa
 
 <div class="top-header">
     <div class="header-main">
-        <div class="store-name">HAIDER MOBILES</div>
-        <input type="text" id="search" class="search-box" placeholder="Find your next device...">
-        <div class="auth-buttons" id="auth-area">
-            <a href="login.html" class="btn-auth login-btn">Login</a>
-            <a href="register.html" class="btn-auth reg-btn">Join</a>
+        <a href="index.html" class="store-name">HAIDER MOBILES</a>
+        
+        <div class="search-container">
+            <i class="fa fa-search"></i>
+            <input type="text" id="search" class="search-box" placeholder="Search devices...">
+        </div>
+
+        <div class="nav-tools">
+            <div class="nav-icons" id="auth-area">
+                <i class="fa fa-user-plus" title="Register" onclick="location.href='register.html'"></i>
+                <i class="fa fa-user" title="Login" onclick="location.href='login.html'"></i>
+            </div>
+            <div class="cart-icon-wrapper" onclick="alert('Opening Cart...')">
+                <i class="fa fa-shopping-bag nav-icons" style="font-size: 20px; cursor: pointer;"></i>
+                <span class="badge" id="cart-count">0</span>
+            </div>
         </div>
     </div>
-    <div class="brand-nav" id="brand-chips"></div>
 </div>
+
+<div class="brand-nav" id="brand-chips"></div>
 
 <div id="brand-wrapper">
     <div style="text-align:center; padding:100px;">
         <div style="color:var(--gold); font-size:24px; font-weight:800;">HAIDER MOBILES</div>
-        <p style="color:#555;">Loading luxury collection...</p>
+        <p style="color:#555;">Loading collections...</p>
     </div>
 </div>
 
@@ -138,26 +131,36 @@ body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sa
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // 1. Premium Auth Tracking
+    // 1. Auth & Cart Badge Logic
     onAuthStateChanged(auth, (user) => {
         const authArea = document.getElementById('auth-area');
         if (user) {
-            const name = user.displayName ? user.displayName.split(' ')[0] : 'Member';
             authArea.innerHTML = `
-                <span style="font-size:12px; color:var(--gold); font-weight:600;">Welcome, ${name}</span>
-                <button id="logoutBtn" style="background:none; border:1px solid red; color:red; padding:5px 10px; border-radius:10px; cursor:pointer; font-size:10px;">Logout</button>
+                <i class="fa fa-sign-out-alt" id="logoutBtn" title="Logout" style="color:#ff4444;"></i>
+                <span style="font-size:11px; color:var(--gold); border:1px solid var(--gold); padding:2px 8px; border-radius:10px;">User</span>
             `;
             document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
         }
     });
 
-    // 2. Optimized Fetch & Premium UI Load
+    // Cart Count Update
+    const updateCartBadge = () => {
+        const cart = JSON.parse(localStorage.getItem('haider_cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if(cart.length > 0) {
+            badge.style.display = 'block';
+            badge.innerText = cart.length;
+        }
+    };
+    updateCartBadge();
+
+    // 2. Fetch Products
     const wrapper = document.getElementById('brand-wrapper');
     const chipContainer = document.getElementById('brand-chips');
 
     onValue(ref(db, 'products'), (snapshot) => {
         if (!snapshot.exists()) {
-            wrapper.innerHTML = "<p style='text-align:center; padding:100px;'>Collections are being updated. Check back soon!</p>";
+            wrapper.innerHTML = "<p style='text-align:center; padding:100px;'>No Products Available.</p>";
             return;
         }
 
@@ -165,30 +168,30 @@ body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sa
         const allProducts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
         const brands = [...new Set(allProducts.map(p => p.brand))];
 
-        chipContainer.innerHTML = `<div class="brand-chip active" onclick="window.scrollTo({top:0, behavior:'smooth'})">All Devices</div>`;
+        chipContainer.innerHTML = `<div class="brand-chip active" onclick="location.reload()">All</div>`;
         wrapper.innerHTML = "";
 
         brands.forEach(brandName => {
             const brandProducts = allProducts.filter(p => p.brand === brandName);
             
-            // Premium Chips
+            // Brand Chips
             const chip = document.createElement('div');
             chip.className = 'brand-chip';
             chip.innerText = brandName;
             chip.onclick = () => document.getElementById(`section-${brandName}`).scrollIntoView({behavior: 'smooth', block: 'center'});
             chipContainer.appendChild(chip);
 
-            // Premium Section HTML
+            // Brand Sections
             let sectionHTML = `
                 <div class="brand-section" id="section-${brandName}">
                     <div class="brand-title">${brandName.toUpperCase()}</div>
                     <div class="product-container">
                         ${brandProducts.map(p => `
                             <div class="card">
-                                <img src="${p.img}" loading="lazy">
+                                <img src="${p.img}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Image+Error'">
                                 <h3>${p.name}</h3>
                                 <span class="price">${p.price}</span>
-                                <a href="product.html?id=${p.id}" class="btn-view">DISCOVER MORE</a>
+                                <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
                             </div>
                         `).join('')}
                     </div>
@@ -198,11 +201,10 @@ body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sa
         });
     });
 
-    // 3. Smart Search
+    // 3. Search Logic
     document.getElementById('search').oninput = (e) => {
         const term = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
+        document.querySelectorAll('.card').forEach(card => {
             const name = card.querySelector('h3').innerText.toLowerCase();
             card.style.display = name.includes(term) ? "block" : "none";
         });
