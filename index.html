@@ -140,18 +140,16 @@
     const mobileChips = document.getElementById('mobile-chips');
     const accessoryChips = document.getElementById('accessory-chips');
 
-    // Real-time listener
     onValue(ref(db, 'products'), (snapshot) => {
         if (!snapshot.exists()) {
-            mobileWrapper.innerHTML = "<p style='text-align:center; padding:50px;'>No products found in database.</p>";
+            mobileWrapper.innerHTML = "<p style='text-align:center; padding:50px;'>No products found.</p>";
             return;
         }
 
         const data = snapshot.val();
         const allProducts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
 
-        // Categories filter (handle missing category as Mobile by default)
-        const mobiles = allProducts.filter(p => p.category === 'Mobile' || !p.category || p.category === '');
+        const mobiles = allProducts.filter(p => p.category === 'Mobile' || !p.category);
         const accessories = allProducts.filter(p => p.category === 'Accessory');
 
         renderSection(mobiles, mobileChips, mobileWrapper, "Smart<span>phones</span>", "mob-grid");
@@ -164,68 +162,52 @@
             return;
         }
 
-        wrapper.innerHTML = `
-            <div class="brand-section">
-                <div class="main-title">${title}</div>
-                <div class="product-container" id="${gridId}"></div>
-            </div>
-        `;
-
+        wrapper.innerHTML = `<div class="brand-section"><div class="main-title">${title}</div><div class="product-container" id="${gridId}"></div></div>`;
         const grid = document.getElementById(gridId);
 
-        // Brands Chips Fix: Clean up undefined or empty strings
-        const brands = ["All", ...new Set(products.map(p => p.brand).filter(b => b && b !== 'undefined' && b !== ""))];
+        // ✨ FIX: Filter out undefined brands
+        const brands = ["All", ...new Set(products.map(p => p.brand).filter(b => b && b !== 'undefined'))];
+        
         chipContainer.innerHTML = "";
         brands.forEach(brand => {
             const chip = document.createElement('div');
             chip.className = `brand-chip ${brand === 'All' ? 'active' : ''}`;
             chip.innerText = brand;
-            
-            // Add click filtering logic
-            chip.onclick = () => {
-                const parent = chip.parentElement;
-                parent.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                
-                const gridCards = grid.querySelectorAll('.card');
-                gridCards.forEach(card => {
-                    const b = card.getAttribute('data-brand');
-                    card.style.display = (brand === "All" || b === brand) ? "block" : "none";
-                });
-            };
+            chip.onclick = () => filterByBrand(brand, gridId, products);
             chipContainer.appendChild(chip);
         });
 
-        // Cards Rendering with Safety Checks
         products.forEach(p => {
-            const safeName = p.name || "Product";
-            const safeBrand = p.brand || "Other";
             grid.innerHTML += `
-                <div class="card" data-brand="${safeBrand}">
+                <div class="card" data-brand="${p.brand || 'Other'}">
                     <img src="${p.img || 'https://via.placeholder.com/200'}" onerror="this.src='https://via.placeholder.com/200'">
-                    <h3>${safeName}</h3>
+                    <h3>${p.name || 'Product'}</h3>
                     <span class="price">Rs. ${p.price || '0'}</span>
                     <div class="btn-group">
                         <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
-                        <a href="https://wa.me/923279518790?text=Salam! I am interested in ${safeName}." class="btn-wa">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
+                        <a href="https://wa.me/923279518790?text=I want ${p.name}" class="btn-wa"><i class="fab fa-whatsapp"></i></a>
                     </div>
-                </div>
-            `;
+                </div>`;
         });
     }
 
-    // Search function with safety for undefined names
+    function filterByBrand(brand, gridId, products) {
+        const grid = document.getElementById(gridId);
+        const cards = grid.querySelectorAll('.card');
+        cards.forEach(card => {
+            const cardBrand = card.getAttribute('data-brand');
+            card.style.display = (brand === "All" || cardBrand === brand) ? "block" : "none";
+        });
+    }
+
+    // ✨ FIX: Safe search function
     document.getElementById('search').addEventListener('input', (e) => {
         const val = e.target.value.toLowerCase();
         document.querySelectorAll('.card').forEach(card => {
-            const h3 = card.querySelector('h3');
-            const title = h3 ? h3.innerText.toLowerCase() : "";
+            const title = (card.querySelector('h3')?.innerText || "").toLowerCase();
             card.style.display = title.includes(val) ? "block" : "none";
         });
     });
 </script>
-
 </body>
 </html>
