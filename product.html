@@ -3,176 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Premium Store</title>
+    <title>Product Details | Haider Mobiles</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root { --apple-black: #000000; --apple-blue: #0066cc; --gold: #d4af37; --text-dim: #86868b; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--apple-black); color: #fff; -webkit-font-smoothing: antialiased; padding-top: 60px; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--apple-black); color: #fff; -webkit-font-smoothing: antialiased; padding-top: 70px; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        nav { position: fixed; top: 0; left: 0; width: 100%; height: 50px; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid #222; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid #222; }
         .nav-content { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 100%; padding: 0 20px; }
         .logo { font-weight: 800; font-size: 18px; color: #fff; text-decoration: none; }
+        
         .nav-tools { display: flex; align-items: center; gap: 15px; }
         .search-box { background: #1d1d1f; border-radius: 6px; padding: 4px 10px; display: flex; align-items: center; }
         .search-box input { background: none; border: none; color: #fff; font-size: 12px; outline: none; width: 120px; }
+        
         .nav-icons { display: flex; gap: 15px; color: #f5f5f7; font-size: 16px; }
         .nav-icons i { cursor: pointer; transition: 0.3s; }
         .nav-icons i:hover { color: var(--gold); }
-        .cart-icon { position: relative; cursor: pointer; }
-        .badge { position: absolute; top: -8px; right: -8px; background: var(--apple-blue); font-size: 9px; padding: 2px 5px; border-radius: 50%; display: none; }
+
+        #loader { text-align: center; padding: 100px; color: var(--gold); font-size: 18px; }
         
-        #loader { text-align: center; padding: 100px; color: var(--gold); font-size: 18px; font-weight: 600; }
-        .product-header { text-align: center; padding: 40px 0; }
+        .product-header { text-align: center; padding: 20px 0; }
         .brand-label { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-        h1 { font-size: clamp(24px, 5vw, 42px); margin: 10px 0; font-weight: 800; color: #fff; }
+        h1 { font-size: clamp(24px, 5vw, 42px); margin: 10px 0; font-weight: 800; }
         
-        .apple-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; margin-bottom: 60px; }
-        .slider-section { background: #0f0f0f; border-radius: 25px; padding: 30px; border: 1px solid #222; text-align: center; }
-        .main-img { height: 400px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; background: #000; border-radius: 15px; }
+        .apple-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 20px; }
+        .slider-section { background: #0f0f0f; border-radius: 25px; padding: 20px; border: 1px solid #222; text-align: center; }
+        .main-img { height: 350px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; background: #fff; border-radius: 15px; overflow: hidden; }
         .main-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
-        .thumb-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .thumb-row img { width: 65px; height: 65px; background: #1a1a1a; border-radius: 10px; cursor: pointer; border: 2px solid transparent; padding: 5px; object-fit: contain; }
+        .thumb-row { display: flex; justify-content: center; gap: 10px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .thumb-row img { width: 60px; height: 60px; background: #fff; border-radius: 8px; cursor: pointer; border: 2px solid transparent; object-fit: contain; padding: 5px; }
         .thumb-row img.active { border-color: var(--gold); }
         
-        .price-current { font-size: 36px; font-weight: 700; color: #fff; }
-        .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
-        .add-cart-btn { background: #1d1d1f; color: #fff; border: 1px solid #333; padding: 18px; border-radius: 14px; font-weight: 600; text-align: center; cursor: pointer; }
-        .buy-btn { background: var(--apple-blue); color: #fff; text-align: center; text-decoration: none; padding: 18px; border-radius: 14px; font-weight: 600; font-size: 18px; }
+        .price-current { font-size: 32px; font-weight: 700; color: #fff; display: block; margin-bottom: 15px; }
+        .main-desc { color: var(--text-dim); line-height: 1.6; font-size: 15px; }
         
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding-bottom: 80px; }
-        .apple-card { text-decoration: none; color: inherit; text-align: center; padding: 20px; background: #0f0f0f; border-radius: 20px; border: 1px solid #222; display: block; transition: 0.3s; }
-        .apple-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="nav-content">
-        <a href="index.html" class="logo">HAIDER</a>
-        <div class="nav-tools">
-            <div class="search-box">
-                <i class="fa fa-search" style="font-size: 10px; color: #888; margin-right: 5px;"></i>
-                <input type="text" id="searchInput" placeholder="Search...">
-            </div>
-            <div class="nav-icons">
-                <i class="fa fa-gear" title="Admin" onclick="location.href='admin.html'"></i>
-                <div class="cart-icon" onclick="location.href='cart.html'">
-                    <i class="fa fa-shopping-bag"></i>
-                    <span class="badge" id="cartCount">0</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="container">
-    <div id="loader">✨ Loading Your Premium Gadget...</div>
-    <div id="main-content" style="display: none;"></div>
-    
-    <h2 style="color: var(--gold); margin: 80px 0 30px; border-left: 4px solid var(--gold); padding-left: 15px;">Related Products</h2>
-    <div id="product-gallery" class="product-grid"></div>
-</div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        // ✅ ADDED DATABASE URL
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        storageBucket: "web-app-4f3a1.firebasestorage.app",
-        messagingSenderId: "222099203820",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const productId = new URLSearchParams(window.location.search).get('id');
-
-    // Badge Update Logic
-    window.updateBadge = function() {
-        const cart = JSON.parse(localStorage.getItem('haider_cart')) || [];
-        const b = document.getElementById('cartCount');
-        if(b) {
-            b.innerText = cart.length;
-            b.style.display = cart.length > 0 ? 'block' : 'none';
-        }
-    }
-    updateBadge();
-
-    // Add to Cart Logic
-    window.addToCart = function(name, price, img) {
-        let cart = JSON.parse(localStorage.getItem('haider_cart')) || [];
-        cart.push({name, price, img});
-        localStorage.setItem('haider_cart', JSON.stringify(cart));
-        window.updateBadge();
-        alert("Added to Bag!");
-    };
-
-    // Load Product Details
-    if (productId) {
-        onValue(ref(db, 'products/' + productId), (snapshot) => {
-            const p = snapshot.val();
-            if (p) {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                
-                // Handling multiple images if exist, else use p.img
-                const images = [p.img, p.img2, p.img3].filter(u => u && u.trim() !== "");
-                let thumbs = images.length > 1 ? images.map((u, i) => 
-                    `<img src="${u}" onclick="document.getElementById('mImg').src='${u}'; document.querySelectorAll('.thumb-row img').forEach(img=>img.classList.remove('active')); this.classList.add('active')" class="${i===0?'active':''}">`
-                ).join('') : '';
-
-                document.getElementById('main-content').innerHTML = `
-                    <div class="product-header">
-                        <span class="brand-label">${p.brand || 'Premium Collection'}</span>
-                        <h1>${p.name}</h1>
-                    </div>
-                    <div class="apple-wrapper">
-                        <div class="slider-section">
-                            <div class="main-img"><img id="mImg" src="${images[0]}"></div>
-                            <div class="thumb-row">${thumbs}</div>
-                        </div>
-                        <div class="info-section">
-                            <div style="margin-bottom:20px;">
-                                <span class="price-current">Rs. ${p.price}</span>
-                            </div>
-                            <div class="main-desc" style="color:#86868b; line-height:1.6; margin-bottom: 30px;">
-                                ${p.description || 'This premium gadget is now available at Haider Mobiles. High performance, elegant design, and original quality guaranteed.'}
-                            </div>
-                            <div class="btn-group">
-                                <div class="add-cart-btn" onclick="window.addToCart('${p.name}', '${p.price}', '${p.img}')">Add to Bag</div>
-                                <a href="https://wa.me/923279518790?text=Salam! I want to buy: ${p.name}" class="buy-btn">Order on WhatsApp</a>
-                            </div>
-                        </div>
-                    </div>`;
-            } else {
-                document.getElementById('loader').innerText = "Product Not Found!";
-            }
-        });
-    }
-
-    // Load Related Products
-    onValue(ref(db, 'products'), (snapshot) => {
-        const gallery = document.getElementById('product-gallery');
-        gallery.innerHTML = "";
-        snapshot.forEach(child => {
-            const p = child.val();
-            if (child.key !== productId) {
-                gallery.innerHTML += `
-                    <a href="product.html?id=${child.key}" class="apple-card">
-                        <img src="${p.img}" style="width:100%; height:150px; object-fit:contain; border-radius:10px; margin-bottom:10px;">
-                        <h4 style="margin:5px 0; color:#fff; font-size:14px;">${p.name}</h4>
-                        <div style="color:var(--gold); font-size:14px; font-weight:bold;">Rs. ${p.price}</div>
-                    </a>`;
-            }
-        });
-    });
-</script>
-</body>
-</html>
+        .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+        .add-cart-btn { background: #1d1d1f; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; font-weight: 600; cursor: pointer; text-align: center; }
+        .buy-btn { background: var
