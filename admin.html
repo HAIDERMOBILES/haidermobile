@@ -4,65 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | Haider Mobiles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --apple-blue: #0066cc; --gold: #d4af37; --bg: #000; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 0; }
-        
-        /* Unlock Screen */
-        #login-screen {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background:#000; z-index:9999; display:flex; align-items:center; justify-content:center;
+        :root { --gold: #d4af37; --bg: #000; --card: #111; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
+
+        /* --- PROFESSIONAL LOGIN OVERLAY --- */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            display: flex; align-items: center; justify-content: center; z-index: 10000;
+            transition: 0.5s;
         }
-        .login-box { background:#111; padding:30px; border-radius:20px; border:1px solid var(--gold); text-align:center; width:90%; max-width:350px; }
+        .login-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 40px 30px;
+            border-radius: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 380px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .login-card i { font-size: 50px; color: var(--gold); margin-bottom: 20px; }
+        .login-card h2 { margin: 0 0 10px; font-weight: 800; letter-spacing: 1px; }
+        .login-card p { color: #888; font-size: 13px; margin-bottom: 25px; }
         
-        /* Main Dashboard (Hidden by default) */
-        #admin-main { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
+        .pass-input {
+            width: 100%; background: #000; border: 1px solid #333;
+            padding: 15px; border-radius: 15px; color: #fff;
+            text-align: center; font-size: 18px; letter-spacing: 5px;
+            outline: none; margin-bottom: 20px; transition: 0.3s;
+        }
+        .pass-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
         
-        .form-card { background: #111; padding: 25px; border-radius: 20px; border: 1px solid #222; margin-bottom: 40px; }
+        .unlock-btn {
+            width: 100%; background: var(--gold); color: #000;
+            border: none; padding: 15px; border-radius: 15px;
+            font-weight: 800; cursor: pointer; transition: 0.3s;
+        }
+        .unlock-btn:hover { background: #fff; transform: translateY(-3px); }
+
+        /* --- ADMIN CONTENT --- */
+        #admin-wrapper { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .form-card { background: #111; padding: 25px; border-radius: 20px; border: 1px solid #222; }
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        input, textarea, select { width: 100%; background: #1c1c1e; border: 1px solid #333; padding: 12px; border-radius: 10px; color: #fff; margin-bottom: 15px; outline: none; }
+        input, select, textarea { 
+            width: 100%; background: #1c1c1e; border: 1px solid #333; 
+            padding: 12px; border-radius: 12px; color: #fff; margin-bottom: 15px; outline: none;
+            box-sizing: border-box;
+        }
+        .add-btn { background: var(--gold); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 800; width: 100%; cursor: pointer; }
         
-        .add-btn { background: var(--gold); color: black; border: none; padding: 15px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; }
-        .product-list-item { display: flex; align-items: center; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #222; }
-        .product-list-item img { width: 50px; height: 50px; object-fit: contain; margin-right: 15px; background: #fff; border-radius: 5px; }
-        .del-btn { color: #ff4444; cursor: pointer; padding: 10px; margin-left: auto; }
+        .product-item { display: flex; align-items: center; background: #111; padding: 12px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #222; }
+        .product-item img { width: 50px; height: 50px; border-radius: 8px; margin-right: 15px; background: #fff; object-fit: contain; }
+        .del-btn { color: #ff4444; margin-left: auto; cursor: pointer; font-size: 18px; }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <div class="login-box">
-        <h2 style="color:var(--gold);">Admin Access</h2>
-        <input type="password" id="passInput" placeholder="Enter Password" style="text-align:center;">
-        <button class="add-btn" id="unlockBtn">UNLOCK DASHBOARD</button>
+<div id="login-overlay">
+    <div class="login-card">
+        <i class="fa fa-shield-halved"></i>
+        <h2>Admin Access</h2>
+        <p>Please enter your secure PIN to continue</p>
+        <input type="password" id="pinInput" class="pass-input" placeholder="••••">
+        <button id="entryBtn" class="unlock-btn">UNLOCK DASHBOARD</button>
     </div>
 </div>
 
-<div id="admin-main" class="admin-container">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="color:var(--gold);">Haider Inventory</h2>
-        <a href="index.html" style="color:#666; text-decoration:none;">Exit</a>
+<div id="admin-wrapper">
+    <div class="header">
+        <h1 style="color:var(--gold); font-size: 24px; margin:0;">HAIDER<span style="color:#fff;">ADMIN</span></h1>
+        <a href="index.html" style="color:#666; text-decoration:none;"><i class="fa fa-sign-out"></i> Exit</a>
     </div>
 
     <div class="form-card">
+        <h3 style="margin-top:0;">Add New Stock</h3>
         <div class="grid-inputs">
-            <input type="text" id="pName" placeholder="Product Name">
-            <input type="text" id="pBrand" placeholder="Brand">
-            <input type="text" id="pPrice" placeholder="Price">
-            <select id="pCategory">
-                <option value="Mobile">Mobile</option>
+            <input type="text" id="name" placeholder="Product Name">
+            <input type="text" id="brand" placeholder="Brand">
+            <input type="text" id="price" placeholder="Price">
+            <select id="cat">
+                <option value="Mobile">Mobile / Tablet</option>
                 <option value="Accessory">Accessory</option>
             </select>
         </div>
-        <input type="text" id="pImg" placeholder="Image Link (Direct)">
-        <textarea id="pDesc" rows="3" placeholder="Specs..."></textarea>
-        <button class="add-btn" id="finalSaveBtn">UPLOAD PRODUCT</button>
+        <input type="text" id="img" placeholder="Main Image Link (ImgBB)">
+        <textarea id="desc" rows="3" placeholder="Specifications..."></textarea>
+        <button class="add-btn" id="uploadBtn">UPLOAD PRODUCT</button>
     </div>
 
-    <h2>Manage Stock</h2>
-    <div id="adminProductList"></div>
+    <h3 style="margin: 30px 0 15px; color:var(--gold);">Inventory Management</h3>
+    <div id="list"></div>
 </div>
 
 <script type="module">
@@ -82,57 +119,62 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- Unlock Logic ---
-    const unlockBtn = document.getElementById('unlockBtn');
-    unlockBtn.addEventListener('click', () => {
-        const pass = document.getElementById('passInput').value;
-        if(pass === "haider786") {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('admin-main').style.display = 'block';
+    // --- Professional Login Logic ---
+    const entryBtn = document.getElementById('entryBtn');
+    entryBtn.addEventListener('click', () => {
+        const pin = document.getElementById('pinInput').value;
+        if(pin === "haider786") {
+            document.getElementById('login-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('admin-wrapper').style.display = 'block';
+            }, 500);
         } else {
-            alert("Wrong Password!");
+            alert("Incorrect PIN, Haider Bhai!");
         }
     });
 
-    // --- Save Product ---
-    document.getElementById('finalSaveBtn').addEventListener('click', () => {
-        const name = document.getElementById('pName').value;
-        const brand = document.getElementById('pBrand').value;
-        const price = document.getElementById('pPrice').value;
-        const category = document.getElementById('pCategory').value;
-        const img = document.getElementById('pImg').value;
-        const desc = document.getElementById('pDesc').value;
+    // --- Firebase Actions ---
+    document.getElementById('uploadBtn').onclick = () => {
+        const product = {
+            name: document.getElementById('name').value,
+            brand: document.getElementById('brand').value,
+            price: document.getElementById('price').value,
+            category: document.getElementById('cat').value,
+            img: document.getElementById('img').value,
+            description: document.getElementById('desc').value
+        };
 
-        if(!name || !price || !img) { alert("Fill Name, Price & Image!"); return; }
+        if(product.name && product.price && product.img) {
+            push(ref(db, 'products'), product).then(() => {
+                alert("Stock Updated!");
+                location.reload();
+            });
+        } else {
+            alert("Bhai details puri daalein!");
+        }
+    };
 
-        const newRef = push(ref(db, 'products'));
-        set(newRef, { name, brand, price, category, img, description: desc })
-        .then(() => {
-            alert("Product Added!");
-            location.reload();
-        });
-    });
-
-    // --- Load Data ---
     onValue(ref(db, 'products'), (snapshot) => {
-        const list = document.getElementById('adminProductList');
-        list.innerHTML = "";
+        const display = document.getElementById('list');
+        display.innerHTML = "";
         snapshot.forEach(child => {
             const p = child.val();
-            list.innerHTML += `
-                <div class="product-list-item">
+            display.innerHTML += `
+                <div class="product-item">
                     <img src="${p.img}">
                     <div>
                         <strong>${p.name}</strong><br>
-                        <small>${p.category} | ${p.price}</small>
+                        <small style="color:var(--gold);">${p.category} | ${p.price}</small>
                     </div>
-                    <i class="fa fa-trash-can del-btn" onclick="window.delProd('${child.key}')"></i>
-                </div>`;
+                    <i class="fa fa-trash-can del-btn" onclick="window.del('${child.key}')"></i>
+                </div>
+            `;
         });
     });
 
-    window.delProd = (id) => {
-        if(confirm("Delete this?")) remove(ref(db, 'products/' + id));
+    window.del = (id) => {
+        if(confirm("Are you sure?")) remove(ref(db, 'products/' + id));
     };
 </script>
 </body>
