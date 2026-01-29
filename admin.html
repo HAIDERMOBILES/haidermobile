@@ -3,108 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Haider Mobiles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Jarvis Admin | Haider Mobiles</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --bg: #000; --card: #111; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
-
-        /* --- PROFESSIONAL LOGIN OVERLAY --- */
-        #login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            display: flex; align-items: center; justify-content: center; z-index: 10000;
-            transition: 0.5s;
-        }
-        .login-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 40px 30px;
-            border-radius: 30px;
-            text-align: center;
-            width: 90%;
-            max-width: 380px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .login-card i { font-size: 50px; color: var(--gold); margin-bottom: 20px; }
-        .login-card h2 { margin: 0 0 10px; font-weight: 800; letter-spacing: 1px; }
-        .login-card p { color: #888; font-size: 13px; margin-bottom: 25px; }
+        :root { --gold: #d4af37; --bg: #050505; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; }
         
-        .pass-input {
-            width: 100%; background: #000; border: 1px solid #333;
-            padding: 15px; border-radius: 15px; color: #fff;
-            text-align: center; font-size: 18px; letter-spacing: 5px;
-            outline: none; margin-bottom: 20px; transition: 0.3s;
+        /* Jarvis UI Box */
+        .jarvis-box {
+            border: 1px solid var(--gold); background: rgba(212, 175, 55, 0.05);
+            padding: 20px; border-radius: 15px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
         }
-        .pass-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
         
-        .unlock-btn {
-            width: 100%; background: var(--gold); color: #000;
-            border: none; padding: 15px; border-radius: 15px;
-            font-weight: 800; cursor: pointer; transition: 0.3s;
+        .upload-area {
+            border: 2px dashed #444; padding: 30px; text-align: center;
+            border-radius: 15px; cursor: pointer; transition: 0.3s;
         }
-        .unlock-btn:hover { background: #fff; transform: translateY(-3px); }
-
-        /* --- ADMIN CONTENT --- */
-        #admin-wrapper { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .form-card { background: #111; padding: 25px; border-radius: 20px; border: 1px solid #222; }
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        input, select, textarea { 
-            width: 100%; background: #1c1c1e; border: 1px solid #333; 
-            padding: 12px; border-radius: 12px; color: #fff; margin-bottom: 15px; outline: none;
-            box-sizing: border-box;
-        }
-        .add-btn { background: var(--gold); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 800; width: 100%; cursor: pointer; }
+        .upload-area:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); }
         
-        .product-item { display: flex; align-items: center; background: #111; padding: 12px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #222; }
-        .product-item img { width: 50px; height: 50px; border-radius: 8px; margin-right: 15px; background: #fff; object-fit: contain; }
-        .del-btn { color: #ff4444; margin-left: auto; cursor: pointer; font-size: 18px; }
+        input, select { 
+            width: 100%; padding: 12px; margin-bottom: 15px; 
+            background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; 
+        }
+        
+        .status-dot { height: 10px; width: 100px; background: #222; border-radius: 5px; overflow: hidden; margin: 10px 0; }
+        #progress-bar { height: 100%; width: 0%; background: var(--gold); transition: 0.3s; }
     </style>
 </head>
 <body>
 
-<div id="login-overlay">
-    <div class="login-card">
-        <i class="fa fa-shield-halved"></i>
-        <h2>Admin Access</h2>
-        <p>Please enter your secure PIN to continue</p>
-        <input type="password" id="pinInput" class="pass-input" placeholder="••••">
-        <button id="entryBtn" class="unlock-btn">UNLOCK DASHBOARD</button>
-    </div>
-</div>
-
-<div id="admin-wrapper">
-    <div class="header">
-        <h1 style="color:var(--gold); font-size: 24px; margin:0;">HAIDER<span style="color:#fff;">ADMIN</span></h1>
-        <a href="index.html" style="color:#666; text-decoration:none;"><i class="fa fa-sign-out"></i> Exit</a>
+<div class="jarvis-box">
+    <h2 style="color:var(--gold); margin-top:0;"><i class="fa fa-robot"></i> JARVIS SYSTEM V1.0</h2>
+    
+    <div class="upload-area" id="drop-zone">
+        <i class="fa fa-cloud-upload" style="font-size: 40px; color: var(--gold);"></i>
+        <p id="upload-text">Select Product Photo</p>
+        <input type="file" id="fileInput" hidden accept="image/*">
+        <div class="status-dot"><div id="progress-bar"></div></div>
     </div>
 
-    <div class="form-card">
-        <h3 style="margin-top:0;">Add New Stock</h3>
-        <div class="grid-inputs">
-            <input type="text" id="name" placeholder="Product Name">
-            <input type="text" id="brand" placeholder="Brand">
-            <input type="text" id="price" placeholder="Price">
-            <select id="cat">
-                <option value="Mobile">Mobile / Tablet</option>
+    <div id="form-content" style="margin-top:20px;">
+        <input type="text" id="pName" placeholder="Product Name">
+        <div style="display: flex; gap:10px;">
+            <input type="text" id="pBrand" placeholder="Brand">
+            <select id="pCat">
+                <option value="Mobile">Mobile</option>
                 <option value="Accessory">Accessory</option>
             </select>
         </div>
-        <input type="text" id="img" placeholder="Main Image Link (ImgBB)">
-        <textarea id="desc" rows="3" placeholder="Specifications..."></textarea>
-        <button class="add-btn" id="uploadBtn">UPLOAD PRODUCT</button>
+        <input type="text" id="pPrice" placeholder="Price (Rs.)">
+        <button id="saveBtn" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:8px; font-weight:bold; cursor:pointer;">SYSTEM UPLOAD</button>
     </div>
-
-    <h3 style="margin: 30px 0 15px; color:var(--gold);">Inventory Management</h3>
-    <div id="list"></div>
 </div>
 
 <script type="module">
+    // --- FIREBASE CONFIG (Aapka wahi purana config aayega) ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -119,62 +74,59 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- Professional Login Logic ---
-    const entryBtn = document.getElementById('entryBtn');
-    entryBtn.addEventListener('click', () => {
-        const pin = document.getElementById('pinInput').value;
-        if(pin === "haider786") {
-            document.getElementById('login-overlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('admin-wrapper').style.display = 'block';
-            }, 500);
-        } else {
-            alert("Incorrect PIN, Haider Bhai!");
-        }
-    });
+    let uploadedImgUrl = "";
+    const IMGBB_API_KEY = "64c92159080b06497793b58129e92404"; // Jarvis's Key
 
-    // --- Firebase Actions ---
-    document.getElementById('uploadBtn').onclick = () => {
-        const product = {
-            name: document.getElementById('name').value,
-            brand: document.getElementById('brand').value,
-            price: document.getElementById('price').value,
-            category: document.getElementById('cat').value,
-            img: document.getElementById('img').value,
-            description: document.getElementById('desc').value
-        };
+    // Jarvis Image Upload Logic
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('fileInput');
 
-        if(product.name && product.price && product.img) {
-            push(ref(db, 'products'), product).then(() => {
-                alert("Stock Updated!");
-                location.reload();
+    dropZone.onclick = () => fileInput.click();
+
+    fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+
+        document.getElementById('upload-text').innerText = "Jarvis is uploading...";
+        document.getElementById('progress-bar').style.width = "50%";
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: "POST",
+                body: formData
             });
-        } else {
-            alert("Bhai details puri daalein!");
+            const data = await res.json();
+            uploadedImgUrl = data.data.url;
+            
+            document.getElementById('progress-bar').style.width = "100%";
+            document.getElementById('upload-text').innerText = "Image Linked Successfully!";
+            document.getElementById('upload-text').style.color = "var(--gold)";
+        } catch (err) {
+            alert("Jarvis Error: Could not upload image.");
         }
     };
 
-    onValue(ref(db, 'products'), (snapshot) => {
-        const display = document.getElementById('list');
-        display.innerHTML = "";
-        snapshot.forEach(child => {
-            const p = child.val();
-            display.innerHTML += `
-                <div class="product-item">
-                    <img src="${p.img}">
-                    <div>
-                        <strong>${p.name}</strong><br>
-                        <small style="color:var(--gold);">${p.category} | ${p.price}</small>
-                    </div>
-                    <i class="fa fa-trash-can del-btn" onclick="window.del('${child.key}')"></i>
-                </div>
-            `;
-        });
-    });
+    // System Upload to Firebase
+    document.getElementById('saveBtn').onclick = () => {
+        const product = {
+            name: document.getElementById('pName').value,
+            brand: document.getElementById('pBrand').value,
+            price: document.getElementById('pPrice').value,
+            category: document.getElementById('pCat').value,
+            img: uploadedImgUrl
+        };
 
-    window.del = (id) => {
-        if(confirm("Are you sure?")) remove(ref(db, 'products/' + id));
+        if(uploadedImgUrl && product.name) {
+            push(ref(db, 'products'), product).then(() => {
+                alert("Database Updated, Sir!");
+                location.reload();
+            });
+        } else {
+            alert("Details missing, Sir!");
+        }
     };
 </script>
 </body>
