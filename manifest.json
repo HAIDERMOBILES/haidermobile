@@ -1,7 +1,8 @@
 {
   "name": "Haider Mobiles Premium",
   "short_name": "Haider Mobiles",
-  "start_url": "index.html",
+  "start_url": "/haidermobile/index.html",
+  "scope": "/haidermobile/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#d4af37",
