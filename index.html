@@ -6,6 +6,7 @@
 <title>Haider Mobiles | Premium Store</title>
 
 <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -72,7 +73,7 @@ body {
 .brand-chip { padding: 6px 20px; background: var(--glass); border: 1px solid #222; border-radius: 50px; font-size: 12px; cursor: pointer; color: #aaa; white-space: nowrap; }
 .brand-chip.active { color: #000; background: var(--gold); border-color: var(--gold); font-weight: 600; }
 
-/* --- PRODUCT GRID & LIGHTING --- */
+/* --- PRODUCT GRID --- */
 .brand-section { padding: 30px 5%; }
 .brand-title { font-size: 22px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
 .brand-title::after { content: ''; height: 1px; flex: 1; background: var(--border); }
@@ -109,6 +110,7 @@ body {
 </style>
 </head>
 <body id="dynamicBody">
+
 <div id="install-banner" style="display: none; background: var(--card-bg); border: 1px solid var(--gold); padding: 15px; position: fixed; bottom: 85px; left: 5%; right: 5%; z-index: 3000; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); align-items: center; justify-content: space-between;">
     <div style="display: flex; align-items: center; gap: 12px;">
         <img src="https://i.ibb.co/SSNjCH9/Haider-Mobile.png" width="40" style="border-radius: 8px;">
@@ -119,6 +121,7 @@ body {
     </div>
     <button id="install-btn" style="background: var(--gold); color: #000; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer;">INSTALL</button>
 </div>
+
 <div class="top-header">
     <div class="header-main">
         <a href="index.html" class="store-name">HAIDER</a>
@@ -142,7 +145,11 @@ body {
 <div class="mobile-nav">
     <a href="index.html" class="nav-item active"><i class="fa fa-home"></i><span>Home</span></a>
     <a href="#" class="nav-item" onclick="document.getElementById('search').focus(); return false;"><i class="fa fa-search"></i><span>Search</span></a>
-    <a href="cart.html" class="nav-item"><i class="fa fa-shopping-bag"></i><span id="mobile-cart-badge" style="color:red; font-weight:bold; display:none;">.</span><span>Cart</span></a>
+    <a href="cart.html" class="nav-item">
+        <i class="fa fa-shopping-bag"></i>
+        <span id="mobile-cart-badge" style="color:red; font-weight:bold; display:none;">.</span>
+        <span>Cart</span>
+    </a>
     <a href="dashboard.html" class="nav-item"><i class="fa fa-user"></i><span>Profile</span></a>
 </div>
 
@@ -166,6 +173,15 @@ body {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
+
+    // --- Service Worker Registration (Crucial for App) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/haidermobile/sw.js')
+                .then(reg => console.log('SW Registered'))
+                .catch(err => console.log('SW Registration failed', err));
+        });
+    }
 
     // Scroll Background Change
     window.addEventListener('scroll', () => {
@@ -201,30 +217,28 @@ body {
         }
     };
     updateCartBadge();
-let deferredPrompt;
-const installBanner = document.getElementById('install-banner');
-const installBtn = document.getElementById('install-btn');
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Browser ka default prompt roko
-    e.preventDefault();
-    deferredPrompt = e;
-    // Apna custom banner dikhao
-    installBanner.style.display = 'flex';
-});
+    // Install App Logic
+    let deferredPrompt;
+    const installBanner = document.getElementById('install-banner');
+    const installBtn = document.getElementById('install-btn');
 
-installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-            console.log('User accepted the install prompt');
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBanner.style.display = 'flex';
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            installBanner.style.display = 'none';
         }
-        deferredPrompt = null;
-        installBanner.style.display = 'none';
-    }
-});
-    // 3. Load Products (With Lighting Card HTML)
+    });
+
+    // 3. Load Products
     const wrapper = document.getElementById('brand-wrapper');
     const chipContainer = document.getElementById('brand-chips');
 
@@ -271,7 +285,6 @@ installBtn.addEventListener('click', async () => {
             card.style.display = title.includes(term) ? "block" : "none";
         });
     };
-    
 </script>
 </body>
 </html>
