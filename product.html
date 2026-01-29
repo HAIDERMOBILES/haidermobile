@@ -13,33 +13,128 @@
         nav { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid #222; }
         .nav-content { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 100%; padding: 0 20px; }
         .logo { font-weight: 800; font-size: 18px; color: #fff; text-decoration: none; }
-        
         .nav-tools { display: flex; align-items: center; gap: 15px; }
         .search-box { background: #1d1d1f; border-radius: 6px; padding: 4px 10px; display: flex; align-items: center; }
         .search-box input { background: none; border: none; color: #fff; font-size: 12px; outline: none; width: 120px; }
-        
         .nav-icons { display: flex; gap: 15px; color: #f5f5f7; font-size: 16px; }
-        .nav-icons i { cursor: pointer; transition: 0.3s; }
-        .nav-icons i:hover { color: var(--gold); }
-
         #loader { text-align: center; padding: 100px; color: var(--gold); font-size: 18px; }
-        
         .product-header { text-align: center; padding: 20px 0; }
         .brand-label { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
         h1 { font-size: clamp(24px, 5vw, 42px); margin: 10px 0; font-weight: 800; }
-        
         .apple-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 20px; }
         .slider-section { background: #0f0f0f; border-radius: 25px; padding: 20px; border: 1px solid #222; text-align: center; }
         .main-img { height: 350px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; background: #fff; border-radius: 15px; overflow: hidden; }
         .main-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        
         .thumb-row { display: flex; justify-content: center; gap: 10px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; }
         .thumb-row img { width: 60px; height: 60px; background: #fff; border-radius: 8px; cursor: pointer; border: 2px solid transparent; object-fit: contain; padding: 5px; }
         .thumb-row img.active { border-color: var(--gold); }
-        
         .price-current { font-size: 32px; font-weight: 700; color: #fff; display: block; margin-bottom: 15px; }
         .main-desc { color: var(--text-dim); line-height: 1.6; font-size: 15px; }
-        
         .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
         .add-cart-btn { background: #1d1d1f; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; font-weight: 600; cursor: pointer; text-align: center; }
-        .buy-btn { background: var
+        .buy-btn { background: var(--apple-blue); color: #fff; text-align: center; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: 600; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-bottom: 50px; }
+        .apple-card { text-decoration: none; color: inherit; text-align: center; padding: 15px; background: #0f0f0f; border-radius: 20px; border: 1px solid #222; transition: 0.3s; }
+        .apple-card img { width: 100%; height: 140px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-content">
+        <a href="index.html" class="logo">HAIDER</a>
+        <div class="nav-tools">
+            <div class="search-box"><input type="text" id="searchInput" placeholder="Search..."></div>
+            <div class="nav-icons"><i class="fa fa-shopping-bag" onclick="location.href='cart.html'"></i></div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div id="loader">✨ Loading Gadget...</div>
+    <div id="main-content" style="display: none;"></div>
+    <h3 style="color: var(--gold); margin: 60px 0 20px;">Related Products</h3>
+    <div id="product-gallery" class="product-grid"></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const productId = new URLSearchParams(window.location.search).get('id');
+
+    window.addToCart = function(name, price, img) {
+        let cart = JSON.parse(localStorage.getItem('haider_cart')) || [];
+        cart.push({name, price, img});
+        localStorage.setItem('haider_cart', JSON.stringify(cart));
+        alert("Added to Bag!");
+    };
+
+    if (productId) {
+        onValue(ref(db, 'products/' + productId), (snapshot) => {
+            const p = snapshot.val();
+            if (p) {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                
+                // Handling missing fields safely
+                const images = [p.img, p.img2, p.img3].filter(u => u && u.length > 5);
+                const mainImgSrc = images.length > 0 ? images[0] : 'https://via.placeholder.com/300';
+                
+                let thumbs = images.length > 1 ? images.map((u, i) => 
+                    `<img src="${u}" onclick="document.getElementById('mImg').src='${u}'; document.querySelectorAll('.thumb-row img').forEach(img=>img.classList.remove('active')); this.classList.add('active')" class="${i===0?'active':''}">`
+                ).join('') : '';
+
+                document.getElementById('main-content').innerHTML = `
+                    <div class="product-header">
+                        <span class="brand-label">${p.brand || 'Premium Gadget'}</span>
+                        <h1>${p.name || 'Mobile Device'}</h1>
+                    </div>
+                    <div class="apple-wrapper">
+                        <div class="slider-section">
+                            <div class="main-img"><img id="mImg" src="${mainImgSrc}"></div>
+                            <div class="thumb-row">${thumbs}</div>
+                        </div>
+                        <div class="info-section">
+                            <span class="price-current">Rs. ${p.price || 'Contact for Price'}</span>
+                            <p class="main-desc">${p.description || 'Exclusive quality gadget available now at Haider Mobiles. High performance and original quality guaranteed.'}</p>
+                            <div class="btn-group">
+                                <div class="add-cart-btn" onclick="window.addToCart('${p.name}', '${p.price}', '${p.img}')">Add to Bag</div>
+                                <a href="https://wa.me/923279518790?text=Salam! I want to buy: ${p.name}" class="buy-btn">Order on WhatsApp</a>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                document.getElementById('loader').innerText = "Product Not Found!";
+            }
+        });
+    }
+
+    onValue(ref(db, 'products'), (snapshot) => {
+        const gallery = document.getElementById('product-gallery');
+        gallery.innerHTML = "";
+        snapshot.forEach(child => {
+            const p = child.val();
+            if (child.key !== productId) {
+                gallery.innerHTML += `
+                    <a href="product.html?id=${child.key}" class="apple-card">
+                        <img src="${p.img || 'https://via.placeholder.com/150'}">
+                        <h4>${p.name}</h4>
+                        <div style="color:var(--gold); font-weight:bold;">Rs. ${p.price}</div>
+                    </a>`;
+            }
+        });
+    });
+</script>
+</body>
+</html>
