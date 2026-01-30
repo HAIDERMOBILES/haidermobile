@@ -27,16 +27,57 @@
 
         .flash-bar { background: linear-gradient(90deg, #d4af37, #8a6d1a); margin: 15px 5%; border-radius: 12px; padding: 12px 20px; display: flex; justify-content: space-between; color: #000; font-weight: 800; font-size: 13px; }
 
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px 5%; }
-        @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        /* 📱 Fixed 4-Column Grid */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 12px; 
+            padding: 20px 4%; 
+        }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.4s; cursor: pointer; }
-        .img-container { width: 100%; height: 140px; background: #fff; border-radius: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-        .card img { width: 85%; height: 85%; object-fit: contain; transition: 0.5s; }
-        .card:hover img { transform: scale(1.1); }
-        .price { color: var(--gold); font-weight: 800; font-size: 18px; display: block; margin: 10px 0; }
+        @media (max-width: 1000px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 10px 3%; } }
+
+        /* 📦 Card Size & Design */
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 15px; 
+            padding: 12px; 
+            text-align: center; 
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250px;
+        }
+
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+
+        .img-container { 
+            width: 100%; 
+            height: 120px; 
+            background: #fff; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 10px; 
+        }
+
+        .card img { 
+            width: 80%; 
+            height: 80%; 
+            object-fit: contain; 
+            transition: 0.6s ease; 
+        }
+
+        .card:hover img { transform: scale(1.12); }
+
+        .price { color: var(--gold); font-weight: 800; font-size: 16px; display: block; margin: 8px 0; }
         
-        /* 🏛️ Footer Updates */
         footer { background: #0a0a0a; padding: 40px 5% 20px; border-top: 1px solid #222; margin-top: 50px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 30px; }
         .footer-col h4 { color: var(--gold); margin-bottom: 15px; font-size: 14px; text-transform: uppercase; }
@@ -45,17 +86,6 @@
         .footer-col a:hover { color: var(--gold); padding-left: 5px; }
 
         .wa-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; z-index: 1000; text-decoration: none; }
-        /* Purane code mein ye dhoond kar replace kar len */
-.card img { 
-    width: 85%; 
-    height: 85%; 
-    object-fit: contain; 
-    transition: 0.5s; /* Image zoom smooth karne ke liye */
-}
-
-.card:hover img { 
-    transform: scale(1.15); /* Mouse le jane par 15% zoom */
-}
     </style>
 </head>
 <body>
@@ -166,7 +196,7 @@
         grid.innerHTML = list.map(p => `
             <div class="card" onclick="location.href='product.html?id=${p.id}'">
                 <div class="img-container"><img src="${p.img}"></div>
-                <h3 style="font-size: 13px;">${p.name}</h3>
+                <h3 style="font-size: 13px; margin: 5px 0;">${p.name}</h3>
                 <span class="price">Rs ${p.price}</span>
             </div>
         `).join('');
