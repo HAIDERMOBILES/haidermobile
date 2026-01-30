@@ -54,7 +54,7 @@
         .slides { display: none; width: 100%; animation: fade 1.2s ease-in-out; }
         @keyframes fade { from {opacity: 0.5} to {opacity: 1} }
 
-        /* 📱 Grid Setup: Desktop 4, Mobile 2 */
+        /* 📱 Grid Setup */
         .grid { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
@@ -65,17 +65,40 @@
             .grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s; }
-        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        /* 🔍 Updated Card & Zoom Effect */
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 20px; 
+            padding: 15px; 
+            text-align: center; 
+            transition: 0.3s; 
+            overflow: hidden; /* Zoom ko card ke andar rakhne ke liye */
+        }
         
-        /* ✨ Picture Size Increase Here */
+        .img-container {
+            width: 100%;
+            height: 150px;
+            background: #fff;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            overflow: hidden; /* Important for zoom boundary */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .card img { 
             width: 100%; 
-            height: 150px; /* Size increased from 120px to 150px */
+            height: 100%;
             object-fit: contain; 
-            background: #fff; 
-            border-radius: 15px; 
-            margin-bottom: 10px; 
+            transition: transform 0.5s ease; /* Smooth zoom transition */
+        }
+
+        /* Hover Effect */
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .card:hover img { 
+            transform: scale(1.15); /* Picture 15% zoom hogi */
         }
         
         .price-box { display: block; margin-top: 10px; font-weight: 800; font-size: 17px; color: var(--gold); }
@@ -201,7 +224,9 @@
     function render(list) {
         grid.innerHTML = list.map(p => `
             <div class="card">
-                <img src="${p.img || 'https://via.placeholder.com/200'}" onerror="this.src='https://via.placeholder.com/200'">
+                <div class="img-container">
+                    <img src="${p.img || 'https://via.placeholder.com/200'}" onerror="this.src='https://via.placeholder.com/200'">
+                </div>
                 <h3 style="font-size: 13px;">${p.name}</h3>
                 <span class="price-box"><span class="rs">RS</span>${p.price}</span>
                 <a href="product.html?id=${p.id}" style="color:#fff; text-decoration:none; font-size:10px; display:block; margin-top:15px; border:1px solid #333; padding:8px; border-radius:8px;">VIEW DETAILS</a>
@@ -215,20 +240,3 @@
         document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
         const type = chip.dataset.type;
-        const val = chip.dataset.val;
-        let result = [...allItems];
-        if (type === 'cat') result = allItems.filter(p => p.category === val);
-        else if (type === 'price') {
-            if (val === 'low') result.sort((a,b) => a.numPrice - b.numPrice);
-            else result.sort((a,b) => b.numPrice - a.numPrice);
-        }
-        render(result);
-    };
-
-    document.getElementById('liveSearch').oninput = (e) => {
-        const s = e.target.value.toLowerCase();
-        render(allItems.filter(p => p.name.toLowerCase().includes(s)));
-    };
-</script>
-</body>
-</html>
