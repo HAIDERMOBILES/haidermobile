@@ -6,87 +6,98 @@
     <title>Jarvis Admin | Haider Mobiles</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --bg: #050505; }
+        :root { --gold: #d4af37; --bg: #050505; --card: #111; --border: #222; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; }
         
-        .jarvis-box {
-            max-width: 500px; margin: auto; border: 1px solid var(--gold); 
-            background: rgba(212, 175, 55, 0.05); padding: 25px; 
-            border-radius: 15px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
-        }
+        .jarvis-container { max-width: 1000px; margin: auto; }
+        
+        /* ✨ Header Area */
+        .jarvis-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid var(--gold); padding-bottom: 10px; }
+        .jarvis-header h2 { color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
 
-        /* Upload Area */
-        .upload-area {
-            border: 2px dashed #444; padding: 20px; text-align: center;
-            border-radius: 15px; cursor: pointer; transition: 0.3s; margin-bottom: 10px;
-        }
-        .upload-area:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); }
+        .main-layout { display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
+        @media (max-width: 850px) { .main-layout { grid-template-columns: 1fr; } }
+
+        /* 📝 Form Section */
+        .upload-card { background: rgba(212, 175, 55, 0.03); border: 1px solid var(--border); padding: 20px; border-radius: 20px; position: sticky; top: 20px; height: fit-content; }
+        .upload-area { border: 2px dashed #333; padding: 15px; text-align: center; border-radius: 12px; cursor: pointer; margin-bottom: 12px; transition: 0.3s; }
+        .upload-area:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
         
         input, select, textarea { 
             width: 100%; padding: 12px; margin-bottom: 15px; box-sizing: border-box;
-            background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 14px;
+            background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 13px;
         }
 
-        /* Progress Bar */
-        .status-dot { height: 6px; width: 100%; background: #222; border-radius: 5px; overflow: hidden; margin: 10px 0; }
+        .status-dot { height: 4px; width: 100%; background: #222; border-radius: 5px; overflow: hidden; margin-top: 8px; }
         .progress-bar { height: 100%; width: 0%; background: var(--gold); transition: 0.3s; }
 
-        /* Inventory List Style */
-        .inventory-section { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; }
-        .item-row { 
-            background: #111; padding: 10px; border-radius: 10px; margin-bottom: 8px;
-            display: flex; align-items: center; justify-content: space-between; border: 1px solid #222;
-        }
-        .item-row img { width: 45px; height: 45px; border-radius: 5px; object-fit: cover; background: #fff; }
-        .item-info { flex: 1; margin-left: 15px; font-size: 13px; }
-        .item-info b { color: var(--gold); }
-        .del-btn { background: #ff4757; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; }
+        /* 📦 Inventory Grid */
+        .inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        #invSearch { width: 250px; margin: 0; padding: 8px 15px; border-radius: 50px; background: #111; border: 1px solid #333; }
+        
+        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; animation: fadeIn 0.5s; }
+        .inv-card img { width: 100%; height: 110px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 10px; }
+        .inv-card h4 { font-size: 12px; margin: 5px 0; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .inv-card b { color: var(--gold); font-size: 14px; }
+        
+        .del-btn { position: absolute; top: 8px; right: 8px; background: rgba(255, 71, 87, 0.9); border: none; color: #fff; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: black; font-size: 14px; text-transform: uppercase; }
+        .save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-<div class="jarvis-box">
-    <h2 style="color:var(--gold); text-align:center;"><i class="fa fa-robot"></i> JARVIS SYSTEM V1.1</h2>
-    
-    <div class="upload-area" onclick="document.getElementById('file1').click()">
-        <p id="t1" style="font-size: 12px;">Main Product Image</p>
-        <input type="file" id="file1" hidden accept="image/*" onchange="uploadToImgBB(this, 'img1', 't1', 'p1')">
-        <div class="status-dot"><div id="p1" class="progress-bar"></div></div>
+<div class="jarvis-container">
+    <div class="jarvis-header">
+        <h2><i class="fa fa-robot"></i> Jarvis System v2.0</h2>
     </div>
 
-    <div style="display: flex; gap: 10px;">
-        <div class="upload-area" style="flex:1; padding: 10px;" onclick="document.getElementById('file2').click()">
-            <p id="t2" style="font-size: 10px;">Extra Image 1</p>
-            <input type="file" id="file2" hidden accept="image/*" onchange="uploadToImgBB(this, 'img2', 't2', 'p2')">
-            <div class="status-dot"><div id="p2" class="progress-bar"></div></div>
-        </div>
-        <div class="upload-area" style="flex:1; padding: 10px;" onclick="document.getElementById('file3').click()">
-            <p id="t3" style="font-size: 10px;">Extra Image 2</p>
-            <input type="file" id="file3" hidden accept="image/*" onchange="uploadToImgBB(this, 'img3', 't3', 'p3')">
-            <div class="status-dot"><div id="p3" class="progress-bar"></div></div>
-        </div>
-    </div>
+    <div class="main-layout">
+        <div class="upload-card">
+            <h3 style="font-size: 15px; margin-top: 0;"><i class="fa fa-plus-circle"></i> New Product</h3>
+            
+            <div class="upload-area" onclick="document.getElementById('f1').click()">
+                <small id="t1">Main Image</small>
+                <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
+                <div class="status-dot"><div id="p1" class="progress-bar"></div></div>
+            </div>
 
-    <div id="form-content" style="margin-top:10px;">
-        <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 15 Pro)">
-        <div style="display: flex; gap:10px;">
-            <input type="text" id="pBrand" placeholder="Brand (e.g. Apple)">
+            <div style="display: flex; gap: 10px;">
+                <div class="upload-area" style="flex:1" onclick="document.getElementById('f2').click()">
+                    <small id="t2">Extra 1</small>
+                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2', 'p2')">
+                    <div class="status-dot"><div id="p2" class="progress-bar"></div></div>
+                </div>
+                <div class="upload-area" style="flex:1" onclick="document.getElementById('f3').click()">
+                    <small id="t3">Extra 2</small>
+                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3', 'p3')">
+                    <div class="status-dot"><div id="p3" class="progress-bar"></div></div>
+                </div>
+            </div>
+
+            <input type="text" id="pName" placeholder="Product Name">
+            <input type="text" id="pBrand" placeholder="Brand (e.g. Vivo)">
+            <input type="text" id="pPrice" placeholder="Price (e.g. 85,000)">
             <select id="pCat">
                 <option value="Mobile">Mobile</option>
                 <option value="Accessory">Accessory</option>
             </select>
+            <textarea id="pDesc" placeholder="Description..." rows="3"></textarea>
+            
+            <button id="saveBtn" class="save-btn"><i class="fa fa-cloud-upload-alt"></i> Upload to Store</button>
         </div>
-        <input type="text" id="pPrice" placeholder="Price (e.g. 245,000)">
-        <textarea id="pDesc" placeholder="Description (Optional)" rows="3"></textarea>
-        
-        <button id="saveBtn" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:black;">
-            <i class="fa fa-database"></i> UPLOAD TO DATABASE
-        </button>
-    </div>
 
-    <div class="inventory-section">
-        <h3 style="color:var(--gold); font-size: 14px;"><i class="fa fa-box"></i> LIVE INVENTORY</h3>
-        <div id="inventoryList"></div>
+        <div class="inventory-display">
+            <div class="inventory-header">
+                <h3><i class="fa fa-warehouse"></i> Live Store</h3>
+                <input type="text" id="invSearch" placeholder="Quick search...">
+            </div>
+            <div id="invGrid" class="inv-grid"></div>
+        </div>
     </div>
 </div>
 
@@ -105,99 +116,80 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const IMGBB_API_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c"; 
+    const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c"; 
     let urls = { img1: "", img2: "", img3: "" };
 
-    // ImgBB Upload Function
-    window.uploadToImgBB = async (input, key, textId, progressId) => {
-        const file = input.files[0];
-        if(!file) return;
+    // Image Upload Logic
+    window.uploadImg = async (input, key, txtId, progId) => {
+        const file = input.files[0]; if(!file) return;
+        const text = document.getElementById(txtId);
+        const bar = document.getElementById(progId);
+        text.innerText = "Jarvis Uploading...";
+        bar.style.width = "40%";
 
-        const textElem = document.getElementById(textId);
-        const barElem = document.getElementById(progressId);
-        
-        textElem.innerText = "Jarvis Uploading...";
-        barElem.style.width = "40%";
-
-        const formData = new FormData();
-        formData.append("image", file);
-
+        const fd = new FormData(); fd.append("image", file);
         try {
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-                method: "POST",
-                body: formData
-            });
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
             const data = await res.json();
-            
             if(data.success) {
                 urls[key] = data.data.url;
-                barElem.style.width = "100%";
-                textElem.innerText = "Ready!";
-                textElem.style.color = "var(--gold)";
+                bar.style.width = "100%";
+                text.innerText = "Success!";
+                text.style.color = "var(--gold)";
             }
-        } catch (err) {
-            textElem.innerText = "Error!";
-            alert("Upload failed.");
-        }
+        } catch (e) { text.innerText = "Error!"; }
     };
 
-    // Load Live Inventory
+    // Load & Search Inventory
+    let allProducts = [];
     onValue(ref(db, 'products'), (snap) => {
-        const list = document.getElementById('inventoryList');
-        list.innerHTML = "";
+        const grid = document.getElementById('invGrid');
+        grid.innerHTML = "";
         if (snap.exists()) {
-            const data = snap.val();
-            Object.keys(data).forEach(id => {
-                const p = data[id];
-                list.innerHTML += `
-                    <div class="item-row">
-                        <img src="${p.img}">
-                        <div class="item-info">
-                            <b>${p.name}</b><br>
-                            <small>${p.brand} | Rs ${p.price}</small>
-                        </div>
-                        <button class="del-btn" onclick="deleteItem('${id}')"><i class="fa fa-trash-alt"></i></button>
-                    </div>
-                `;
-            });
+            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            renderGrid(allProducts);
         }
     });
 
-    // Delete Item
-    window.deleteItem = (id) => {
-        if(confirm("Sir, confirm to delete this product?")) {
-            remove(ref(db, `products/${id}`));
-        }
+    function renderGrid(list) {
+        const grid = document.getElementById('invGrid');
+        grid.innerHTML = list.map(p => `
+            <div class="inv-card">
+                <button class="del-btn" onclick="deleteItem('${p.id}')"><i class="fa fa-trash"></i></button>
+                <img src="${p.img}">
+                <h4>${p.name}</h4>
+                <b>Rs ${p.price}</b>
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('invSearch').oninput = (e) => {
+        const val = e.target.value.toLowerCase();
+        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(val) || p.brand.toLowerCase().includes(val));
+        renderGrid(filtered);
     };
 
-    // Save to Firebase
+    window.deleteItem = (id) => {
+        if(confirm("Sir, delete this product?")) remove(ref(db, `products/${id}`));
+    };
+
+    // Save Logic
     document.getElementById('saveBtn').onclick = function() {
-        const btn = this;
         const product = {
             name: document.getElementById('pName').value.trim(),
             brand: document.getElementById('pBrand').value.trim(),
             price: document.getElementById('pPrice').value.trim(),
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value.trim(),
-            img: urls.img1,
-            img2: urls.img2,
-            img3: urls.img3,
+            img: urls.img1, img2: urls.img2, img3: urls.img3,
             timestamp: Date.now()
         };
 
-        if(!product.img || !product.name || !product.price) {
-            alert("Sir, Main Image, Name and Price are required!");
-            return;
-        }
+        if(!product.img || !product.name) { alert("Main Image & Name required!"); return; }
 
-        btn.disabled = true;
-        btn.innerText = "UPLOADING...";
-
+        this.disabled = true; this.innerText = "UPLOADING...";
         push(ref(db, 'products'), product).then(() => {
-            alert("Data Secured, Sir!");
-            location.reload();
-        }).catch(e => {
-            btn.disabled = false;
+            alert("Secured!"); location.reload();
         });
     };
 </script>
