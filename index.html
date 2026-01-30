@@ -9,20 +9,34 @@
     <style>
         :root { --gold: #d4af37; --bg: #000000; --card-bg: rgba(255, 255, 255, 0.05); }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; padding-top: 80px; }
-        .top-header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); padding: 15px 5%; border-bottom: 1px solid #333; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
-        .store-name { color: var(--gold); font-weight: 800; text-decoration: none; font-size: 1.5rem; letter-spacing: 2px; }
         
-        /* Navigation Chips Styling */
-        .brand-nav { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5% 5px; scrollbar-width: none; }
-        .brand-chip { padding: 8px 25px; background: #111; border: 1px solid #333; border-radius: 50px; font-size: 12px; cursor: pointer; white-space: nowrap; color: #aaa; transition: 0.3s; }
-        .brand-chip.active { background: var(--gold); color: #000; font-weight: 600; border-color: var(--gold); }
+        /* Header & Search Bar */
+        .top-header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); padding: 10px 5%; border-bottom: 1px solid #333; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+        .header-main { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .store-name { color: var(--gold); font-weight: 800; text-decoration: none; font-size: 1.5rem; letter-spacing: 2px; }
 
+        /* ✨ Glowing Search Bar */
+        .search-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; }
+        .search-input { width: 100%; background: #111; border: 1px solid #333; padding: 10px 40px 10px 15px; border-radius: 12px; color: #fff; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .search-container i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); }
+        
+        /* Glow Effect on Focus */
+        .search-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+
+        /* Navigation Chips */
+        .filter-wrapper { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5% 5px; scrollbar-width: none; }
+        .brand-chip { padding: 8px 22px; background: #111; border: 1px solid #333; border-radius: 50px; font-size: 12px; cursor: pointer; white-space: nowrap; color: #aaa; transition: 0.3s; }
+        .brand-chip.active { background: var(--gold); color: #000; font-weight: 600; border-color: var(--gold); }
+        .special-chip { border: 1px solid var(--gold); color: var(--gold); }
+
+        /* Product Grid */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 10px 5%; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 12px; border: 1px solid #222; text-align: center; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 12px; border: 1px solid #222; text-align: center; transition: 0.3s; }
+        .card:hover { border-color: var(--gold); transform: translateY(-3px); }
         .card img { width: 100%; height: 140px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 10px; }
-        .card h3 { font-size: 14px; margin: 5px 0; font-weight: 600; color: #fff; height: 40px; overflow: hidden; }
-        .price { color: var(--gold); font-weight: 800; font-size: 16px; display: block; margin-bottom: 10px; }
-        .btn-view { display: block; background: #fff; color: #000; text-decoration: none; padding: 8px; border-radius: 10px; font-size: 11px; font-weight: 800; }
+        .card h3 { font-size: 13px; margin: 5px 0; font-weight: 600; color: #fff; height: 38px; overflow: hidden; }
+        .price { color: var(--gold); font-weight: 800; font-size: 15px; display: block; margin-bottom: 10px; }
+        .btn-view { display: block; background: #fff; color: #000; text-decoration: none; padding: 8px; border-radius: 10px; font-size: 10px; font-weight: 800; }
         
         @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
     </style>
@@ -30,31 +44,34 @@
 <body>
 
 <div class="top-header">
-    <a href="index.html" class="store-name">HAIDER MOBILES</a>
-    <i class="fa fa-search" style="color:var(--gold)"></i>
+    <div class="header-main">
+        <a href="index.html" class="store-name">HAIDER</a>
+        <div class="search-container">
+            <input type="text" id="liveSearch" class="search-input" placeholder="Search devices...">
+            <i class="fa fa-search"></i>
+        </div>
+    </div>
 </div>
 
-<div class="brand-nav">
-    <div class="brand-chip active" id="filter-all">All</div>
-    <div class="brand-chip" id="filter-acc">Accessories</div>
-    <div class="brand-chip" id="sort-price">Price: Low to High</div>
-</div>
-
-<div id="chip-container" class="brand-nav"></div>
+<div class="filter-wrapper" id="chip-container">
+    <div class="brand-chip active" id="btn-all">All</div>
+    <div class="brand-chip special-chip" id="btn-acc">Accessories</div>
+    <div class="brand-chip special-chip" id="btn-sort">Price: Low to High</div>
+    </div>
 
 <div id="product-grid" class="product-grid">
-    <p style="text-align:center; width:100%; grid-column: 1/-1;">Connecting to Database...</p>
+    <p style="text-align:center; width:100%; grid-column: 1/-1;">Jarvis is loading data...</p>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
         authDomain: "web-app-4f3a1.firebaseapp.com",
         projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com", 
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
         appId: "1:222099203820:web:778e204d2960181dfba7c9"
     };
 
@@ -64,65 +81,67 @@
     const chipBox = document.getElementById('chip-container');
     
     let localProducts = [];
+    let currentFilter = "All";
 
-    // Data Load karna
     onValue(ref(db, 'products'), (snapshot) => {
-        if (!snapshot.exists()) {
-            grid.innerHTML = "<p>No Products Found.</p>";
-            return;
-        }
+        if (!snapshot.exists()) return;
         const data = snapshot.val();
-        localProducts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        localProducts = Object.keys(data).map(key => ({ 
+            id: key, 
+            ...data[key],
+            numPrice: parseInt(data[key].price?.toString().replace(/[^0-9]/g, '')) || 0 
+        }));
         
-        // Brand list generate karna
-        const brands = [...new Set(localProducts.map(p => p.brand).filter(b => b && b !== 'undefined'))];
+        const brands = [...new Set(localProducts
+            .filter(p => p.category !== 'Accessory')
+            .map(p => p.brand)
+            .filter(b => b && b !== 'undefined' && b !== 'General'))];
+        
         renderBrandChips(brands);
-        
         display(localProducts);
     });
 
-    // ✨ Brands Chips Render karne ka sahi tareeqa
     function renderBrandChips(brands) {
-        chipBox.innerHTML = "";
         brands.forEach(brand => {
             const chip = document.createElement('div');
             chip.className = "brand-chip";
             chip.innerText = brand;
             chip.onclick = () => {
-                setActive(chip);
-                const filtered = localProducts.filter(p => p.brand === brand);
-                display(filtered);
+                resetActive();
+                chip.classList.add('active');
+                currentFilter = brand;
+                display(localProducts.filter(p => p.brand === brand));
             };
             chipBox.appendChild(chip);
         });
     }
 
-    // Filter Buttons ke Click Events
-    document.getElementById('filter-all').onclick = function() {
-        setActive(this);
-        display(localProducts);
-    };
-
-    document.getElementById('filter-acc').onclick = function() {
-        setActive(this);
-        // Accessory logic: filter products where category is Accessory
-        const filtered = localProducts.filter(p => p.category === 'Accessory' || p.brand === 'Accessory');
+    // Live Search Logic
+    document.getElementById('liveSearch').oninput = function() {
+        const term = this.value.toLowerCase();
+        const filtered = localProducts.filter(p => p.name.toLowerCase().includes(term));
         display(filtered);
     };
 
-    document.getElementById('sort-price').onclick = function() {
-        setActive(this);
-        const sorted = [...localProducts].sort((a, b) => {
-            let p1 = parseInt(a.price?.toString().replace(/\D/g,'')) || 0;
-            let p2 = parseInt(b.price?.toString().replace(/\D/g,'')) || 0;
-            return p1 - p2;
-        });
+    document.getElementById('btn-all').onclick = () => {
+        resetActive();
+        document.getElementById('btn-all').classList.add('active');
+        display(localProducts);
+    };
+
+    document.getElementById('btn-acc').onclick = () => {
+        resetActive();
+        document.getElementById('btn-acc').classList.add('active');
+        display(localProducts.filter(p => p.category === 'Accessory'));
+    };
+
+    document.getElementById('btn-sort').onclick = () => {
+        const sorted = [...localProducts].sort((a, b) => a.numPrice - b.numPrice);
         display(sorted);
     };
 
-    function setActive(el) {
+    function resetActive() {
         document.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
-        el.classList.add('active');
     }
 
     function display(items) {
@@ -130,9 +149,9 @@
         items.forEach(p => {
             grid.innerHTML += `
                 <div class="card">
-                    <img src="${p.img || ''}" onerror="this.src='https://via.placeholder.com/150'">
+                    <img src="${p.img || ''}" onerror="this.src='https://via.placeholder.com/200'">
                     <h3>${p.name || 'Premium Product'}</h3>
-                    <span class="price">Rs. ${p.price || 'Check Website'}</span>
+                    <span class="price">Rs. ${p.price || 'N/A'}</span>
                     <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
                 </div>`;
         });
