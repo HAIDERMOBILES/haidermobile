@@ -71,9 +71,9 @@
 </header>
 
 <div class="slider-box">
-    <img src="Gemini1.jpg" class="slides" style="display:block;">
-    <img src="Gemini 2.jpg" class="slides">
-    <img src="Gemini_Generated_Image_s898ifs898ifs898.jpg" class="slides">
+    <img src="faq/Gemini.png" class="slides" style="display:block;">
+    <img src="faq/Gemini1.png" class="slides">
+    <img src="faq/Gemini 2.png" class="slides">
 </div>
 
 <div id="product-grid" class="grid"></div>
@@ -83,26 +83,26 @@
         <h4>About Us</h4>
         <ul>
             <li><a href="about.html">About Haider Mobiles</a></li>
-            <li><a href="faq.html">FAQs</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq/faq.html">FAQs</a></li>
+            <li><a href="faq/contact.html">Contact Us</a></li>
             <li><a href="about.html">Careers</a></li>
         </ul>
     </div>
     <div class="footer-col">
         <h4>Customer Service</h4>
         <ul>
-            <li><a href="policy.html">Privacy Policy</a></li>
-            <li><a href="policy.html">Terms & Condition</a></li>
-            <li><a href="policy.html">Installments Plan</a></li>
-            <li><a href="policy.html">E-Warranty Activation</a></li>
+            <li><a href="faq/policy.html">Privacy Policy</a></li>
+            <li><a href="faq/policy.html">Terms & Condition</a></li>
+            <li><a href="faq/policy.html">Installments Plan</a></li>
+            <li><a href="faq/policy.html">E-Warranty Activation</a></li>
         </ul>
     </div>
     <div class="footer-col">
         <h4>Others</h4>
         <ul>
-            <li><a href="policy.html">Sell on Priceoye</a></li>
-            <li><a href="policy.html">Secure Payments</a></li>
-            <li><a href="policy.html">Press & Blog</a></li>
+            <li><a href="faq/policy.html">Sell on Priceoye</a></li>
+            <li><a href="faq/policy.html">Secure Payments</a></li>
+            <li><a href="faq/policy.html">Press & Blog</a></li>
         </ul>
     </div>
 </footer>
@@ -124,15 +124,16 @@
     const grid = document.getElementById('product-grid');
     const filterMenu = document.getElementById('filterMenu');
 
-    // Slider Logic
+    // --- Slider Logic ---
     let slideIndex = 0;
     const slides = document.querySelectorAll(".slides");
     function runSlider() {
+        if(slides.length === 0) return;
         slides.forEach(s => s.style.display = "none");
         slideIndex++;
         if (slideIndex > slides.length) slideIndex = 1;
         slides[slideIndex-1].style.display = "block";
-        setTimeout(runSlider, 4000);
+        setTimeout(runSlider, 4000); // 4 seconds
     }
     runSlider();
 
