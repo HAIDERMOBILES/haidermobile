@@ -12,14 +12,19 @@
         .top-header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); padding: 15px 5%; border-bottom: 1px solid #333; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
         .store-name { color: var(--gold); font-weight: 800; text-decoration: none; font-size: 1.5rem; letter-spacing: 2px; }
         
-        .brand-nav { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5%; scrollbar-width: none; }
-        .brand-chip { padding: 8px 25px; background: #111; border: 1px solid #333; border-radius: 50px; font-size: 12px; cursor: pointer; white-space: nowrap; color: #aaa; }
+        .brand-nav { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5% 5px; scrollbar-width: none; }
+        .brand-chip { padding: 8px 25px; background: #111; border: 1px solid #333; border-radius: 50px; font-size: 12px; cursor: pointer; white-space: nowrap; color: #aaa; transition: 0.3s; }
         .brand-chip.active { background: var(--gold); color: #000; font-weight: 600; border-color: var(--gold); }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 10px 5%; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 12px; border: 1px solid #222; text-align: center; }
+        /* Sort Tools */
+        .tools-bar { padding: 5px 5%; display: flex; gap: 10px; }
+        .sort-btn { background: none; border: 1px solid #444; color: var(--gold); padding: 5px 12px; border-radius: 5px; font-size: 11px; cursor: pointer; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px 5%; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 12px; border: 1px solid #222; text-align: center; transition: 0.3s; }
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
         .card img { width: 100%; height: 140px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 10px; }
-        .card h3 { font-size: 14px; margin: 5px 0; font-weight: 600; color: #fff; }
+        .card h3 { font-size: 14px; margin: 5px 0; font-weight: 600; color: #fff; height: 40px; overflow: hidden; }
         .price { color: var(--gold); font-weight: 800; font-size: 16px; display: block; margin-bottom: 10px; }
         .btn-view { display: block; background: #fff; color: #000; text-decoration: none; padding: 8px; border-radius: 10px; font-size: 11px; font-weight: 800; }
         
@@ -30,10 +35,15 @@
 
 <div class="top-header">
     <a href="index.html" class="store-name">HAIDER MOBILES</a>
-    <i class="fa fa-search" style="color:var(--gold)"></i>
+    <i class="fa fa-search" style="color:var(--gold)" onclick="let s = prompt('Search Product:'); if(s) window.location.href='?search='+s"></i>
 </div>
 
 <div id="chip-container" class="brand-nav"></div>
+
+<div class="tools-bar">
+    <button class="sort-btn" id="sortPrice"><i class="fa fa-sort-amount-down"></i> Price: Low to High</button>
+</div>
+
 <div id="product-grid" class="product-grid">
     <p style="text-align:center; width:100%; grid-column: 1/-1;">Connecting to Database...</p>
 </div>
@@ -54,6 +64,9 @@
     const db = getDatabase(app);
     const grid = document.getElementById('product-grid');
     const chipBox = document.getElementById('chip-container');
+    
+    let allProducts = [];
+    let currentFilter = "All";
 
     onValue(ref(db, 'products'), (snapshot) => {
         if (!snapshot.exists()) {
@@ -62,12 +75,16 @@
         }
 
         const data = snapshot.val();
-        const products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        allProducts = Object.keys(data).map(key => ({ 
+            id: key, 
+            ...data[key],
+            // Price ko number mein convert kar rahe hain sorting ke liye
+            numPrice: parseInt(data[key].price.toString().replace(/,/g, '')) || 0 
+        }));
 
-        // Safe Brand Extraction (Filter out undefined)
-        const brands = ["All", ...new Set(products.map(p => p.brand).filter(b => b && b !== 'undefined'))];
+        // Brand + Accessory Filter logic
+        const brands = ["All", "Accessory", ...new Set(allProducts.filter(p => p.category !== 'Accessory').map(p => p.brand).filter(b => b && b !== 'undefined'))];
         
-        // Render Chips
         chipBox.innerHTML = "";
         brands.forEach(brand => {
             const chip = document.createElement('div');
@@ -76,30 +93,44 @@
             chip.onclick = () => {
                 document.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
                 chip.classList.add('active');
-                displayProducts(products, brand);
+                currentFilter = brand;
+                displayProducts();
             };
             chipBox.appendChild(chip);
         });
         chipBox.firstChild.classList.add('active');
 
-        displayProducts(products, "All");
+        displayProducts();
     });
 
-    function displayProducts(products, filter) {
+    // Price Sorting Logic
+    document.getElementById('sortPrice').onclick = function() {
+        allProducts.sort((a, b) => a.numPrice - b.numPrice);
+        displayProducts();
+        this.innerHTML = "<i class='fa fa-check'></i> Sorted by Price";
+    };
+
+    function displayProducts() {
         grid.innerHTML = "";
-        products.forEach(p => {
-            if (filter !== "All" && p.brand !== filter) return;
+        
+        const filtered = allProducts.filter(p => {
+            if (currentFilter === "All") return true;
+            if (currentFilter === "Accessory") return p.category === "Accessory";
+            return p.brand === currentFilter;
+        });
 
-            // SAFETY: Use ImgBB link if exists, otherwise placeholder
-            const name = p.name || "Premium Device";
-            const price = p.price || "Check Price";
+        if(filtered.length === 0) {
+            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No items in this category.</p>";
+            return;
+        }
+
+        filtered.forEach(p => {
             const img = p.img || "https://via.placeholder.com/200";
-
             grid.innerHTML += `
                 <div class="card">
                     <img src="${img}" onerror="this.src='https://via.placeholder.com/200'">
-                    <h3>${name}</h3>
-                    <span class="price">Rs. ${price}</span>
+                    <h3>${p.name}</h3>
+                    <span class="price">Rs. ${p.price}</span>
                     <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
                 </div>
             `;
