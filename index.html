@@ -20,21 +20,54 @@
         
         /* Filter Button */
         .filter-btn { background: var(--gold); color: #000; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        .filter-menu { display: none; background: #050505; border-bottom: 1px solid #222; padding: 10px 5%; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-        .filter-menu.active { display: flex; gap: 10px; animation: slideDown 0.3s ease; }
-        .f-chip { padding: 6px 15px; background: #111; border: 1px solid #333; border-radius: 8px; font-size: 11px; color: #aaa; cursor: pointer; }
-        .f-chip.active { border-color: var(--gold); color: var(--gold); font-weight: 600; }
+        
+        /* 📱 Swipeable Category Menu */
+        .filter-menu { 
+            display: none; 
+            background: #050505; 
+            border-bottom: 1px solid #222; 
+            padding: 12px 5%; 
+            overflow-x: auto; 
+            white-space: nowrap; 
+            gap: 12px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        .filter-menu::-webkit-scrollbar { display: none; }
+        .filter-menu.active { display: flex; animation: slideDown 0.3s ease; }
+
+        .f-chip { 
+            flex: 0 0 auto; 
+            padding: 8px 18px; 
+            background: #111; 
+            border: 1px solid #333; 
+            border-radius: 25px; 
+            font-size: 12px; 
+            color: #aaa; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .f-chip.active { border-color: var(--gold); color: var(--gold); font-weight: 600; background: rgba(212, 175, 55, 0.1); }
 
         /* 🎨 Slider Section */
         .slider-box { width: 90%; margin: 10px auto; border-radius: 15px; overflow: hidden; border: 1px solid #222; position: relative; }
         .slides { display: none; width: 100%; animation: fade 1.2s ease-in-out; }
         @keyframes fade { from {opacity: 0.5} to {opacity: 1} }
 
-        /* Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px 5%; }
+        /* 📱 Grid Setup: Desktop 4, Mobile 2 */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 15px; 
+            padding: 20px 5%; 
+        }
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
         .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s; }
         .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .card img { width: 100%; height: 140px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 10px; }
+        .card img { width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 10px; }
         
         .price-box { display: block; margin-top: 10px; font-weight: 800; font-size: 17px; color: var(--gold); }
         .rs { font-size: 11px; margin-right: 3px; font-weight: 400; opacity: 0.8; }
@@ -63,10 +96,15 @@
     </div>
     <div class="filter-menu" id="filterMenu">
         <div class="f-chip active" data-type="all">All Items</div>
+        <div class="f-chip" data-type="cat" data-val="Mobile">Mobiles</div>
+        <div class="f-chip" data-type="cat" data-val="Handfree">Handfree</div>
+        <div class="f-chip" data-type="cat" data-val="Earbuds">Earbuds</div>
+        <div class="f-chip" data-type="cat" data-val="Power Bank">Power Bank</div>
+        <div class="f-chip" data-type="cat" data-val="Data Cable">Data Cable</div>
+        <div class="f-chip" data-type="cat" data-val="Headphone">Headphones</div>
+        <div class="f-chip" data-type="cat" data-val="Neckband">Neckband</div>
         <div class="f-chip" data-type="price" data-val="low">Sasti Price</div>
         <div class="f-chip" data-type="price" data-val="high">Mehengi Price</div>
-        <div class="f-chip" data-type="cat" data-val="Mobile">Mobiles</div>
-        <div class="f-chip" data-type="cat" data-val="Accessory">Accessories</div>
     </div>
 </header>
 
@@ -100,7 +138,7 @@
     <div class="footer-col">
         <h4>Others</h4>
         <ul>
-            <li><a href="faq/policy.html">Sell on Priceoye</a></li>
+            <li><a href="faq/policy.html">Sell on Haider Mobile</a></li>
             <li><a href="faq/policy.html">Secure Payments</a></li>
             <li><a href="faq/policy.html">Press & Blog</a></li>
         </ul>
@@ -109,80 +147,4 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const grid = document.getElementById('product-grid');
-    const filterMenu = document.getElementById('filterMenu');
-
-    // --- Slider Logic ---
-    let slideIndex = 0;
-    const slides = document.querySelectorAll(".slides");
-    function runSlider() {
-        if(slides.length === 0) return;
-        slides.forEach(s => s.style.display = "none");
-        slideIndex++;
-        if (slideIndex > slides.length) slideIndex = 1;
-        slides[slideIndex-1].style.display = "block";
-        setTimeout(runSlider, 4000); // 4 seconds
-    }
-    runSlider();
-
-    let allItems = [];
-
-    document.getElementById('toggleFilter').onclick = () => filterMenu.classList.toggle('active');
-
-    onValue(ref(db, 'products'), (snap) => {
-        if (!snap.exists()) return;
-        const data = snap.val();
-        allItems = Object.keys(data).map(k => ({ 
-            id: k, 
-            ...data[k], 
-            numPrice: parseInt(data[k].price?.toString().replace(/\D/g, '')) || 0 
-        }));
-        render(allItems);
-    });
-
-    function render(list) {
-        grid.innerHTML = list.map(p => `
-            <div class="card">
-                <img src="${p.img || 'https://via.placeholder.com/200'}" onerror="this.src='https://via.placeholder.com/200'">
-                <h3>${p.name}</h3>
-                <span class="price-box"><span class="rs">RS</span>${p.price}</span>
-                <a href="product.html?id=${p.id}" style="color:#fff; text-decoration:none; font-size:10px; display:block; margin-top:15px; border:1px solid #333; padding:8px; border-radius:8px;">VIEW DETAILS</a>
-            </div>
-        `).join('');
-    }
-
-    filterMenu.onclick = (e) => {
-        const chip = e.target.closest('.f-chip');
-        if (!chip) return;
-        document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        const type = chip.dataset.type;
-        const val = chip.dataset.val;
-        let result = [...allItems];
-        if (type === 'cat') result = allItems.filter(p => p.category === val);
-        else if (type === 'price') {
-            if (val === 'low') result.sort((a,b) => a.numPrice - b.numPrice);
-            else result.sort((a,b) => b.numPrice - a.numPrice);
-        }
-        render(result);
-    };
-
-    document.getElementById('liveSearch').oninput = (e) => {
-        const s = e.target.value.toLowerCase();
-        render(allItems.filter(p => p.name.toLowerCase().includes(s)));
-    };
-</script>
-</body>
-</html>
+    import { getDatabase, ref,
