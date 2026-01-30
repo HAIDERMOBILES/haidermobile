@@ -8,35 +8,50 @@
     <style>
         :root { --gold: #d4af37; --bg: #050505; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; }
+        
         .jarvis-box {
             max-width: 500px; margin: auto; border: 1px solid var(--gold); 
             background: rgba(212, 175, 55, 0.05); padding: 25px; 
             border-radius: 15px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
         }
+
+        /* Upload Area */
         .upload-area {
             border: 2px dashed #444; padding: 20px; text-align: center;
             border-radius: 15px; cursor: pointer; transition: 0.3s; margin-bottom: 10px;
         }
         .upload-area:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); }
+        
         input, select, textarea { 
             width: 100%; padding: 12px; margin-bottom: 15px; box-sizing: border-box;
             background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 14px;
         }
+
+        /* Progress Bar */
         .status-dot { height: 6px; width: 100%; background: #222; border-radius: 5px; overflow: hidden; margin: 10px 0; }
         .progress-bar { height: 100%; width: 0%; background: var(--gold); transition: 0.3s; }
-        .preview-img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; display: none; margin-top: 10px; border: 1px solid var(--gold); }
+
+        /* Inventory List Style */
+        .inventory-section { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; }
+        .item-row { 
+            background: #111; padding: 10px; border-radius: 10px; margin-bottom: 8px;
+            display: flex; align-items: center; justify-content: space-between; border: 1px solid #222;
+        }
+        .item-row img { width: 45px; height: 45px; border-radius: 5px; object-fit: cover; background: #fff; }
+        .item-info { flex: 1; margin-left: 15px; font-size: 13px; }
+        .item-info b { color: var(--gold); }
+        .del-btn { background: #ff4757; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="jarvis-box">
-    <h2 style="color:var(--gold); text-align:center;"><i class="fa fa-robot"></i> JARVIS SYSTEM V1.0</h2>
+    <h2 style="color:var(--gold); text-align:center;"><i class="fa fa-robot"></i> JARVIS SYSTEM V1.1</h2>
     
     <div class="upload-area" onclick="document.getElementById('file1').click()">
         <p id="t1" style="font-size: 12px;">Main Product Image</p>
         <input type="file" id="file1" hidden accept="image/*" onchange="uploadToImgBB(this, 'img1', 't1', 'p1')">
         <div class="status-dot"><div id="p1" class="progress-bar"></div></div>
-        <img id="prev1" class="preview-img">
     </div>
 
     <div style="display: flex; gap: 10px;">
@@ -55,7 +70,7 @@
     <div id="form-content" style="margin-top:10px;">
         <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 15 Pro)">
         <div style="display: flex; gap:10px;">
-            <input type="text" id="pBrand" placeholder="Brand (Apple)">
+            <input type="text" id="pBrand" placeholder="Brand (e.g. Apple)">
             <select id="pCat">
                 <option value="Mobile">Mobile</option>
                 <option value="Accessory">Accessory</option>
@@ -68,11 +83,16 @@
             <i class="fa fa-database"></i> UPLOAD TO DATABASE
         </button>
     </div>
+
+    <div class="inventory-section">
+        <h3 style="color:var(--gold); font-size: 14px;"><i class="fa fa-box"></i> LIVE INVENTORY</h3>
+        <div id="inventoryList"></div>
+    </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -88,7 +108,7 @@
     const IMGBB_API_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c"; 
     let urls = { img1: "", img2: "", img3: "" };
 
-    // Global function for uploading
+    // ImgBB Upload Function
     window.uploadToImgBB = async (input, key, textId, progressId) => {
         const file = input.files[0];
         if(!file) return;
@@ -117,10 +137,40 @@
             }
         } catch (err) {
             textElem.innerText = "Error!";
-            alert("Upload failed. Check internet/API.");
+            alert("Upload failed.");
         }
     };
 
+    // Load Live Inventory
+    onValue(ref(db, 'products'), (snap) => {
+        const list = document.getElementById('inventoryList');
+        list.innerHTML = "";
+        if (snap.exists()) {
+            const data = snap.val();
+            Object.keys(data).forEach(id => {
+                const p = data[id];
+                list.innerHTML += `
+                    <div class="item-row">
+                        <img src="${p.img}">
+                        <div class="item-info">
+                            <b>${p.name}</b><br>
+                            <small>${p.brand} | Rs ${p.price}</small>
+                        </div>
+                        <button class="del-btn" onclick="deleteItem('${id}')"><i class="fa fa-trash-alt"></i></button>
+                    </div>
+                `;
+            });
+        }
+    });
+
+    // Delete Item
+    window.deleteItem = (id) => {
+        if(confirm("Sir, confirm to delete this product?")) {
+            remove(ref(db, `products/${id}`));
+        }
+    };
+
+    // Save to Firebase
     document.getElementById('saveBtn').onclick = function() {
         const btn = this;
         const product = {
@@ -141,13 +191,12 @@
         }
 
         btn.disabled = true;
-        btn.innerText = "UPLOADING TO SYSTEM...";
+        btn.innerText = "UPLOADING...";
 
         push(ref(db, 'products'), product).then(() => {
-            alert("Data Secured in Database, Sir!");
+            alert("Data Secured, Sir!");
             location.reload();
         }).catch(e => {
-            alert("Firebase Error!");
             btn.disabled = false;
         });
     };
