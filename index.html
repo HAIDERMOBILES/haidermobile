@@ -8,54 +8,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root { --gold: #d4af37; --bg: #000000; --card-bg: #0f0f0f; --border: #222; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding-top: 180px; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding-top: 180px; scroll-behavior: smooth; }
 
-        /* ✨ Premium Header */
+        /* ✨ Header & Navigation */
         header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
         .nav-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; }
-        .store-name { color: var(--gold); font-weight: 700; text-decoration: none; font-size: 1.4rem; letter-spacing: 1px; }
+        .store-name { color: var(--gold); font-weight: 700; text-decoration: none; font-size: 1.5rem; letter-spacing: 1px; }
 
-        /* 🔍 Search Bar */
+        /* 🔍 Search & Brands */
         .search-area { padding: 0 5% 10px; display: flex; gap: 10px; }
-        #liveSearch { flex: 1; background: #111; border: 1px solid #333; padding: 12px 20px; border-radius: 50px; color: #fff; outline: none; font-size: 14px; }
-
-        /* 🏷️ Dynamic Brands Row */
-        .brands-bar { background: #080808; border-top: 1px solid #111; padding: 10px 5%; display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; }
+        #liveSearch { flex: 1; background: #111; border: 1px solid #333; padding: 12px 20px; border-radius: 50px; color: #fff; outline: none; }
+        
+        .brands-bar { background: #080808; border-top: 1px solid #111; padding: 10px 5%; display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; }
         .brands-bar::-webkit-scrollbar { display: none; }
-        .brand-chip { background: #1a1a1a; padding: 6px 15px; border-radius: 50px; font-size: 12px; color: #aaa; cursor: pointer; border: 1px solid #222; transition: 0.3s; white-space: nowrap; font-weight: 600; }
-        .brand-chip:hover, .brand-chip.active { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
+        .brand-chip { background: #1a1a1a; padding: 6px 18px; border-radius: 50px; font-size: 12px; color: #aaa; cursor: pointer; border: 1px solid #222; white-space: nowrap; transition: 0.3s; }
+        .brand-chip.active { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
 
-        /* 🖼️ Poster Slider */
-        .poster-box { width: 94%; margin: 10px auto; border-radius: 20px; overflow: hidden; height: 180px; border: 1px solid #222; }
-        .slides { display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 20px; animation: fade 1.5s; }
+        /* 🖼️ Poster Section */
+        .poster-box { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; height: 180px; border: 1px solid #222; }
+        .slides { display: none; width: 100%; height: 100%; object-fit: cover; }
 
-        /* ⚡ Flash Sale & Trust Badges */
-        .flash-bar { background: linear-gradient(90deg, #d4af37, #8a6d1a); margin: 15px 5%; border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; color: #000; font-weight: 800; font-size: 13px; }
-        .trust-badges { display: flex; justify-content: space-around; padding: 10px 5%; background: #080808; border-bottom: 1px solid #111; margin-bottom: 10px; }
+        /* ⚡ Deals & Badges */
+        .flash-bar { background: linear-gradient(90deg, #d4af37, #8a6d1a); margin: 15px 5%; border-radius: 12px; padding: 12px 20px; display: flex; justify-content: space-between; color: #000; font-weight: 800; font-size: 13px; }
+        .trust-badges { display: flex; justify-content: space-around; padding: 15px 5%; background: #080808; border-bottom: 1px solid #111; }
         .badge-item { text-align: center; font-size: 9px; color: #777; }
-        .badge-item i { color: var(--gold); font-size: 16px; display: block; margin-bottom: 4px; }
+        .badge-item i { color: var(--gold); font-size: 18px; display: block; margin-bottom: 4px; }
 
-        /* 📦 Grid */
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 10px 5%; }
+        /* 📱 Grid */
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px 5%; }
         @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.4s; cursor: pointer; position: relative; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.4s; cursor: pointer; }
         .card:hover { border-color: var(--gold); transform: translateY(-5px); }
         .img-container { width: 100%; height: 140px; background: #fff; border-radius: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
         .card img { width: 85%; height: 85%; object-fit: contain; transition: 0.5s; }
-        .card h3 { font-size: 13px; height: 32px; overflow: hidden; margin: 10px 0; color: #eee; }
-        .price { color: var(--gold); font-weight: 800; font-size: 16px; }
+        .price { color: var(--gold); font-weight: 800; font-size: 18px; display: block; margin: 10px 0; }
+        .buy-btn { background: #1a1a1a; color: #fff; text-decoration: none; font-size: 11px; display: block; padding: 10px; border-radius: 10px; border: 1px solid #333; }
 
-        /* 🏛️ Footer */
-        footer { background: #0a0a0a; padding: 40px 5% 20px; border-top: 1px solid #222; margin-top: 50px; }
+        .wa-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; z-index: 1000; text-decoration: none; }
+
+        footer { background: #0a0a0a; padding: 40px 5%; border-top: 1px solid #222; margin-top: 50px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 30px; }
         .footer-col h4 { color: var(--gold); margin-bottom: 15px; font-size: 14px; }
         .footer-col ul { list-style: none; padding: 0; font-size: 12px; line-height: 2.2; color: #777; }
-        .footer-col a { color: inherit; text-decoration: none; transition: 0.3s; }
-        .footer-col a:hover { color: var(--gold); }
-
-        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28px; z-index: 1000; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+        .footer-col a { color: inherit; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -63,13 +59,13 @@
 <header>
     <div class="nav-top">
         <a href="index.html" class="store-name">HAIDER MOBILES</a>
-        <i class="fa fa-shopping-bag" style="color:var(--gold); cursor:pointer;" onclick="location.href='cart.html'"></i>
+        <a href="cart.html" style="color:var(--gold)"><i class="fa fa-shopping-bag fa-lg"></i></a>
     </div>
     <div class="search-area">
-        <input type="text" id="liveSearch" placeholder="Search brands or models...">
+        <input type="text" id="liveSearch" placeholder="Search devices...">
     </div>
     <div class="brands-bar" id="dynamicBrands">
-        <div class="brand-chip active" data-brand="all">All Brands</div>
+        <div class="brand-chip active" data-brand="all">All Store</div>
     </div>
 </header>
 
@@ -79,40 +75,39 @@
 </div>
 
 <div class="trust-badges">
-    <div class="badge-item"><i class="fa fa-shield-check"></i>100% Original</div>
-    <div class="badge-item"><i class="fa fa-truck-fast"></i>Fast Delivery</div>
-    <div class="badge-item"><i class="fa fa-rotate-left"></i>7 Days Return</div>
+    <div class="badge-item"><i class="fa fa-check-circle"></i>100% Original</div>
+    <div class="badge-item"><i class="fa fa-truck"></i>Fast Shipping</div>
+    <div class="badge-item"><i class="fa fa-sync"></i>7 Days Return</div>
 </div>
 
 <div class="flash-bar">
-    <span><i class="fa fa-bolt"></i> HOT DEALS</span>
+    <span><i class="fa fa-bolt"></i> FLASH SALE</span>
     <span id="timer">04:00:00</span>
 </div>
 
 <div id="product-grid" class="grid"></div>
 
-<a href="https://wa.me/923279518790" class="wa-float"><i class="fab fa-whatsapp"></i></a>
+<a href="https://wa.me/923000000000" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <footer>
     <div class="footer-grid">
         <div class="footer-col">
-            <h4>CUSTOMER SERVICE</h4>
+            <h4>About Us</h4>
             <ul>
-                <li><a href="about.html">About Us</a></li>
+                <li><a href="about.html">About Haider Mobiles</a></li>
                 <li><a href="faq/faq.html">FAQs</a></li>
                 <li><a href="faq/contact.html">Contact Us</a></li>
             </ul>
         </div>
         <div class="footer-col">
-            <h4>POLICIES</h4>
+            <h4>Policy</h4>
             <ul>
                 <li><a href="faq/policy.html">Privacy Policy</a></li>
-                <li><a href="faq/policy.html">Warranty Policy</a></li>
-                <li><a href="faq/policy.html">Terms of Service</a></li>
+                <li><a href="faq/policy.html">Terms & Condition</a></li>
             </ul>
         </div>
     </div>
-    <p style="text-align: center; color: #333; font-size: 10px; margin-top: 30px;">© 2026 Haider Mobiles. All Rights Reserved.</p>
+    <p style="text-align: center; color: #333; font-size: 11px; margin-top: 30px;">© 2026 Haider Mobiles. Powered by Jarvis.</p>
 </footer>
 
 <script type="module">
@@ -131,11 +126,11 @@
     const db = getDatabase(app);
     let allProducts = [];
 
-    // 🔄 Fetch Data
     onValue(ref(db, 'products'), (snap) => {
         if (!snap.exists()) return;
         const data = snap.val();
         allProducts = Object.keys(data).map(id => ({ id, ...data[id] }));
+        
         renderBrands(allProducts);
         renderProducts(allProducts);
     });
@@ -143,7 +138,7 @@
     function renderBrands(products) {
         const brandList = document.getElementById('dynamicBrands');
         const uniqueBrands = [...new Set(products.map(p => p.brand).filter(b => b))];
-        let brandHtml = `<div class="brand-chip active" data-brand="all">All Brands</div>`;
+        let brandHtml = `<div class="brand-chip active" data-brand="all">All Store</div>`;
         uniqueBrands.forEach(brand => {
             brandHtml += `<div class="brand-chip" data-brand="${brand}">${brand}</div>`;
         });
@@ -164,23 +159,23 @@
         const grid = document.getElementById('product-grid');
         grid.innerHTML = list.map(p => `
             <div class="card" onclick="location.href='product.html?id=${p.id}'">
-                <div class="img-container"><img src="${p.img || 'https://via.placeholder.com/150'}"></div>
-                <h3>${p.name}</h3>
-                <div class="price">Rs. ${p.price}</div>
+                <div class="img-container"><img src="${p.img}"></div>
+                <h3 style="font-size: 13px;">${p.name}</h3>
+                <span class="price">Rs ${p.price}</span>
+                <span class="buy-btn">VIEW DETAILS</span>
             </div>
         `).join('');
     }
 
     document.getElementById('liveSearch').oninput = (e) => {
         const val = e.target.value.toLowerCase();
-        renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(val) || (p.brand && p.brand.toLowerCase().includes(val))));
+        renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(val) || p.brand?.toLowerCase().includes(val)));
     };
 
-    // Slider Logic
+    // Slider & Timer Logic
     let sIdx = 0;
     function runSlider() {
         const s = document.querySelectorAll(".slides");
-        if(s.length === 0) return;
         s.forEach(img => img.style.display = "none");
         sIdx++; if(sIdx > s.length) sIdx = 1;
         s[sIdx-1].style.display = "block";
@@ -188,7 +183,6 @@
     }
     runSlider();
 
-    // Timer Logic
     let timeLeft = 14400;
     setInterval(() => {
         let h = Math.floor(timeLeft / 3600);
