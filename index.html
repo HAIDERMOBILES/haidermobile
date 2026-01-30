@@ -1,141 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Premium Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        :root { --gold: #d4af37; --bg: #000000; --card-bg: rgba(255, 255, 255, 0.05); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; padding-top: 80px; }
-        .top-header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); padding: 15px 5%; border-bottom: 1px solid #333; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
-        .store-name { color: var(--gold); font-weight: 800; text-decoration: none; font-size: 1.5rem; letter-spacing: 2px; }
-        
-        .brand-nav { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5% 5px; scrollbar-width: none; }
-        .brand-chip { padding: 8px 25px; background: #111; border: 1px solid #333; border-radius: 50px; font-size: 12px; cursor: pointer; white-space: nowrap; color: #aaa; transition: 0.3s; }
-        .brand-chip.active { background: var(--gold); color: #000; font-weight: 600; border-color: var(--gold); }
-
-        /* Sort Tools */
-        .tools-bar { padding: 5px 5%; display: flex; gap: 10px; }
-        .sort-btn { background: none; border: 1px solid #444; color: var(--gold); padding: 5px 12px; border-radius: 5px; font-size: 11px; cursor: pointer; }
-
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px 5%; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 12px; border: 1px solid #222; text-align: center; transition: 0.3s; }
-        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .card img { width: 100%; height: 140px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 10px; }
-        .card h3 { font-size: 14px; margin: 5px 0; font-weight: 600; color: #fff; height: 40px; overflow: hidden; }
-        .price { color: var(--gold); font-weight: 800; font-size: 16px; display: block; margin-bottom: 10px; }
-        .btn-view { display: block; background: #fff; color: #000; text-decoration: none; padding: 8px; border-radius: 10px; font-size: 11px; font-weight: 800; }
-        
-        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
-    </style>
-</head>
-<body>
-
 <div class="top-header">
     <a href="index.html" class="store-name">HAIDER MOBILES</a>
-    <i class="fa fa-search" style="color:var(--gold)" onclick="let s = prompt('Search Product:'); if(s) window.location.href='?search='+s"></i>
+    <i class="fa fa-search" style="color:var(--gold)"></i>
+</div>
+
+<div class="brand-nav">
+    <div class="brand-chip active" onclick="filterData('All', this)">All</div>
+    <div class="brand-chip" onclick="filterData('Accessory', this, true)">Accessories</div>
+    <div class="brand-chip" onclick="sortPrice()">Price: Low to High</div>
 </div>
 
 <div id="chip-container" class="brand-nav"></div>
 
-<div class="tools-bar">
-    <button class="sort-btn" id="sortPrice"><i class="fa fa-sort-amount-down"></i> Price: Low to High</button>
-</div>
-
 <div id="product-grid" class="product-grid">
-    <p style="text-align:center; width:100%; grid-column: 1/-1;">Connecting to Database...</p>
+    <p style="text-align:center; width:100%; grid-column: 1/-1;">Connecting...</p>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com", 
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const grid = document.getElementById('product-grid');
-    const chipBox = document.getElementById('chip-container');
+    // ... (Firebase Initialize wala part wahi rahega) ...
     
-    let allProducts = [];
-    let currentFilter = "All";
+    let localProducts = []; // Data save karne ke liye
 
     onValue(ref(db, 'products'), (snapshot) => {
-        if (!snapshot.exists()) {
-            grid.innerHTML = "<p>No Products Found.</p>";
-            return;
-        }
-
+        if (!snapshot.exists()) return;
         const data = snapshot.val();
-        allProducts = Object.keys(data).map(key => ({ 
-            id: key, 
-            ...data[key],
-            // Price ko number mein convert kar rahe hain sorting ke liye
-            numPrice: parseInt(data[key].price.toString().replace(/,/g, '')) || 0 
-        }));
-
-        // Brand + Accessory Filter logic
-        const brands = ["All", "Accessory", ...new Set(allProducts.filter(p => p.category !== 'Accessory').map(p => p.brand).filter(b => b && b !== 'undefined'))];
+        localProducts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
         
-        chipBox.innerHTML = "";
-        brands.forEach(brand => {
-            const chip = document.createElement('div');
-            chip.className = "brand-chip";
-            chip.innerText = brand;
-            chip.onclick = () => {
-                document.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                currentFilter = brand;
-                displayProducts();
-            };
-            chipBox.appendChild(chip);
-        });
-        chipBox.firstChild.classList.add('active');
-
-        displayProducts();
+        // Brands generate karein (Pehele ki tarah)
+        const brands = [...new Set(localProducts.map(p => p.brand).filter(b => b && b !== 'undefined'))];
+        renderBrandChips(brands);
+        
+        display(localProducts);
     });
 
-    // Price Sorting Logic
-    document.getElementById('sortPrice').onclick = function() {
-        allProducts.sort((a, b) => a.numPrice - b.numPrice);
-        displayProducts();
-        this.innerHTML = "<i class='fa fa-check'></i> Sorted by Price";
-    };
-
-    function displayProducts() {
-        grid.innerHTML = "";
+    // ✨ NAYA: Filter Function
+    window.filterData = function(val, el, isCat = false) {
+        document.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
         
-        const filtered = allProducts.filter(p => {
-            if (currentFilter === "All") return true;
-            if (currentFilter === "Accessory") return p.category === "Accessory";
-            return p.brand === currentFilter;
+        let filtered;
+        if(val === 'All') filtered = localProducts;
+        else if(isCat) filtered = localProducts.filter(p => p.category === 'Accessory');
+        else filtered = localProducts.filter(p => p.brand === val);
+        
+        display(filtered);
+    }
+
+    // ✨ NAYA: Sort Function
+    window.sortPrice = function() {
+        let sorted = [...localProducts].sort((a, b) => {
+            let p1 = parseInt(a.price.toString().replace(/\D/g,'')) || 0;
+            let p2 = parseInt(b.price.toString().replace(/\D/g,'')) || 0;
+            return p1 - p2;
         });
+        display(sorted);
+    }
 
-        if(filtered.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No items in this category.</p>";
-            return;
-        }
+    function renderBrandChips(brands) {
+        // Aapka purana brand chip rendering logic yahan aayega
+        // Bas onclick par filterData(brand, this) call karna hai
+    }
 
-        filtered.forEach(p => {
-            const img = p.img || "https://via.placeholder.com/200";
+    function display(items) {
+        grid.innerHTML = "";
+        items.forEach(p => {
             grid.innerHTML += `
                 <div class="card">
-                    <img src="${img}" onerror="this.src='https://via.placeholder.com/200'">
+                    <img src="${p.img || ''}">
                     <h3>${p.name}</h3>
                     <span class="price">Rs. ${p.price}</span>
                     <a href="product.html?id=${p.id}" class="btn-view">VIEW DETAILS</a>
-                </div>
-            `;
+                </div>`;
         });
     }
 </script>
-</body>
-</html>
