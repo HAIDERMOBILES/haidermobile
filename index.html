@@ -25,12 +25,16 @@
         .f-chip { padding: 6px 15px; background: #111; border: 1px solid #333; border-radius: 8px; font-size: 11px; color: #aaa; cursor: pointer; }
         .f-chip.active { border-color: var(--gold); color: var(--gold); font-weight: 600; }
 
+        /* 🎨 Banner Slider Section */
+        .slider-container { width: 90%; margin: 10px auto; border-radius: 15px; overflow: hidden; position: relative; border: 1px solid #222; }
+        .slides { display: none; width: 100%; animation: fade 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
         /* Grid & Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px 5%; }
         .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; }
         .card img { width: 100%; height: 140px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 10px; }
         
-        /* Price Animation */
         .price-box { display: block; margin-top: 10px; font-weight: 800; font-size: 17px; color: var(--gold); animation: pricePop 0.5s ease-out; }
         .rs { font-size: 11px; margin-right: 3px; font-weight: 400; opacity: 0.8; }
 
@@ -65,33 +69,39 @@
     </div>
 </header>
 
+<div class="slider-container">
+    <img src="Gemini1.jpg" class="slides">
+    <img src="Gemini 2.jpg" class="slides">
+    <img src="Gemini_Generated_Image_s898ifs898ifs898.jpg" class="slides">
+</div>
+
 <div id="product-grid" class="grid"></div>
 
 <footer class="footer-grid">
     <div class="footer-col">
         <h4>About Us</h4>
         <ul>
-            <li><a href="#">About Haider Mobiles</a></li>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Careers</a></li>
+            <li><a href="about.html">About Haider Mobiles</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="about.html">Careers</a></li>
         </ul>
     </div>
     <div class="footer-col">
         <h4>Customer Service</h4>
         <ul>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms & Condition</a></li>
-            <li><a href="#">Installments Plan</a></li>
-            <li><a href="#">E-Warranty Activation</a></li>
+            <li><a href="policy.html">Privacy Policy</a></li>
+            <li><a href="policy.html">Terms & Condition</a></li>
+            <li><a href="policy.html">Installments Plan</a></li>
+            <li><a href="policy.html">E-Warranty Activation</a></li>
         </ul>
     </div>
     <div class="footer-col">
         <h4>Others</h4>
         <ul>
-            <li><a href="#">Sell on Priceoye</a></li>
-            <li><a href="#">Secure Payments</a></li>
-            <li><a href="#">Press & Blog</a></li>
+            <li><a href="policy.html">Sell on Haider Mobiles</a></li>
+            <li><a href="policy.html">Secure Payments</a></li>
+            <li><a href="policy.html">Press & Blog</a></li>
         </ul>
     </div>
     <div style="grid-column: 1/-1; text-align: center; color: #444; font-size: 11px; margin-top: 20px;">
@@ -118,6 +128,18 @@
     
     let allItems = [];
 
+    // --- Slider Logic ---
+    let slideIndex = 0;
+    const slides = document.querySelectorAll(".slides");
+    function showSlides() {
+        slides.forEach(s => s.style.display = "none");
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 4000); // 4 second baad change hoga
+    }
+    showSlides();
+
     // Toggle Menu
     document.getElementById('toggleFilter').onclick = () => filterMenu.classList.toggle('active');
 
@@ -127,7 +149,6 @@
         const data = snap.val();
         allItems = Object.keys(data).map(k => {
             const p = data[k];
-            // Price clean karein taake filter sahi chale
             const cleanPrice = parseInt(p.price?.toString().replace(/\D/g, '')) || 0;
             return { id: k, ...p, numPrice: cleanPrice };
         });
@@ -145,29 +166,24 @@
         `).join('');
     }
 
-    // Filter Working Logic
+    // Filter Logic
     filterMenu.onclick = (e) => {
         const chip = e.target.closest('.f-chip');
         if (!chip) return;
-
         document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
-
         const type = chip.dataset.type;
         const val = chip.dataset.val;
-
         let result = [...allItems];
-
         if (type === 'cat') result = allItems.filter(p => p.category === val);
         else if (type === 'price') {
             if (val === 'low') result.sort((a,b) => a.numPrice - b.numPrice);
             else result.sort((a,b) => b.numPrice - a.numPrice);
         }
-
         render(result);
     };
 
-    // Live Search Working
+    // Live Search
     document.getElementById('liveSearch').oninput = (e) => {
         const s = e.target.value.toLowerCase();
         render(allItems.filter(p => p.name.toLowerCase().includes(s)));
