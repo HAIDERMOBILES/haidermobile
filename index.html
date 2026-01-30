@@ -37,4 +37,139 @@
         .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s; }
         .card:hover { border-color: var(--gold); transform: translateY(-5px); }
         .card img { width: 100%; height: 140px; object-fit: contain; border-radius: 15px; background: #fff; margin-bottom: 12px; }
-        .card h3 { font-size: 13px; font-weight: 400; height: 38px; overflow: hidden; margin: 8px 0; color:
+        .card h3 { font-size: 13px; font-weight: 400; height: 38px; overflow: hidden; margin: 8px 0; color: #eee; }
+
+        /* --- ✨ Price & RS Animation --- */
+        .price-container { display: block; margin-bottom: 12px; }
+        .rs-symbol { font-size: 11px; color: var(--gold); opacity: 0.8; font-weight: 400; margin-right: 2px; }
+        .price-val { 
+            color: var(--gold); font-weight: 800; font-size: 17px; 
+            display: inline-block; animation: rsFloat 1.5s ease-in-out infinite alternate; 
+        }
+
+        @keyframes rsFloat { from { transform: translateY(0); } to { transform: translateY(-2px); } }
+
+        .btn-view { display: block; border: 1px solid #333; color: #fff; text-decoration: none; padding: 8px; border-radius: 10px; font-size: 10px; font-weight: 600; transition: 0.3s; }
+        .btn-view:hover { background: #fff; color: #000; }
+
+        @media (min-width: 768px) { .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+    </style>
+</head>
+<body>
+
+<header class="top-header">
+    <div class="header-row">
+        <a href="index.html" class="store-name">HAIDER MOBILES</a>
+        <a href="cart.html" style="color:#fff"><i class="fa fa-shopping-bag fa-lg"></i></a>
+    </div>
+
+    <div class="action-bar">
+        <input type="text" id="liveSearch" class="search-input" placeholder="Search iPhone, Buds...">
+        <button class="filter-trigger" id="filterBtn">
+            <i class="fa-solid fa-sliders"></i> Filter
+        </button>
+    </div>
+</header>
+
+<div class="filter-drawer" id="filterMenu">
+    <div class="f-chip selected" data-type="all">All Store</div>
+    <div class="f-chip" data-type="cat" data-val="Mobile">Mobiles</div>
+    <div class="f-chip" data-type="cat" data-val="Accessory">Accessories</div>
+    <div class="f-chip" data-type="price" data-val="low">Cheapest First</div>
+    <div class="f-chip" data-type="price" data-val="high">High Range</div>
+</div>
+
+<div id="product-grid" class="grid">
+    <p style="text-align:center; grid-column:1/-1;">Loading Jarvis Database...</p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const grid = document.getElementById('product-grid');
+    const filterMenu = document.getElementById('filterMenu');
+    
+    let products = [];
+
+    // Toggle Filter Menu
+    document.getElementById('filterBtn').onclick = () => filterMenu.classList.toggle('active');
+
+    // Load Data
+    onValue(ref(db, 'products'), (snapshot) => {
+        if (!snapshot.exists()) { grid.innerHTML = "No products found."; return; }
+        const data = snapshot.val();
+        products = Object.keys(data).map(key => {
+            const p = data[key];
+            const numericPrice = parseInt(p.price?.toString().replace(/\D/g, '')) || 0;
+            return { id: key, ...p, numPrice: numericPrice };
+        });
+
+        // Add dynamic brands to filter menu
+        const brands = [...new Set(products.map(p => p.brand).filter(b => b && b !== 'undefined'))];
+        brands.forEach(brand => {
+            const chip = document.createElement('div');
+            chip.className = 'f-chip';
+            chip.innerText = brand;
+            chip.dataset.type = 'brand';
+            chip.dataset.val = brand;
+            filterMenu.appendChild(chip);
+        });
+
+        renderItems(products);
+    });
+
+    function renderItems(list) {
+        grid.innerHTML = list.map(p => `
+            <div class="card">
+                <img src="${p.img || 'https://via.placeholder.com/200'}" onerror="this.src='https://via.placeholder.com/200'">
+                <h3>${p.name}</h3>
+                <div class="price-container">
+                    <span class="rs-symbol">RS</span>
+                    <span class="price-val">${p.price}</span>
+                </div>
+                <a href="product.html?id=${p.id}" class="btn-view">VIEW PRODUCT</a>
+            </div>
+        `).join('');
+    }
+
+    // Filter Logic
+    filterMenu.onclick = (e) => {
+        const chip = e.target.closest('.f-chip');
+        if (!chip) return;
+
+        document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+
+        const type = chip.dataset.type;
+        const val = chip.dataset.val;
+
+        let filtered = [...products];
+        if (type === 'cat') filtered = products.filter(p => p.category === val);
+        else if (type === 'brand') filtered = products.filter(p => p.brand === val);
+        else if (type === 'price') {
+            if (val === 'low') filtered.sort((a, b) => a.numPrice - b.numPrice);
+            else filtered.sort((a, b) => b.numPrice - a.numPrice);
+        }
+
+        renderItems(filtered);
+    };
+
+    // Live Search
+    document.getElementById('liveSearch').oninput = (e) => {
+        const term = e.target.value.toLowerCase();
+        renderItems(products.filter(p => p.name.toLowerCase().includes(term)));
+    };
+</script>
+</body>
+</html>
