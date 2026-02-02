@@ -3,57 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Premium Store & Repairing</title>
+    <title>Haider Mobiles | Jarvis Terminal</title>
     
-    <meta name="description" content="Haider Mobiles – Premium mobile store & expert repairing services in Pakistan.">
-    <meta property="og:title" content="Haider Mobiles">
-    <meta property="og:image" content="faq/Gemini.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <meta name="description" content="Haider Mobiles – Premium mobile store & expert repairing services.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        :root { --gold: #d4af37; --dark: #0a0a0a; --card: #161616; --text: #e0e0e0; --border: #262626; --green: #25d366; }
+        :root { --gold: #d4af37; --dark: #050505; --card: #0d0d0d; --border: #1a1a1a; --text: #e0e0e0; --green: #25d366; --neon: rgba(212, 175, 55, 0.3); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; overflow-x: hidden; }
+        body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        header { position: fixed; top: 0; width: 100%; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(12px); z-index: 1000; border-bottom: 1px solid var(--border); }
-        .nav-container { max-width: 1200px; margin: 0 auto; padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { color: var(--gold); font-weight: 800; font-size: 1.5rem; text-decoration: none; }
-        .nav-links a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 0.85rem; font-weight: 600; }
+        header { position: fixed; top: 0; width: 100%; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Orbitron'; color: var(--gold); font-weight: 800; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; }
 
-        .hero { padding: 160px 5% 60px; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%); }
-        .hero h1 { font-size: clamp(2.2rem, 7vw, 3.5rem); font-weight: 800; color: #fff; margin-bottom: 15px; }
+        .hero { padding: 180px 5% 80px; text-align: center; background: radial-gradient(circle at center, #111 0%, #050505 100%); }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 3.5rem); color: #fff; margin-bottom: 15px; text-shadow: 0 0 20px var(--neon); }
         .hero span { color: var(--gold); }
 
-        .section-padding { padding: 60px 5% 60px; }
-        .section-title { text-align: center; font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 40px; }
+        .section-padding { padding: 80px 5%; }
+        .section-title { font-family: 'Orbitron'; text-align: center; font-size: 1.8rem; color: #fff; margin-bottom: 50px; letter-spacing: 3px; }
         
-        .shop-controls { max-width: 1200px; margin: 0 auto 30px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        #searchBar { flex: 1; min-width: 280px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); background: #111; color: #fff; outline: none; transition: 0.3s; }
-        #searchBar:focus { border-color: var(--gold); }
-        .filter-btn { padding: 10px 25px; border-radius: 50px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; transition: 0.3s; }
+        .shop-controls { max-width: 1200px; margin: 0 auto 40px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        #searchBar { flex: 1; min-width: 280px; padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border); background: #000; color: #fff; outline: none; transition: 0.3s; }
+        #searchBar:focus { border-color: var(--gold); box-shadow: 0 0 15px var(--neon); }
+        
+        .filter-btn { padding: 12px 28px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; transition: 0.3s; }
         .filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 20px; transition: 0.4s; position: relative; }
-        .product-card:hover { border-color: var(--gold); transform: translateY(-8px); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         
-        .img-box { background: #fff; border-radius: 18px; height: 180px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; overflow: hidden; }
-        .img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        /* 💎 PREMIUM CARD WITH ZOOM */
+        .product-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 20px; 
+            padding: 20px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative; cursor: pointer; overflow: hidden;
+        }
+        .product-card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
         
-        .price-row { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #222; margin-top: 10px; }
-        .price { color: var(--gold); font-weight: 800; font-size: 1.1rem; }
-        .buy-now { background: var(--green); color: #fff; padding: 8px 14px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
+        /* 🔍 IMAGE ZOOM EFFECT */
+        .img-box { 
+            background: #fff; border-radius: 15px; height: 200px; 
+            display: flex; align-items: center; justify-content: center; 
+            margin-bottom: 20px; overflow: hidden; position: relative;
+        }
+        .img-box img { 
+            max-width: 80%; max-height: 80%; object-fit: contain; 
+            transition: transform 0.6s ease; /* Zoom speed */
+        }
+        .product-card:hover .img-box img { transform: scale(1.2); } /* Zoom depth */
+        
+        .product-card h3 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; }
 
-        .wa-float { position: fixed; bottom: 30px; right: 30px; background: var(--green); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); text-decoration: none; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #1a1a1a; }
+        .price { color: var(--gold); font-family: 'Orbitron'; font-weight: 700; font-size: 1.1rem; }
+        
+        .order-btn { background: var(--green); color: #fff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
+
+        .wa-float { position: fixed; bottom: 30px; right: 30px; background: var(--green); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 
         @media (max-width: 768px) {
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .img-box { height: 140px; }
-            .buy-now span { display: none; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .img-box { height: 160px; }
+            .order-btn span { display: none; }
         }
     </style>
 </head>
@@ -61,29 +76,29 @@
 
 <header>
     <div class="nav-container">
-        <a href="index.html" class="logo">HAIDER MOBILES</a>
-        <nav class="nav-links">
-            <a href="#shop">Store</a>
-            <a href="#services">Repairs</a>
-            <a href="#contact">Location</a>
+        <a href="index.html" class="logo">HAIDER TERMINAL</a>
+        <nav style="display: flex; gap: 15px;">
+            <a href="#shop" style="color:#888; text-decoration:none; font-size:0.7rem; font-family:'Orbitron'">INVENTORY</a>
+            <a href="#contact" style="color:#888; text-decoration:none; font-size:0.7rem; font-family:'Orbitron'">LOCATION</a>
         </nav>
     </div>
 </header>
 
 <section class="hero">
     <div data-aos="fade-up">
-        <h1>Your Premium <span>Mobile Shop</span></h1>
-        <p>Expert repairing services and original accessories in Pakistan.</p>
+        <small style="letter-spacing: 5px; color: var(--gold);">SYSTEM ONLINE</small>
+        <h1>HAIDER <span>MOBILES</span></h1>
+        <p style="color: #666; max-width: 600px; margin: 10px auto;">Advanced mobile solutions and premium inventory terminal.</p>
     </div>
 </section>
 
 <section id="shop" class="section-padding">
     <div class="shop-controls" data-aos="fade-up">
-        <input type="text" id="searchBar" placeholder="Search products...">
-        <div style="display: flex; gap: 8px;">
-            <button class="filter-btn active" onclick="filterItems('all', this)">All</button>
-            <button class="filter-btn" onclick="filterItems('Mobile', this)">Mobiles</button>
-            <button class="filter-btn" onclick="filterItems('Accessories', this)">Accessories</button>
+        <input type="text" id="searchBar" placeholder="Search system memory...">
+        <div style="display: flex; gap: 10px;">
+            <button class="filter-btn active" onclick="filterItems('all', this)">ALL</button>
+            <button class="filter-btn" onclick="filterItems('Mobile', this)">MOBILES</button>
+            <button class="filter-btn" onclick="filterItems('Accessories', this)">GEAR</button>
         </div>
     </div>
 
@@ -91,34 +106,16 @@
         </div>
 </section>
 
-<section id="services" class="section-padding" style="background:#080808;">
-    <div class="section-title">Professional Repairing</div>
-    <div class="grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <div class="product-card" style="text-align:center;">
-             <i class="fa fa-mobile-screen" style="font-size:3rem; color:var(--gold); margin-bottom:15px;"></i>
-             <h3>Glass & Panel</h3>
-             <p style="font-size:0.8rem; color:#888;">Original LCD/OLED Replacements</p>
-        </div>
-        <div class="product-card" style="text-align:center;">
-             <i class="fa fa-microchip" style="font-size:3rem; color:var(--gold); margin-bottom:15px;"></i>
-             <h3>Motherboard Fix</h3>
-             <p style="font-size:0.8rem; color:#888;">IC Level Repairing & Reballing</p>
-        </div>
-    </div>
-</section>
-
-<section id="contact" class="section-padding">
-    <div class="section-title">Visit Us</div>
+<section id="contact" class="section-padding" style="background: #080808; border-top: 1px solid var(--border);">
+    <div class="section-title">STORE COORDINATES</div>
     <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:30px;">
-        <div style="border-radius:20px; overflow:hidden; height:350px; border:1px solid #222;">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3374.832!2d74.323506!3d32.644251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzLCsDM4JzM5LjMiTiA3NMKwMTknMjQuNiJF!5e0!3m2!1sen!2s!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <div style="border-radius:20px; overflow:hidden; height:350px; border:1px solid var(--border); filter: grayscale(1) invert(1);">
+            <iframe src="http://googleusercontent.com/maps.google.com/7" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
-        <div style="background:var(--card); padding:30px; border-radius:20px; border:1px solid #222;">
-            <h3 style="color:var(--gold); margin-bottom:15px;">Shop Info</h3>
-            <p><i class="fa fa-phone" style="color:var(--gold);"></i> +92 327 9518790</p>
+        <div style="background:var(--card); padding:40px; border-radius:20px; border:1px solid var(--border);">
+            <h3 style="color:var(--gold); font-family:'Orbitron'; margin-bottom:20px;">CONTACT_INFO</h3>
+            <p style="margin-bottom:10px;"><i class="fa fa-phone" style="color:var(--gold);"></i> +92 327 9518790</p>
             <p><i class="fa fa-clock" style="color:var(--gold);"></i> 11:00 AM - 10:00 PM</p>
-            <br>
-            <p style="font-size: 0.9rem; color: #888;">Expert in iPhone Repairing, IC Reballing, and Software Unlocking.</p>
         </div>
     </div>
 </section>
@@ -147,7 +144,7 @@
     onValue(ref(db, 'products'), (snap) => {
         if (!snap.exists()) return;
         const data = snap.val();
-        allProducts = Object.keys(data).map(id => ({ id, ...data[id] }));
+        allProducts = Object.keys(data).map(id => ({ id, ...data[id] })).reverse();
         renderProducts(allProducts);
     });
 
@@ -155,18 +152,17 @@
         const grid = document.getElementById('productGrid');
         grid.innerHTML = list.map(p => {
             const formattedPrice = new Intl.NumberFormat('en-PK').format(p.price);
-            const msg = encodeURIComponent(`I want to buy: ${p.name}`);
             return `
-            <div class="product-card" data-aos="fade-up">
+            <div class="product-card" data-aos="fade-up" onclick="location.href='product.html?id=${p.id}'">
                 <div class="img-box">
                     <img src="${p.img}" onerror="this.src='faq/Gemini.png'" alt="${p.name}">
                 </div>
                 <h3>${p.name}</h3>
                 <div class="price-row">
                     <span class="price">Rs ${formattedPrice}</span>
-                    <a href="https://wa.me/923279518790?text=${msg}" class="buy-now">
-                        <i class="fab fa-whatsapp"></i> <span>Order</span>
-                    </a>
+                    <div class="order-btn">
+                        <i class="fa fa-eye"></i> <span>View</span>
+                    </div>
                 </div>
             </div>`;
         }).join('');
