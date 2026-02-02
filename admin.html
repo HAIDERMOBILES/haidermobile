@@ -7,149 +7,69 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
-
         :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: rgba(212, 175, 55, 0.4); }
-        
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
-        
-        /* 🌌 Futuristic Background Decoration */
-        body::before { content: ""; position: fixed; top: -10%; left: -10%; width: 40%; height: 40%; background: radial-gradient(circle, var(--neon) 0%, transparent 70%); z-index: -1; filter: blur(50px); }
-
         .jarvis-container { max-width: 1200px; margin: auto; }
-        
-        /* 🤖 Jarvis Header */
-        .jarvis-header { text-align: center; margin-bottom: 40px; position: relative; }
-        .jarvis-header h2 { 
-            font-family: 'Orbitron', sans-serif; color: var(--gold); 
-            letter-spacing: 5px; font-size: 1.8rem; margin: 0;
-            text-shadow: 0 0 15px var(--neon);
-        }
-        .jarvis-header p { font-size: 10px; color: #555; letter-spacing: 3px; margin-top: 5px; }
-
+        .jarvis-header { text-align: center; margin-bottom: 40px; }
+        .jarvis-header h2 { font-family: 'Orbitron', sans-serif; color: var(--gold); letter-spacing: 5px; text-shadow: 0 0 15px var(--neon); }
         .main-layout { display: grid; grid-template-columns: 380px 1fr; gap: 30px; }
-        @media (max-width: 950px) { .main-layout { grid-template-columns: 1fr; } }
-
-        /* 📝 Premium Upload Card */
-        .upload-card { 
-            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(10px);
-            border: 1px solid var(--border); padding: 25px; border-radius: 24px; 
-            position: sticky; top: 20px; height: fit-content;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        
-        .upload-title { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-
-        .upload-area { 
-            border: 1px dashed #333; padding: 20px; text-align: center; border-radius: 15px; 
-            cursor: pointer; margin-bottom: 15px; transition: 0.3s ease;
-            background: rgba(0,0,0,0.3);
-        }
-        .upload-area:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); }
-        .upload-area small { font-size: 11px; color: #888; text-transform: uppercase; }
-
-        input, select, textarea { 
-            width: 100%; padding: 14px; margin-bottom: 15px; box-sizing: border-box;
-            background: #000; border: 1px solid #222; color: #fff; border-radius: 12px; 
-            font-size: 13px; transition: 0.3s;
-        }
-        input:focus, select:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
-
-        .status-dot { height: 3px; width: 100%; background: #111; border-radius: 5px; overflow: hidden; margin-top: 10px; }
-        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), #fff); transition: 0.5s; }
-
-        /* 📦 Premium Inventory Grid */
-        .inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .inventory-header h3 { font-family: 'Orbitron', sans-serif; font-size: 16px; color: #fff; }
-        
-        #invSearch { width: 250px; margin: 0; padding: 10px 20px; border-radius: 50px; background: #0a0a0a; border: 1px solid #222; }
-
+        .upload-card { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
+        .upload-area { border: 1px dashed #333; padding: 15px; text-align: center; border-radius: 15px; cursor: pointer; margin-bottom: 15px; background: rgba(0,0,0,0.3); }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 13px; }
+        .progress-bar { height: 3px; width: 0%; background: var(--gold); transition: 0.3s; margin-top: 5px; }
         .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; }
+        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; position: relative; }
+        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; }
+        .del-btn { position: absolute; top: 10px; right: 10px; background: #ff4757; border: none; color: #fff; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; }
+        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; }
         
-        .inv-card { 
-            background: var(--card); border: 1px solid var(--border); border-radius: 20px; 
-            padding: 15px; text-align: center; position: relative; 
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideUp 0.6s ease forwards;
-        }
-        .inv-card:hover { border-color: var(--gold); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
-        
-        .inv-card img { width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 12px; margin-bottom: 12px; padding: 5px; box-sizing: border-box; }
-        .inv-card h4 { font-size: 13px; margin: 8px 0; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .inv-card b { color: var(--gold); font-size: 15px; text-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
-        
-        .del-btn { 
-            position: absolute; top: -10px; right: -10px; background: #ff4757; border: none; 
-            color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; 
-            box-shadow: 0 5px 10px rgba(255, 71, 87, 0.3); opacity: 0; transition: 0.3s;
-        }
-        .inv-card:hover .del-btn { opacity: 1; top: 10px; right: 10px; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .save-btn { 
-            width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37, #b08d2b); 
-            border: none; border-radius: 12px; font-weight: 700; cursor: pointer; 
-            color: black; font-size: 14px; text-transform: uppercase; font-family: 'Orbitron', sans-serif;
-            transition: 0.3s; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
-        }
-        .save-btn:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); }
+        /* 🛡️ Login Overlay */
+        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); }
     </style>
 </head>
 <body>
 
+<div id="loginOverlay">
+    <div id="loginBox">
+        <h2 style="font-family:'Orbitron'; color:var(--gold)">ACCESS REQUIRED</h2>
+        <input type="password" id="passInput" placeholder="Enter System Key">
+        <button onclick="checkPass()" class="save-btn">AUTHORIZE</button>
+    </div>
+</div>
+
 <div class="jarvis-container">
     <div class="jarvis-header">
-        <h2>JARVIS SYSTEM V2.1</h2>
-        <p>ADVANCED INVENTORY TERMINAL</p>
+        <h2>JARVIS TERMINAL V2.1</h2>
+        <p style="letter-spacing: 2px; font-size: 10px; color: #555;">SECURE INVENTORY UPLINK</p>
     </div>
 
     <div class="main-layout">
         <div class="upload-card">
-            <div class="upload-title"><i class="fa fa-atom"></i> INITIALIZE PRODUCT</div>
-            
             <div class="upload-area" onclick="document.getElementById('f1').click()">
-                <small id="t1"><i class="fa fa-image"></i> Main Frame</small>
+                <small id="t1"><i class="fa fa-image"></i> MAIN FRAME</small>
                 <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
-                <div class="status-dot"><div id="p1" class="progress-bar"></div></div>
+                <div class="progress-bar" id="p1"></div>
             </div>
-
-            <div style="display: flex; gap: 10px;">
-                <div class="upload-area" style="flex:1" onclick="document.getElementById('f2').click()">
-                    <small id="t2">View 01</small>
-                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2', 'p2')">
-                    <div class="status-dot"><div id="p2" class="progress-bar"></div></div>
-                </div>
-                <div class="upload-area" style="flex:1" onclick="document.getElementById('f3').click()">
-                    <small id="t3">View 02</small>
-                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3', 'p3')">
-                    <div class="status-dot"><div id="p3" class="progress-bar"></div></div>
-                </div>
-            </div>
-
-            <input type="text" id="pName" placeholder="Unit Designation (Name)">
-            <input type="text" id="pBrand" placeholder="Manufacturer (Brand)">
-            <input type="text" id="pPrice" placeholder="Credits (Price)">
+            <input type="text" id="pName" placeholder="Unit Name (e.g. iPhone 15)">
+            <input type="text" id="pBrand" placeholder="Manufacturer (e.g. Apple)">
+            <input type="number" id="pPrice" placeholder="Credits (Price)">
             <select id="pCat">
                 <option value="Mobile">Mobile Unit</option>
-                <option value="Accessory">Accessory Gear</option>
+                <option value="Accessories">Accessory Gear</option>
             </select>
-            <textarea id="pDesc" placeholder="Technical Specifications (Description)..." rows="3"></textarea>
-            
+            <textarea id="pDesc" placeholder="Technical Specs..." rows="2"></textarea>
             <button id="saveBtn" class="save-btn">EXECUTE UPLOAD</button>
         </div>
 
         <div class="inventory-display">
-            <div class="inventory-header">
-                <h3><i class="fa fa-database"></i> ACTIVE DATABASE</h3>
-                <input type="text" id="invSearch" placeholder="Filter memory...">
-            </div>
+            <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:20px;"><i class="fa fa-database"></i> ACTIVE DATABASE</h3>
             <div id="invGrid" class="inv-grid"></div>
         </div>
     </div>
 </div>
 
 <script type="module">
-    // Firebase and logic remain the same for stability
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -163,15 +83,25 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c"; 
-    let urls = { img1: "", img2: "", img3: "" };
+    const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
+    let urls = { img1: "" };
 
+    // Password Check
+    window.checkPass = () => {
+        const pass = document.getElementById('passInput').value;
+        if(pass === "haider786") { // <--- Apna password yahan set karein
+            document.getElementById('loginOverlay').style.display = 'none';
+        } else {
+            alert("ACCESS DENIED");
+        }
+    };
+
+    // Upload Image Logic
     window.uploadImg = async (input, key, txtId, progId) => {
         const file = input.files[0]; if(!file) return;
         const text = document.getElementById(txtId);
         const bar = document.getElementById(progId);
-        text.innerText = "Transmitting...";
-        bar.style.width = "40%";
+        text.innerText = "Transmitting..."; bar.style.width = "50%";
 
         const fd = new FormData(); fd.append("image", file);
         try {
@@ -180,57 +110,54 @@
             if(data.success) {
                 urls[key] = data.data.url;
                 bar.style.width = "100%";
-                text.innerText = "LINKED";
-                text.style.color = "var(--gold)";
+                text.innerText = "LINKED"; text.style.color = "var(--gold)";
             }
-        } catch (e) { text.innerText = "TERMINATED"; }
+        } catch (e) { text.innerText = "FAILED"; }
     };
 
-    let allProducts = [];
+    // Load Database
     onValue(ref(db, 'products'), (snap) => {
         const grid = document.getElementById('invGrid');
         grid.innerHTML = "";
         if (snap.exists()) {
-            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            renderGrid(allProducts);
+            const list = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            grid.innerHTML = list.map(p => `
+                <div class="inv-card">
+                    <button class="del-btn" onclick="window.deleteItem('${p.id}')"><i class="fa fa-trash"></i></button>
+                    <img src="${p.img}" onerror="this.src='faq/Gemini.png'">
+                    <h4 style="font-size:12px; margin:10px 0;">${p.name}</h4>
+                    <b style="color:var(--gold)">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</b>
+                </div>
+            `).join('');
         }
     });
 
-    function renderGrid(list) {
-        const grid = document.getElementById('invGrid');
-        grid.innerHTML = list.map(p => `
-            <div class="inv-card">
-                <button class="del-btn" onclick="deleteItem('${p.id}')"><i class="fa fa-times"></i></button>
-                <img src="${p.img || 'https://via.placeholder.com/200'}" onerror="this.src='https://via.placeholder.com/200'">
-                <h4>${p.name}</h4>
-                <b>Rs ${p.price}</b>
-            </div>
-        `).join('');
-    }
-
-    document.getElementById('invSearch').oninput = (e) => {
-        const val = e.target.value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
-        renderGrid(filtered);
-    };
-
+    // Delete Logic (Fixed Global Scope)
     window.deleteItem = (id) => {
-        if(confirm("Confirm deletion of this unit?")) remove(ref(db, `products/${id}`));
+        if(confirm("Confirm Deletion?")) remove(ref(db, `products/${id}`));
     };
 
+    // Save Logic
     document.getElementById('saveBtn').onclick = function() {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        if(!urls.img1 || !name || !price) return alert("Fill mandatory fields, Sir.");
+
+        this.disabled = true; this.innerText = "SYNCING...";
         const product = {
-            name: document.getElementById('pName').value.trim(),
-            brand: document.getElementById('pBrand').value.trim(),
-            price: document.getElementById('pPrice').value.trim(),
+            name: name,
+            brand: document.getElementById('pBrand').value,
+            price: Number(price), // ✅ Fixed: Save as Number
             category: document.getElementById('pCat').value,
-            description: document.getElementById('pDesc').value.trim(),
-            img: urls.img1, img2: urls.img2, img3: urls.img3,
+            description: document.getElementById('pDesc').value,
+            img: urls.img1,
             timestamp: Date.now()
         };
-        if(!product.img || !product.name) { alert("Data incomplete, Sir."); return; }
-        this.disabled = true; this.innerText = "SYNCING...";
-        push(ref(db, 'products'), product).then(() => { location.reload(); });
+
+        push(ref(db, 'products'), product).then(() => {
+            alert("DATABASE UPDATED");
+            location.reload();
+        });
     };
 </script>
 </body>
