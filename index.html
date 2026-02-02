@@ -16,59 +16,74 @@
         html { scroll-behavior: smooth; }
         body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        header { position: fixed; top: 0; width: 100%; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); }
-        .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Orbitron'; color: var(--gold); font-weight: 800; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; }
+        /* 🤖 HEADER & NAV */
+        header { position: fixed; top: 0; width: 100%; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); height: 70px; }
+        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; height: 100%; }
+        .logo { font-family: 'Orbitron'; color: var(--gold); font-weight: 800; font-size: 1.2rem; text-decoration: none; letter-spacing: 2px; }
 
+        .system-nav { display: flex; align-items: center; gap: 25px; height: 100%; }
+        .status { font-family: 'Orbitron'; font-size: 10px; color: var(--green); white-space: nowrap; }
+        .blink { animation: flash 1.5s infinite; }
+        @keyframes flash { 50% { opacity: 0.3; } }
+
+        /* BRAND LINKS IN HEADER */
+        .nav-brands { display: flex; gap: 15px; height: 100%; align-items: center; }
+        .brand-link { 
+            font-family: 'Orbitron'; font-size: 10px; color: #777; cursor: pointer; 
+            padding: 25px 5px; transition: 0.3s; height: 100%; display: flex; align-items: center; text-transform: uppercase;
+        }
+        .brand-link:hover { color: var(--gold); border-bottom: 2px solid var(--gold); }
+
+        /* 🛡️ MEGA MENU (LEFT SIDE) */
+        #megaMenu {
+            position: fixed; top: 71px; left: -500px; width: 450px; height: auto; max-height: 75vh;
+            background: rgba(10, 10, 10, 0.98); border: 1px solid var(--border); border-left: none;
+            backdrop-filter: blur(20px); z-index: 999; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex; border-radius: 0 0 20px 0; overflow: hidden;
+        }
+        #megaMenu.active { left: 0; box-shadow: 20px 20px 60px rgba(0,0,0,0.8); }
+
+        .menu-cats { width: 55%; border-right: 1px solid #222; padding: 20px; overflow-y: auto; }
+        .cat-group-title { font-family: 'Orbitron'; font-size: 10px; color: var(--gold); margin-bottom: 15px; opacity: 0.7; letter-spacing: 1px; }
+        .acc-item { padding: 10px; font-size: 12px; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; border-radius: 5px; }
+        .acc-item:hover { color: #fff; background: rgba(212, 175, 55, 0.1); padding-left: 15px; }
+
+        .menu-preview { width: 45%; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; }
+        .menu-preview img { max-width: 100%; max-height: 180px; object-fit: contain; display: none; }
+        .menu-preview p { color: #000; font-family: 'Orbitron'; font-size: 9px; margin-top: 15px; text-align: center; font-weight: bold; }
+
+        /* 🌌 HERO */
         .hero { padding: 180px 5% 80px; text-align: center; background: radial-gradient(circle at center, #111 0%, #050505 100%); }
         .hero h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 3.5rem); color: #fff; margin-bottom: 15px; text-shadow: 0 0 20px var(--neon); }
         .hero span { color: var(--gold); }
 
+        /* 🛒 SHOP CONTROLS */
         .section-padding { padding: 80px 5%; }
-        .section-title { font-family: 'Orbitron'; text-align: center; font-size: 1.8rem; color: #fff; margin-bottom: 50px; letter-spacing: 3px; }
-        
         .shop-controls { max-width: 1200px; margin: 0 auto 40px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         #searchBar { flex: 1; min-width: 280px; padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border); background: #000; color: #fff; outline: none; transition: 0.3s; }
-        #searchBar:focus { border-color: var(--gold); box-shadow: 0 0 15px var(--neon); }
         
         .filter-btn { padding: 12px 28px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; transition: 0.3s; }
         .filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
 
+        /* 💎 PRODUCT CARDS */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
-        
-        /* 💎 PREMIUM CARD WITH ZOOM */
-        .product-card { 
-            background: var(--card); border: 1px solid var(--border); border-radius: 20px; 
-            padding: 20px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            position: relative; cursor: pointer; overflow: hidden;
-        }
+        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; transition: 0.4s; position: relative; cursor: pointer; overflow: hidden; }
         .product-card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
         
-        /* 🔍 IMAGE ZOOM EFFECT */
-        .img-box { 
-            background: #fff; border-radius: 15px; height: 200px; 
-            display: flex; align-items: center; justify-content: center; 
-            margin-bottom: 20px; overflow: hidden; position: relative;
-        }
-        .img-box img { 
-            max-width: 80%; max-height: 80%; object-fit: contain; 
-            transition: transform 0.6s ease; /* Zoom speed */
-        }
-        .product-card:hover .img-box img { transform: scale(1.2); } /* Zoom depth */
-        
-        .product-card h3 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; }
+        .img-box { background: #fff; border-radius: 15px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; }
+        .img-box img { max-width: 80%; max-height: 80%; object-fit: contain; transition: 0.6s ease; }
+        .product-card:hover .img-box img { transform: scale(1.2); }
 
         .price-row { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #1a1a1a; }
         .price { color: var(--gold); font-family: 'Orbitron'; font-weight: 700; font-size: 1.1rem; }
-        
-        .order-btn { background: var(--green); color: #fff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
+        .order-btn { background: var(--green); color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
 
         .wa-float { position: fixed; bottom: 30px; right: 30px; background: var(--green); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 
         @media (max-width: 768px) {
+            .nav-brands { display: none; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .img-box { height: 160px; }
-            .order-btn span { display: none; }
+            #megaMenu { width: 320px; }
         }
     </style>
 </head>
@@ -77,47 +92,44 @@
 <header>
     <div class="nav-container">
         <a href="index.html" class="logo">HAIDER STORE</a>
-        <nav style="display: flex; gap: 15px;">
-            <a href="#shop" style="color:#888; text-decoration:none; font-size:0.7rem; font-family:'Orbitron'">INVENTORY</a>
-            <a href="#contact" style="color:#888; text-decoration:none; font-size:0.7rem; font-family:'Orbitron'">LOCATION</a>
-        </nav>
+        <div class="system-nav">
+            <div class="status"><span class="blink">●</span> SYSTEM_ONLINE</div>
+            <div class="nav-brands" id="headerBrands">
+                </div>
+        </div>
     </div>
 </header>
 
+<div id="megaMenu" onmouseleave="closeMenu()">
+    <div class="menu-cats">
+        <div class="cat-group-title" id="activeBrandTitle">SCANNING...</div>
+        <div id="accList">
+            </div>
+    </div>
+    <div class="menu-preview" id="previewPane">
+        <img id="prevImg" src="">
+        <p id="prevName">TARGET_LOCKED</p>
+    </div>
+</div>
+
 <section class="hero">
     <div data-aos="fade-up">
-        <small style="letter-spacing: 5px; color: var(--gold);">STORE LIVE</small>
+        <small style="letter-spacing: 5px; color: var(--gold);">PREMIUM TERMINAL</small>
         <h1>HAIDER <span>MOBILES</span></h1>
-        <p style="color: #666; max-width: 600px; margin: 10px auto;">Advanced mobile solutions and premium inventory terminal.</p>
+        <p style="color: #666; max-width: 600px; margin: 10px auto;">Advanced mobile solutions and premium inventory gear.</p>
     </div>
 </section>
 
 <section id="shop" class="section-padding">
     <div class="shop-controls" data-aos="fade-up">
-        <input type="text" id="searchBar" placeholder="Search system memory...">
+        <input type="text" id="searchBar" placeholder="Search system database...">
         <div style="display: flex; gap: 10px;">
             <button class="filter-btn active" onclick="filterItems('all', this)">ALL</button>
             <button class="filter-btn" onclick="filterItems('Mobile', this)">MOBILES</button>
             <button class="filter-btn" onclick="filterItems('Accessories', this)">GEAR</button>
         </div>
     </div>
-
-    <div id="productGrid" class="grid">
-        </div>
-</section>
-
-<section id="contact" class="section-padding" style="background: #080808; border-top: 1px solid var(--border);">
-    <div class="section-title">STORE COORDINATES</div>
-    <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:30px;">
-        <div style="border-radius:20px; overflow:hidden; height:350px; border:1px solid var(--border); filter: grayscale(1) invert(1);">
-            <iframe src="http://googleusercontent.com/maps.google.com/7" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-        <div style="background:var(--card); padding:40px; border-radius:20px; border:1px solid var(--border);">
-            <h3 style="color:var(--gold); font-family:'Orbitron'; margin-bottom:20px;">CONTACT_INFO</h3>
-            <p style="margin-bottom:10px;"><i class="fa fa-phone" style="color:var(--gold);"></i> +92 327 9518790</p>
-            <p><i class="fa fa-clock" style="color:var(--gold);"></i> 11:00 AM - 10:00 PM</p>
-        </div>
-    </div>
+    <div id="productGrid" class="grid"></div>
 </section>
 
 <a href="https://wa.me/923279518790" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -143,11 +155,49 @@
 
     onValue(ref(db, 'products'), (snap) => {
         if (!snap.exists()) return;
-        const data = snap.val();
-        allProducts = Object.keys(data).map(id => ({ id, ...data[id] })).reverse();
+        allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+        
+        // Load Brands in Header (Max 5 for clean look)
+        const brands = [...new Set(allProducts.map(p => p.brand))].slice(0, 6);
+        document.getElementById('headerBrands').innerHTML = brands.map(b => 
+            `<div class="brand-link" onmouseenter="openMenu('${b}')">${b}</div>`
+        ).join('');
+
         renderProducts(allProducts);
     });
 
+    // 🟢 MEGA MENU LOGIC
+    window.openMenu = (brand) => {
+        const menu = document.getElementById('megaMenu');
+        const accList = document.getElementById('accList');
+        document.getElementById('activeBrandTitle').innerText = brand + "_SUBSYSTEM";
+        
+        const items = allProducts.filter(p => p.brand === brand && p.category === 'Accessories');
+        
+        if(items.length > 0) {
+            accList.innerHTML = items.map(p => `
+                <div class="acc-item" onmouseenter="showPreview('${p.img}', '${p.name}')" onclick="location.href='product.html?id=${p.id}'">
+                    <i class="fa fa-microchip" style="font-size:10px; color:var(--gold)"></i> ${p.name}
+                </div>
+            `).join('');
+        } else {
+            accList.innerHTML = "<p style='color:#444; font-size:11px; padding:10px;'>No gear detected.</p>";
+        }
+        menu.classList.add('active');
+    };
+
+    window.showPreview = (img, name) => {
+        const imgTag = document.getElementById('prevImg');
+        imgTag.src = img;
+        imgTag.style.display = 'block';
+        document.getElementById('prevName').innerText = name;
+    };
+
+    window.closeMenu = () => {
+        document.getElementById('megaMenu').classList.remove('active');
+    };
+
+    // 🛒 RENDERING & FILTERS
     function renderProducts(list) {
         const grid = document.getElementById('productGrid');
         grid.innerHTML = list.map(p => {
@@ -157,12 +207,14 @@
                 <div class="img-box">
                     <img src="${p.img}" onerror="this.src='faq/Gemini.png'" alt="${p.name}">
                 </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="color:var(--gold); font-family:Orbitron; font-size:10px">${p.brand}</span>
+                    <span style="color:#444; font-size:9px;">${p.category}</span>
+                </div>
                 <h3>${p.name}</h3>
                 <div class="price-row">
                     <span class="price">Rs ${formattedPrice}</span>
-                    <div class="order-btn">
-                        <i class="fa fa-eye"></i> <span>View</span>
-                    </div>
+                    <div class="order-btn"><i class="fa fa-eye"></i></div>
                 </div>
             </div>`;
         }).join('');
