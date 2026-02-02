@@ -1,64 +1,236 @@
-// 🧠 UPGRADED JARVIS AI SCAN (FIXED)
-window.jarvisAIScan = async () => {
-    const query = document.getElementById('aiQuery').value;
-    const log = document.getElementById('aiLog');
-    const btn = document.getElementById('aiStatusBtn');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis AI Admin | Non-Stop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: rgba(212, 175, 55, 0.4); --green: #25d366; --red: #ff4757; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; }
+        
+        /* 🛡️ Login Overlay */
+        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: 0.5s; }
+        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); }
+        
+        .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
+        .upload-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
+        
+        /* Slots */
+        .multi-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .upload-slot { border: 1px dashed #333; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.3); }
+        
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; }
+        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; }
+        
+        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; }
+        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; }
+        
+        .progress-bar { height: 2px; width: 0%; background: var(--gold); transition: 0.3s; margin-top: 4px; }
+        .active-link { color: var(--gold) !important; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="loginOverlay">
+    <div id="loginBox">
+        <h2 style="font-family:'Orbitron'; color:var(--gold)">SYSTEM_ACCESS</h2>
+        <input type="password" id="passInput" placeholder="Security Key">
+        <button onclick="checkPass()" class="save-btn">AUTHORIZE</button>
+    </div>
+</div>
+
+<div class="main-layout">
+    <div class="sidebar">
+        <div style="background:#0f0f0f; border:1px solid var(--gold); padding:15px; border-radius:20px; margin-bottom:20px;">
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="aiQuery" placeholder="AI Search..." style="margin:0;">
+                <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
+            </div>
+            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px;">Neural Standby...</div>
+        </div>
+
+        <div class="upload-card">
+            <div class="multi-upload-grid">
+                <div class="upload-slot" onclick="document.getElementById('f1').click()">
+                    <i class="fa fa-camera"></i> <small id="t1">Main</small>
+                    <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
+                    <div class="progress-bar" id="p1"></div>
+                </div>
+                <div class="upload-slot" onclick="document.getElementById('f2').click()">
+                    <i class="fa fa-camera"></i> <small id="t2">Side</small>
+                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2', 'p2')">
+                    <div class="progress-bar" id="p2"></div>
+                </div>
+                <div class="upload-slot" onclick="document.getElementById('f3').click()">
+                    <i class="fa fa-camera"></i> <small id="t3">Back</small>
+                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3', 'p3')">
+                    <div class="progress-bar" id="p3"></div>
+                </div>
+            </div>
+
+            <input type="text" id="pName" placeholder="Product Name">
+            <input type="text" id="pBrand" placeholder="Brand">
+            <input type="number" id="pPrice" placeholder="Price (PKR)">
+            <select id="pCat">
+                <option value="Mobile">Mobile Unit</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+            <textarea id="pDesc" placeholder="Specifications..." rows="3"></textarea>
+            <button id="saveBtn" class="save-btn">SYNC TO DATABASE</button>
+            <button onclick="logout()" style="background:transparent; border:none; color:#444; font-size:10px; cursor:pointer; width:100%; margin-top:10px;">TERMINATE SESSION</button>
+        </div>
+    </div>
+
+    <div class="inventory">
+        <h3 style="font-family:'Orbitron'; color:var(--gold); font-size:14px; margin-bottom:20px;">CORE_DATABASE</h3>
+        <div id="invGrid" class="inv-grid"></div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
+    const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
     
-    if(!query) return alert("Sir, enter a product name first.");
+    let productImages = { img1: "", img2: "", img3: "" };
 
-    log.innerText = "Initializing Neural Link...";
-    log.style.color = "var(--gold)";
-    btn.innerText = "SCANNING";
-    btn.disabled = true;
-
-    try {
-        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                contents: [{ 
-                    parts: [{ 
-                        text: `Search for ${query}. You are a product database. Return ONLY a raw JSON object (strictly no markdown, no backticks, no conversation) with these keys: {"name": "full name", "brand": "brand name", "price": "numeric price only", "category": "Mobile or Accessories", "specs": "brief bullet points"}.` 
-                    }] 
-                }]
-            })
-        });
-
-        const data = await resp.json();
-        
-        // Safety check for API response
-        if(!data.candidates || !data.candidates[0].content) {
-            throw new Error("Invalid API Response");
+    // 🔒 Persistent Login Check
+    window.onload = () => {
+        if(localStorage.getItem("jarvis_auth") === "true") {
+            document.getElementById('loginOverlay').style.display = 'none';
         }
+    };
 
-        let rawText = data.candidates[0].content.parts[0].text;
+    window.checkPass = () => {
+        if(document.getElementById('passInput').value === "haider786") {
+            localStorage.setItem("jarvis_auth", "true"); // Save login state
+            document.getElementById('loginOverlay').style.display = 'none';
+        } else {
+            alert("DENIED");
+        }
+    };
+
+    window.logout = () => {
+        localStorage.removeItem("jarvis_auth");
+        location.reload();
+    };
+
+    // 🧠 AI SCANNER
+    window.jarvisAIScan = async () => {
+        const query = document.getElementById('aiQuery').value;
+        const log = document.getElementById('aiLog');
+        if(!query) return;
+        log.innerText = "Scanning satellites...";
+        try {
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+                method: "POST", headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ contents: [{ parts: [{ text: `JSON only for ${query}: {"name": "name", "brand": "brand", "price": "number", "category": "Mobile or Accessories", "specs": "specs"}` }] }] })
+            });
+            const data = await resp.json();
+            const res = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, ""));
+            document.getElementById('pName').value = res.name;
+            document.getElementById('pBrand').value = res.brand.toUpperCase();
+            document.getElementById('pPrice').value = res.price.toString().replace(/\D/g, "");
+            document.getElementById('pCat').value = res.category;
+            document.getElementById('pDesc').value = res.specs;
+            log.innerText = "Data acquired.";
+        } catch (e) { log.innerText = "Link failed. Try again."; }
+    };
+
+    // 📸 IMAGE UPLOAD
+    window.uploadImg = async (input, key, txtId, progId) => {
+        const file = input.files[0]; if(!file) return;
+        const text = document.getElementById(txtId);
+        const bar = document.getElementById(progId);
+        text.innerText = "WAIT...";
+        const fd = new FormData(); fd.append("image", file);
+        try {
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+            const data = await res.json();
+            if(data.success) {
+                productImages[key] = data.data.url;
+                bar.style.width = "100%";
+                text.innerText = "READY";
+                text.classList.add('active-link');
+            }
+        } catch (e) { text.innerText = "ERROR"; }
+    };
+
+    // 💾 SAVE & NO-LOGOUT LOGIC
+    document.getElementById('saveBtn').onclick = function() {
+        const btn = this;
+        if(!productImages.img1 || !document.getElementById('pName').value) return alert("Main Image & Name Required");
         
-        // Clean markdown if present
-        let cleanJson = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
-        
-        // Parse data
-        const res = JSON.parse(cleanJson);
+        btn.innerText = "SYNCING...";
+        btn.disabled = true;
 
-        // Injecting into fields
-        document.getElementById('pName').value = res.name || "";
-        document.getElementById('pBrand').value = (res.brand || "").toUpperCase();
-        document.getElementById('pPrice').value = res.price ? res.price.toString().replace(/\D/g, "") : "";
-        document.getElementById('pCat').value = res.category.includes("Mobile") ? "Mobile" : "Accessories";
-        document.getElementById('pDesc').value = res.specs || "";
+        const product = {
+            name: document.getElementById('pName').value,
+            brand: document.getElementById('pBrand').value.toUpperCase(),
+            price: Number(document.getElementById('pPrice').value),
+            category: document.getElementById('pCat').value,
+            description: document.getElementById('pDesc').value,
+            img: productImages.img1, 
+            img2: productImages.img2 || "",
+            img3: productImages.img3 || "",
+            timestamp: Date.now()
+        };
 
-        log.innerText = "Neural Link Stable. Injection Complete.";
-        log.style.color = "var(--green)";
-        btn.innerText = "SUCCESS";
-    } catch (e) {
-        console.error("Jarvis Neural Error:", e);
-        log.innerText = "Link Failed: System busy or key restricted.";
-        log.style.color = "var(--red)";
-        btn.innerText = "RETRY";
-    } finally {
-        btn.disabled = false;
-        setTimeout(() => { 
-            btn.innerText = "SCAN"; 
-            log.style.color = "#555";
-        }, 3000);
-    }
-};
+        push(ref(db, 'products'), product).then(() => {
+            // ✅ Magic Step: Don't reload, just reset form
+            alert("Database Updated Sir.");
+            btn.innerText = "SYNC TO DATABASE";
+            btn.disabled = false;
+            
+            // Reset Form & Images
+            document.getElementById('pName').value = "";
+            document.getElementById('pBrand').value = "";
+            document.getElementById('pPrice').value = "";
+            document.getElementById('pDesc').value = "";
+            document.getElementById('aiQuery').value = "";
+            productImages = { img1: "", img2: "", img3: "" };
+            
+            // Reset UI
+            document.querySelectorAll('.progress-bar').forEach(b => b.style.width = "0%");
+            document.getElementById('t1').innerText = "Main";
+            document.getElementById('t2').innerText = "Side";
+            document.getElementById('t3').innerText = "Back";
+            document.querySelectorAll('small').forEach(s => s.classList.remove('active-link'));
+        });
+    };
+
+    onValue(ref(db, 'products'), (snap) => {
+        const grid = document.getElementById('invGrid'); grid.innerHTML = "";
+        if(snap.exists()){
+            Object.keys(snap.val()).reverse().forEach(id => {
+                const p = snap.val()[id];
+                grid.innerHTML += `
+                    <div class="inv-card">
+                        <button style="position:absolute; right:5px; top:5px; border:none; background:red; color:white; border-radius:50%; cursor:pointer;" onclick="deleteItem('${id}')">×</button>
+                        <img src="${p.img}">
+                        <div style="font-size:10px; color:var(--gold);">${p.brand}</div>
+                        <div style="font-size:11px;">${p.name}</div>
+                    </div>`;
+            });
+        }
+    });
+
+    window.deleteItem = (id) => { if(confirm("Delete?")) remove(ref(db, `products/${id}`)); };
+</script>
+</body>
+</html>
