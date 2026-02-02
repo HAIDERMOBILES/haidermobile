@@ -3,50 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details | Haider Mobiles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Terminal | Haider Mobiles</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --dark: #0a0a0a; --card: #141414; --text: #e0e0e0; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 100px; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        
+        :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: rgba(212, 175, 55, 0.4); --green: #25d366; }
+        
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
+        
+        /* 🌌 Futuristic Background */
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%); z-index: -1; }
 
-        header { position: fixed; top: 0; width: 100%; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(12px); z-index: 1000; border-bottom: 1px solid #222; }
-        .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 5%; display: flex; justify-content: space-between; }
-        .logo { color: var(--gold); font-weight: 800; font-size: 1.5rem; text-decoration: none; }
+        /* 🤖 Jarvis Header */
+        header { padding: 20px 5%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .nav-logo { font-family: 'Orbitron'; color: var(--gold); text-decoration: none; letter-spacing: 3px; font-size: 1.2rem; }
+        .back-link { color: #888; text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 20px 5%; display: flex; gap: 40px; flex-wrap: wrap; }
-        .product-image { flex: 1; min-width: 300px; background: #fff; border-radius: 30px; padding: 40px; display: flex; align-items: center; justify-content: center; height: 450px; }
-        .product-image img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 
-        .product-info { flex: 1; min-width: 300px; }
-        .product-info h1 { font-size: 2.5rem; margin-bottom: 15px; color: #fff; }
-        .brand-tag { color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        .price-tag { font-size: 2rem; font-weight: 800; color: var(--gold); margin: 20px 0; }
-        .desc { color: #888; margin-bottom: 30px; line-height: 1.8; }
+        /* 🖼️ Premium Image Terminal */
+        .viewer-box { background: #fff; border-radius: 30px; padding: 40px; position: relative; display: flex; align-items: center; justify-content: center; height: 500px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.1); border: 2px solid var(--border); }
+        .viewer-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .brand-badge { position: absolute; top: 20px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 50px; font-family: 'Orbitron'; font-size: 10px; font-weight: bold; }
 
-        .btn-whatsapp { 
-            background: #25d366; color: #fff; padding: 18px 40px; border-radius: 50px; 
-            text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 10px;
-            font-size: 1.1rem; transition: 0.3s;
-        }
-        .btn-whatsapp:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
+        /* 📝 Info Terminal */
+        .info-panel { padding: 20px; }
+        .info-panel h1 { font-family: 'Orbitron'; font-size: 2.5rem; margin: 10px 0; letter-spacing: 2px; }
+        .price-display { font-family: 'Orbitron'; color: var(--gold); font-size: 2rem; margin: 20px 0; text-shadow: 0 0 15px var(--neon); }
+        .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .spec-item { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
+        .spec-item small { color: #555; display: block; text-transform: uppercase; font-size: 10px; }
+        .spec-item span { font-weight: 600; color: #ddd; }
 
-        @media (max-width: 768px) { .product-image { height: 300px; } .product-info h1 { font-size: 1.8rem; } }
+        /* 💬 Comment Section */
+        .comment-section { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 40px; grid-column: 1 / -1; }
+        .comment-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 25px; max-width: 700px; }
+        .comment-box h3 { font-family: 'Orbitron'; font-size: 14px; color: var(--gold); margin-bottom: 20px; }
+        .user-cmt { display: flex; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #1a1a1a; }
+        .user-cmt .avatar { width: 40px; height: 40px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); }
+        
+        /* 📱 Mobile Adjustments */
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .viewer-box { height: 350px; } }
+
+        .buy-btn { width: 100%; margin-top: 30px; padding: 20px; background: var(--green); border: none; border-radius: 15px; color: #fff; font-family: 'Orbitron'; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; transition: 0.3s; }
+        .buy-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+        
+        footer { text-align: center; padding: 60px 20px; color: #444; font-size: 12px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="nav-container">
-        <a href="index.html" class="logo">HAIDER MOBILES</a>
-        <a href="index.html" style="color:#fff; text-decoration:none;"><i class="fa fa-arrow-left"></i> Back</a>
-    </div>
+    <a href="index.html" class="nav-logo">HAIDER MOBILES</a>
+    <a href="index.html" class="back-link"><i class="fa fa-chevron-left"></i> Return to Terminal</a>
 </header>
 
-<div class="container" id="product-details">
-    <p>Loading product details...</p>
+<div class="container" id="loader">
+    <p style="text-align: center; grid-column: 1/-1; font-family: 'Orbitron';">INITIALIZING DATA UPLINK...</p>
 </div>
+
+<div class="container" id="mainContent" style="display: none;">
+    <div class="viewer-box">
+        <div class="brand-badge" id="brandTag">APPLE</div>
+        <img id="mainImg" src="" alt="Product Unit">
+    </div>
+
+    <div class="info-panel">
+        <small style="color: #555; letter-spacing: 3px;">PRODUCT UNIT SPECIFICATIONS</small>
+        <h1 id="pName">UNIT NAME</h1>
+        <div class="price-display" id="pPrice">Rs 0</div>
+        
+        <div class="specs-grid">
+            <div class="spec-item"><small>Condition</small><span>Premium / Used</span></div>
+            <div class="spec-item"><small>Warranty</small><span>30 Days Shop</span></div>
+            <div class="spec-item"><small>Availability</small><span style="color:var(--green)">In Stock</span></div>
+            <div class="spec-item"><small>Category</small><span id="pCat">Unit</span></div>
+        </div>
+
+        <p id="pDesc" style="color: #888; margin-top: 30px; font-size: 0.9rem; line-height: 1.6;"></p>
+
+        <a href="" id="waBtn" class="buy-btn">
+            <i class="fab fa-whatsapp"></i> INITIATE ACQUISITION
+        </a>
+    </div>
+
+    <div class="comment-section">
+        <div class="comment-box">
+            <h3><i class="fa fa-comments"></i> SYSTEM REVIEWS</h3>
+            <div class="user-cmt">
+                <div class="avatar"><i class="fa fa-user"></i></div>
+                <div>
+                    <strong style="font-size: 13px;">Customer_041</strong>
+                    <p style="font-size: 12px; color: #888; margin: 5px 0;">Great condition, original panel as promised. Highly recommend Haider Mobiles.</p>
+                </div>
+            </div>
+            <div class="user-cmt">
+                <div class="avatar"><i class="fa fa-user"></i></div>
+                <div>
+                    <strong style="font-size: 13px;">Hamza_Siddiqui</strong>
+                    <p style="font-size: 12px; color: #888; margin: 5px 0;">Best repairing services in the city. IC repair done perfectly.</p>
+                </div>
+            </div>
+            <p style="font-size: 10px; color: #333; text-align: center; margin-top: 20px;">FEEDBACK LOOP CLOSED</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>JARVIS SYSTEM V2.1 // DESIGNED FOR HAIDER MOBILES</p>
+</footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -63,31 +129,26 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Get Product ID from URL
     const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id');
+    const id = params.get('id');
 
-    if (productId) {
-        get(ref(db, `products/${productId}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                const p = snapshot.val();
-                document.getElementById('product-details').innerHTML = `
-                    <div class="product-image">
-                        <img src="${p.img}" alt="${p.name}">
-                    </div>
-                    <div class="product-info">
-                        <span class="brand-tag">${p.brand || 'Premium'}</span>
-                        <h1>${p.name}</h1>
-                        <p class="desc">${p.description || 'No description available for this premium item.'}</p>
-                        <div class="price-tag">Rs ${p.price}</div>
-                        <a href="https://wa.me/923279518790?text=Hello Haider Mobiles, I want to buy: ${p.name} (Price: Rs ${p.price})" 
-                           class="btn-whatsapp" target="_blank">
-                            <i class="fab fa-whatsapp"></i> Order via WhatsApp
-                        </a>
-                    </div>
-                `;
-            } else {
-                document.getElementById('product-details').innerHTML = "<h2>Product not found!</h2>";
+    if(id) {
+        get(ref(db, `products/${id}`)).then((snap) => {
+            if(snap.exists()){
+                const p = snap.val();
+                document.getElementById('pName').innerText = p.name;
+                document.getElementById('pPrice').innerText = "Rs " + new Intl.NumberFormat('en-PK').format(p.price);
+                document.getElementById('mainImg').src = p.img;
+                document.getElementById('brandTag').innerText = p.brand || 'PREMIUM';
+                document.getElementById('pCat').innerText = p.category || 'Mobile';
+                document.getElementById('pDesc').innerText = p.description || 'System data shows this unit is in perfect working condition with original parts.';
+                
+                const msg = encodeURIComponent(`Jarvis Terminal Order: I am interested in ${p.name}. Provide details.`);
+                document.getElementById('waBtn').href = `https://wa.me/923279518790?text=${msg}`;
+
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'grid';
+                document.title = p.name + " | Haider Terminal";
             }
         });
     }
