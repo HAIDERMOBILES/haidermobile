@@ -11,13 +11,22 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        :root { --gold: #d4af37; --dark: #050505; --card: #0d0d0d; --border: #1a1a1a; --text: #e0e0e0; --green: #25d366; --neon: rgba(212, 175, 55, 0.3); }
+        :root { 
+            --gold: #d4af37; 
+            --dark: #050505; 
+            --card: rgba(255, 255, 255, 0.03); 
+            --border: rgba(255, 255, 255, 0.08); 
+            --text: #e0e0e0; 
+            --green: #25d366; 
+            --neon: rgba(212, 175, 55, 0.3); 
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        /* 🤖 HEADER & NAV */
-        header { position: fixed; top: 0; width: 100%; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); height: 70px; }
+        /* 🤖 HEADER */
+        header { position: fixed; top: 0; width: 100%; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border); height: 75px; }
         .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; height: 100%; }
         .logo { font-family: 'Orbitron'; color: var(--gold); font-weight: 800; font-size: 1.2rem; text-decoration: none; letter-spacing: 2px; }
 
@@ -26,64 +35,83 @@
         .blink { animation: flash 1.5s infinite; }
         @keyframes flash { 50% { opacity: 0.3; } }
 
-        /* BRAND LINKS IN HEADER */
+        /* HEADER BRANDS AUTO-SYNC */
         .nav-brands { display: flex; gap: 15px; height: 100%; align-items: center; }
         .brand-link { 
-            font-family: 'Orbitron'; font-size: 10px; color: #777; cursor: pointer; 
-            padding: 25px 5px; transition: 0.3s; height: 100%; display: flex; align-items: center; text-transform: uppercase;
+            font-family: 'Orbitron'; font-size: 10px; color: #888; cursor: pointer; 
+            padding: 25px 10px; transition: 0.3s; height: 100%; display: flex; align-items: center; text-transform: uppercase;
         }
-        .brand-link:hover { color: var(--gold); border-bottom: 2px solid var(--gold); }
+        .brand-link:hover { color: var(--gold); border-bottom: 3px solid var(--gold); background: rgba(212, 175, 55, 0.05); }
 
-        /* 🛡️ MEGA MENU (LEFT SIDE) */
+        /* 🛡️ MEGA MENU (CRYSTAL LOOK) */
         #megaMenu {
-            position: fixed; top: 71px; left: -500px; width: 450px; height: auto; max-height: 75vh;
-            background: rgba(10, 10, 10, 0.98); border: 1px solid var(--border); border-left: none;
-            backdrop-filter: blur(20px); z-index: 999; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            display: flex; border-radius: 0 0 20px 0; overflow: hidden;
+            position: fixed; top: 76px; left: -500px; width: 480px; height: auto; max-height: 80vh;
+            background: rgba(10, 10, 10, 0.8); border: 1px solid var(--border); border-left: none;
+            backdrop-filter: blur(40px); z-index: 999; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex; border-radius: 0 0 25px 0; overflow: hidden; box-shadow: 25px 0 50px rgba(0,0,0,0.7);
         }
-        #megaMenu.active { left: 0; box-shadow: 20px 20px 60px rgba(0,0,0,0.8); }
+        #megaMenu.active { left: 0; }
+        .menu-cats { width: 55%; border-right: 1px solid rgba(255,255,255,0.05); padding: 25px; overflow-y: auto; }
+        .cat-group-title { font-family: 'Orbitron'; font-size: 11px; color: var(--gold); margin-bottom: 20px; letter-spacing: 2px; }
+        .acc-item { padding: 12px; font-size: 12px; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s; border-radius: 10px; }
+        .acc-item:hover { color: #fff; background: rgba(212, 175, 55, 0.15); transform: translateX(10px); }
 
-        .menu-cats { width: 55%; border-right: 1px solid #222; padding: 20px; overflow-y: auto; }
-        .cat-group-title { font-family: 'Orbitron'; font-size: 10px; color: var(--gold); margin-bottom: 15px; opacity: 0.7; letter-spacing: 1px; }
-        .acc-item { padding: 10px; font-size: 12px; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; border-radius: 5px; }
-        .acc-item:hover { color: #fff; background: rgba(212, 175, 55, 0.1); padding-left: 15px; }
+        .menu-preview { width: 45%; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); }
+        .menu-preview img { max-width: 90%; max-height: 200px; object-fit: contain; display: none; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        .menu-preview p { color: var(--gold); font-family: 'Orbitron'; font-size: 10px; margin-top: 15px; text-align: center; font-weight: bold; }
 
-        .menu-preview { width: 45%; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; }
-        .menu-preview img { max-width: 100%; max-height: 180px; object-fit: contain; display: none; }
-        .menu-preview p { color: #000; font-family: 'Orbitron'; font-size: 9px; margin-top: 15px; text-align: center; font-weight: bold; }
-
-        /* 🌌 HERO */
-        .hero { padding: 180px 5% 80px; text-align: center; background: radial-gradient(circle at center, #111 0%, #050505 100%); }
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 3.5rem); color: #fff; margin-bottom: 15px; text-shadow: 0 0 20px var(--neon); }
+        /* 🌌 HERO SECTION */
+        .hero { padding: 180px 5% 100px; text-align: center; background: radial-gradient(circle at center, #151515 0%, #050505 100%); }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 4.5rem); color: #fff; margin-bottom: 20px; text-shadow: 0 0 30px var(--neon); }
         .hero span { color: var(--gold); }
 
         /* 🛒 SHOP CONTROLS */
-        .section-padding { padding: 80px 5%; }
-        .shop-controls { max-width: 1200px; margin: 0 auto 40px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        #searchBar { flex: 1; min-width: 280px; padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border); background: #000; color: #fff; outline: none; transition: 0.3s; }
+        .section-padding { padding: 60px 5%; }
+        .shop-controls { max-width: 1200px; margin: 0 auto 50px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        #searchBar { flex: 1; min-width: 300px; padding: 18px 30px; border-radius: 15px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: 0.3s; backdrop-filter: blur(10px); }
+        #searchBar:focus { border-color: var(--gold); background: rgba(255,255,255,0.07); box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
         
-        .filter-btn { padding: 12px 28px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; transition: 0.3s; }
-        .filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+        .filter-btn { padding: 14px 32px; border-radius: 12px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-family: 'Orbitron'; font-size: 0.75rem; transition: 0.3s; letter-spacing: 1px; }
+        .filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; }
 
-        /* 💎 PRODUCT CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
-        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; transition: 0.4s; position: relative; cursor: pointer; overflow: hidden; }
-        .product-card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        /* 💎 CRYSTAL CARDS - LARGER PICS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; max-width: 1300px; margin: 0 auto; }
+        .product-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 25px; padding: 25px; 
+            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; cursor: pointer; overflow: hidden; 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        }
+        .product-card:hover { 
+            border-color: var(--gold); transform: translateY(-15px); 
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6); 
+        }
         
-        .img-box { background: #fff; border-radius: 15px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; }
-        .img-box img { max-width: 80%; max-height: 80%; object-fit: contain; transition: 0.6s ease; }
-        .product-card:hover .img-box img { transform: scale(1.2); }
+        /* Image Box Size Increased */
+        .img-box { 
+            background: rgba(255,255,255,0.02); border-radius: 20px; height: 320px; /* BARI IMAGE */
+            display: flex; align-items: center; justify-content: center; margin-bottom: 25px; 
+            overflow: hidden; border: 1px solid rgba(255,255,255,0.05); 
+        }
+        .img-box img { 
+            max-width: 92%; max-height: 92%; object-fit: contain; 
+            transition: 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+        .product-card:hover .img-box img { transform: scale(1.08); }
 
-        .price-row { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #1a1a1a; }
-        .price { color: var(--gold); font-family: 'Orbitron'; font-weight: 700; font-size: 1.1rem; }
-        .order-btn { background: var(--green); color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+        .price { color: var(--gold); font-family: 'Orbitron'; font-weight: 700; font-size: 1.2rem; }
+        .order-btn { background: var(--green); color: #fff; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; }
 
-        .wa-float { position: fixed; bottom: 30px; right: 30px; background: var(--green); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .wa-float { position: fixed; bottom: 35px; right: 35px; background: var(--green); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #fff; z-index: 1000; box-shadow: 0 15px 30px rgba(0,0,0,0.5); transition: 0.3s; }
+        .wa-float:hover { transform: scale(1.1) rotate(10deg); }
 
         @media (max-width: 768px) {
             .nav-brands { display: none; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .grid { grid-template-columns: repeat(1, 1fr); gap: 20px; }
             #megaMenu { width: 320px; }
+            .img-box { height: 280px; }
         }
     </style>
 </head>
@@ -94,8 +122,7 @@
         <a href="index.html" class="logo">HAIDER STORE</a>
         <div class="system-nav">
             <div class="status"><span class="blink">●</span> SYSTEM_ONLINE</div>
-            <div class="nav-brands" id="headerBrands">
-                </div>
+            <div class="nav-brands" id="headerBrands"></div>
         </div>
     </div>
 </header>
@@ -103,8 +130,7 @@
 <div id="megaMenu" onmouseleave="closeMenu()">
     <div class="menu-cats">
         <div class="cat-group-title" id="activeBrandTitle">SCANNING...</div>
-        <div id="accList">
-            </div>
+        <div id="accList"></div>
     </div>
     <div class="menu-preview" id="previewPane">
         <img id="prevImg" src="">
@@ -113,20 +139,20 @@
 </div>
 
 <section class="hero">
-    <div data-aos="fade-up">
-        <small style="letter-spacing: 5px; color: var(--gold);">PREMIUM TERMINAL</small>
+    <div data-aos="zoom-out">
+        <small style="letter-spacing: 7px; color: var(--gold); text-transform: uppercase; font-size: 10px;">The Future of Mobile Tech</small>
         <h1>HAIDER <span>MOBILES</span></h1>
-        <p style="color: #666; max-width: 600px; margin: 10px auto;">Advanced mobile solutions and premium inventory gear.</p>
+        <p style="color: #888; max-width: 600px; margin: 15px auto; font-size: 14px; line-height: 1.6;">Your premium terminal for advanced mobile solutions and elite accessories. Database synchronized in real-time.</p>
     </div>
 </section>
 
 <section id="shop" class="section-padding">
     <div class="shop-controls" data-aos="fade-up">
-        <input type="text" id="searchBar" placeholder="Search system database...">
-        <div style="display: flex; gap: 10px;">
-            <button class="filter-btn active" onclick="filterItems('all', this)">ALL</button>
+        <input type="text" id="searchBar" placeholder="Search system database (e.g. iPhone, Samsung, Charger)...">
+        <div style="display: flex; gap: 12px;">
+            <button class="filter-btn active" onclick="filterItems('all', this)">ALL_GEAR</button>
             <button class="filter-btn" onclick="filterItems('Mobile', this)">MOBILES</button>
-            <button class="filter-btn" onclick="filterItems('Accessories', this)">GEAR</button>
+            <button class="filter-btn" onclick="filterItems('Accessories', this)">ACCESSORIES</button>
         </div>
     </div>
     <div id="productGrid" class="grid"></div>
@@ -153,11 +179,16 @@
 
     AOS.init({ duration: 1000, once: true });
 
+    // 🔄 AUTO-SYNC: Fetch products and build UI
     onValue(ref(db, 'products'), (snap) => {
-        if (!snap.exists()) return;
+        if (!snap.exists()) {
+            document.getElementById('productGrid').innerHTML = "<p>No products found in database.</p>";
+            return;
+        }
+        
         allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
         
-        // Load Brands in Header (Max 5 for clean look)
+        // Build Header Brands Automatically
         const brands = [...new Set(allProducts.map(p => p.brand))].slice(0, 6);
         document.getElementById('headerBrands').innerHTML = brands.map(b => 
             `<div class="brand-link" onmouseenter="openMenu('${b}')">${b}</div>`
@@ -166,22 +197,23 @@
         renderProducts(allProducts);
     });
 
-    // 🟢 MEGA MENU LOGIC
+    // 🟢 MEGA MENU SYNC
     window.openMenu = (brand) => {
         const menu = document.getElementById('megaMenu');
         const accList = document.getElementById('accList');
-        document.getElementById('activeBrandTitle').innerText = brand + "_SUBSYSTEM";
+        document.getElementById('activeBrandTitle').innerText = brand.toUpperCase() + "_GEAR";
         
+        // Show only accessories of this brand in menu
         const items = allProducts.filter(p => p.brand === brand && p.category === 'Accessories');
         
         if(items.length > 0) {
             accList.innerHTML = items.map(p => `
                 <div class="acc-item" onmouseenter="showPreview('${p.img}', '${p.name}')" onclick="location.href='product.html?id=${p.id}'">
-                    <i class="fa fa-microchip" style="font-size:10px; color:var(--gold)"></i> ${p.name}
+                    <i class="fa fa-bolt" style="font-size:10px; color:var(--gold)"></i> ${p.name}
                 </div>
             `).join('');
         } else {
-            accList.innerHTML = "<p style='color:#444; font-size:11px; padding:10px;'>No gear detected.</p>";
+            accList.innerHTML = "<p style='color:#444; font-size:11px; padding:10px;'>No specific accessories found.</p>";
         }
         menu.classList.add('active');
     };
@@ -197,7 +229,7 @@
         document.getElementById('megaMenu').classList.remove('active');
     };
 
-    // 🛒 RENDERING & FILTERS
+    // 🛒 PRODUCT RENDERER
     function renderProducts(list) {
         const grid = document.getElementById('productGrid');
         grid.innerHTML = list.map(p => {
@@ -205,21 +237,22 @@
             return `
             <div class="product-card" data-aos="fade-up" onclick="location.href='product.html?id=${p.id}'">
                 <div class="img-box">
-                    <img src="${p.img}" onerror="this.src='faq/Gemini.png'" alt="${p.name}">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/400?text=Haider+Mobiles'" alt="${p.name}">
                 </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <span style="color:var(--gold); font-family:Orbitron; font-size:10px">${p.brand}</span>
-                    <span style="color:#444; font-size:9px;">${p.category}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <span style="color:var(--gold); font-family:Orbitron; font-size:11px; font-weight:bold;">${p.brand}</span>
+                    <span style="color:#555; font-size:10px; text-transform:uppercase;">${p.category}</span>
                 </div>
-                <h3>${p.name}</h3>
+                <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #fff; font-weight:600;">${p.name}</h3>
                 <div class="price-row">
                     <span class="price">Rs ${formattedPrice}</span>
-                    <div class="order-btn"><i class="fa fa-eye"></i></div>
+                    <div class="order-btn">VIEW <i class="fa fa-arrow-right" style="font-size:10px;"></i></div>
                 </div>
             </div>`;
         }).join('');
     }
 
+    // 🛠️ FILTER & SEARCH LOGIC
     window.filterItems = (cat, el) => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         el.classList.add('active');
@@ -229,7 +262,10 @@
 
     document.getElementById('searchBar').oninput = (e) => {
         const term = e.target.value.toLowerCase();
-        renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(term)));
+        renderProducts(allProducts.filter(p => 
+            p.name.toLowerCase().includes(term) || 
+            p.brand.toLowerCase().includes(term)
+        ));
     };
 </script>
 </body>
