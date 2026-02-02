@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --dark: #0a0a0a; --card: #141414; --text: #e0e0e0; }
+        :root { --gold: #d4af37; --dark: #0a0a0a; --card: #141414; --text: #e0e0e0; --border: #222; }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; }
+        body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; scroll-behavior: smooth; }
 
         /* 1. Modern Sticky Header */
         header { 
@@ -43,7 +43,7 @@
         }
         .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
 
-        /* 3. Expert Services Cards (Now with Accessories) */
+        /* 3. Expert Services Cards */
         .section-title { text-align: center; padding: 80px 0 40px; font-size: 2rem; }
         .services-grid { 
             display: grid; 
@@ -52,12 +52,22 @@
         }
         .service-card { 
             background: var(--card); border: 1px solid #222; padding: 35px 25px; 
-            border-radius: 25px; text-align: center; transition: 0.4s;
+            border-radius: 25px; text-align: center; transition: 0.4s; cursor: pointer;
         }
         .service-card:hover { border-color: var(--gold); transform: translateY(-10px); }
         .service-card i { font-size: 2.2rem; color: var(--gold); margin-bottom: 15px; }
         .service-card h3 { margin-bottom: 10px; font-size: 1.1rem; }
         .service-card p { font-size: 0.85rem; color: #777; }
+
+        /* 🛒 Product Grid Section */
+        .shop-section { max-width: 1200px; margin: 0 auto; padding: 60px 5%; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s; }
+        .product-card:hover { border-color: var(--gold); }
+        .img-box { background: #fff; border-radius: 15px; height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; overflow: hidden; }
+        .img-box img { max-width: 80%; max-height: 80%; object-fit: contain; }
+        .product-card h3 { font-size: 0.9rem; margin: 10px 0; color: #fff; }
+        .price { color: var(--gold); font-weight: 800; }
 
         /* WhatsApp Float */
         .wa-float { 
@@ -68,21 +78,19 @@
             box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
         }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .nav-links { display: none; }
-        }
+        @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.2rem; } .nav-links { display: none; } }
     </style>
 </head>
 <body>
 
 <header>
     <div class="nav-container">
-        <a href="#" class="logo">HAIDER MOBILES</a>
+        <a href="index.html" class="logo">HAIDER MOBILES</a>
         <nav class="nav-links">
             <a href="#services">Services</a>
             <a href="#shop">Shop</a>
-            <a href="#contact">Contact</a>
+            <a href="https://wa.me/923279518790">Contact</a>
         </nav>
     </div>
 </header>
@@ -90,7 +98,7 @@
 <section class="hero">
     <h1>Expert <span>Mobile Repairing</span> & Software Solutions</h1>
     <p>Premium repairing services for iPhone & Android with 100% satisfaction guaranteed.</p>
-    <a href="https://wa.me/923279518790" class="btn-gold">Consult Now</a>
+    <a href="#shop" class="btn-gold">Start Shopping</a>
 </section>
 
 <div class="section-title" id="services">Our Expert Services</div>
@@ -116,16 +124,64 @@
         <h3>Board Repair</h3>
         <p>Expert micro-soldering.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card" onclick="filterShop('Accessories')">
         <i class="fa fa-headphones"></i>
         <h3>Accessories</h3>
         <p>Premium & Original items.</p>
     </div>
 </div>
 
+<div class="section-title" id="shop">Premium Store</div>
+<div class="shop-section">
+    <div id="product-grid" class="grid">
+        </div>
+</div>
+
 <a href="https://wa.me/923279518790" class="wa-float" target="_blank">
     <i class="fab fa-whatsapp"></i>
 </a>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    let allProducts = [];
+
+    onValue(ref(db, 'products'), (snap) => {
+        if (!snap.exists()) return;
+        const data = snap.val();
+        allProducts = Object.keys(data).map(id => ({ id, ...data[id] }));
+        renderProducts(allProducts);
+    });
+
+    // Function to filter and scroll
+    window.filterShop = function(category) {
+        const filtered = allProducts.filter(p => p.category === category || p.brand === category);
+        renderProducts(filtered);
+        document.getElementById('shop').scrollIntoView();
+    };
+
+    function renderProducts(list) {
+        const grid = document.getElementById('product-grid');
+        grid.innerHTML = list.map(p => `
+            <div class="product-card" onclick="location.href='product.html?id=${p.id}'">
+                <div class="img-box"><img src="${p.img}"></div>
+                <h3>${p.name}</h3>
+                <span class="price">Rs ${p.price}</span>
+            </div>
+        `).join('');
+    }
+</script>
 
 </body>
 </html>
