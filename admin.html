@@ -3,75 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis Admin | Haider Mobiles</title>
+    <title>Jarvis AI Admin | Haider Mobiles</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
-        :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: rgba(212, 175, 55, 0.4); }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
-        .jarvis-container { max-width: 1200px; margin: auto; }
-        .jarvis-header { text-align: center; margin-bottom: 40px; }
-        .jarvis-header h2 { font-family: 'Orbitron', sans-serif; color: var(--gold); letter-spacing: 5px; text-shadow: 0 0 15px var(--neon); }
-        .main-layout { display: grid; grid-template-columns: 380px 1fr; gap: 30px; }
-        .upload-card { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
-        .upload-area { border: 1px dashed #333; padding: 15px; text-align: center; border-radius: 15px; cursor: pointer; margin-bottom: 15px; background: rgba(0,0,0,0.3); }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 13px; }
-        .progress-bar { height: 3px; width: 0%; background: var(--gold); transition: 0.3s; margin-top: 5px; }
-        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; }
-        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; position: relative; }
-        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; }
-        .del-btn { position: absolute; top: 10px; right: 10px; background: #ff4757; border: none; color: #fff; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; }
-        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; }
+        :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: rgba(212, 175, 55, 0.4); --green: #25d366; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; }
         
-        /* 🛡️ Login Overlay */
         #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); }
+        
+        .main-layout { display: grid; grid-template-columns: 400px 1fr; gap: 30px; max-width: 1400px; margin: auto; }
+        
+        /* 🧠 AI SECTION */
+        .ai-brain-box { 
+            background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+            border: 1px solid var(--gold); padding: 20px; border-radius: 20px; margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+        
+        .upload-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 13px; }
+        
+        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; }
+        .ai-btn { background: #000; color: var(--gold); border: 1px solid var(--gold); padding: 10px; cursor: pointer; border-radius: 10px; font-family: 'Orbitron'; font-size: 10px; transition: 0.3s; }
+        .ai-btn:hover { background: var(--gold); color: #000; }
+
+        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; }
+        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; }
+        .del-btn { position: absolute; top: 5px; right: 5px; background: #ff4757; border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; }
+        
+        .progress-bar { height: 3px; width: 0%; background: var(--gold); transition: 0.3s; margin-top: 5px; }
+        .blink { animation: flash 1.5s infinite; }
+        @keyframes flash { 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay">
     <div id="loginBox">
-        <h2 style="font-family:'Orbitron'; color:var(--gold)">ACCESS REQUIRED</h2>
-        <input type="password" id="passInput" placeholder="Enter System Key">
+        <h2 style="font-family:'Orbitron'; color:var(--gold)">JARVIS AUTHENTICATION</h2>
+        <input type="password" id="passInput" placeholder="System Key">
         <button onclick="checkPass()" class="save-btn">AUTHORIZE</button>
     </div>
 </div>
 
-<div class="jarvis-container">
-    <div class="jarvis-header">
-        <h2>JARVIS TERMINAL V2.1</h2>
-        <p style="letter-spacing: 2px; font-size: 10px; color: #555;">SECURE INVENTORY UPLINK</p>
-    </div>
+<div class="main-layout">
+    <div class="upload-sidebar">
+        <div class="ai-brain-box">
+            <label style="font-family:'Orbitron'; font-size:9px; color:var(--gold); letter-spacing:2px;">AI NEURAL SCANNER</label>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <input type="text" id="aiQuery" placeholder="Product name..." style="margin:0;">
+                <button class="ai-btn" onclick="jarvisAIScan()" id="aiStatusBtn">SCAN</button>
+            </div>
+            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family:monospace;">System Ready...</div>
+        </div>
 
-    <div class="main-layout">
         <div class="upload-card">
-            <div class="upload-area" onclick="document.getElementById('f1').click()">
-                <small id="t1"><i class="fa fa-image"></i> MAIN FRAME</small>
+            <div style="border:1px dashed #333; padding:15px; text-align:center; border-radius:15px; cursor:pointer; margin-bottom:15px;" onclick="document.getElementById('f1').click()">
+                <small id="t1"><i class="fa fa-image"></i> UPLOAD IMAGE</small>
                 <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
                 <div class="progress-bar" id="p1"></div>
             </div>
-            <input type="text" id="pName" placeholder="Unit Name (e.g. iPhone 15)">
-            <input type="text" id="pBrand" placeholder="Manufacturer (e.g. Apple)">
-            <input type="number" id="pPrice" placeholder="Credits (Price)">
+
+            <input type="text" id="pName" placeholder="Product Name">
+            <input type="text" id="pBrand" placeholder="Brand (e.g. ROYALX)">
+            <input type="number" id="pPrice" placeholder="Price (PKR)">
             <select id="pCat">
                 <option value="Mobile">Mobile Unit</option>
-                <option value="Accessories">Accessory Gear</option>
+                <option value="Accessories">Accessories Gear</option>
             </select>
-            <textarea id="pDesc" placeholder="Technical Specs..." rows="2"></textarea>
+            <textarea id="pDesc" placeholder="Specifications..." rows="3"></textarea>
             <button id="saveBtn" class="save-btn">EXECUTE UPLOAD</button>
         </div>
+    </div>
 
-        <div class="inventory-display">
-            <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:20px;"><i class="fa fa-database"></i> ACTIVE DATABASE</h3>
-            <div id="invGrid" class="inv-grid"></div>
-        </div>
+    <div class="inventory-display">
+        <h3 style="font-family:'Orbitron'; font-size:14px; color:var(--gold); margin-bottom:20px;"><span class="blink">●</span> DATABASE_LIVE_STREAM</h3>
+        <div id="invGrid" class="inv-grid"></div>
     </div>
 </div>
 
+
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -84,80 +102,93 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
+    const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
     let urls = { img1: "" };
 
-    // Password Check
     window.checkPass = () => {
-        const pass = document.getElementById('passInput').value;
-        if(pass === "haider786") { // <--- Apna password yahan set karein
+        if(document.getElementById('passInput').value === "haider786") 
             document.getElementById('loginOverlay').style.display = 'none';
-        } else {
-            alert("ACCESS DENIED");
+        else alert("ACCESS DENIED");
+    };
+
+    // 🧠 JARVIS AI SCAN LOGIC
+    window.jarvisAIScan = async () => {
+        const query = document.getElementById('aiQuery').value;
+        const log = document.getElementById('aiLog');
+        const btn = document.getElementById('aiStatusBtn');
+        if(!query) return;
+
+        log.innerText = "Searching global satellites...";
+        btn.innerText = "SCANNING";
+
+        try {
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: `Provide details for ${query} in JSON: {"name": "full name", "brand": "brand", "price": "numeric price in PKR", "category": "Mobile or Accessories", "specs": "3 key features"}. No extra text.` }] }]
+                })
+            });
+            const data = await resp.json();
+            const cleanJson = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "");
+            const res = JSON.parse(cleanJson);
+
+            document.getElementById('pName').value = res.name;
+            document.getElementById('pBrand').value = res.brand.toUpperCase();
+            document.getElementById('pPrice').value = res.price.toString().replace(/\D/g, "");
+            document.getElementById('pCat').value = res.category;
+            document.getElementById('pDesc').value = res.specs;
+
+            log.innerText = "Data Injected Successfully.";
+            btn.innerText = "DONE";
+        } catch (e) {
+            log.innerText = "Neural Link Error. Try again.";
+            btn.innerText = "RETRY";
         }
     };
 
-    // Upload Image Logic
     window.uploadImg = async (input, key, txtId, progId) => {
         const file = input.files[0]; if(!file) return;
-        const text = document.getElementById(txtId);
-        const bar = document.getElementById(progId);
-        text.innerText = "Transmitting..."; bar.style.width = "50%";
-
+        document.getElementById(txtId).innerText = "Uploading...";
         const fd = new FormData(); fd.append("image", file);
-        try {
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-            const data = await res.json();
-            if(data.success) {
-                urls[key] = data.data.url;
-                bar.style.width = "100%";
-                text.innerText = "LINKED"; text.style.color = "var(--gold)";
-            }
-        } catch (e) { text.innerText = "FAILED"; }
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+        const data = await res.json();
+        if(data.success) {
+            urls[key] = data.data.url;
+            document.getElementById(progId).style.width = "100%";
+            document.getElementById(txtId).innerText = "LINKED";
+        }
     };
 
-    // Load Database
     onValue(ref(db, 'products'), (snap) => {
-        const grid = document.getElementById('invGrid');
-        grid.innerHTML = "";
-        if (snap.exists()) {
-            const list = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            grid.innerHTML = list.map(p => `
-                <div class="inv-card">
-                    <button class="del-btn" onclick="window.deleteItem('${p.id}')"><i class="fa fa-trash"></i></button>
-                    <img src="${p.img}" onerror="this.src='faq/Gemini.png'">
-                    <h4 style="font-size:12px; margin:10px 0;">${p.name}</h4>
-                    <b style="color:var(--gold)">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</b>
-                </div>
-            `).join('');
+        const grid = document.getElementById('invGrid'); grid.innerHTML = "";
+        if(snap.exists()){
+            Object.keys(snap.val()).reverse().forEach(id => {
+                const p = snap.val()[id];
+                grid.innerHTML += `
+                    <div class="inv-card">
+                        <button class="del-btn" onclick="deleteItem('${id}')">×</button>
+                        <img src="${p.img}">
+                        <div style="font-size:9px; color:var(--gold); margin-top:5px;">${p.brand}</div>
+                        <div style="font-size:10px; font-weight:600;">${p.name}</div>
+                    </div>`;
+            });
         }
     });
 
-    // Delete Logic (Fixed Global Scope)
-    window.deleteItem = (id) => {
-        if(confirm("Confirm Deletion?")) remove(ref(db, `products/${id}`));
-    };
+    window.deleteItem = (id) => { if(confirm("Delete?")) remove(ref(db, `products/${id}`)); };
 
-    // Save Logic
     document.getElementById('saveBtn').onclick = function() {
-        const name = document.getElementById('pName').value;
-        const price = document.getElementById('pPrice').value;
-        if(!urls.img1 || !name || !price) return alert("Fill mandatory fields, Sir.");
-
-        this.disabled = true; this.innerText = "SYNCING...";
         const product = {
-            name: name,
-            brand: document.getElementById('pBrand').value,
-            price: Number(price), // ✅ Fixed: Save as Number
+            name: document.getElementById('pName').value,
+            brand: document.getElementById('pBrand').value.toUpperCase(),
+            price: Number(document.getElementById('pPrice').value),
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
             img: urls.img1,
             timestamp: Date.now()
         };
-
-        push(ref(db, 'products'), product).then(() => {
-            alert("DATABASE UPDATED");
-            location.reload();
-        });
+        push(ref(db, 'products'), product).then(() => location.reload());
     };
 </script>
 </body>
