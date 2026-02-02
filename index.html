@@ -1,152 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Expert Solutions</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        :root { --gold: #d4af37; --dark: #0a0a0a; --card: #141414; --text: #e0e0e0; --border: #222; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; scroll-behavior: smooth; overflow-x: hidden; }
+<title>Haider Mobiles | Mobile Repair & Accessories</title>
 
-        /* 1. Header */
-        header { position: fixed; top: 0; width: 100%; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(12px); z-index: 1000; border-bottom: 1px solid var(--border); }
-        .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { color: var(--gold); font-weight: 800; font-size: 1.6rem; text-decoration: none; letter-spacing: -1px; }
-        .nav-links a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 0.85rem; font-weight: 600; }
+<!-- SEO -->
+<meta name="description" content="Haider Mobiles – Expert mobile repairing, accessories, batteries and original mobile parts in Pakistan.">
+<meta name="keywords" content="Haider Mobiles, mobile repair, phone accessories, mobile shop Pakistan">
+<meta property="og:title" content="Haider Mobiles">
+<meta property="og:description" content="Expert Mobile Care & Accessories">
+<meta property="og:image" content="faq/Gemini.png">
 
-        /* 2. Hero Section */
-        .hero { padding: 180px 5% 60px; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%); }
-        .hero h1 { font-size: clamp(2.2rem, 8vw, 3.5rem); font-weight: 800; margin-bottom: 20px; color: #fff; }
-        .hero h1 span { color: var(--gold); }
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-        /* 3. Your Poster Slider */
-        .poster-box { width: 90%; max-width: 1100px; margin: 0 auto 40px; border-radius: 25px; overflow: hidden; height: 280px; border: 1px solid var(--border); }
-        .slides { display: none; width: 100%; height: 100%; object-fit: cover; }
+<style>
+:root{--gold:#d4af37;--dark:#0a0a0a;--card:#141414;--text:#e0e0e0;--border:#222}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--dark);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden}
 
-        /* 4. Product Grid */
-        .section-title { text-align: center; padding: 60px 0 30px; font-size: 2rem; font-weight: 800; color: #fff; }
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 1200px; margin: 0 auto; padding: 0 5%; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; transition: 0.4s; cursor: pointer; }
-        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .img-box { background: #fff; border-radius: 15px; height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .card img { max-width: 80%; max-height: 80%; object-fit: contain; }
-        .card h3 { font-size: 0.9rem; margin: 12px 0; color: #fff; }
-        .price { color: var(--gold); font-weight: 800; font-size: 1.1rem; }
+header{position:fixed;top:0;width:100%;background:rgba(10,10,10,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:999}
+.nav-container{max-width:1200px;margin:auto;padding:15px 5%;display:flex;justify-content:space-between;align-items:center}
+.logo{color:var(--gold);font-size:1.6rem;font-weight:800;text-decoration:none}
+.nav-links a{color:#fff;margin-left:20px;text-decoration:none;font-weight:600;font-size:.85rem}
 
-        /* 5. Google Maps Section */
-        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1200px; margin: 60px auto; padding: 0 5%; }
-        .map-box { border-radius: 25px; overflow: hidden; height: 350px; border: 1px solid var(--border); }
-        .info-box { background: var(--card); padding: 40px; border-radius: 25px; border: 1px solid var(--border); }
+.hero{padding:180px 5% 70px;text-align:center;background:radial-gradient(circle,#1a1a1a,#0a0a0a)}
+.hero h1{font-size:clamp(2.2rem,8vw,3.5rem);color:#fff}
+.hero span{color:var(--gold)}
 
-        /* 6. WhatsApp Float */
-        .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: #fff; z-index: 1000; box-shadow: 0 10px 30px rgba(37,211,102,0.4); text-decoration: none; }
+.poster-box{width:90%;max-width:1100px;margin:0 auto 40px;border-radius:25px;overflow:hidden;height:280px;border:1px solid var(--border)}
+.slides{display:none;width:100%;height:100%;object-fit:cover}
 
-        @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } .contact-container { grid-template-columns: 1fr; } }
-    </style>
+.section-title{text-align:center;font-size:2rem;font-weight:800;margin:60px 0 30px;color:#fff}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;max-width:1200px;margin:auto;padding:0 5%}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:15px;text-align:center;transition:.3s;cursor:pointer}
+.card:hover{border-color:var(--gold);transform:translateY(-5px)}
+.img-box{background:#fff;border-radius:15px;height:150px;display:flex;align-items:center;justify-content:center}
+.card img{max-width:80%;max-height:80%}
+.card h3{font-size:.9rem;margin:12px 0;color:#fff}
+.price{color:var(--gold);font-weight:800;font-size:1.1rem}
+
+.contact-container{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:1200px;margin:60px auto;padding:0 5%}
+.map-box,.info-box{border-radius:25px;overflow:hidden;border:1px solid var(--border)}
+.info-box{background:var(--card);padding:40px}
+
+footer{border-top:1px solid var(--border);padding:30px;text-align:center;color:#888}
+
+.wa-float{position:fixed;bottom:30px;right:30px;background:#25d366;width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:35px;color:#fff;text-decoration:none}
+
+@media(max-width:900px){
+.grid{grid-template-columns:repeat(2,1fr)}
+.contact-container{grid-template-columns:1fr}
+}
+</style>
 </head>
+
 <body>
 
 <header>
-    <div class="nav-container">
-        <a href="#" class="logo">HAIDER MOBILES</a>
-        <nav class="nav-links">
-            <a href="#shop">Shop</a>
-            <a href="#services">Repairs</a>
-            <a href="#contact">Location</a>
-        </nav>
-    </div>
+<div class="nav-container">
+<a href="#" class="logo">HAIDER MOBILES</a>
+<nav class="nav-links">
+<a href="#shop">Shop</a>
+<a href="#contact">Location</a>
+</nav>
+</div>
 </header>
 
 <section class="hero">
-    <div data-aos="fade-up">
-        <h1>Expert <span>Mobile Care</span></h1>
-        <p>Your one-stop shop for premium repairs and accessories.</p>
-    </div>
+<h1 data-aos="fade-up">Expert <span>Mobile Care</span></h1>
+<p>Your one-stop shop for repairs & accessories</p>
 </section>
 
 <div class="poster-box" data-aos="zoom-in">
-    <img src="faq/Gemini.png" class="slides" style="display:block;">
-    <img src="faq/Gemini1.png" class="slides">
+<img src="faq/Gemini.png" class="slides" loading="lazy">
+<img src="faq/Gemini1.png" class="slides" loading="lazy">
 </div>
 
 <div class="section-title" id="shop">Our Shop</div>
 <div id="product-grid" class="grid" data-aos="fade-up">
-    </div>
+<p>Loading products...</p>
+</div>
 
 <div class="section-title" id="contact">Visit Our Shop</div>
 <div class="contact-container">
-    <div class="map-box" data-aos="fade-right">
-        <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1000!2d74.326081!3d32.644251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2spk!4v1700000000000" 
-            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
-        </iframe>
-    </div>
-    <div class="info-box" data-aos="fade-left">
-        <h3 style="color:var(--gold); margin-bottom:15px;">Contact Details</h3>
-        <p style="margin-bottom:10px;"><i class="fa fa-phone" style="color:var(--gold);"></i> +92 327 9518790</p>
-        <p style="margin-bottom:10px;"><i class="fa fa-clock" style="color:var(--gold);"></i> 11:00 AM - 10:00 PM</p>
-        <p style="margin-bottom:20px; color:#888;">Visit us for original panels, battery health solutions, and expert micro-soldering.</p>
-        <a href="https://wa.me/923279518790" style="background:var(--gold); color:#000; text-decoration:none; font-weight:bold; padding:12px 25px; border-radius:10px; display:inline-block;">Send WhatsApp Message</a>
-    </div>
+<div class="map-box">
+<iframe src="https://www.google.com/maps?q=32.644251,74.326081&output=embed" width="100%" height="100%" style="border:0" loading="lazy"></iframe>
+</div>
+<div class="info-box">
+<h3 style="color:var(--gold)">Contact Details</h3>
+<p><i class="fa fa-phone"></i> +92 327 9518790</p>
+<p><i class="fa fa-clock"></i> 11:00 AM – 10:00 PM</p>
+<a href="https://wa.me/923279518790" style="display:inline-block;margin-top:15px;background:var(--gold);color:#000;padding:12px 25px;border-radius:10px;font-weight:700;text-decoration:none">WhatsApp Us</a>
+</div>
 </div>
 
-<a href="https://wa.me/923279518790" class="wa-float" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-</a>
+<footer>
+© 2026 Haider Mobiles — All Rights Reserved
+</footer>
+
+<a href="https://wa.me/923279518790" class="wa-float"><i class="fab fa-whatsapp"></i></a>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 <script type="module">
-    // --- YOUR FIREBASE LINKS ---
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
+const firebaseConfig={
+apiKey:"AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+authDomain:"web-app-4f3a1.firebaseapp.com",
+databaseURL:"https://web-app-4f3a1-default-rtdb.firebaseio.com",
+projectId:"web-app-4f3a1",
+appId:"1:222099203820:web:778e204d2960181dfba7c9"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+initializeApp(firebaseConfig);
+const db=getDatabase();
 
-    AOS.init({ duration: 1000, once: true });
+AOS.init({once:true});
 
-    // Load Products
-    onValue(ref(db, 'products'), (snap) => {
-        if (!snap.exists()) return;
-        const data = snap.val();
-        const list = Object.keys(data).map(id => ({ id, ...data[id] }));
-        
-        const grid = document.getElementById('product-grid');
-        grid.innerHTML = list.map(p => `
-            <div class="card" onclick="location.href='product.html?id=${p.id}'">
-                <div class="img-box"><img src="${p.img}"></div>
-                <h3>${p.name}</h3>
-                <span class="price">Rs ${p.price}</span>
-            </div>
-        `).join('');
-    });
+onValue(ref(db,"products"),snap=>{
+const grid=document.getElementById("product-grid");
+if(!snap.exists()){grid.innerHTML="<p>No products available.</p>";return;}
+const data=snap.val();
+grid.innerHTML=Object.keys(data).map(id=>{
+const p=data[id];
+return `
+<div class="card">
+<div class="img-box"><img src="${p.img}" alt="${p.name}"></div>
+<h3>${p.name}</h3>
+<div class="price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
+</div>`;
+}).join("");
+});
 
-    // Slider Logic for your faq/Gemini.png images
-    let sIdx = 0;
-    function runSlider() {
-        const s = document.querySelectorAll(".slides");
-        if(s.length > 0){
-            s.forEach(img => img.style.display = "none");
-            sIdx++; if(sIdx > s.length) sIdx = 1;
-            s[sIdx-1].style.display = "block";
-        }
-        setTimeout(runSlider, 4000);
-    }
-    runSlider();
+let i=0;
+setInterval(()=>{
+const s=document.querySelectorAll(".slides");
+s.forEach(img=>img.style.display="none");
+i=(i+1)%s.length;
+s[i].style.display="block";
+},4000);
 </script>
+
 </body>
 </html>
