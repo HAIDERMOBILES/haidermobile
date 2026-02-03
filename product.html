@@ -3,73 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Interface | Haider Mobiles</title>
+    <title>Haider Mobiles | Terminal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --bg: #050505; --card: rgba(255,255,255,0.03); --border: rgba(212,175,55,0.3); }
-        body { font-family: 'JetBrains Mono', monospace; background: var(--bg); color: #fff; margin: 0; }
-
-        /* 🖼️ Image Gallery Style */
-        .container { max-width: 1400px; margin: 40px auto; padding: 0 5%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 50px; }
-        .gallery-box { display: flex; flex-direction: column; gap: 15px; }
-        .main-img { 
-            width: 100%; height: 500px; background: #fff; border-radius: 4px; 
-            display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);
-        }
-        .main-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
-        .thumb-row { display: flex; gap: 10px; overflow-x: auto; }
-        .thumb { 
-            width: 80px; height: 80px; background: #fff; border: 2px solid transparent; 
-            cursor: pointer; padding: 5px; border-radius: 4px; 
-        }
-        .thumb.active { border-color: var(--gold); }
-        .thumb img { width: 100%; height: 100%; object-fit: contain; }
-
-        /* 📋 Info Style */
-        .status { color: var(--gold); font-size: 10px; margin-bottom: 10px; display: block; }
-        h1 { font-family: 'Orbitron'; font-size: 2.5rem; margin: 0; }
-        .price { font-size: 2rem; color: var(--gold); margin: 20px 0; font-family: 'Orbitron'; }
+        :root { --gold: #d4af37; --bg: #000; --card: #0f0f0f; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding-top: 60px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         
-        .auto-specs { 
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; 
-            margin: 30px 0; border: 1px solid var(--border); padding: 20px; background: var(--card);
-        }
-        .spec-item small { color: #666; font-size: 10px; text-transform: uppercase; }
-        .spec-item p { margin: 5px 0 0; font-size: 14px; color: var(--gold); }
+        /* Premium Layout */
+        .product-grid-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 30px; }
+        .gallery-section { text-align: center; }
+        .main-img-box { height: 450px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #222; }
+        .main-img-box img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        
+        .thumbs { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
+        .thumbs img { width: 70px; height: 70px; border: 2px solid transparent; border-radius: 10px; cursor: pointer; background: #fff; padding: 5px; object-fit: contain; }
+        .thumbs img.active { border-color: var(--gold); }
 
-        /* 📦 Related Products */
-        .related-section { padding: 50px 5%; border-top: 1px solid var(--border); margin-top: 50px; }
-        .related-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 20px; margin-top: 30px; 
-        }
-        .rel-card { background: var(--card); border: 1px solid #222; padding: 15px; cursor: pointer; transition: 0.3s; }
-        .rel-card:hover { border-color: var(--gold); }
-        .rel-card img { width: 100%; height: 180px; object-fit: contain; background: #fff; margin-bottom: 10px; }
-
-        .wa-btn {
-            background: var(--gold); color: #000; text-decoration: none; padding: 20px;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            font-family: 'Orbitron'; font-weight: bold; margin-top: 30px;
-        }
-
-        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
+        .price-tag { font-size: 32px; font-weight: 800; color: var(--gold); margin: 20px 0; }
+        .desc-box { background: var(--card); border: 1px solid #222; padding: 20px; border-radius: 15px; line-height: 1.6; color: #aaa; }
+        
+        .wa-buy { background: #0066cc; color: white; text-decoration: none; display: block; padding: 18px; text-align: center; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 18px; }
+        
+        /* Related Products */
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin: 40px 0; }
+        .rel-card { background: var(--card); padding: 15px; border-radius: 15px; border: 1px solid #222; text-decoration: none; color: #fff; text-align: center; }
+        .rel-card img { width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container" id="productMain">
+<div class="container">
+    <div id="product-content">
+        <p style="text-align:center; padding: 50px;">Accessing Database...</p>
     </div>
 
-<div class="related-section">
-    <h3 style="font-family: 'Orbitron'; color: var(--gold);">SIMILAR_UNITS_IN_STOCK</h3>
-    <div class="related-grid" id="relatedGrid"></div>
+    <h3 style="margin-top:60px; color:var(--gold); border-bottom: 1px solid #222; padding-bottom: 10px;">RELATED_STOCK</h3>
+    <div id="related-grid" class="related-grid"></div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -81,89 +56,54 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id');
+    const pId = new URLSearchParams(window.location.search).get('id');
 
-    if (productId) {
-        // 1. Fetch main product
-        get(ref(db, `products/${productId}`)).then((snap) => {
-            if (snap.exists()) {
-                const p = snap.val();
-                renderMainProduct(p);
-                loadRelated(p.category, productId);
-            }
+    if (pId) {
+        onValue(ref(db, 'products/' + pId), (snap) => {
+            const p = snap.val();
+            if(!p) return;
+
+            const imgs = [p.img, p.img2, p.img3].filter(x => x);
+            document.getElementById('product-content').innerHTML = `
+                <div class="product-grid-main">
+                    <div class="gallery-section">
+                        <div class="main-img-box"><img id="mImg" src="${imgs[0]}"></div>
+                        <div class="thumbs">
+                            ${imgs.map(i => `<img src="${i}" onclick="document.getElementById('mImg').src='${i}'">`).join('')}
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <span style="color:var(--gold); font-size:12px; letter-spacing:2px;">${p.brand}</span>
+                        <h1 style="margin:10px 0;">${p.name}</h1>
+                        <div class="price-tag">${p.price}</div>
+                        <div class="desc-box">${p.description || 'No additional specs provided.'}</div>
+                        <a href="https://wa.me/923279518790?text=I want to buy: ${p.name}" class="wa-buy">
+                            <i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP
+                        </a>
+                    </div>
+                </div>
+            `;
+            loadRelated(p.category, pId);
         });
     }
 
-    function renderMainProduct(p) {
-        // Handle Multiple Images (comma separated in DB)
-        const images = p.img.split(','); 
-        const formattedPrice = new Intl.NumberFormat('en-PK').format(p.price);
-
-        document.getElementById('productMain').innerHTML = `
-            <div class="gallery-box">
-                <div class="main-img"><img id="viewfinder" src="${images[0]}"></div>
-                <div class="thumb-row">
-                    ${images.map((img, i) => `
-                        <div class="thumb ${i===0?'active':''}" onclick="changeImg('${img}', this)">
-                            <img src="${img}">
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-            <div class="info-panel">
-                <span class="status">ID: ${productId.slice(-6)} // VERIFIED</span>
-                <small style="color:#666">${p.brand}</small>
-                <h1>${p.name}</h1>
-                <div class="price">Rs ${formattedPrice}</div>
-                
-                <div class="auto-specs">
-                    <div class="spec-item"><small>Condition</small><p>A+ Grade Premium</p></div>
-                    <div class="spec-item"><small>Category</small><p>${p.category}</p></div>
-                    <div class="spec-item"><small>Stock Status</small><p>Available</p></div>
-                    <div class="spec-item"><small>Auth</small><p>100% Original</p></div>
-                </div>
-
-                <p style="color:#888; line-height:1.6; font-size:13px;">
-                    Technical Evaluation: This ${p.name} has passed our 40-point diagnostic test. 
-                    Includes genuine parts and optimized battery performance.
-                </p>
-
-                <a href="https://wa.me/923279518790?text=I%20want%20to%20buy%20${p.name}" class="wa-btn">
-                    <i class="fab fa-whatsapp"></i> INITIATE ORDER
-                </a>
-            </div>
-        `;
-    }
-
-    // 🔄 Related Products Logic
-    function loadRelated(category, currentId) {
-        get(ref(db, 'products')).then((snap) => {
-            const all = snap.val();
-            const relatedGrid = document.getElementById('relatedGrid');
-            let html = "";
-            
-            for(let id in all) {
-                if(id !== currentId && all[id].category === category) {
-                    const r = all[id];
-                    html += `
-                        <div class="rel-card" onclick="location.href='product.html?id=${id}'">
-                            <img src="${r.img.split(',')[0]}">
-                            <div style="font-size:12px; font-weight:bold;">${r.name}</div>
-                            <div style="color:var(--gold); font-size:11px;">Rs ${r.price}</div>
-                        </div>
-                    `;
+    function loadRelated(cat, currentId) {
+        get(ref(db, 'products')).then(snap => {
+            const grid = document.getElementById('related-grid');
+            grid.innerHTML = "";
+            snap.forEach(child => {
+                const prod = child.val();
+                if(child.key !== currentId && prod.category === cat) {
+                    grid.innerHTML += `
+                        <a href="product.html?id=${child.key}" class="rel-card">
+                            <img src="${prod.img}">
+                            <h4 style="font-size:14px; margin:10px 0 5px;">${prod.name}</h4>
+                            <div style="color:var(--gold); font-weight:bold;">${prod.price}</div>
+                        </a>`;
                 }
-            }
-            relatedGrid.innerHTML = html || "<p>No similar items found.</p>";
+            });
         });
     }
-
-    window.changeImg = (src, el) => {
-        document.getElementById('viewfinder').src = src;
-        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-    };
 </script>
 </body>
 </html>
