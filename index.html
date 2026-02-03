@@ -3,164 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Jarvis Terminal</title>
+    <title>Haider Mobiles | Elite Command Center</title>
     
-    <meta name="description" content="Haider Mobiles – Premium mobile store & expert repairing services.">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
+    
     <style>
         :root { 
-            --gold: #d4af37; 
-            --dark: #050505; 
-            --card: rgba(255, 255, 255, 0.03); 
-            --border: rgba(255, 255, 255, 0.08); 
-            --text: #e0e0e0; 
-            --green: #25d366; 
-            --neon: rgba(212, 175, 55, 0.3); 
+            --gold: #d4af37; --dark: #020202; --card: rgba(20, 20, 20, 0.6); 
+            --border: rgba(212, 175, 55, 0.3); --neon: 0 0 15px rgba(212, 175, 55, 0.4);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { background: var(--dark); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        body { background: var(--dark); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
 
-        /* 🤖 HEADER */
-        header { position: fixed; top: 0; width: 100%; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border); height: 75px; }
-        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; height: 100%; }
-        .logo { font-family: 'Orbitron'; color: var(--gold); font-weight: 800; font-size: 1.2rem; text-decoration: none; letter-spacing: 2px; }
-
-        .system-nav { display: flex; align-items: center; gap: 25px; height: 100%; }
-        .status { font-family: 'Orbitron'; font-size: 10px; color: var(--green); white-space: nowrap; }
-        .blink { animation: flash 1.5s infinite; }
-        @keyframes flash { 50% { opacity: 0.3; } }
-
-        /* HEADER BRANDS AUTO-SYNC */
-        .nav-brands { display: flex; gap: 15px; height: 100%; align-items: center; }
-        .brand-link { 
-            font-family: 'Orbitron'; font-size: 10px; color: #888; cursor: pointer; 
-            padding: 25px 10px; transition: 0.3s; height: 100%; display: flex; align-items: center; text-transform: uppercase;
+        /* 🌌 Cyber Background */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 80%);
+            pointer-events: none; z-index: -1;
         }
-        .brand-link:hover { color: var(--gold); border-bottom: 3px solid var(--gold); background: rgba(212, 175, 55, 0.05); }
 
-        /* 🛡️ MEGA MENU (CRYSTAL LOOK) */
-        #megaMenu {
-            position: fixed; top: 76px; left: -500px; width: 480px; height: auto; max-height: 80vh;
-            background: rgba(10, 10, 10, 0.8); border: 1px solid var(--border); border-left: none;
-            backdrop-filter: blur(40px); z-index: 999; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            display: flex; border-radius: 0 0 25px 0; overflow: hidden; box-shadow: 25px 0 50px rgba(0,0,0,0.7);
+        /* 🤖 Professional Header */
+        header { position: fixed; top: 0; width: 100%; height: 80px; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 2px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
+        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.5rem; text-decoration: none; text-shadow: var(--neon); }
+        .status-hub { display: flex; align-items: center; gap: 20px; font-size: 10px; color: var(--gold); }
+
+        /* 🔍 Search & Filter Command (Elite Style) */
+        .command-center { padding: 140px 5% 40px; max-width: 1400px; margin: 0 auto; }
+        .search-wrapper { position: relative; margin-bottom: 30px; }
+        #searchBar { 
+            width: 100%; padding: 25px 30px; background: var(--card); border: 1px solid var(--border); 
+            border-radius: 4px; color: #fff; font-family: 'JetBrains Mono'; font-size: 1.1rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); outline: none; transition: 0.3s;
         }
-        #megaMenu.active { left: 0; }
-        .menu-cats { width: 55%; border-right: 1px solid rgba(255,255,255,0.05); padding: 25px; overflow-y: auto; }
-        .cat-group-title { font-family: 'Orbitron'; font-size: 11px; color: var(--gold); margin-bottom: 20px; letter-spacing: 2px; }
-        .acc-item { padding: 12px; font-size: 12px; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s; border-radius: 10px; }
-        .acc-item:hover { color: #fff; background: rgba(212, 175, 55, 0.15); transform: translateX(10px); }
+        #searchBar:focus { border-color: var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
 
-        .menu-preview { width: 45%; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); }
-        .menu-preview img { max-width: 90%; max-height: 200px; object-fit: contain; display: none; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
-        .menu-preview p { color: var(--gold); font-family: 'Orbitron'; font-size: 10px; margin-top: 15px; text-align: center; font-weight: bold; }
+        .filter-strip { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .f-btn { 
+            background: transparent; color: #888; border: 1px solid #333; padding: 12px 25px; 
+            font-family: 'Orbitron'; font-size: 10px; cursor: pointer; transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+        .f-btn.active, .f-btn:hover { color: #000; background: var(--gold); border-color: var(--gold); font-weight: bold; }
 
-        /* 🌌 HERO SECTION */
-        .hero { padding: 180px 5% 100px; text-align: center; background: radial-gradient(circle at center, #151515 0%, #050505 100%); }
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 4.5rem); color: #fff; margin-bottom: 20px; text-shadow: 0 0 30px var(--neon); }
-        .hero span { color: var(--gold); }
-
-        /* 🛒 SHOP CONTROLS */
-        .section-padding { padding: 60px 5%; }
-        .shop-controls { max-width: 1200px; margin: 0 auto 50px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-        #searchBar { flex: 1; min-width: 300px; padding: 18px 30px; border-radius: 15px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: 0.3s; backdrop-filter: blur(10px); }
-        #searchBar:focus { border-color: var(--gold); background: rgba(255,255,255,0.07); box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
+        /* 💎 Product Grid (High Detail) */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 35px; max-width: 1400px; margin: 50px auto; padding: 0 5%; }
+        .p-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 4px; 
+            padding: 20px; position: relative; transition: 0.5s; cursor: pointer;
+            overflow: hidden;
+        }
+        .p-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 0 40px rgba(212,175,55,0.15); }
         
-        .filter-btn { padding: 14px 32px; border-radius: 12px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-family: 'Orbitron'; font-size: 0.75rem; transition: 0.3s; letter-spacing: 1px; }
-        .filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; }
+        .p-img-box { 
+            height: 300px; background: #fff; border-radius: 2px; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; transition: 0.5s; }
+        .p-card:hover .p-img-box img { transform: scale(1.1); }
 
-        /* 💎 CRYSTAL CARDS - LARGER PICS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; max-width: 1300px; margin: 0 auto; }
-        .product-card { 
-            background: var(--card); border: 1px solid var(--border); border-radius: 25px; padding: 25px; 
-            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; cursor: pointer; overflow: hidden; 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-        }
-        .product-card:hover { 
-            border-color: var(--gold); transform: translateY(-15px); 
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6); 
-        }
+        .p-brand { color: var(--gold); font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .p-name { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 15px; color: #fff; }
         
-        /* Image Box Size Increased */
-        .img-box { 
-            background: rgba(255,255,255,0.02); border-radius: 20px; height: 320px; /* BARI IMAGE */
-            display: flex; align-items: center; justify-content: center; margin-bottom: 25px; 
-            overflow: hidden; border: 1px solid rgba(255,255,255,0.05); 
-        }
-        .img-box img { 
-            max-width: 92%; max-height: 92%; object-fit: contain; 
-            transition: 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); 
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
-        }
-        .product-card:hover .img-box img { transform: scale(1.08); }
+        .p-info-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; padding-top: 15px; }
+        .p-price { font-family: 'Orbitron'; font-size: 1.4rem; color: var(--gold); font-weight: 900; }
+        .p-buy { background: var(--gold); color: #000; padding: 10px 20px; font-size: 10px; font-weight: 900; text-decoration: none; clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%, 0 70%); }
 
-        .price-row { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); }
-        .price { color: var(--gold); font-family: 'Orbitron'; font-weight: 700; font-size: 1.2rem; }
-        .order-btn { background: var(--green); color: #fff; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; }
-
-        .wa-float { position: fixed; bottom: 35px; right: 35px; background: var(--green); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #fff; z-index: 1000; box-shadow: 0 15px 30px rgba(0,0,0,0.5); transition: 0.3s; }
-        .wa-float:hover { transform: scale(1.1) rotate(10deg); }
-
-        @media (max-width: 768px) {
-            .nav-brands { display: none; }
-            .grid { grid-template-columns: repeat(1, 1fr); gap: 20px; }
-            #megaMenu { width: 320px; }
-            .img-box { height: 280px; }
-        }
+        .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); z-index: 1000; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="nav-container">
-        <a href="index.html" class="logo">HAIDER STORE</a>
-        <div class="system-nav">
-            <div class="status"><span class="blink">●</span> SYSTEM_ONLINE</div>
-            <div class="nav-brands" id="headerBrands"></div>
-        </div>
+    <a href="#" class="logo">HAIDER_COMMAND</a>
+    <div class="status-hub">
+        <span>DATA_SYNC: ONLINE</span>
+        <span id="itemCount">ITEMS: 00</span>
     </div>
 </header>
 
-<div id="megaMenu" onmouseleave="closeMenu()">
-    <div class="menu-cats">
-        <div class="cat-group-title" id="activeBrandTitle">SCANNING...</div>
-        <div id="accList"></div>
+<div class="command-center">
+    <div class="search-wrapper">
+        <input type="text" id="searchBar" placeholder="SCAN_DATABASE: ENTER MODEL, BRAND OR SPEC...">
     </div>
-    <div class="menu-preview" id="previewPane">
-        <img id="prevImg" src="">
-        <p id="prevName">TARGET_LOCKED</p>
+    
+    <div class="filter-strip">
+        <button class="f-btn active" onclick="filterItems('all', this)">[ ALL_UNITS ]</button>
+        <button class="f-btn" onclick="filterItems('Mobile', this)">[ SMARTPHONES ]</button>
+        <button class="f-btn" onclick="filterItems('Accessories', this)">[ ACCESSORIES ]</button>
+        <button class="f-btn" onclick="filterItems('Repairing', this)">[ REPAIR_LAB ]</button>
+        <button class="f-btn" onclick="filterItems('Tools', this)">[ TECH_TOOLS ]</button>
     </div>
 </div>
 
-<section class="hero">
-    <div data-aos="zoom-out">
-        <small style="letter-spacing: 7px; color: var(--gold); text-transform: uppercase; font-size: 10px;">The Future of Mobile Tech</small>
-        <h1>HAIDER <span>MOBILES</span></h1>
-        <p style="color: #888; max-width: 600px; margin: 15px auto; font-size: 14px; line-height: 1.6;">Your premium terminal for advanced mobile solutions and elite accessories. Database synchronized in real-time.</p>
-    </div>
-</section>
+<div id="productGrid" class="grid"></div>
 
-<section id="shop" class="section-padding">
-    <div class="shop-controls" data-aos="fade-up">
-        <input type="text" id="searchBar" placeholder="Search system database (e.g. iPhone, Samsung, Charger)...">
-        <div style="display: flex; gap: 12px;">
-            <button class="filter-btn active" onclick="filterItems('all', this)">ALL_GEAR</button>
-            <button class="filter-btn" onclick="filterItems('Mobile', this)">MOBILES</button>
-            <button class="filter-btn" onclick="filterItems('Accessories', this)">ACCESSORIES</button>
-        </div>
-    </div>
-    <div id="productGrid" class="grid"></div>
-</section>
+<a href="https://wa.me/923279518790" class="wa-float"><i class="fab fa-whatsapp"></i></a>
 
-<a href="https://wa.me/923279518790" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -177,95 +117,40 @@
     const db = getDatabase(app);
     let allProducts = [];
 
-    AOS.init({ duration: 1000, once: true });
-
-    // 🔄 AUTO-SYNC: Fetch products and build UI
     onValue(ref(db, 'products'), (snap) => {
-        if (!snap.exists()) {
-            document.getElementById('productGrid').innerHTML = "<p>No products found in database.</p>";
-            return;
+        if (snap.exists()) {
+            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            document.getElementById('itemCount').innerText = `ITEMS: ${allProducts.length.toString().padStart(2, '0')}`;
+            renderProducts(allProducts);
         }
-        
-        allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-        
-        // Build Header Brands Automatically
-        const brands = [...new Set(allProducts.map(p => p.brand))].slice(0, 6);
-        document.getElementById('headerBrands').innerHTML = brands.map(b => 
-            `<div class="brand-link" onmouseenter="openMenu('${b}')">${b}</div>`
-        ).join('');
-
-        renderProducts(allProducts);
     });
 
-    // 🟢 MEGA MENU SYNC
-    window.openMenu = (brand) => {
-        const menu = document.getElementById('megaMenu');
-        const accList = document.getElementById('accList');
-        document.getElementById('activeBrandTitle').innerText = brand.toUpperCase() + "_GEAR";
-        
-        // Show only accessories of this brand in menu
-        const items = allProducts.filter(p => p.brand === brand && p.category === 'Accessories');
-        
-        if(items.length > 0) {
-            accList.innerHTML = items.map(p => `
-                <div class="acc-item" onmouseenter="showPreview('${p.img}', '${p.name}')" onclick="location.href='product.html?id=${p.id}'">
-                    <i class="fa fa-bolt" style="font-size:10px; color:var(--gold)"></i> ${p.name}
-                </div>
-            `).join('');
-        } else {
-            accList.innerHTML = "<p style='color:#444; font-size:11px; padding:10px;'>No specific accessories found.</p>";
-        }
-        menu.classList.add('active');
-    };
-
-    window.showPreview = (img, name) => {
-        const imgTag = document.getElementById('prevImg');
-        imgTag.src = img;
-        imgTag.style.display = 'block';
-        document.getElementById('prevName').innerText = name;
-    };
-
-    window.closeMenu = () => {
-        document.getElementById('megaMenu').classList.remove('active');
-    };
-
-    // 🛒 PRODUCT RENDERER
     function renderProducts(list) {
         const grid = document.getElementById('productGrid');
-        grid.innerHTML = list.map(p => {
-            const formattedPrice = new Intl.NumberFormat('en-PK').format(p.price);
-            return `
-            <div class="product-card" data-aos="fade-up" onclick="location.href='product.html?id=${p.id}'">
-                <div class="img-box">
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/400?text=Haider+Mobiles'" alt="${p.name}">
+        grid.innerHTML = list.map(p => `
+            <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
+                <div class="p-img-box">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300x400?text=DATA_MISSING'">
                 </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <span style="color:var(--gold); font-family:Orbitron; font-size:11px; font-weight:bold;">${p.brand}</span>
-                    <span style="color:#555; font-size:10px; text-transform:uppercase;">${p.category}</span>
+                <span class="p-brand">${p.brand} // SYSTEM_ID_${p.id.slice(0,4)}</span>
+                <h3 class="p-name">${p.name}</h3>
+                <div class="p-info-row">
+                    <div class="p-price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
+                    <div class="p-buy">VIEW_DATA</div>
                 </div>
-                <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #fff; font-weight:600;">${p.name}</h3>
-                <div class="price-row">
-                    <span class="price">Rs ${formattedPrice}</span>
-                    <div class="order-btn">VIEW <i class="fa fa-arrow-right" style="font-size:10px;"></i></div>
-                </div>
-            </div>`;
-        }).join('');
+            </div>
+        `).join('');
     }
 
-    // 🛠️ FILTER & SEARCH LOGIC
-    window.filterItems = (cat, el) => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-        if (cat === 'all') return renderProducts(allProducts);
-        renderProducts(allProducts.filter(p => p.category === cat));
+    window.filterItems = (cat, btn) => {
+        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category === cat));
     };
 
     document.getElementById('searchBar').oninput = (e) => {
-        const term = e.target.value.toLowerCase();
-        renderProducts(allProducts.filter(p => 
-            p.name.toLowerCase().includes(term) || 
-            p.brand.toLowerCase().includes(term)
-        ));
+        const val = e.target.value.toLowerCase();
+        renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(val) || p.brand.toLowerCase().includes(val)));
     };
 </script>
 </body>
