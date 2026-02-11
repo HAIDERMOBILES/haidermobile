@@ -23,15 +23,15 @@
 
         /* 🛰️ Left Side: Related Units */
         .side-panel { background: var(--glass); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 10px; padding: 20px; }
-        .panel-header { font-family: 'Orbitron'; color: var(--neon); font-size: 12px; letter-spacing: 2px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; }
+        .panel-header { font-family: 'Orbitron'; color: var(--neon); font-size: 12px; letter-spacing: 2px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase; }
         .rel-item { margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); padding: 10px; transition: 0.3s; text-decoration: none; color: #fff; display: block; }
         .rel-item:hover { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); }
-        .rel-item img { width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 5px; }
+        .rel-item img { width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 5px; mix-blend-mode: multiply; }
 
         /* 🌀 Center: Main Viewport */
         .viewport { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0, 242, 255, 0.1) 0%, transparent 70%); }
         .main-scanner { width: 100%; height: 500px; position: relative; display: flex; align-items: center; justify-content: center; }
-        .main-scanner img { max-width: 80%; max-height: 80%; z-index: 5; filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.4)); }
+        .main-scanner img { max-width: 80%; max-height: 80%; z-index: 5; filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.4)); transition: 0.5s; }
         
         /* Rotating Circles */
         .circle-dec { position: absolute; border: 2px dashed var(--neon); border-radius: 50%; opacity: 0.3; animation: rotate 20s linear infinite; }
@@ -56,9 +56,15 @@
         .acquire-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 30px var(--neon); }
 
         .thumb-row { display: flex; gap: 10px; margin-top: 20px; }
-        .thumb { width: 60px; height: 60px; border: 1px solid #333; padding: 5px; background: #fff; border-radius: 5px; }
+        .thumb { width: 60px; height: 60px; border: 1px solid #333; padding: 5px; background: #fff; border-radius: 5px; cursor: pointer; mix-blend-mode: multiply; }
+        .thumb:hover { border-color: var(--neon); }
 
-        @media (max-width: 1100px) { .quantum-container { grid-template-columns: 1fr; } .side-panel { display: none; } }
+        @media (max-width: 1100px) { 
+            .quantum-container { grid-template-columns: 1fr; margin: 10px; } 
+            .side-panel { display: none; } 
+            .main-scanner { height: 350px; }
+            .circle-dec { width: 300px !important; height: 300px !important; }
+        }
     </style>
 </head>
 <body>
@@ -66,7 +72,9 @@
 <div class="quantum-container" id="terminal-ui">
     <div class="side-panel">
         <div class="panel-header">DATABASE_RELATED_UNITS</div>
-        <div id="related-box"></div>
+        <div id="related-box">
+            <p style="font-size: 10px; color: #444;">SEARCHING_SIMILAR_HARDWARE...</p>
+        </div>
     </div>
 
     <div class="viewport">
@@ -74,14 +82,14 @@
         <div class="main-scanner">
             <div class="circle-dec" style="width: 450px; height: 450px;"></div>
             <div class="circle-dec" style="width: 380px; height: 380px; animation-direction: reverse;"></div>
-            <img id="main-view" src="">
+            <img id="main-view" src="https://via.placeholder.com/400?text=SCANNING...">
         </div>
         <div class="thumb-row" id="thumb-box"></div>
     </div>
 
     <div class="info-panel">
         <div class="panel-header">UNIT_IDENTIFICATION</div>
-        <h1 class="unit-title" id="p-name">LOADING...</h1>
+        <h1 class="unit-title" id="p-name">CONNECTING...</h1>
         <div class="unit-price" id="p-price">---</div>
 
         <div class="panel-header" style="margin-top:20px">LIVE_DIAGNOSTICS</div>
@@ -93,9 +101,11 @@
         </div>
 
         <div class="panel-header">SPECIFICATIONS</div>
-        <p id="p-desc" style="font-size: 12px; line-height: 1.6; color: #888; margin-bottom: 30px;"></p>
+        <p id="p-desc" style="font-size: 12px; line-height: 1.6; color: #888; margin-bottom: 30px;">Initializing hardware scan...</p>
 
         <a id="wa-link" href="#" class="acquire-btn">INITIATE_ACQUISITION</a>
+        
+        <a href="index.html" style="color: #444; text-decoration: none; font-size: 10px; display: block; text-align: center; margin-top: 20px;">[ RETURN_TO_HOME ]</a>
     </div>
 </div>
 
@@ -115,6 +125,15 @@
     const db = getDatabase(app);
     const productId = new URLSearchParams(window.location.search).get('id');
 
+    // Image switcher function (globally accessible)
+    window.switchView = (url) => {
+        document.getElementById('main-view').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('main-view').src = url;
+            document.getElementById('main-view').style.opacity = '1';
+        }, 200);
+    };
+
     if (productId) {
         get(ref(db, `products/${productId}`)).then((snap) => {
             if (snap.exists()) {
@@ -125,12 +144,21 @@
                 document.getElementById('main-view').src = p.img;
                 document.getElementById('wa-link').href = `https://wa.me/923279518790?text=System_Protocol: I want to acquire ${p.name}`;
                 
-                // Add Thumbnails if available
+                // Optimized Thumbnails
                 const images = [p.img, p.img2, p.img3].filter(x => x);
-                document.getElementById('thumb-box').innerHTML = images.map(i => `<img src="${i}" class="thumb" onclick="document.getElementById('main-view').src='${i}'">`).join('');
+                if(images.length > 1) {
+                    document.getElementById('thumb-box').innerHTML = images.map(i => 
+                        `<img src="${i}" class="thumb" onclick="switchView('${i}')">`
+                    ).join('');
+                }
                 
                 loadRelated(p.category, productId);
+            } else {
+                document.getElementById('p-name').innerText = "UNIT_NOT_FOUND";
             }
+        }).catch(err => {
+            console.error(err);
+            document.getElementById('p-name').innerText = "CONNECTION_ERROR";
         });
     }
 
@@ -138,6 +166,7 @@
         get(ref(db, 'products')).then((snap) => {
             const all = snap.val();
             const box = document.getElementById('related-box');
+            box.innerHTML = ''; // Clear loader
             let count = 0;
             for (let id in all) {
                 if (id !== currentId && all[id].category === cat && count < 3) {
@@ -146,6 +175,7 @@
                         <a href="product.html?id=${id}" class="rel-item">
                             <img src="${r.img}">
                             <div style="font-size:11px; margin-top:10px; color:var(--neon)">${r.name}</div>
+                            <div style="font-size:10px; color:var(--gold)">PKR ${r.price}</div>
                         </a>`;
                     count++;
                 }
