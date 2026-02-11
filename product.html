@@ -27,14 +27,35 @@
         .panel-header { font-family: 'Orbitron'; color: var(--neon); font-size: 11px; letter-spacing: 2px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase; }
         .rel-item { margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); padding: 10px; transition: 0.3s; text-decoration: none; color: #fff; display: block; border-radius: 5px; }
         .rel-item:hover { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); transform: translateY(-3px); }
-        .rel-item img { width: 100%; height: 110px; object-fit: contain; background: #fff; border-radius: 5px; mix-blend-mode: screen; }
+        .rel-item img { width: 100%; height: 110px; object-fit: contain; background: #fff; border-radius: 5px; }
 
-        /* 🌀 Center: Main Viewport */
-        .viewport { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .main-scanner { width: 100%; height: 450px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .main-scanner img { max-width: 80%; max-height: 80%; z-index: 5; filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.4)); transition: 0.5s; }
+        /* 🌀 Center: Main Viewport (Updated to White) */
+        .viewport { 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: flex-start;
+            background: #ffffff; /* Pure white background for product */
+            border: 1px solid var(--neon);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .viewport .panel-header { 
+            width: 100%; 
+            background: var(--bg); /* Header remains dark for contrast */
+            margin-bottom: 0;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--neon);
+        }
+
+        .main-scanner { width: 100%; height: 450px; position: relative; display: flex; align-items: center; justify-content: center; }
+        .main-scanner img { max-width: 85%; max-height: 85%; z-index: 5; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); transition: 0.5s; }
         
-        .circle-dec { position: absolute; border: 1px dashed var(--neon); border-radius: 50%; opacity: 0.2; animation: rotate 20s linear infinite; }
+        /* Darker circles for white background visibility */
+        .circle-dec { position: absolute; border: 1px dashed rgba(0, 242, 255, 0.3); border-radius: 50%; animation: rotate 20s linear infinite; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         /* 📊 Right Side: Unit Info */
@@ -55,8 +76,8 @@
         }
         .acquire-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 40px var(--neon); transform: scale(1.02); }
 
-        .thumb-row { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
-        .thumb { width: 60px; height: 60px; border: 1px solid #333; padding: 5px; background: #fff; border-radius: 5px; cursor: pointer; transition: 0.2s; mix-blend-mode: screen; }
+        .thumb-row { display: flex; gap: 10px; padding: 15px; background: rgba(0,0,0,0.05); width: 100%; justify-content: center; }
+        .thumb { width: 60px; height: 60px; border: 1px solid #ddd; padding: 5px; background: #fff; border-radius: 5px; cursor: pointer; transition: 0.2s; }
         .thumb:hover { border-color: var(--neon); transform: scale(1.1); }
 
         @media (max-width: 1100px) { 
@@ -75,7 +96,7 @@
     </div>
 
     <div class="viewport">
-        <div class="panel-header" style="width: 100%;">SCANNING_SUBJECT_ACTIVE</div>
+        <div class="panel-header">SCANNING_SUBJECT_ACTIVE</div>
         <div class="main-scanner">
             <div class="circle-dec" style="width: 450px; height: 450px;"></div>
             <div class="circle-dec" style="width: 380px; height: 380px; animation-direction: reverse;"></div>
@@ -121,7 +142,6 @@
     const db = getDatabase(app);
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    // Make image switcher globally accessible
     window.changeImage = (url) => {
         const mainView = document.getElementById('main-view');
         mainView.style.opacity = 0;
@@ -137,11 +157,10 @@
                 const p = snap.val();
                 document.getElementById('p-name').innerText = p.name;
                 document.getElementById('p-price').innerText = `PKR ${p.price}`;
-                document.getElementById('p-desc').innerText = p.description || "Quantum system scan complete. No hardware anomalies detected in this unit.";
+                document.getElementById('p-desc').innerText = p.description || "Hardware scan complete. This unit meets all tactical communication standards.";
                 document.getElementById('main-view').src = p.img;
                 document.getElementById('wa-link').href = `https://wa.me/923279518790?text=System_Protocol: I want to acquire ${p.name}`;
                 
-                // Add Thumbnails
                 const images = [p.img, p.img2, p.img3].filter(x => x);
                 document.getElementById('thumb-box').innerHTML = images.map(i => 
                     `<img src="${i}" class="thumb" onclick="changeImage('${i}')">`
