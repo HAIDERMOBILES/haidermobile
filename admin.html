@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Self-Evolving AI</title>
+    <title>Jarvis | Self-Evolving AI v5.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
@@ -11,7 +11,6 @@
         
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
         
-        /* 🛡️ Login Overlay */
         #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
         
@@ -30,19 +29,24 @@
         .upload-slot { border: 1px dashed #333; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.3s; }
         .upload-slot:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
         
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; outline: none; transition: 0.3s; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; outline: none; transition: 0.3s; box-sizing: border-box; }
         input:focus, select:focus { border-color: var(--gold); }
         
+        /* 📈 Stats Panel */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: #0d0d0d; border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
+        .stat-box small { font-size: 9px; color: var(--neon); font-family: 'Orbitron'; }
+        .stat-box h2 { margin: 5px 0 0 0; font-size: 20px; }
+
         .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; transition: 0.3s; letter-spacing: 1px; }
         .save-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
         
         .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
-        .inv-card:hover { border-color: var(--gold); }
         .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
         
+        .sale-badge { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-family: 'Orbitron'; font-weight: bold; z-index: 5; }
         .progress-bar { height: 2px; width: 0%; background: var(--gold); transition: 0.3s; margin-top: 4px; }
-        
         .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; z-index: 10; }
     </style>
 </head>
@@ -59,7 +63,7 @@
 <div class="main-layout">
     <div class="sidebar">
         <div class="ai-brain-box" id="aiBrain">
-            <span class="upgrade-status" id="sysStatus">SYSTEM: STABLE | VER: 4.0.2</span>
+            <span class="upgrade-status" id="sysStatus">SYSTEM: STABLE | <span id="clock"></span></span>
             <div style="display:flex; gap:10px;">
                 <input type="text" id="aiQuery" placeholder="Target product name..." style="margin:0;">
                 <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
@@ -88,22 +92,21 @@
 
             <input type="text" id="pName" placeholder="Product Name">
             <input type="text" id="pBrand" placeholder="Brand Name">
-            <input type="number" id="pPrice" placeholder="Price (PKR)">
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <input type="number" id="pPrice" placeholder="Reg. Price">
+                <input type="number" id="pSalePrice" placeholder="Sale Price (Optional)">
+            </div>
             
             <select id="pCat">
                 <option value="" disabled selected>SELECT CATEGORY</option>
                 <option value="Cables">Cables</option>
                 <option value="Chargers">Chargers</option>
                 <option value="Car Charger">Car Charger</option>
-                <option value="Clip Charger">Clip Charger</option>
-                <option value="Card Reader">Card Reader</option>
                 <option value="Neck Band">Neck Band</option>
                 <option value="Earbuds">Earbuds</option>
-                <option value="Handfree">Handfree</option>
                 <option value="Speaker">Speaker</option>
                 <option value="Power Banks">Power Banks</option>
-                <option value="OTG Connectors">OTG Connectors</option>
-                <option value="Battery">Battery</option>
                 <option value="HeadPhones">Headphones</option>
             </select>
 
@@ -114,6 +117,12 @@
     </div>
 
     <div class="inventory-section">
+        <div class="stats-grid">
+            <div class="stat-box"><small>MONTHLY ADDED</small><h2 id="monthStat">0</h2></div>
+            <div class="stat-box"><small>YEARLY TOTAL</small><h2 id="yearStat">0</h2></div>
+            <div class="stat-box"><small>ON SALE</small><h2 id="saleStat" style="color:var(--red)">0</h2></div>
+        </div>
+        
         <h3 style="font-family:'Orbitron'; color:var(--gold); font-size:14px; margin-bottom:20px; border-left: 3px solid var(--gold); padding-left: 15px;">
             <i class="fa fa-database"></i> LIVE_DATABASE_STREAM
         </h3>
@@ -147,13 +156,18 @@
         synth.speak(utter);
     };
 
+    // Clock Logic
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleDateString('en-GB', {month:'short', year:'numeric'});
+    }, 1000);
+
     window.checkPass = () => {
         if(document.getElementById('passInput').value === "haider786") {
-            localStorage.setItem("jarvis_session", "active");
             document.getElementById('loginOverlay').style.display = 'none';
-            speak("Welcome back, Sir. All systems are online.");
+            speak("Welcome back, Sir. Analyzing current market trends.");
         } else {
-            speak("Access denied. Intruders will be terminated.");
+            speak("Unauthorized access.");
         }
     };
 
@@ -166,8 +180,7 @@
         log.innerText = "ACCESSING NEURAL NETWORK...";
         
         try {
-            const prompt = `Search for: ${query}. Respond ONLY in JSON: {"name": "product name", "brand": "brand", "price": "numeric", "category": "One from this list: Cables, Chargers, Car Charger, Clip Charger, Card Reader, Neck Band, Earbuds, Handfree, Speaker, Power Banks, OTG Connectors, Battery, HeadPhones", "specs": "3 key specs"}`;
-            
+            const prompt = `Search for: ${query}. Respond ONLY in JSON: {"name": "product name", "brand": "brand", "price": "numeric", "category": "Cables or Chargers or Neck Band or Earbuds or Speaker or Power Banks or HeadPhones", "specs": "3 key specs"}`;
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: "POST", headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -182,10 +195,10 @@
             document.getElementById('pCat').value = res.category;
             document.getElementById('pDesc').value = res.specs;
             
-            speak("Information retrieved and categorized, Sir.");
+            speak("Scan complete. Data packets organized.");
             log.innerText = "SCAN COMPLETE.";
         } catch (e) {
-            speak("External link failed. Manual data entry required.");
+            speak("Scan error.");
             log.innerText = "ERROR IN SCAN.";
         }
     };
@@ -202,55 +215,73 @@
                 productImages[key] = data.data.url;
                 document.getElementById(progId).style.width = "100%";
                 document.getElementById(txtId).innerText = "SYNCED";
-                speak("Visual data stored.");
+                speak("Image " + key + " stored.");
             }
-        } catch (e) { speak("Image transmission failure."); }
+        } catch (e) { speak("Link failed."); }
     };
 
     document.getElementById('saveBtn').onclick = function() {
-        const name = document.getElementById('pName').value;
-        const category = document.getElementById('pCat').value;
-        if(!productImages.img1 || !name || !category) return speak("Data packets incomplete, Sir.");
-
+        const d = new Date();
         const product = {
-            name: name, 
+            name: document.getElementById('pName').value, 
             brand: document.getElementById('pBrand').value || "GENERIC",
             price: Number(document.getElementById('pPrice').value),
-            category: category,
+            salePrice: Number(document.getElementById('pSalePrice').value) || null,
+            onSale: document.getElementById('pSalePrice').value ? true : false,
+            category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
             img: productImages.img1, 
             img2: productImages.img2 || "", 
             img3: productImages.img3 || "",
+            month: d.getMonth(),
+            year: d.getFullYear(),
             timestamp: Date.now()
         };
 
+        if(!product.img || !product.name) return speak("Sir, data is incomplete.");
+
         push(ref(db, 'products'), product).then(() => {
-            speak("Database synchronization successful.");
+            speak("Database updated successfully.");
             location.reload();
         });
     };
 
     onValue(ref(db, 'products'), (snap) => {
         const grid = document.getElementById('invGrid'); grid.innerHTML = "";
+        let mCount = 0, yCount = 0, sCount = 0;
+        const now = new Date();
+
         if(snap.exists()){
             Object.keys(snap.val()).reverse().forEach(id => {
                 const p = snap.val()[id];
+                
+                // Analytics Logic
+                if(p.month === now.getMonth() && p.year === now.getFullYear()) mCount++;
+                if(p.year === now.getFullYear()) yCount++;
+                if(p.onSale) sCount++;
+
                 grid.innerHTML += `
                     <div class="inv-card">
+                        ${p.onSale ? '<div class="sale-badge">SALE</div>' : ''}
                         <button class="delete-btn" onclick="deleteItem('${id}')"><i class="fa fa-trash"></i></button>
                         <img src="${p.img}">
                         <div style="font-size:9px; color:var(--gold); font-family:'Orbitron';">${p.brand}</div>
                         <div style="font-size:11px; margin-top:5px; font-weight:600;">${p.name}</div>
-                        <div style="font-size:10px; color:#555;">${p.category}</div>
+                        <div style="font-size:11px; margin-top:5px; font-weight:bold;">
+                            ${p.onSale ? `<span style="text-decoration:line-through; color:#555; font-size:9px;">Rs ${p.price}</span> Rs ${p.salePrice}` : `Rs ${p.price}`}
+                        </div>
                     </div>`;
             });
+            document.getElementById('monthStat').innerText = mCount;
+            document.getElementById('yearStat').innerText = yCount;
+            document.getElementById('saleStat').innerText = sCount;
         }
     });
 
     window.deleteItem = (id) => { 
-        if(confirm("Confirm deletion of unit?")) {
+        if(confirm("Confirm deletion?")) {
             remove(ref(db, `products/${id}`));
-            speak("Unit removed from database.");
+            speak("Unit removed.");
         }
     };
 </script>
