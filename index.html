@@ -10,96 +10,95 @@
     
     <style>
         :root { 
-            --gold: #d4af37; --dark: #020202; --card: rgba(20, 20, 20, 0.6); 
+            --gold: #d4af37; --dark: #020202; --card: rgba(20, 20, 20, 0.8); 
             --border: rgba(212, 175, 55, 0.3); --neon: 0 0 15px rgba(212, 175, 55, 0.4);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--dark); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
 
-        /* 🌌 Cyber Background */
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 80%);
             pointer-events: none; z-index: -1;
         }
 
-        /* 🤖 Professional Header */
         header { position: fixed; top: 0; width: 100%; height: 80px; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 2px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
-        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.5rem; text-decoration: none; text-shadow: var(--neon); }
+        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.5rem; text-decoration: none; text-shadow: var(--neon); letter-spacing: 2px; }
         .status-hub { display: flex; align-items: center; gap: 20px; font-size: 10px; color: var(--gold); }
 
-        /* 🔍 Search & Filter Command (Elite Style) */
         .command-center { padding: 140px 5% 40px; max-width: 1400px; margin: 0 auto; }
         .search-wrapper { position: relative; margin-bottom: 30px; }
         #searchBar { 
-            width: 100%; padding: 25px 30px; background: var(--card); border: 1px solid var(--border); 
+            width: 100%; padding: 20px 30px; background: var(--card); border: 1px solid var(--border); 
             border-radius: 4px; color: #fff; font-family: 'JetBrains Mono'; font-size: 1.1rem;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.5); outline: none; transition: 0.3s;
         }
         #searchBar:focus { border-color: var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
 
-        .filter-strip { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        /* 🏷️ Auto-Sync Brand Strip */
+        #brandStrip { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
         .f-btn { 
-            background: transparent; color: #888; border: 1px solid #333; padding: 12px 25px; 
+            background: transparent; color: #888; border: 1px solid #333; padding: 10px 18px; 
             font-family: 'Orbitron'; font-size: 10px; cursor: pointer; transition: 0.3s;
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            text-transform: uppercase;
         }
         .f-btn.active, .f-btn:hover { color: #000; background: var(--gold); border-color: var(--gold); font-weight: bold; }
 
-        /* 💎 Product Grid (High Detail) */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 35px; max-width: 1400px; margin: 50px auto; padding: 0 5%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; max-width: 1400px; margin: 30px auto; padding: 0 5%; min-height: 400px; }
         .p-card { 
             background: var(--card); border: 1px solid var(--border); border-radius: 4px; 
-            padding: 20px; position: relative; transition: 0.5s; cursor: pointer;
-            overflow: hidden;
+            padding: 20px; position: relative; transition: 0.4s; cursor: pointer;
+            overflow: hidden; display: flex; flex-direction: column;
         }
         .p-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 0 40px rgba(212,175,55,0.15); }
         
         .p-img-box { 
-            height: 300px; background: #fff; border-radius: 2px; margin-bottom: 20px;
+            height: 250px; background: #fff; border-radius: 2px; margin-bottom: 20px;
             display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; transition: 0.5s; }
-        .p-card:hover .p-img-box img { transform: scale(1.1); }
 
-        .p-brand { color: var(--gold); font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .p-name { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 15px; color: #fff; }
+        .p-brand { color: var(--gold); font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; opacity: 0.8; }
+        .p-name { font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 15px; color: #fff; flex-grow: 1; }
         
         .p-info-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; padding-top: 15px; }
-        .p-price { font-family: 'Orbitron'; font-size: 1.4rem; color: var(--gold); font-weight: 900; }
-        .p-buy { background: var(--gold); color: #000; padding: 10px 20px; font-size: 10px; font-weight: 900; text-decoration: none; clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%, 0 70%); }
+        .p-price { font-family: 'Orbitron'; font-size: 1.3rem; color: var(--gold); font-weight: 900; }
+        .p-buy { background: var(--gold); color: #000; padding: 10px 18px; font-size: 9px; font-weight: 900; text-decoration: none; clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%, 0 70%); }
 
-        .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); z-index: 1000; }
+        .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; z-index: 1000; }
+        .no-data { grid-column: 1 / -1; text-align: center; padding: 100px; color: var(--gold); font-family: 'Orbitron'; letter-spacing: 4px; border: 1px dashed var(--border); }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .p-img-box { height: 160px; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="#" class="logo">HAIDER_COMMAND</a>
+    <a href="#" class="logo">HAIDER_CMD</a>
     <div class="status-hub">
-        <span>DATA_SYNC: ONLINE</span>
-        <span id="itemCount">ITEMS: 00</span>
+        <span><i class="fas fa-circle" style="font-size: 8px; color: #25d366;"></i> SCANNING_BRANDS</span>
+        <span id="itemCount">UNITS: 00</span>
     </div>
 </header>
 
 <div class="command-center">
     <div class="search-wrapper">
-        <input type="text" id="searchBar" placeholder="SCAN_DATABASE: ENTER MODEL, BRAND OR SPEC...">
+        <input type="text" id="searchBar" placeholder="SCAN_DATABASE: ENTER MODEL OR SPEC...">
     </div>
     
-    <div class="filter-strip">
-        <button class="f-btn active" onclick="filterItems('all', this)">[ ALL_UNITS ]</button>
-        <button class="f-btn" onclick="filterItems('Mobile', this)">[ SMARTPHONES ]</button>
-        <button class="f-btn" onclick="filterItems('Accessories', this)">[ ACCESSORIES ]</button>
-        <button class="f-btn" onclick="filterItems('Repairing', this)">[ REPAIR_LAB ]</button>
-        <button class="f-btn" onclick="filterItems('Tools', this)">[ TECH_TOOLS ]</button>
-    </div>
+    <div id="brandStrip" class="filter-strip"></div>
 </div>
 
-<div id="productGrid" class="grid"></div>
+<div id="productGrid" class="grid">
+    <div class="no-data">INITIALIZING_SYSTEM...</div>
+</div>
 
-<a href="https://wa.me/923279518790" class="wa-float"><i class="fab fa-whatsapp"></i></a>
+<a href="https://wa.me/923279518790" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -115,43 +114,79 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    
     let allProducts = [];
+    let currentBrand = 'ALL';
 
+    // 📡 Data Load + Brand Sync
     onValue(ref(db, 'products'), (snap) => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            document.getElementById('itemCount').innerText = `ITEMS: ${allProducts.length.toString().padStart(2, '0')}`;
-            renderProducts(allProducts);
+            generateBrandFilters();
+            updateDisplay();
+        } else {
+            document.getElementById('productGrid').innerHTML = `<div class="no-data">ERROR: NO_DATA_SYNC</div>`;
         }
     });
 
+    // 🏷️ Generate Brands Automatically
+    function generateBrandFilters() {
+        const brandStrip = document.getElementById('brandStrip');
+        // Extract unique brands from data
+        const brands = ['ALL', ...new Set(allProducts.map(p => p.brand.toUpperCase()).filter(b => b))];
+        
+        brandStrip.innerHTML = brands.map(brand => `
+            <button class="f-btn ${brand === currentBrand ? 'active' : ''}" 
+                    onclick="filterByBrand('${brand}', this)">
+                [ ${brand} ]
+            </button>
+        `).join('');
+    }
+
+    window.filterByBrand = (brand, btn) => {
+        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentBrand = brand;
+        updateDisplay();
+    };
+
+    function updateDisplay() {
+        const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+        
+        const filtered = allProducts.filter(p => {
+            const matchesBrand = currentBrand === 'ALL' || p.brand.toUpperCase() === currentBrand;
+            const matchesSearch = p.name.toLowerCase().includes(searchTerm);
+            return matchesBrand && matchesSearch;
+        });
+
+        document.getElementById('itemCount').innerText = `UNITS: ${filtered.length.toString().padStart(2, '0')}`;
+        renderProducts(filtered);
+    }
+
     function renderProducts(list) {
         const grid = document.getElementById('productGrid');
+        if (list.length === 0) {
+            grid.innerHTML = `<div class="no-data">NO_MATCHING_DATA_IN_SCOPE</div>`;
+            return;
+        }
+
         grid.innerHTML = list.map(p => `
             <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
                 <div class="p-img-box">
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300x400?text=DATA_MISSING'">
+                    <img src="${p.img}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400?text=IMAGE_OFFLINE'">
                 </div>
-                <span class="p-brand">${p.brand} // SYSTEM_ID_${p.id.slice(0,4)}</span>
+                <span class="p-brand">${p.brand}</span>
                 <h3 class="p-name">${p.name}</h3>
                 <div class="p-info-row">
                     <div class="p-price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
-                    <div class="p-buy">VIEW_DATA</div>
+                    <div class="p-buy">PROTOCOL_VIEW</div>
                 </div>
             </div>
         `).join('');
     }
 
-    window.filterItems = (cat, btn) => {
-        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category === cat));
-    };
-
-    document.getElementById('searchBar').oninput = (e) => {
-        const val = e.target.value.toLowerCase();
-        renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(val) || p.brand.toLowerCase().includes(val)));
-    };
+    document.getElementById('searchBar').oninput = () => updateDisplay();
 </script>
+
 </body>
 </html>
