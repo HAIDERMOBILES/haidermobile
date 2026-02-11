@@ -7,65 +7,62 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        :root { --neon: #00f2ff; --gold: #d4af37; --bg: #02050a; --glass: rgba(0, 242, 255, 0.03); }
+        :root { --neon: #00f2ff; --gold: #d4af37; --bg: #02050a; --glass: rgba(0, 242, 255, 0.05); }
         
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
         body { background: var(--bg); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
 
-        /* Background Grid */
+        /* 🌠 Animated Background Grid */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
             background-size: 50px 50px; z-index: -1;
         }
 
-        .quantum-container { max-width: 1400px; margin: 40px auto; padding: 20px; display: grid; grid-template-columns: 320px 1fr 350px; gap: 25px; opacity: 0; transition: opacity 0.8s ease-in; }
-        .quantum-container.ready { opacity: 1; }
+        .quantum-container { max-width: 1400px; margin: 40px auto; padding: 20px; display: grid; grid-template-columns: 320px 1fr 350px; gap: 20px; opacity: 0; transition: opacity 1s; }
+        .quantum-container.loaded { opacity: 1; }
 
-        /* Panels */
-        .side-panel, .info-panel { background: var(--glass); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 10px; padding: 20px; backdrop-filter: blur(10px); }
+        /* 🛰️ Left Side: Related Units */
+        .side-panel { background: var(--glass); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 10px; padding: 20px; backdrop-filter: blur(5px); }
         .panel-header { font-family: 'Orbitron'; color: var(--neon); font-size: 11px; letter-spacing: 2px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase; }
+        .rel-item { margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); padding: 10px; transition: 0.3s; text-decoration: none; color: #fff; display: block; border-radius: 5px; }
+        .rel-item:hover { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); transform: translateY(-3px); }
+        .rel-item img { width: 100%; height: 110px; object-fit: contain; background: #fff; border-radius: 5px; mix-blend-mode: screen; }
 
-        /* Related Items */
-        .rel-item { margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); padding: 12px; transition: 0.3s; text-decoration: none; color: #fff; display: block; border-radius: 5px; }
-        .rel-item:hover { border-color: var(--neon); background: rgba(0, 242, 255, 0.08); transform: translateY(-3px); }
-        .rel-item img { width: 100%; height: 110px; object-fit: contain; background: #fff; border-radius: 4px; mix-blend-mode: screen; }
-
-        /* Main Viewport */
+        /* 🌀 Center: Main Viewport */
         .viewport { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .main-scanner { width: 100%; height: 450px; position: relative; display: flex; align-items: center; justify-content: center; }
-        .main-scanner img { max-width: 85%; max-height: 85%; z-index: 5; filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.3)); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .main-scanner { width: 100%; height: 450px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .main-scanner img { max-width: 80%; max-height: 80%; z-index: 5; filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.4)); transition: 0.5s; }
         
-        .circle-dec { position: absolute; border: 1px dashed var(--neon); border-radius: 50%; opacity: 0.2; animation: rotate 30s linear infinite; pointer-events: none; }
+        .circle-dec { position: absolute; border: 1px dashed var(--neon); border-radius: 50%; opacity: 0.2; animation: rotate 20s linear infinite; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* Info Panel Details */
-        .unit-title { font-family: 'Orbitron'; font-size: 26px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+        /* 📊 Right Side: Unit Info */
+        .info-panel { background: var(--glass); border: 1px solid rgba(0, 242, 255, 0.2); padding: 25px; border-radius: 10px; backdrop-filter: blur(5px); }
+        .unit-title { font-family: 'Orbitron'; font-size: 26px; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; }
         .unit-price { font-size: 24px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 25px; }
 
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-        .stat-card { border: 1px solid rgba(0, 242, 255, 0.1); padding: 12px; text-align: center; background: rgba(255,255,255,0.02); }
-        .stat-card small { font-size: 8px; color: #555; display: block; letter-spacing: 1px; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .stat-card { border: 1px solid rgba(255,255,255,0.05); padding: 12px; text-align: center; background: rgba(0, 242, 255, 0.02); }
+        .stat-card small { font-size: 8px; color: #666; display: block; letter-spacing: 1px; }
         .stat-card span { font-size: 12px; color: var(--neon); font-weight: bold; }
 
-        /* Buttons */
         .acquire-btn { 
             width: 100%; padding: 20px; background: transparent; border: 1px solid var(--neon); 
-            color: var(--neon); font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px;
+            color: var(--neon); font-family: 'Orbitron'; font-weight: 900; 
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-            transition: 0.4s; text-decoration: none; display: block; text-align: center;
+            transition: 0.3s; text-decoration: none; display: block; text-align: center; text-transform: uppercase;
         }
-        .acquire-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 40px rgba(0, 242, 255, 0.6); transform: scale(1.02); }
+        .acquire-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 40px var(--neon); transform: scale(1.02); }
 
-        .thumb-row { display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
-        .thumb { width: 65px; height: 65px; border: 1px solid rgba(0,242,255,0.2); padding: 5px; background: #fff; border-radius: 6px; cursor: pointer; mix-blend-mode: screen; transition: 0.2s; }
+        .thumb-row { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+        .thumb { width: 60px; height: 60px; border: 1px solid #333; padding: 5px; background: #fff; border-radius: 5px; cursor: pointer; transition: 0.2s; mix-blend-mode: screen; }
         .thumb:hover { border-color: var(--neon); transform: scale(1.1); }
 
         @media (max-width: 1100px) { 
-            .quantum-container { grid-template-columns: 1fr; margin: 10px; gap: 15px; } 
+            .quantum-container { grid-template-columns: 1fr; margin: 15px auto; } 
             .side-panel { display: none; } 
-            .main-scanner { height: 320px; }
-            .unit-title { font-size: 20px; }
+            .main-scanner { height: 350px; }
         }
     </style>
 </head>
@@ -74,24 +71,22 @@
 <div class="quantum-container" id="terminal-ui">
     <div class="side-panel">
         <div class="panel-header">DATABASE_RELATED_UNITS</div>
-        <div id="related-box">
-            <p style="font-size: 10px; color: #444; text-align: center;">SYNCING...</p>
-        </div>
+        <div id="related-box"></div>
     </div>
 
     <div class="viewport">
         <div class="panel-header" style="width: 100%;">SCANNING_SUBJECT_ACTIVE</div>
         <div class="main-scanner">
-            <div class="circle-dec" style="width: 420px; height: 420px;"></div>
-            <div class="circle-dec" style="width: 350px; height: 350px; animation-direction: reverse;"></div>
-            <img id="main-view" src="https://via.placeholder.com/400?text=INITIALIZING...">
+            <div class="circle-dec" style="width: 450px; height: 450px;"></div>
+            <div class="circle-dec" style="width: 380px; height: 380px; animation-direction: reverse;"></div>
+            <img id="main-view" src="https://via.placeholder.com/400?text=SCANNING...">
         </div>
         <div class="thumb-row" id="thumb-box"></div>
     </div>
 
     <div class="info-panel">
         <div class="panel-header">UNIT_IDENTIFICATION</div>
-        <h1 class="unit-title" id="p-name">CONNECTING...</h1>
+        <h1 class="unit-title" id="p-name">INITIALIZING...</h1>
         <div class="unit-price" id="p-price">---</div>
 
         <div class="panel-header" style="margin-top:20px">LIVE_DIAGNOSTICS</div>
@@ -103,11 +98,10 @@
         </div>
 
         <div class="panel-header">SPECIFICATIONS</div>
-        <p id="p-desc" style="font-size: 11px; line-height: 1.8; color: #aaa; margin-bottom: 30px; min-height: 60px;"></p>
+        <p id="p-desc" style="font-size: 11px; line-height: 1.8; color: #888; margin-bottom: 30px;"></p>
 
         <a id="wa-link" href="#" class="acquire-btn">INITIATE_ACQUISITION</a>
-        
-        <a href="index.html" style="color: #444; text-decoration: none; font-size: 10px; display: block; text-align: center; margin-top: 25px; letter-spacing: 2px;">[ RETURN_TO_HOME ]</a>
+        <a href="index.html" style="color: #444; text-decoration: none; font-size: 10px; display: block; text-align: center; margin-top: 20px;">[ RETURN_TO_BASE ]</a>
     </div>
 </div>
 
@@ -127,45 +121,37 @@
     const db = getDatabase(app);
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    window.switchView = (url) => {
-        const main = document.getElementById('main-view');
-        main.style.opacity = '0';
-        main.style.transform = 'scale(0.9)';
+    // Make image switcher globally accessible
+    window.changeImage = (url) => {
+        const mainView = document.getElementById('main-view');
+        mainView.style.opacity = 0;
         setTimeout(() => {
-            main.src = url;
-            main.style.opacity = '1';
-            main.style.transform = 'scale(1)';
-        }, 250);
+            mainView.src = url;
+            mainView.style.opacity = 1;
+        }, 200);
     };
 
     if (productId) {
         get(ref(db, `products/${productId}`)).then((snap) => {
-            const container = document.getElementById('terminal-ui');
-            container.classList.add('ready');
-
             if (snap.exists()) {
                 const p = snap.val();
                 document.getElementById('p-name').innerText = p.name;
                 document.getElementById('p-price').innerText = `PKR ${p.price}`;
-                document.getElementById('p-desc').innerText = p.description || "Hardware scan complete. This unit meets all tactical communication standards.";
+                document.getElementById('p-desc').innerText = p.description || "Quantum system scan complete. No hardware anomalies detected in this unit.";
                 document.getElementById('main-view').src = p.img;
-                document.getElementById('wa-link').href = `https://wa.me/923279518790?text=System_Protocol: I am interested in acquiring ${p.name}`;
+                document.getElementById('wa-link').href = `https://wa.me/923279518790?text=System_Protocol: I want to acquire ${p.name}`;
                 
+                // Add Thumbnails
                 const images = [p.img, p.img2, p.img3].filter(x => x);
-                if(images.length > 1) {
-                    document.getElementById('thumb-box').innerHTML = images.map(i => 
-                        `<img src="${i}" class="thumb" onerror="this.style.display='none'" onclick="switchView('${i}')">`
-                    ).join('');
-                }
+                document.getElementById('thumb-box').innerHTML = images.map(i => 
+                    `<img src="${i}" class="thumb" onclick="changeImage('${i}')">`
+                ).join('');
                 
+                document.getElementById('terminal-ui').classList.add('loaded');
                 loadRelated(p.category, productId);
             } else {
                 document.getElementById('p-name').innerText = "UNIT_NOT_FOUND";
-                document.getElementById('p-desc').innerText = "The requested hardware ID does not exist in the secure database.";
             }
-        }).catch(err => {
-            document.getElementById('p-name').innerText = "OFFLINE_MODE";
-            console.error("Firebase Error:", err);
         });
     }
 
@@ -173,21 +159,18 @@
         get(ref(db, 'products')).then((snap) => {
             const all = snap.val();
             const box = document.getElementById('related-box');
-            box.innerHTML = '';
             let count = 0;
             for (let id in all) {
                 if (id !== currentId && all[id].category === cat && count < 3) {
                     const r = all[id];
                     box.innerHTML += `
                         <a href="product.html?id=${id}" class="rel-item">
-                            <img src="${r.img}" onerror="this.src='https://via.placeholder.com/100'">
-                            <div style="font-size:11px; margin-top:10px; color:var(--neon); font-family:Orbitron">${r.name}</div>
-                            <div style="font-size:10px; color:var(--gold); margin-top:4px">PKR ${r.price}</div>
+                            <img src="${r.img}">
+                            <div style="font-size:10px; margin-top:8px; color:var(--neon); font-family:Orbitron">${r.name}</div>
                         </a>`;
                     count++;
                 }
             }
-            if(count === 0) box.innerHTML = '<p style="font-size:10px; color:#444">NO_SIMILAR_UNITS_FOUND</p>';
         });
     }
 </script>
