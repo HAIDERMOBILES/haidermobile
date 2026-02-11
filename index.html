@@ -17,14 +17,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--dark); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
 
-        /* 🌌 Futuristic Background */
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 80%);
             pointer-events: none; z-index: -1;
         }
 
-        /* 🤖 Navigation Bar */
         header { 
             position: fixed; top: 0; width: 100%; height: 85px; 
             background: rgba(0,0,0,0.9); backdrop-filter: blur(25px); 
@@ -33,68 +31,65 @@
         }
         .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.4rem; text-decoration: none; text-shadow: var(--neon); letter-spacing: 2px; }
 
-        /* 🧭 Desktop Nav */
+        /* 🧭 Nav System */
         .nav-links { display: flex; gap: 30px; list-style: none; align-items: center; }
         .nav-item { position: relative; }
         .nav-link { 
             color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 11px; 
             letter-spacing: 1px; transition: 0.3s; cursor: pointer; padding: 10px 0;
         }
-        .nav-link:hover { color: var(--gold); text-shadow: var(--neon); }
+        .nav-link:hover { color: var(--gold); }
 
-        /* 🛒 Shop Dropdown */
+        /* 🛒 Auto-Generated Dropdown */
         .dropdown-menu {
             position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(20px);
             background: var(--card); border: 1px solid var(--border); 
             width: 240px; opacity: 0; visibility: hidden; transition: 0.4s;
             padding: 10px 0; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
-            display: grid; grid-template-columns: 1fr;
+            max-height: 400px; overflow-y: auto;
         }
         .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
         
         .dropdown-menu a {
             color: #aaa; padding: 12px 20px; text-decoration: none; font-size: 10px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.1); transition: 0.3s;
-            cursor: pointer;
+            display: block; text-transform: uppercase; cursor: pointer;
         }
         .dropdown-menu a:hover { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding-left: 25px; }
 
-        /* 📡 Live Status Hub */
-        .status-hub { display: flex; flex-direction: column; align-items: flex-end; font-size: 9px; color: var(--gold); font-weight: bold; }
+        .status-hub { display: flex; flex-direction: column; align-items: flex-end; font-size: 9px; color: var(--gold); }
 
-        /* 🔍 Search & Brands */
+        /* 🔍 Search & Filters */
         .command-center { padding: 140px 5% 40px; max-width: 1400px; margin: 0 auto; text-align: center; }
         #searchBar { 
-            width: 100%; max-width: 800px; padding: 18px 25px; background: rgba(20,20,20,0.8); 
-            border: 1px solid var(--border); border-radius: 4px; color: #fff; 
-            font-family: 'JetBrains Mono'; outline: none; transition: 0.3s; font-size: 1rem;
+            width: 100%; max-width: 800px; padding: 18px; background: rgba(20,20,20,0.8); 
+            border: 1px solid var(--border); border-radius: 4px; color: #fff; font-family: 'JetBrains Mono'; outline: none;
         }
-        #searchBar:focus { border-color: var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
 
         #brandStrip { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 30px 0; }
         .f-btn { 
-            background: transparent; color: #888; border: 1px solid #333; padding: 10px 20px; 
+            background: transparent; color: #888; border: 1px solid #333; padding: 8px 18px; 
             font-family: 'Orbitron'; font-size: 10px; cursor: pointer; transition: 0.3s;
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
         }
         .f-btn.active, .f-btn:hover { color: #000; background: var(--gold); border-color: var(--gold); font-weight: 900; }
 
         /* 💎 Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 0 5%; max-width: 1400px; margin: 0 auto 100px; }
-        .p-card { background: var(--card); border: 1px solid var(--border); padding: 20px; transition: 0.5s; cursor: pointer; }
-        .p-card:hover { transform: translateY(-10px); border-color: var(--gold); }
-        .p-img-box { height: 260px; background: #fff; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
-        .p-name { font-family: 'Orbitron'; font-size: 1.1rem; color: #fff; margin: 10px 0; }
-        .p-price { color: var(--gold); font-weight: 900; font-family: 'Orbitron'; font-size: 1.3rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 0 5% 100px; max-width: 1400px; margin: 0 auto; }
+        .p-card { background: var(--card); border: 1px solid var(--border); padding: 20px; transition: 0.4s; cursor: pointer; }
+        .p-card:hover { transform: translateY(-8px); border-color: var(--gold); }
+        .p-img-box { height: 240px; background: #fff; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
+        .p-img-box img { max-width: 80%; max-height: 80%; object-fit: contain; }
+        .p-name { font-family: 'Orbitron'; font-size: 1rem; color: #fff; margin: 10px 0; height: 2.4em; overflow: hidden; }
+        .p-price { color: var(--gold); font-weight: 900; font-family: 'Orbitron'; font-size: 1.2rem; }
 
-        .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; z-index: 3000; }
+        .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; z-index: 3000; }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="index.html" class="logo">HAIDER STORE</a>
+    <a href="index.html" class="logo">HAIDER_CMD</a>
     
     <nav>
         <ul class="nav-links">
@@ -102,20 +97,8 @@
             <li><a href="about.html" class="nav-link">ABOUT US</a></li>
             <li class="nav-item">
                 <span class="nav-link">SHOP <i class="fas fa-caret-down"></i></span>
-                <div class="dropdown-menu">
-                    <a onclick="filterByCat('Cables')">CABLES</a>
-                    <a onclick="filterByCat('Chargers')">CHARGERS</a>
-                    <a onclick="filterByCat('Car Charger')">CAR CHARGER</a>
-                    <a onclick="filterByCat('Clip Charger')">CLIP CHARGER</a>
-                    <a onclick="filterByCat('Card Reader')">CARD READER</a>
-                    <a onclick="filterByCat('Neck Band')">NECK BAND</a>
-                    <a onclick="filterByCat('Earbuds')">EARBUDS</a>
-                    <a onclick="filterByCat('Handfree')">HANDFREE</a>
-                    <a onclick="filterByCat('Speaker')">SPEAKER</a>
-                    <a onclick="filterByCat('Power Banks')">POWER BANKS</a>
-                    <a onclick="filterByCat('OTG Connectors')">OTG CONNECTORS</a>
-                    <a onclick="filterByCat('Battery')">BATTERY</a>
-                    <a onclick="filterByCat('HeadPhones')">HEADPHONES</a>
+                <div class="dropdown-menu" id="autoCategoryMenu">
+                    <a onclick="setFilter('ALL', 'ALL')">ALL PRODUCTS</a>
                 </div>
             </li>
             <li><a href="contact.html" class="nav-link">CONTACT</a></li>
@@ -123,7 +106,7 @@
     </nav>
 
     <div class="status-hub">
-        <span><i class="fas fa-circle" style="font-size: 7px; color: #25d366;"></i> SCANNING_BRANDS</span>
+        <span><i class="fas fa-circle" style="font-size: 7px; color: #25d366;"></i> AUTO_SYNC: ON</span>
         <span id="itemCount">UNITS: 00</span>
     </div>
 </header>
@@ -155,45 +138,59 @@
     const db = getDatabase(app);
     
     let allProducts = [];
-    let currentBrand = 'ALL';
-    let currentCategory = 'ALL';
+    let activeBrand = 'ALL';
+    let activeCat = 'ALL';
 
+    // 📡 Real-time Sync for BOTH Brands and Categories
     onValue(ref(db, 'products'), (snap) => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            syncBrands();
-            updateDisplay();
+            
+            generateAutoMenu(); // Sync Categories
+            generateBrandStrip(); // Sync Brands
+            updateUI();
         }
     });
 
-    function syncBrands() {
+    // 🏷️ Auto-Generate Category Dropdown from Data
+    function generateAutoMenu() {
+        const menu = document.getElementById('autoCategoryMenu');
+        const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+        
+        let html = `<a onclick="window.setFilter('ALL', 'ALL')">ALL PRODUCTS</a>`;
+        categories.sort().forEach(cat => {
+            html += `<a onclick="window.setFilter('ALL', '${cat}')">${cat}</a>`;
+        });
+        menu.innerHTML = html;
+    }
+
+    // 🏷️ Auto-Generate Brand Buttons from Data
+    function generateBrandStrip() {
+        const strip = document.getElementById('brandStrip');
         const brands = ['ALL', ...new Set(allProducts.map(p => p.brand.toUpperCase()).filter(b => b))];
-        document.getElementById('brandStrip').innerHTML = brands.map(b => `
-            <button class="f-btn ${b === currentBrand ? 'active' : ''}" onclick="window.setBrand('${b}', this)">
+        
+        strip.innerHTML = brands.map(b => `
+            <button class="f-btn ${b === activeBrand ? 'active' : ''}" onclick="window.setFilter('${b}', 'ALL')">
                 [ ${b} ]
             </button>
         `).join('');
     }
 
-    window.setBrand = (brand, btn) => {
-        currentBrand = brand;
-        currentCategory = 'ALL';
-        updateDisplay();
+    // 🖱️ Global Filter Controller
+    window.setFilter = (brand, cat) => {
+        activeBrand = brand;
+        activeCat = cat;
+        updateUI();
     };
 
-    window.filterByCat = (cat) => {
-        currentCategory = cat;
-        currentBrand = 'ALL';
-        updateDisplay();
-    };
-
-    function updateDisplay() {
+    function updateUI() {
         const query = document.getElementById('searchBar').value.toLowerCase();
+        
         const filtered = allProducts.filter(p => {
-            const mBrand = currentBrand === 'ALL' || p.brand.toUpperCase() === currentBrand;
-            const mCat = currentCategory === 'ALL' || p.category === currentCategory;
-            const mSearch = p.name.toLowerCase().includes(query);
-            return mBrand && mCat && mSearch;
+            const matchesBrand = activeBrand === 'ALL' || p.brand.toUpperCase() === activeBrand;
+            const matchesCat = activeCat === 'ALL' || p.category === activeCat;
+            const matchesSearch = p.name.toLowerCase().includes(query);
+            return matchesBrand && matchesCat && matchesSearch;
         });
 
         document.getElementById('itemCount').innerText = `UNITS: ${filtered.length.toString().padStart(2, '0')}`;
@@ -201,15 +198,16 @@
         const grid = document.getElementById('productGrid');
         grid.innerHTML = filtered.map(p => `
             <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
-                <div class="p-img-box"><img src="${p.img}" onerror="this.src='https://via.placeholder.com/300?text=DATA_OFFLINE'"></div>
-                <div style="font-size: 9px; color: var(--gold);">${p.brand}</div>
+                <div class="p-img-box"><img src="${p.img}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=IMAGE_OFFLINE'"></div>
+                <div style="font-size: 9px; color: var(--gold); text-transform: uppercase;">${p.brand}</div>
                 <h3 class="p-name">${p.name}</h3>
                 <div class="p-price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
             </div>
         `).join('');
     }
 
-    document.getElementById('searchBar').oninput = updateDisplay;
+    document.getElementById('searchBar').oninput = updateUI;
+
 </script>
 </body>
 </html>
