@@ -7,41 +7,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --bg: #050505; --card: #111; --border: #222; --green: #25d366; }
+        :root { --gold: #d4af37; --bg: #050505; --card: #111; --border: #222; --green: #25d366; --neon: #00f3ff; --red: #ff4757; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .admin-container { max-width: 1200px; margin: 0 auto; }
+        .admin-container { max-width: 1300px; margin: 0 auto; }
         
         /* ✨ Header */
         .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .logo-text { font-family: 'Orbitron'; color: var(--gold); letter-spacing: 2px; }
+        .logo-text { font-family: 'Orbitron'; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
 
-        /* 🚀 NEW: Product Upload Form Style */
-        .upload-section { background: rgba(212, 175, 55, 0.05); padding: 25px; border-radius: 15px; border: 1px dashed var(--gold); margin-bottom: 40px; }
+        /* 🚀 Product Upload Section */
+        .upload-section { background: rgba(212, 175, 55, 0.03); padding: 25px; border-radius: 15px; border: 1px solid var(--gold); margin-bottom: 40px; box-shadow: 0 0 20px rgba(212,175,55,0.1); }
         .upload-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         
         /* 📊 Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
-        .stat-card p { font-size: 22px; font-weight: 800; color: var(--gold); margin: 5px 0 0; }
+        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); text-align: center; transition: 0.3s; }
+        .stat-card:hover { border-color: var(--gold); }
+        .stat-card h4 { font-size: 10px; font-family: 'Orbitron'; color: #888; margin-bottom: 5px; text-transform: uppercase; }
+        .stat-card p { font-size: 26px; font-weight: 800; color: var(--gold); margin: 0; }
 
         /* 🔍 Inputs & Tables */
-        .input-field { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 8px; color: #fff; outline: none; margin-bottom: 10px; }
+        .input-field { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 8px; color: #fff; outline: none; margin-bottom: 10px; font-size: 13px; box-sizing: border-box; }
         .input-field:focus { border-color: var(--gold); }
         
         .table-wrap { background: var(--card); border-radius: 15px; overflow-x: auto; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th { background: #1a1a1a; color: var(--gold); padding: 15px; text-align: left; font-size: 12px; font-family: 'Orbitron'; }
-        td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
+        th { background: #1a1a1a; color: var(--gold); padding: 15px; text-align: left; font-size: 11px; font-family: 'Orbitron'; letter-spacing: 1px; }
+        td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 13px; vertical-align: top; }
         
         /* 🟢 Status & Buttons */
-        .status-select { background: #000; color: #fff; border: 1px solid #444; border-radius: 5px; padding: 5px; font-size: 11px; }
-        .btn { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; border: none; transition: 0.3s; }
-        .btn-gold { background: var(--gold); color: #000; width: 100%; font-family: 'Orbitron'; }
-        .btn-gold:hover { background: #b8962d; transform: scale(1.02); }
-        .btn-del { background: #333; color: #ff4757; padding: 6px 12px; }
-        .btn-wa { background: var(--green); color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; }
+        .status-select { background: #000; color: var(--neon); border: 1px solid var(--neon); border-radius: 5px; padding: 6px; font-size: 10px; font-family: 'Orbitron'; cursor: pointer; outline: none; }
+        .btn { padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; border: none; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; font-family: 'Orbitron'; }
+        .btn-gold { background: var(--gold); color: #000; width: 100%; justify-content: center; }
+        .btn-gold:hover { background: #fff; transform: translateY(-2px); }
+        .btn-del { background: #222; color: var(--red); border: 1px solid #333; padding: 8px 12px; }
+        .btn-del:hover { background: var(--red); color: #fff; }
+        .btn-wa { background: var(--green); color: #fff; text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-family: sans-serif; }
         
-        .order-item { background: #000; padding: 8px; border-radius: 5px; margin-bottom: 5px; border-left: 3px solid var(--gold); font-size: 12px; }
+        .order-item { background: #080808; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #1a1a1a; border-left: 4px solid var(--gold); }
+        .img-preview { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; vertical-align: middle; margin-right: 10px; border: 1px solid #333; }
     </style>
 </head>
 <body>
@@ -50,44 +54,58 @@
     <div class="header-box">
         <h2 class="logo-text"><i class="fa fa-shuttle-space"></i> CENTRAL_COMMAND</h2>
         <div style="display:flex; gap:10px;">
-            <button class="btn" style="background:#222; color:#fff" onclick="location.reload()">Refresh System</button>
-            <a href="index.html" target="_blank" class="btn btn-gold" style="width:auto">View Website</a>
+            <button class="btn" style="background:#222; color:#fff" onclick="location.reload()"><i class="fa fa-sync"></i> REFRESH</button>
+            <a href="index.html" target="_blank" class="btn btn-gold" style="width:auto"><i class="fa fa-external-link"></i> LIVE SITE</a>
         </div>
     </div>
 
     <div class="upload-section">
-        <h3 style="color:var(--gold); font-family:'Orbitron'; font-size:14px; margin-bottom:20px;"><i class="fa fa-plus-circle"></i> UPLOAD NEW GEAR TO WEBSITE</h3>
+        <h3 style="color:var(--gold); font-family:'Orbitron'; font-size:13px; margin-bottom:20px; letter-spacing: 2px;">
+            <i class="fa fa-plus-circle"></i> ADD_NEW_INVENTORY_UNIT
+        </h3>
         <div class="upload-grid">
-            <input type="text" id="pName" placeholder="Product Name (e.g. iPhone 13 Pro)" class="input-field">
-            <input type="number" id="pPrice" placeholder="Price (Rs)" class="input-field">
+            <input type="text" id="pName" placeholder="Unit Name (e.g. Realme 65W Charger)" class="input-field">
+            <input type="number" id="pPrice" placeholder="Price (PKR)" class="input-field">
+            
             <select id="pCat" class="input-field">
-                <option value="Mobile">Mobile Phones</option>
-                <option value="Accessories">Accessories</option>
-                <option value="Repairing">Repairing Services</option>
-                <option value="Tools">Repairing Tools</option>
+                <option value="" disabled selected>SELECT_CATEGORY</option>
+                <option value="Cables">Cables</option>
+                <option value="Chargers">Chargers</option>
+                <option value="Car Charger">Car Charger</option>
+                <option value="Clip Charger">Clip Charger</option>
+                <option value="Card Reader">Card Reader</option>
+                <option value="Neck Band">Neck Band</option>
+                <option value="Earbuds">Earbuds</option>
+                <option value="Handfree">Handfree</option>
+                <option value="Speaker">Speaker</option>
+                <option value="Power Banks">Power Banks</option>
+                <option value="OTG Connectors">OTG Connectors</option>
+                <option value="Battery">Battery</option>
+                <option value="HeadPhones">Headphones</option>
             </select>
-            <input type="text" id="pBrand" placeholder="Brand (e.g. Samsung, Apple)" class="input-field">
-            <input type="text" id="pImg" placeholder="Direct Image URL" class="input-field">
+
+            <input type="text" id="pBrand" placeholder="Brand Name" class="input-field">
+            <input type="text" id="pImg" placeholder="Direct Image URL (ImgBB)" class="input-field">
         </div>
-        <button onclick="window.uploadProduct()" class="btn btn-gold" style="margin-top:15px;">DEPLOY TO FRONTEND</button>
+        <button onclick="window.uploadProduct()" class="btn btn-gold" style="margin-top:15px;">DEPLOY_TO_TERMINAL</button>
     </div>
 
     <div class="stats-grid">
-        <div class="stat-card"><h4>Users</h4><p id="totalUsers">0</p></div>
-        <div class="stat-card"><h4>Total Orders</h4><p id="totalOrders">0</p></div>
-        <div class="stat-card"><h4>Pending</h4><p id="pendingOrders" style="color:#ff4757;">0</p></div>
+        <div class="stat-card"><h4>System Users</h4><p id="totalUsers">0</p></div>
+        <div class="stat-card"><h4>Lifetime Orders</h4><p id="totalOrders">0</p></div>
+        <div class="stat-card"><h4>Action Required</h4><p id="pendingOrders" style="color:var(--neon);">0</p></div>
     </div>
 
-    <input type="text" id="adminSearch" class="input-field" placeholder="Search orders by customer name, phone or CNIC...">
+    <input type="text" id="adminSearch" class="input-field" placeholder="Search by customer name, phone, CNIC or status..." style="margin-bottom: 20px; border-color: #333;">
 
     <div class="table-wrap">
         <table>
             <thead>
                 <tr>
-                    <th>Customer Details</th>
-                    <th>Contact & CNIC</th>
-                    <th>Orders & Status</th>
-                    <th>Actions</th>
+                    <th>CUSTOMER_INTEL</th>
+                    <th>SECURE_ID_&_PHONE</th>
+                    <th>ORDER_MANIFEST</th>
+                    <th>OPERATIONS</th>
                 </tr>
             </thead>
             <tbody id="adminTable"></tbody>
@@ -110,7 +128,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- 🚀 NEW: PRODUCT UPLOAD LOGIC ---
+    // --- 🚀 PRODUCT UPLOAD LOGIC ---
     window.uploadProduct = () => {
         const name = document.getElementById('pName').value;
         const price = document.getElementById('pPrice').value;
@@ -118,8 +136,8 @@
         const brand = document.getElementById('pBrand').value;
         const img = document.getElementById('pImg').value;
 
-        if(!name || !price || !img) {
-            alert("Sir, please fill Name, Price and Image URL!");
+        if(!name || !price || !cat || !img) {
+            alert("Sir, missing data packets. Ensure Name, Price, Category and Image URL are present.");
             return;
         }
 
@@ -128,21 +146,23 @@
             name,
             price: parseInt(price),
             category: cat,
-            brand,
-            img
+            brand: brand || "Generic",
+            img,
+            timestamp: Date.now()
         }).then(() => {
-            alert("System Success: Product is now live on the website!");
-            document.getElementById('pName').value = "";
-            document.getElementById('pPrice').value = "";
-            document.getElementById('pImg').value = "";
+            alert("UNIT DEPLOYED: Product is now live on the frontend.");
+            ['pName', 'pPrice', 'pBrand', 'pImg'].forEach(id => document.getElementById(id).value = "");
+            document.getElementById('pCat').value = "";
         });
     };
 
-    // --- 🔄 ORDER MANAGEMENT LOGIC ---
+    // --- 🔄 ORDER & USER MANAGEMENT ---
     onValue(ref(db, 'users'), (snapshot) => {
         const adminTable = document.getElementById('adminTable');
         adminTable.innerHTML = "";
         let uCount = 0, oCount = 0, pCount = 0;
+
+        if(!snapshot.exists()) return;
 
         snapshot.forEach((child) => {
             uCount++;
@@ -151,31 +171,41 @@
             const orders = user.orders || {};
 
             let orderHtml = "";
-            Object.keys(orders).forEach(oid => {
+            Object.keys(orders).reverse().forEach(oid => {
                 oCount++;
                 const order = orders[oid];
                 if(order.status === "Pending") pCount++;
                 
                 orderHtml += `
                     <div class="order-item">
-                        <b>${order.items || 'Items'}</b><br>
-                        <small style="color:#555">${order.date || ''}</small><br>
+                        <div style="margin-bottom:5px;">
+                            <span style="color:var(--gold)">#</span> <b>${order.items || 'Units'}</b>
+                        </div>
+                        <div style="font-size:10px; color:#666; margin-bottom:8px;">TIMESTAMP: ${order.date || 'Unknown'}</div>
                         <select class="status-select" onchange="window.updateStatus('${uid}', '${oid}', this)">
-                            <option value="Pending" ${order.status==='Pending'?'selected':''}>Pending</option>
-                            <option value="Shipped" ${order.status==='Shipped'?'selected':''}>Shipped</option>
-                            <option value="Delivered" ${order.status==='Delivered'?'selected':''}>Delivered</option>
+                            <option value="Pending" ${order.status==='Pending'?'selected':''}>PENDING</option>
+                            <option value="Shipped" ${order.status==='Shipped'?'selected':''}>SHIPPED</option>
+                            <option value="Delivered" ${order.status==='Delivered'?'selected':''}>DELIVERED</option>
                         </select>
                     </div>`;
             });
 
             adminTable.innerHTML += `
                 <tr class="user-row">
-                    <td><b>${user.name || 'Unknown'}</b><br><small style="color:#888">${user.email || ''}</small></td>
-                    <td>${user.phone || 'N/A'}<br><small style="color:#555">CNIC: ${user.cnic || 'N/A'}</small></td>
-                    <td>${orderHtml || '<span style="color:#333">No Orders</span>'}</td>
                     <td>
-                        <button class="btn btn-del" onclick="window.deleteUser('${uid}')"><i class="fa fa-trash"></i></button>
-                        <a href="https://wa.me/${user.phone}" class="btn btn-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <div style="font-weight:700; color:var(--gold); font-family:'Orbitron'; font-size:12px;">${user.name || 'Anonymous User'}</div>
+                        <div style="color:#888; font-size:11px;">${user.email || 'No Email'}</div>
+                    </td>
+                    <td>
+                        <div style="font-family:monospace;">${user.phone || 'N/A'}</div>
+                        <div style="color:#555; font-size:10px; margin-top:4px;">CNIC: ${user.cnic || 'NOT_FOUND'}</div>
+                    </td>
+                    <td>${orderHtml || '<span style="color:#333; font-style:italic;">No active transmissions</span>'}</td>
+                    <td>
+                        <div style="display:flex; gap:8px;">
+                            <a href="https://wa.me/${user.phone}" class="btn btn-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <button class="btn btn-del" onclick="window.deleteUser('${uid}')"><i class="fa fa-trash"></i></button>
+                        </div>
                     </td>
                 </tr>`;
         });
@@ -187,15 +217,16 @@
 
     window.updateStatus = (uid, oid, elem) => {
         update(ref(db, `users/${uid}/orders/${oid}`), { status: elem.value })
-        .then(() => alert("Database Synchronized: Status Updated!"));
+        .then(() => console.log("System Sync: Order status updated."));
     };
 
     window.deleteUser = (uid) => {
-        if(confirm("Confirm Deletion? All user data will be lost.")) {
+        if(confirm("DANGER: This will erase all user data and order history. Proceed?")) {
             remove(ref(db, `users/${uid}`));
         }
     };
 
+    // 🔍 Search Logic
     document.getElementById('adminSearch').oninput = (e) => {
         const val = e.target.value.toLowerCase();
         document.querySelectorAll('.user-row').forEach(row => {
