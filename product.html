@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        :root { --neon: #00f2ff; --gold: #d4af37; --bg: #02050a; --glass: rgba(0, 242, 255, 0.05); }
+        :root { --neon: #00f2ff; --gold: #d4af37; --bg: #02050a; --glass: rgba(0, 242, 255, 0.05); --border: rgba(212, 175, 55, 0.3); }
         
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
         body { background: var(--bg); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
@@ -18,74 +18,60 @@
             background-size: 50px 50px; z-index: -1;
         }
 
-        .quantum-container { max-width: 1500px; margin: 20px auto; padding: 20px; display: grid; grid-template-columns: 300px 1fr 350px; gap: 25px; opacity: 0; transition: opacity 1s; }
+        /* 🤖 Navigation Bar (Strict List Integrated) */
+        header { 
+            position: fixed; top: 0; width: 100%; height: 85px; 
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(25px); 
+            z-index: 2000; border-bottom: 2px solid var(--border); 
+            display: flex; align-items: center; justify-content: space-between; padding: 0 5%; 
+        }
+        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.3rem; text-decoration: none; text-shadow: 0 0 10px rgba(212,175,55,0.4); letter-spacing: 2px; }
+        
+        .nav-links { display: flex; gap: 25px; list-style: none; align-items: center; }
+        .nav-item { position: relative; }
+        .nav-link { color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 11px; letter-spacing: 1px; transition: 0.3s; cursor: pointer; padding: 10px 0; }
+        .nav-link:hover { color: var(--gold); }
+
+        .dropdown-menu {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: rgba(10,10,10,0.98); border: 1px solid var(--border); 
+            width: 220px; opacity: 0; visibility: hidden; transition: 0.4s; padding: 10px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9); z-index: 3000;
+            max-height: 400px; overflow-y: auto;
+        }
+        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
+        .dropdown-menu a { color: #aaa; padding: 10px 20px; text-decoration: none; font-size: 10px; display: block; border-bottom: 1px solid rgba(212,175,55,0.05); text-transform: uppercase; }
+        .dropdown-menu a:hover { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding-left: 25px; }
+
+        /* 🌌 Terminal Layout */
+        .quantum-container { max-width: 1500px; margin: 120px auto 40px; padding: 20px; display: grid; grid-template-columns: 300px 1fr 350px; gap: 25px; opacity: 0; transition: opacity 1s; }
         .quantum-container.loaded { opacity: 1; }
 
         .panel-header { font-family: 'Orbitron'; color: var(--neon); font-size: 11px; letter-spacing: 2px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase; }
 
-        /* 🛰️ Related Units */
         .side-panel { background: var(--glass); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 10px; padding: 20px; backdrop-filter: blur(5px); }
         .rel-item { margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); padding: 10px; transition: 0.3s; text-decoration: none; color: #fff; display: block; border-radius: 5px; text-align: center; }
-        .rel-item:hover { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); }
-        .rel-item img { width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 5px; }
+        .rel-item:hover { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); transform: translateY(-3px); }
+        .rel-item img { width: 100%; height: 110px; object-fit: contain; background: #fff; border-radius: 5px; }
 
-        /* 🌀 Center Viewport (ZOOM ENABLED) */
-        .viewport { 
-            position: relative; 
-            display: flex; 
-            flex-direction: column; 
-            background: #ffffff; 
-            border: 1px solid var(--neon);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
-            overflow: hidden;
-        }
+        .viewport { position: relative; display: flex; flex-direction: column; background: #ffffff; border: 1px solid var(--neon); border-radius: 15px; box-shadow: 0 0 30px rgba(0, 242, 255, 0.15); overflow: hidden; }
+        .viewport .panel-header { background: #000; margin-bottom: 0; padding: 15px 25px; border-bottom: 1px solid var(--neon); }
 
-        .viewport .panel-header { 
-            background: #000; 
-            margin-bottom: 0; 
-            padding: 15px 25px; 
-            width: 100%; 
-            border-bottom: 1px solid var(--neon); 
-        }
+        .main-scanner { width: 100%; height: 550px; position: relative; display: flex; align-items: center; justify-content: center; padding: 40px; overflow: hidden; }
+        .main-scanner img { max-width: 90%; max-height: 90%; z-index: 5; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); object-fit: contain; }
+        .main-scanner:hover img { transform: scale(1.4); }
 
-        .main-scanner { 
-            width: 100%; 
-            height: 600px; 
-            position: relative; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 40px;
-            overflow: hidden; /* Important for Zoom */
-        }
-
-        .main-scanner img { 
-            max-width: 90%; 
-            max-height: 90%; 
-            z-index: 5; 
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s; 
-            object-fit: contain;
-            transform-origin: center; /* Center se zoom hoga */
-        }
-
-        /* 🔍 Zoom Effect on Hover */
-        .main-scanner:hover img {
-            transform: scale(1.4); /* 40% bada ho jayega */
-        }
-
-        .thumb-row { display: flex; gap: 15px; padding: 20px; background: #f8f9fa; border-top: 1px solid #eee; justify-content: center; width: 100%; }
-        .thumb { width: 80px; height: 80px; border: 2px solid #ddd; padding: 5px; background: #fff; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .thumb-row { display: flex; gap: 15px; padding: 20px; background: #f8f9fa; border-top: 1px solid #eee; justify-content: center; }
+        .thumb { width: 75px; height: 75px; border: 2px solid #ddd; padding: 5px; background: #fff; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .thumb:hover { border-color: var(--neon); transform: translateY(-5px); }
 
         .info-panel { background: var(--glass); border: 1px solid rgba(0, 242, 255, 0.2); padding: 30px; border-radius: 10px; backdrop-filter: blur(5px); }
-        .unit-title { font-family: 'Orbitron'; font-size: 28px; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
+        .unit-title { font-family: 'Orbitron'; font-size: 26px; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
         .unit-price { font-size: 26px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 25px; }
 
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
         .stat-card { border: 1px solid rgba(255,255,255,0.05); padding: 15px; text-align: center; background: rgba(0, 242, 255, 0.02); }
-        .stat-card small { font-size: 8px; color: #666; display: block; letter-spacing: 1px; margin-bottom: 5px; }
+        .stat-card small { font-size: 8px; color: #666; display: block; margin-bottom: 5px; }
         .stat-card span { font-size: 13px; color: var(--neon); font-weight: bold; }
 
         .acquire-btn { 
@@ -96,14 +82,40 @@
         }
         .acquire-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 50px var(--neon); }
 
-        @media (max-width: 1100px) { 
-            .quantum-container { grid-template-columns: 1fr; } 
-            .side-panel { display: none; } 
-            .main-scanner { height: 400px; }
-        }
+        @media (max-width: 1100px) { .quantum-container { grid-template-columns: 1fr; margin-top: 100px; } .side-panel { display: none; } }
     </style>
 </head>
 <body>
+
+<header>
+    <a href="index.html" class="logo">HAIDER_COMMAND</a>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">HOME</a></li>
+            <li><a href="about.html" class="nav-link">ABOUT US</a></li>
+            <li class="nav-item">
+                <span class="nav-link">SHOP <i class="fas fa-caret-down" style="font-size: 8px;"></i></span>
+                <div class="dropdown-menu">
+                    <a href="index.html">Cables</a>
+                    <a href="index.html">Chargers</a>
+                    <a href="index.html">Car Charger</a>
+                    <a href="index.html">Clip Charger</a>
+                    <a href="index.html">Card Reader</a>
+                    <a href="index.html">Neck Band</a>
+                    <a href="index.html">Earbuds</a>
+                    <a href="index.html">Handfree</a>
+                    <a href="index.html">Speaker</a>
+                    <a href="index.html">Power Banks</a>
+                    <a href="index.html">OTG Connectors</a>
+                    <a href="index.html">Battery</a>
+                    <a href="index.html">HeadPhones</a>
+                    <a href="index.html" style="color:var(--gold)">[ ALL UNITS ]</a>
+                </div>
+            </li>
+            <li><a href="contact.html" class="nav-link">CONTACT</a></li>
+        </ul>
+    </nav>
+</header>
 
 <div class="quantum-container" id="terminal-ui">
     <div class="side-panel">
@@ -114,9 +126,9 @@
     <div class="viewport">
         <div class="panel-header">SCANNING_SUBJECT_ACTIVE</div>
         <div class="main-scanner">
-            <img id="main-view" src="https://via.placeholder.com/600?text=INITIALIZING+SCAN...">
+            <img id="main-view" src="">
         </div>
-        <div class="thumb-row" id="thumb-box"></div>
+        <div id="thumb-box" class="thumb-row"></div>
     </div>
 
     <div class="info-panel">
@@ -128,7 +140,7 @@
         <div class="stat-grid">
             <div class="stat-card"><small>INTEGRITY</small><span>100% OK</span></div>
             <div class="stat-card"><small>STOCK</small><span style="color:var(--gold)">AVAILABLE</span></div>
-            <div class="stat-card"><small>NETWORK</small><span>UNLOCKED</span></div>
+            <div class="stat-card"><small>NETWORK</small><span>SECURED</span></div>
             <div class="stat-card"><small>WARRANTY</small><span>ACTIVE</span></div>
         </div>
 
@@ -171,9 +183,9 @@
                 const p = snap.val();
                 document.getElementById('p-name').innerText = p.name;
                 document.getElementById('p-price').innerText = `PKR ${p.price}`;
-                document.getElementById('p-desc').innerText = p.description || "Quantum system scan complete. No hardware anomalies detected in this unit.";
+                document.getElementById('p-desc').innerText = p.description || "Quantum system scan complete. Hardware integrity verified.";
                 document.getElementById('main-view').src = p.img;
-                document.getElementById('wa-link').href = `https://wa.me/923279518790?text=System_Protocol: I want to acquire ${p.name}`;
+                document.getElementById('wa-link').href = `https://wa.me/923279518790?text=I am interested in acquiring: ${p.name}`;
                 
                 const images = [p.img, p.img2, p.img3].filter(x => x);
                 document.getElementById('thumb-box').innerHTML = images.map(i => 
@@ -190,14 +202,16 @@
         get(ref(db, 'products')).then((snap) => {
             const all = snap.val();
             const box = document.getElementById('related-box');
+            box.innerHTML = '';
             let count = 0;
             for (let id in all) {
-                if (id !== currentId && all[id].category === cat && count < 3) {
+                // Scans for up to 6 related units
+                if (id !== currentId && all[id].category === cat && count < 6) {
                     const r = all[id];
                     box.innerHTML += `
                         <a href="product.html?id=${id}" class="rel-item">
                             <img src="${r.img}">
-                            <div style="font-size:10px; margin-top:10px; color:var(--neon)">${r.name}</div>
+                            <div style="font-size:9px; margin-top:10px; color:var(--neon); text-transform:uppercase;">${r.name}</div>
                         </a>`;
                     count++;
                 }
