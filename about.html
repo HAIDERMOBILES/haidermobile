@@ -1,32 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us | Haider Mobiles</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --bg: #000; }
-        body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
-        .hero { padding: 80px 5%; text-align: center; background: linear-gradient(to bottom, #111, #000); }
-        h1 { color: var(--gold); font-size: 3rem; margin-bottom: 20px; }
-        .content { max-width: 800px; margin: 0 auto; padding: 40px 5%; line-height: 1.8; color: #ccc; }
-        .stats { display: flex; justify-content: space-around; padding: 40px 5%; background: #0a0a0a; border-top: 1px solid #222; }
-        .stat-item h2 { color: var(--gold); margin: 0; }
-        .back-btn { display: inline-block; margin-top: 30px; color: var(--gold); text-decoration: none; border: 1px solid var(--gold); padding: 10px 25px; border-radius: 50px; }
+        :root { --neon: #00f2ff; --gold: #d4af37; --bg: #02050a; --border: rgba(212, 175, 55, 0.3); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
+
+        /* Background Grid */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; z-index: -1;
+        }
+
+        /* 🤖 Navigation Bar */
+        header { 
+            position: fixed; top: 0; width: 100%; height: 85px; 
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(25px); 
+            z-index: 2000; border-bottom: 2px solid var(--border); 
+            display: flex; align-items: center; justify-content: space-between; padding: 0 5%; 
+        }
+        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.3rem; text-decoration: none; text-shadow: 0 0 10px rgba(212,175,55,0.4); letter-spacing: 2px; }
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-link { color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 11px; letter-spacing: 1px; }
+        .nav-link:hover { color: var(--gold); }
+
+        /* 🌌 Content Layout */
+        .main-content { max-width: 1000px; margin: 150px auto 50px; padding: 40px; background: rgba(0, 242, 255, 0.03); border: 1px solid var(--neon); border-radius: 15px; position: relative; }
+        .panel-header { font-family: 'Orbitron'; color: var(--neon); font-size: 14px; letter-spacing: 4px; border-bottom: 1px solid var(--neon); padding-bottom: 15px; margin-bottom: 30px; text-transform: uppercase; }
+        
+        h2 { font-family: 'Orbitron'; color: var(--gold); margin-bottom: 20px; font-size: 2rem; }
+        p { line-height: 1.8; color: #ccc; margin-bottom: 20px; font-size: 14px; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+        .stat-box { border: 1px solid rgba(255,255,255,0.1); padding: 20px; text-align: center; background: rgba(255,255,255,0.02); }
+        .stat-box i { color: var(--neon); font-size: 24px; margin-bottom: 10px; }
+        .stat-box h4 { font-family: 'Orbitron'; font-size: 18px; color: var(--gold); }
+        .stat-box span { font-size: 10px; color: #666; text-transform: uppercase; }
+
+        .btn-base { display: inline-block; margin-top: 30px; padding: 15px 30px; border: 1px solid var(--neon); color: var(--neon); text-decoration: none; font-family: 'Orbitron'; font-size: 12px; transition: 0.3s; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); }
+        .btn-base:hover { background: var(--neon); color: #000; box-shadow: 0 0 30px var(--neon); }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1>Our Story</h1>
-        <p>Providing Premium Gadgets Since 2020</p>
+
+<header>
+    <a href="index.html" class="logo">HAIDER STORE</a>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">HOME</a></li>
+            <li><a href="about.html" class="nav-link" style="color:var(--gold)">ABOUT US</a></li>
+            <li><a href="contact.html" class="nav-link">CONTACT</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="main-content">
+    <div class="panel-header">ESTABLISHING_MISSION_PROTOCOL</div>
+    <h2>WELCOME TO HAIDER MOBILES</h2>
+    <p>We are a futuristic mobile accessories hub dedicated to providing high-performance hardware for your digital lifestyle. From high-speed chargers to premium audio units, our database is curated for quality and durability.</p>
+    <p>Established with the vision of bridging the gap between cutting-edge technology and affordability, Haider Mobiles has become a trusted name in the mobile industry. Every unit in our terminal undergoes a strict integrity scan before reaching your hands.</p>
+
+    <div class="stats-row">
+        <div class="stat-box">
+            <i class="fas fa-check-double"></i>
+            <h4>100%</h4>
+            <span>Genuine Quality</span>
+        </div>
+        <div class="stat-box">
+            <i class="fas fa-shipping-fast"></i>
+            <h4>FAST</h4>
+            <span>Secure Delivery</span>
+        </div>
+        <div class="stat-box">
+            <i class="fas fa-headset"></i>
+            <h4>24/7</h4>
+            <span>System Support</span>
+        </div>
     </div>
-    <div class="content">
-        <h2>About Haider Mobiles</h2>
-        <p>Hum Pakistan ke un chand dealers mein se hain jo quality par kabhi compromise nahi karte. Hamara mission har Pakistani tak original technology pohanchana hai.</p>
-        <br>
-        <h2>Careers</h2>
-        <p>Kya aap hamari team ka hissa banna chahte hain? Hum hamesha talented logon ki talash mein rehte hain. Apna CV hamesha <b>jobs@haidermobiles.pk</b> par bhenjein.</p>
-        <a href="index.html" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Store</a>
-    </div>
+
+    <a href="index.html" class="btn-base">EXPLORE_INVENTORY</a>
+</div>
+
 </body>
 </html>
