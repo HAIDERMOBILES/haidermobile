@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Secure Neural Interface v5.0</title>
+    <title>Jarvis | Secure Neural Interface v5.1</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
@@ -11,13 +11,11 @@
         
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
         
-        /* 🔐 Security Overlay */
         #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); width: 320px; }
         
         .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
         
-        /* 🧠 JARVIS NEURAL INTERFACE */
         .ai-brain-box { 
             background: #0f0f0f; border: 1px solid var(--gold); padding: 15px; border-radius: 20px; 
             margin-bottom: 20px; position: relative; overflow: hidden;
@@ -45,9 +43,6 @@
         .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
         .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
         
-        .sale-badge { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-family: 'Orbitron'; font-weight: bold; z-index: 5; }
-        .price-cut { text-decoration: line-through; color: #555; font-size: 9px; margin-right: 5px; }
-        
         .progress-bar { height: 2px; width: 0%; background: var(--gold); transition: 0.3s; margin-top: 4px; }
         .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; z-index: 10; }
 
@@ -62,7 +57,7 @@
 <div id="loginOverlay">
     <div id="loginBox">
         <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px; margin-bottom: 20px;">JARVIS CORE</h2>
-        <input type="password" id="passInput" placeholder="Enter System Key...">
+        <input type="password" id="passInput" placeholder="System Key (haider786)">
         <button onclick="checkPass()" class="save-btn">INITIALIZE CORE</button>
     </div>
 </div>
@@ -70,7 +65,7 @@
 <div class="main-layout">
     <div class="sidebar">
         <div class="ai-brain-box" id="aiBrain">
-            <span class="upgrade-status" id="sysStatus">SYSTEM: ENCRYPTED | VER: 5.0</span>
+            <span class="upgrade-status" id="sysStatus">SYSTEM: ACTIVE | ENCRYPTED</span>
             <div style="display:flex; gap:10px;">
                 <input type="text" id="aiQuery" placeholder="Target product name..." style="margin:0;">
                 <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
@@ -129,16 +124,11 @@
             <div class="stat-card"><small>YEARLY TOTAL</small><h2 id="yStat">0</h2></div>
             <div class="stat-card"><small>ITEMS ON SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
         </div>
-
-        <h3 style="font-family:'Orbitron'; color:var(--gold); font-size:14px; margin-bottom:20px; border-left: 3px solid var(--gold); padding-left: 15px;">
-            <i class="fa fa-database"></i> LIVE_DATABASE_STREAM
-        </h3>
         <div id="invGrid" class="inv-grid"></div>
     </div>
 </div>
 
 <script type="module">
-    // --- 🚀 FIREBASE CORE ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -154,168 +144,107 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
-    
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
     const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
     
     let productImages = { img1: "", img2: "", img3: "" };
 
     const speak = (txt) => {
-        const synth = window.speechSynthesis;
         const utter = new SpeechSynthesisUtterance(txt);
-        utter.pitch = 0.9; utter.rate = 1.0;
-        synth.speak(utter);
+        utter.pitch = 0.9; window.speechSynthesis.speak(utter);
     };
 
-    // --- 🔐 AUTHENTICATION LOGIC ---
+    // --- 🔐 AUTH ---
     window.checkPass = () => {
         const pass = document.getElementById('passInput').value;
-        const adminEmail = "admin@haider.com"; // Your preset admin email
-
-        signInWithEmailAndPassword(auth, adminEmail, pass)
-            .then(() => {
-                document.getElementById('loginOverlay').style.display = 'none';
-                speak("Access granted. Neural link established.");
-            })
-            .catch((error) => {
-                speak("Access denied. Intruder alert.");
-                alert("INVALID KEY: Connection Refused.");
-            });
+        signInWithEmailAndPassword(auth, "admin@haider.com", pass)
+            .then(() => speak("Welcome back, Sir."))
+            .catch(e => alert("Access Denied: " + e.message));
     };
 
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            document.getElementById('loginOverlay').style.display = 'none';
-        } else {
-            document.getElementById('loginOverlay').style.display = 'flex';
-        }
+        document.getElementById('loginOverlay').style.display = user ? 'none' : 'flex';
     });
 
-    window.logout = () => {
-        if(confirm("Terminate session?")) {
-            signOut(auth).then(() => speak("Session terminated."));
-        }
-    };
+    window.logout = () => signOut(auth);
 
-    // --- 🤖 JARVIS AI SCAN (GEMINI) ---
+    // --- 🤖 SCAN ---
     window.jarvisAIScan = async () => {
         const query = document.getElementById('aiQuery').value;
-        const log = document.getElementById('aiLog');
         if(!query) return;
-
-        speak("Scanning neural networks for " + query);
-        log.innerText = "ACCESSING CLOUD DATA...";
-        
+        speak("Scanning for " + query);
         try {
-            const prompt = `Search for: ${query}. Respond ONLY in JSON format: {"name": "full name", "brand": "brand", "price": "numeric price", "category": "Cables or Chargers or Earbuds or Neck Band or Speaker or Power Banks or HeadPhones", "specs": "short specs"}`;
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: "POST", headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Search: ${query}. Respond ONLY JSON: {"name": "...", "brand": "...", "price": 0, "category": "Earbuds", "specs": "..."}` }] }] })
             });
             const data = await resp.json();
-            const text = data.candidates[0].content.parts[0].text;
-            const res = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
-            
+            const res = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, ""));
             document.getElementById('pName').value = res.name;
-            document.getElementById('pBrand').value = res.brand.toUpperCase();
-            document.getElementById('pPrice').value = res.price.toString().replace(/\D/g, "");
+            document.getElementById('pBrand').value = res.brand;
+            document.getElementById('pPrice').value = res.price;
             document.getElementById('pCat').value = res.category;
             document.getElementById('pDesc').value = res.specs;
-            
-            speak("Analysis complete, Sir.");
-            log.innerText = "SCAN SUCCESSFUL.";
-        } catch (e) { 
-            log.innerText = "NEURAL ERROR."; 
-            speak("Data retrieval failed.");
+            speak("Scan complete.");
+        } catch (e) { speak("Neural link failed."); }
+    };
+
+    // --- 📸 UPLOAD ---
+    window.uploadImg = async (input, key, txtId, progId) => {
+        const fd = new FormData(); fd.append("image", input.files[0]);
+        document.getElementById(txtId).innerText = "SYNC...";
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+        const data = await res.json();
+        if(data.success) {
+            productImages[key] = data.data.url;
+            document.getElementById(progId).style.width = "100%";
+            document.getElementById(txtId).innerText = "READY";
         }
     };
 
-    // --- 📸 IMAGE UPLOAD (IMGBB) ---
-    window.uploadImg = async (input, key, txtId, progId) => {
-        const file = input.files[0];
-        if(!file) return;
-        document.getElementById(txtId).innerText = "SYNCING...";
-        const fd = new FormData(); fd.append("image", file);
-        try {
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-            const data = await res.json();
-            if(data.success) {
-                productImages[key] = data.data.url;
-                document.getElementById(progId).style.width = "100%";
-                document.getElementById(txtId).innerText = "SYNCED";
-                speak("Image packet received.");
-            }
-        } catch (e) { speak("Upload failure."); }
-    };
-
-    // --- 💾 DATABASE SYNC ---
-    document.getElementById('saveBtn').onclick = function() {
-        if (!auth.currentUser) return speak("Unauthorized attempt.");
-        
-        const d = new Date();
+    // --- 💾 SAVE ---
+    document.getElementById('saveBtn').onclick = () => {
         const product = {
-            name: document.getElementById('pName').value, 
+            name: document.getElementById('pName').value,
             brand: document.getElementById('pBrand').value,
             price: Number(document.getElementById('pPrice').value),
             salePrice: Number(document.getElementById('pDiscountPrice').value) || null,
-            onSale: document.getElementById('pDiscountPrice').value ? true : false,
+            onSale: !!document.getElementById('pDiscountPrice').value,
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
-            img: productImages.img1, 
-            img2: productImages.img2 || "", 
-            img3: productImages.img3 || "",
-            month: d.getMonth(),
-            year: d.getFullYear(),
+            img: productImages.img1,
             timestamp: Date.now()
         };
 
-        if(!product.img || !product.name) return speak("Data packet incomplete, Sir.");
+        if(!product.name || !product.img) return alert("Fill Name & Main Image!");
 
-        push(ref(db, 'products'), product).then(() => {
-            speak("Database updated. Unit online.");
-            location.reload();
-        }).catch(err => {
-            speak("Database write error.");
-            alert("SECURITY BLOCK: You need Firebase Rules permission.");
-        });
+        console.log("Saving to Firebase...", product);
+        push(ref(db, 'products'), product)
+            .then(() => {
+                alert("SUCCESS: Data Synced!");
+                location.reload();
+            })
+            .catch(err => alert("FIREBASE ERROR: " + err.message));
     };
 
-    // --- 📊 INVENTORY STREAM ---
+    // --- 📊 LOAD ---
     onValue(ref(db, 'products'), (snap) => {
         const grid = document.getElementById('invGrid'); grid.innerHTML = "";
-        const now = new Date();
-        let m = 0, y = 0, s = 0;
-
         if(snap.exists()){
             Object.keys(snap.val()).reverse().forEach(id => {
                 const p = snap.val()[id];
-                if(p.month === now.getMonth() && p.year === now.getFullYear()) m++;
-                if(p.year === now.getFullYear()) y++;
-                if(p.onSale) s++;
-
                 grid.innerHTML += `
                     <div class="inv-card">
-                        ${p.onSale ? '<div class="sale-badge">SALE</div>' : ''}
-                        <button class="delete-btn" onclick="deleteItem('${id}')"><i class="fa fa-trash"></i></button>
+                        <button class="delete-btn" onclick="deleteItem('${id}')">×</button>
                         <img src="${p.img}">
-                        <div style="font-size:9px; color:var(--gold); font-family:'Orbitron';">${p.brand}</div>
-                        <div style="font-size:11px; margin-top:5px; font-weight:600;">${p.name}</div>
-                        <div style="font-size:11px; margin-top:5px; font-weight:bold; color:var(--gold);">
-                            ${p.onSale ? `<span class="price-cut">Rs ${p.price}</span> Rs ${p.salePrice}` : `Rs ${p.price}`}
-                        </div>
+                        <div style="font-size:11px;">${p.name}</div>
+                        <div style="color:var(--gold)">Rs ${p.price}</div>
                     </div>`;
             });
-            document.getElementById('mStat').innerText = m;
-            document.getElementById('yStat').innerText = y;
-            document.getElementById('sStat').innerText = s;
         }
     });
 
-    window.deleteItem = (id) => { 
-        if(confirm("Destroy unit data?")) {
-            remove(ref(db, `products/${id}`)).then(() => speak("Unit removed from grid."));
-        }
-    };
+    window.deleteItem = (id) => confirm("Delete?") && remove(ref(db, `products/${id}`));
 </script>
 </body>
 </html>
