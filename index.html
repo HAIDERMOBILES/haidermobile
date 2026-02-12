@@ -247,7 +247,7 @@
         generatedOTP = Math.floor(100000 + Math.random() * 900000);
         userData = { name, email, pass };
 
-        emailjs.send('service_c15ds0p', 'YOUR_TEMPLATE_ID', {
+        emailjs.send('service_c15ds0p', 'template_jmz55qc', {
             to_name: name, to_email: email, otp_code: generatedOTP
         }).then(() => {
             document.getElementById('step1').classList.add('hidden');
