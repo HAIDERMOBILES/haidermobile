@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Self-Evolving AI v5.0</title>
+    <title>Jarvis | Secure Neural Interface v5.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
@@ -11,8 +11,9 @@
         
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
         
-        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
+        /* 🔐 Security Overlay */
+        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); width: 320px; }
         
         .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
         
@@ -24,7 +25,6 @@
         }
         .upgrade-status { font-size: 8px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 5px; display: block; }
         
-        /* 📊 Analytics Panel */
         .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
         .stat-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
         .stat-card small { font-family: 'Orbitron'; font-size: 9px; color: var(--neon); }
@@ -45,20 +45,24 @@
         .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
         .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
         
-        /* 🏷️ Sale UI Elements */
         .sale-badge { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-family: 'Orbitron'; font-weight: bold; z-index: 5; }
         .price-cut { text-decoration: line-through; color: #555; font-size: 9px; margin-right: 5px; }
         
         .progress-bar { height: 2px; width: 0%; background: var(--gold); transition: 0.3s; margin-top: 4px; }
         .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; z-index: 10; }
+
+        @media (max-width: 800px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .upload-card { position: relative; top: 0; }
+        }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay">
     <div id="loginBox">
-        <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px;">JARVIS CORE</h2>
-        <input type="password" id="passInput" placeholder="System Key">
+        <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px; margin-bottom: 20px;">JARVIS CORE</h2>
+        <input type="password" id="passInput" placeholder="Enter System Key...">
         <button onclick="checkPass()" class="save-btn">INITIALIZE CORE</button>
     </div>
 </div>
@@ -66,12 +70,12 @@
 <div class="main-layout">
     <div class="sidebar">
         <div class="ai-brain-box" id="aiBrain">
-            <span class="upgrade-status" id="sysStatus">SYSTEM: STABLE | VER: 5.0</span>
+            <span class="upgrade-status" id="sysStatus">SYSTEM: ENCRYPTED | VER: 5.0</span>
             <div style="display:flex; gap:10px;">
                 <input type="text" id="aiQuery" placeholder="Target product name..." style="margin:0;">
                 <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
             </div>
-            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family: 'Orbitron'; uppercase;">Standing by, Sir.</div>
+            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family: 'Orbitron'; text-transform: uppercase;">Standing by, Sir.</div>
         </div>
 
         <div class="upload-card">
@@ -115,6 +119,7 @@
             <textarea id="pDesc" placeholder="Technical Specs..." rows="3"></textarea>
             
             <button id="saveBtn" class="save-btn">SYNC DATABASE</button>
+            <button onclick="logout()" style="background:none; border:none; color:#444; font-size:10px; margin-top:15px; cursor:pointer; width:100%;">TERMINATE SESSION</button>
         </div>
     </div>
 
@@ -133,8 +138,10 @@
 </div>
 
 <script type="module">
+    // --- 🚀 FIREBASE CORE ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -146,6 +153,8 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
+    
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
     const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
     
@@ -154,30 +163,51 @@
     const speak = (txt) => {
         const synth = window.speechSynthesis;
         const utter = new SpeechSynthesisUtterance(txt);
-        utter.pitch = 0.85; utter.rate = 1.0;
+        utter.pitch = 0.9; utter.rate = 1.0;
         synth.speak(utter);
     };
 
+    // --- 🔐 AUTHENTICATION LOGIC ---
     window.checkPass = () => {
-        if(document.getElementById('passInput').value === "haider786") {
-            localStorage.setItem("jarvis_session", "active");
+        const pass = document.getElementById('passInput').value;
+        const adminEmail = "admin@haider.com"; // Your preset admin email
+
+        signInWithEmailAndPassword(auth, adminEmail, pass)
+            .then(() => {
+                document.getElementById('loginOverlay').style.display = 'none';
+                speak("Access granted. Neural link established.");
+            })
+            .catch((error) => {
+                speak("Access denied. Intruder alert.");
+                alert("INVALID KEY: Connection Refused.");
+            });
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
             document.getElementById('loginOverlay').style.display = 'none';
-            speak("Welcome back, Sir. Market analysis tools are ready.");
         } else {
-            speak("Access denied.");
+            document.getElementById('loginOverlay').style.display = 'flex';
+        }
+    });
+
+    window.logout = () => {
+        if(confirm("Terminate session?")) {
+            signOut(auth).then(() => speak("Session terminated."));
         }
     };
 
+    // --- 🤖 JARVIS AI SCAN (GEMINI) ---
     window.jarvisAIScan = async () => {
         const query = document.getElementById('aiQuery').value;
         const log = document.getElementById('aiLog');
         if(!query) return;
 
-        speak("Scanning for " + query);
-        log.innerText = "ACCESSING NEURAL NETWORK...";
+        speak("Scanning neural networks for " + query);
+        log.innerText = "ACCESSING CLOUD DATA...";
         
         try {
-            const prompt = `Search for: ${query}. Respond ONLY in JSON: {"name": "product name", "brand": "brand", "price": "numeric", "category": "Cables or Chargers or Earbuds or Neck Band or Speaker or Power Banks or HeadPhones", "specs": "3 key specs"}`;
+            const prompt = `Search for: ${query}. Respond ONLY in JSON format: {"name": "full name", "brand": "brand", "price": "numeric price", "category": "Cables or Chargers or Earbuds or Neck Band or Speaker or Power Banks or HeadPhones", "specs": "short specs"}`;
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: "POST", headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -192,15 +222,19 @@
             document.getElementById('pCat').value = res.category;
             document.getElementById('pDesc').value = res.specs;
             
-            speak("Data retrieval successful.");
-            log.innerText = "SCAN COMPLETE.";
-        } catch (e) { log.innerText = "SCAN ERROR."; }
+            speak("Analysis complete, Sir.");
+            log.innerText = "SCAN SUCCESSFUL.";
+        } catch (e) { 
+            log.innerText = "NEURAL ERROR."; 
+            speak("Data retrieval failed.");
+        }
     };
 
+    // --- 📸 IMAGE UPLOAD (IMGBB) ---
     window.uploadImg = async (input, key, txtId, progId) => {
         const file = input.files[0];
         if(!file) return;
-        document.getElementById(txtId).innerText = "SYNC...";
+        document.getElementById(txtId).innerText = "SYNCING...";
         const fd = new FormData(); fd.append("image", file);
         try {
             const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
@@ -209,11 +243,15 @@
                 productImages[key] = data.data.url;
                 document.getElementById(progId).style.width = "100%";
                 document.getElementById(txtId).innerText = "SYNCED";
+                speak("Image packet received.");
             }
-        } catch (e) { speak("Link error."); }
+        } catch (e) { speak("Upload failure."); }
     };
 
+    // --- 💾 DATABASE SYNC ---
     document.getElementById('saveBtn').onclick = function() {
+        if (!auth.currentUser) return speak("Unauthorized attempt.");
+        
         const d = new Date();
         const product = {
             name: document.getElementById('pName').value, 
@@ -231,14 +269,18 @@
             timestamp: Date.now()
         };
 
-        if(!product.img || !product.name) return speak("Data packet incomplete.");
+        if(!product.img || !product.name) return speak("Data packet incomplete, Sir.");
 
         push(ref(db, 'products'), product).then(() => {
-            speak("Database synced.");
+            speak("Database updated. Unit online.");
             location.reload();
+        }).catch(err => {
+            speak("Database write error.");
+            alert("SECURITY BLOCK: You need Firebase Rules permission.");
         });
     };
 
+    // --- 📊 INVENTORY STREAM ---
     onValue(ref(db, 'products'), (snap) => {
         const grid = document.getElementById('invGrid'); grid.innerHTML = "";
         const now = new Date();
@@ -247,8 +289,6 @@
         if(snap.exists()){
             Object.keys(snap.val()).reverse().forEach(id => {
                 const p = snap.val()[id];
-                
-                // Track Stats
                 if(p.month === now.getMonth() && p.year === now.getFullYear()) m++;
                 if(p.year === now.getFullYear()) y++;
                 if(p.onSale) s++;
@@ -272,9 +312,8 @@
     });
 
     window.deleteItem = (id) => { 
-        if(confirm("Delete item?")) {
-            remove(ref(db, `products/${id}`));
-            speak("Unit removed.");
+        if(confirm("Destroy unit data?")) {
+            remove(ref(db, `products/${id}`)).then(() => speak("Unit removed from grid."));
         }
     };
 </script>
