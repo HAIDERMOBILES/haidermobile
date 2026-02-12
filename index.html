@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
     <style>
         :root { 
             --gold: #d4af37; --dark: #020202; --card: rgba(15, 15, 15, 0.95); 
@@ -17,14 +19,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--dark); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
 
-        /* 🌌 Futuristic Background */
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 80%);
             pointer-events: none; z-index: -1;
         }
 
-        /* 🤖 Navigation Bar */
         header { 
             position: fixed; top: 0; width: 100%; height: 85px; 
             background: rgba(0,0,0,0.95); backdrop-filter: blur(25px); 
@@ -33,7 +33,6 @@
         }
         .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.4rem; text-decoration: none; text-shadow: var(--neon); letter-spacing: 2px; }
 
-        /* 🧭 Nav Links */
         .nav-links { display: flex; gap: 25px; list-style: none; align-items: center; }
         .nav-link { 
             color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 11px; 
@@ -41,10 +40,17 @@
         }
         .nav-link:hover { color: var(--gold); text-shadow: var(--neon); }
 
-        /* Mobile Menu Toggle */
+        /* Extreme Right Container */
+        .header-right { display: flex; align-items: center; gap: 20px; }
+
+        .auth-trigger { 
+            font-size: 1.6rem; color: var(--gold); cursor: pointer; transition: 0.3s; 
+            border: 1px solid var(--border); padding: 5px; border-radius: 4px;
+        }
+        .auth-trigger:hover { transform: scale(1.1); box-shadow: var(--neon); color: #fff; border-color: var(--gold); }
+
         .menu-toggle { display: none; color: var(--gold); font-size: 1.5rem; cursor: pointer; }
 
-        /* 🛒 Shop Dropdown */
         .nav-item { position: relative; }
         .dropdown-menu {
             position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -64,14 +70,12 @@
 
         .status-hub { display: flex; flex-direction: column; align-items: flex-end; font-size: 9px; color: var(--gold); }
 
-        /* 🔍 Search & Brands Strip */
+        /* Search & Grid */
         .command-center { padding: 140px 5% 40px; max-width: 1400px; margin: 0 auto; text-align: center; }
         #searchBar { 
             width: 100%; max-width: 800px; padding: 18px 25px; background: rgba(20,20,20,0.8); 
             border: 1px solid var(--border); border-radius: 4px; color: #fff; font-family: 'JetBrains Mono'; outline: none;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
-
         #brandStrip { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 30px 0; }
         .f-btn { 
             background: transparent; color: #888; border: 1px solid #333; padding: 10px 20px; 
@@ -80,48 +84,49 @@
         }
         .f-btn.active, .f-btn:hover { color: #000; background: var(--gold); border-color: var(--gold); font-weight: bold; }
 
-        /* 💎 Grid Display */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 0 5% 100px; max-width: 1400px; margin: 0 auto; }
         .p-card { background: var(--card); border: 1px solid var(--border); padding: 15px; transition: 0.4s; cursor: pointer; position: relative; }
-        .p-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
+        .p-card:hover { transform: translateY(-8px); border-color: var(--gold); }
         .p-img-box { height: 240px; background: #fff; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 4px; }
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
-        .p-name { font-family: 'Orbitron'; font-size: 1rem; color: #fff; margin: 10px 0; line-height: 1.4; height: 2.8em; overflow: hidden; }
+        .p-name { font-family: 'Orbitron'; font-size: 1rem; color: #fff; margin: 10px 0; height: 2.8em; overflow: hidden; }
         .p-price { color: var(--gold); font-weight: 900; font-family: 'Orbitron'; font-size: 1.2rem; }
 
-        /* WhatsApp */
-        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; z-index: 3000; transition: 0.3s; }
+        /* Auth Modal Styling */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); z-index: 4000; 
+            display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px);
+        }
+        .auth-card { 
+            background: var(--card); border: 1px solid var(--gold); padding: 30px; 
+            width: 90%; max-width: 400px; position: relative; 
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+        .auth-input {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border); color: #fff; margin-bottom: 15px;
+            font-family: 'JetBrains Mono'; outline: none;
+        }
+        .auth-input:focus { border-color: var(--gold); }
+        .hidden { display: none; }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 25px; color: var(--gold); cursor: pointer; }
 
-        /* 📱 RESPONSIVE DESIGN (MOBILE FIXES) */
+        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; z-index: 3000; }
+
         @media (max-width: 768px) {
-            header { height: 70px; padding: 0 4%; }
+            header { height: 70px; }
             .logo { font-size: 1rem; }
-            .menu-toggle { display: block; order: -1; } /* Hamburger icon on left */
-            
+            .menu-toggle { display: block; order: -1; }
             .nav-links {
                 position: absolute; top: 70px; left: -100%; width: 100%; 
                 background: rgba(5,5,5,0.98); flex-direction: column; 
                 padding: 30px; transition: 0.4s; border-bottom: 1px solid var(--border);
             }
             .nav-links.active { left: 0; }
-            
-            .dropdown-menu { position: static; transform: none; width: 100%; opacity: 1; visibility: visible; display: none; background: transparent; border: none; }
-            .nav-item:hover .dropdown-menu { display: block; }
-
-            .command-center { padding: 110px 4% 20px; }
-            #searchBar { padding: 14px 18px; font-size: 13px; }
-
-            #brandStrip { 
-                justify-content: flex-start; flex-wrap: nowrap; 
-                overflow-x: auto; padding-bottom: 10px; gap: 8px;
-            }
-            .f-btn { flex: 0 0 auto; padding: 8px 15px; font-size: 9px; }
-
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 10px 80px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .p-img-box { height: 160px; }
-            .p-name { font-size: 0.75rem; height: 3em; margin: 5px 0; }
-            .p-price { font-size: 0.95rem; }
-            .status-hub span:first-child { display: none; } /* Hide scanning text on small mobile */
+            .auth-trigger { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -158,33 +163,104 @@
         </ul>
     </nav>
 
-    <div class="status-hub">
-        <span><i class="fas fa-circle" style="font-size: 6px; color: #25d366;"></i> SCANNING_DATABASE</span>
-        <span id="itemCount">UNITS: 00</span>
+    <div class="header-right">
+        <i class="fas fa-user-circle auth-trigger" onclick="openAuth()" title="Login / Register"></i>
+        
+        <div class="status-hub">
+            <span id="authDisplayName"><i class="fas fa-circle" style="font-size: 6px; color: #25d366;"></i> SCANNING_DB</span>
+            <span id="itemCount">UNITS: 00</span>
+        </div>
     </div>
 </header>
 
 <div class="command-center">
-    <input type="text" id="searchBar" placeholder="SCAN_DATABASE: ENTER MODEL OR SPEC...">
+    <input type="text" id="searchBar" placeholder="SCAN_DATABASE: ENTER MODEL...">
     <div id="brandStrip"></div>
 </div>
 
 <div id="productGrid" class="grid">
-    <div style="grid-column: 1/-1; text-align: center; padding: 100px; color: var(--gold); letter-spacing: 3px;">INITIALIZING_SYSTEM...</div>
+    <div style="grid-column: 1/-1; text-align: center; padding: 100px; color: var(--gold);">INITIALIZING_SYSTEM...</div>
+</div>
+
+<div id="authModal" class="modal-overlay">
+    <div class="auth-card">
+        <div class="close-btn" onclick="closeAuth()">&times;</div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button id="tabLogin" class="f-btn active" onclick="switchAuth('login')">LOGIN</button>
+            <button id="tabReg" class="f-btn" onclick="switchAuth('reg')">SIGN UP</button>
+        </div>
+
+        <div id="loginForm">
+            <input type="email" id="logEmail" class="auth-input" placeholder="EMAIL_ADDRESS">
+            <input type="password" id="logPass" class="auth-input" placeholder="PASSWORD">
+            <button class="f-btn active" style="width: 100%;" id="loginBtn">ACCESS_SYSTEM</button>
+        </div>
+
+        <div id="regForm" class="hidden">
+            <div id="step1">
+                <input type="text" id="regName" class="auth-input" placeholder="FULL_NAME">
+                <input type="email" id="regEmail" class="auth-input" placeholder="EMAIL_ADDRESS">
+                <input type="password" id="regPass" class="auth-input" placeholder="PASSWORD (MIN 6)">
+                <button class="f-btn active" style="width: 100%;" onclick="sendOTP()">REQUEST_OTP</button>
+            </div>
+            <div id="step2" class="hidden">
+                <p id="msg" style="font-size: 9px; margin-bottom: 10px; color: var(--gold);"></p>
+                <input type="number" id="otpInput" class="auth-input" placeholder="6-DIGIT_CODE">
+                <button id="verifyBtn" class="f-btn active" style="width: 100%;">VERIFY_&_CREATE</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <a href="https://wa.me/923279518790" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <script>
-    // 📱 Mobile Menu Toggle Function
-    function toggleMenu() {
-        document.getElementById('navLinks').classList.toggle('active');
+    function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+    function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
+    function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+    
+    function switchAuth(mode) {
+        if(mode === 'login') {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('regForm').classList.add('hidden');
+            document.getElementById('tabLogin').classList.add('active');
+            document.getElementById('tabReg').classList.remove('active');
+        } else {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('regForm').classList.remove('hidden');
+            document.getElementById('tabLogin').classList.remove('active');
+            document.getElementById('tabReg').classList.add('active');
+        }
     }
+
+    // EmailJS logic from auth.js
+    emailjs.init("YOUR_PUBLIC_KEY"); 
+    let generatedOTP, userData = {};
+
+    window.sendOTP = function() {
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const pass = document.getElementById('regPass').value;
+        if(!name || !email || pass.length < 6) { alert("Invalid Data"); return; }
+        
+        generatedOTP = Math.floor(100000 + Math.random() * 900000);
+        userData = { name, email, pass };
+
+        emailjs.send('service_c15ds0p', 'YOUR_TEMPLATE_ID', {
+            to_name: name, to_email: email, otp_code: generatedOTP
+        }).then(() => {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('msg').innerText = "OTP_SENT_TO_EMAIL";
+        }).catch(() => alert("Email Error"));
+    };
 </script>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -196,66 +272,68 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
     
     let allProducts = [];
-    let activeBrand = 'ALL';
-    let activeCat = 'ALL';
+    let activeBrand = 'ALL', activeCat = 'ALL';
 
+    // Firebase Data Fetch
     onValue(ref(db, 'products'), (snap) => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            syncBrands();
-            updateUI();
-        } else {
-            document.getElementById('productGrid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:100px;">NO_DATA_FOUND_IN_DB</div>';
+            syncBrands(); updateUI();
         }
     });
 
     function syncBrands() {
-        const brands = ['ALL', ...new Set(allProducts.map(p => p.brand ? p.brand.toUpperCase() : 'UNKNOWN'))];
-        const strip = document.getElementById('brandStrip');
-        strip.innerHTML = brands.map(b => `
+        const brands = ['ALL', ...new Set(allProducts.map(p => p.brand?.toUpperCase() || 'TECH'))];
+        document.getElementById('brandStrip').innerHTML = brands.map(b => `
             <button class="f-btn ${b === activeBrand ? 'active' : ''}" onclick="window.setFilter('${b}', 'ALL')">
                 [ ${b} ]
-            </button>
-        `).join('');
+            </button>`).join('');
     }
 
     window.setFilter = (brand, cat) => {
-        activeBrand = brand;
-        activeCat = cat;
-        updateUI();
-        if(window.innerWidth < 768) {
-            document.getElementById('navLinks').classList.remove('active'); // Close menu on select
-        }
+        activeBrand = brand; activeCat = cat; updateUI();
     };
 
     function updateUI() {
         const query = document.getElementById('searchBar').value.toLowerCase();
         const filtered = allProducts.filter(p => {
-            const mBrand = activeBrand === 'ALL' || (p.brand && p.brand.toUpperCase() === activeBrand);
-            const mCat = activeCat === 'ALL' || (p.category && p.category.toLowerCase() === activeCat.toLowerCase());
-            const mSearch = p.name.toLowerCase().includes(query);
-            return mBrand && mCat && mSearch;
+            const mBrand = activeBrand === 'ALL' || p.brand?.toUpperCase() === activeBrand;
+            const mCat = activeCat === 'ALL' || p.category?.toLowerCase() === activeCat.toLowerCase();
+            return mBrand && mCat && p.name.toLowerCase().includes(query);
         });
-
         document.getElementById('itemCount').innerText = `UNITS: ${filtered.length.toString().padStart(2, '0')}`;
-        const grid = document.getElementById('productGrid');
-        
-        if(filtered.length === 0) {
-            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:100px; color:#555;">NO_MATCHING_PROTOCOL_FOUND</div>';
-            return;
-        }
-
-        grid.innerHTML = filtered.map(p => `
+        document.getElementById('productGrid').innerHTML = filtered.map(p => `
             <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
-                <div class="p-img-box"><img src="${p.img}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=OFFLINE'"></div>
-                <div style="font-size: 8px; color: var(--gold); text-transform: uppercase; font-weight:800;">${p.brand || 'TECH'}</div>
+                <div class="p-img-box"><img src="${p.img}" onerror="this.src='https://via.placeholder.com/300'"></div>
+                <div style="font-size: 8px; color: var(--gold);">${p.brand || 'TECH'}</div>
                 <h3 class="p-name">${p.name}</h3>
                 <div class="p-price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
-            </div>
-        `).join('');
+            </div>`).join('');
     }
+
+    // Login Action
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        const email = document.getElementById('logEmail').value;
+        const pass = document.getElementById('logPass').value;
+        signInWithEmailAndPassword(auth, email, pass)
+            .then(() => { 
+                alert("LOGIN_SUCCESS"); 
+                document.getElementById('authDisplayName').innerText = "AUTHORIZED";
+                closeAuth(); 
+            }).catch(e => alert("Login Failed"));
+    });
+
+    // Register Action
+    document.getElementById('verifyBtn').addEventListener('click', () => {
+        if(document.getElementById('otpInput').value == generatedOTP) {
+            createUserWithEmailAndPassword(auth, userData.email, userData.pass)
+                .then(() => { alert("ACCOUNT_CREATED"); closeAuth(); })
+                .catch(e => alert(e.message));
+        } else { alert("WRONG_OTP"); }
+    });
 
     document.getElementById('searchBar').oninput = updateUI;
 </script>
