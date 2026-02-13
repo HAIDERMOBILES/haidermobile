@@ -1,196 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Haider Studio v6.5</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
-        :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: #00f3ff; --green: #25d366; --red: #ff4757; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
-        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); width: 320px; }
-        .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
-        .ai-brain-box { background: #0f0f0f; border: 1px solid var(--gold); padding: 15px; border-radius: 20px; margin-bottom: 20px; position: relative; }
-        .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
-        .upload-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
-        .multi-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .upload-slot { border: 1px dashed #333; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; position: relative; }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; }
-        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; }
-        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; }
-        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; }
-        .progress-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0%; background: var(--gold); }
-        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-family: 'Orbitron'; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis | Secure Neural Interface v5.2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: #00f3ff; --green: #25d366; --red: #ff4757; }
+        
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
+        
+        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); width: 320px; }
+        
+        .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
+        
+        .ai-brain-box { 
+            background: #0f0f0f; border: 1px solid var(--gold); padding: 15px; border-radius: 20px; 
+            margin-bottom: 20px; position: relative; overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+        }
+        .upgrade-status { font-size: 8px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 5px; display: block; }
+        
+        .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
+        .stat-card small { font-family: 'Orbitron'; font-size: 9px; color: var(--neon); }
+        .stat-card h2 { margin: 5px 0 0 0; font-size: 20px; }
+
+        .upload-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
+        .multi-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .upload-slot { border: 1px dashed #333; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.3s; position: relative; }
+        .upload-slot:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
+        
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        input:focus, select:focus { border-color: var(--gold); }
+        
+        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; transition: 0.3s; letter-spacing: 1px; }
+        .save-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        
+        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
+        .inv-card:hover { border-color: var(--gold); }
+        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
+        
+        .progress-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0%; background: var(--gold); transition: 0.3s; }
+        .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: 'Orbitron'; }
+
+        @media (max-width: 800px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .upload-card { position: relative; top: 0; }
+        }
+    </style>
 </head>
 <body>
 
 <div id="loginOverlay">
-    <div id="loginBox">
-        <h2 style="font-family:'Orbitron'; color:var(--gold);">JARVIS CORE</h2>
-        <input type="password" id="passInput" placeholder="System Key">
-        <button onclick="checkPass()" class="save-btn">INITIALIZE</button>
-    </div>
+    <div id="loginBox">
+        <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px; margin-bottom: 20px;">JARVIS CORE</h2>
+        <input type="password" id="passInput" placeholder="System Key">
+        <button onclick="checkPass()" class="save-btn">INITIALIZE CORE</button>
+    </div>
 </div>
 
 <div class="main-layout">
-    <div class="sidebar">
-        <div class="ai-brain-box">
-            <span style="font-size:8px; color:var(--neon); font-family:'Orbitron';">AUTO-BROADCAST: ENABLED</span>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="aiQuery" placeholder="Scan product..." style="margin:0;">
-                <button onclick="jarvisAIScan()" class="save-btn" style="width:80px; padding:0; font-size:10px;">SCAN</button>
-            </div>
-        </div>
+    <div class="sidebar">
+        <div class="ai-brain-box" id="aiBrain">
+            <span class="upgrade-status" id="sysStatus">SYSTEM: ACTIVE | ENCRYPTED</span>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="aiQuery" placeholder="Target product name..." style="margin:0;">
+                <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
+            </div>
+            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family: 'Orbitron'; text-transform: uppercase;">Standing by, Sir.</div>
+        </div>
 
-        <div class="upload-card">
-            <div class="multi-upload-grid">
-                <div class="upload-slot" onclick="document.getElementById('f1').click()">
-                    <i class="fa fa-camera"></i> <br><small id="t1">Main</small>
-                    <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
-                    <div class="progress-bar" id="p1"></div>
-                </div>
-                <div class="upload-slot" onclick="document.getElementById('f2').click()">
-                    <i class="fa fa-plus"></i> <br><small id="t2">Side</small>
-                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2', 'p2')">
-                    <div class="progress-bar" id="p2"></div>
-                </div>
-                <div class="upload-slot" onclick="document.getElementById('f3').click()">
-                    <i class="fa fa-plus"></i> <br><small id="t3">Back</small>
-                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3', 'p3')">
-                    <div class="progress-bar" id="p3"></div>
-                </div>
-            </div>
+        <div class="upload-card">
+            <div class="multi-upload-grid">
+                <div class="upload-slot" onclick="document.getElementById('f1').click()">
+                    <i class="fa fa-camera"></i> <br><small id="t1">Main</small>
+                    <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
+                    <div class="progress-bar" id="p1"></div>
+                </div>
+                <div class="upload-slot" onclick="document.getElementById('f2').click()">
+                    <i class="fa fa-plus"></i> <br><small id="t2">Side</small>
+                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2', 'p2')">
+                    <div class="progress-bar" id="p2"></div>
+                </div>
+                <div class="upload-slot" onclick="document.getElementById('f3').click()">
+                    <i class="fa fa-plus"></i> <br><small id="t3">Back</small>
+                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3', 'p3')">
+                    <div class="progress-bar" id="p3"></div>
+                </div>
+            </div>
 
-            <input type="text" id="pName" placeholder="Product Name">
-            <input type="text" id="pBrand" placeholder="Brand Name">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <input type="number" id="pPrice" placeholder="Price">
-                <input type="number" id="pDiscountPrice" placeholder="Sale Price">
-            </div>
-            <select id="pCat">
-                <option value="Earbuds">Earbuds</option>
-                <option value="Chargers">Chargers</option>
-                <option value="Cables">Cables</option>
-                <option value="Speaker">Speaker</option>
-            </select>
-            <textarea id="pDesc" placeholder="Specs..." rows="3"></textarea>
-            <button id="saveBtn" class="save-btn">SYNC & BROADCAST</button>
-        </div>
-    </div>
+            <input type="text" id="pName" placeholder="Product Name">
+            <input type="text" id="pBrand" placeholder="Brand Name">
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <input type="number" id="pPrice" placeholder="Reg. Price">
+                <input type="number" id="pDiscountPrice" placeholder="Sale Price (Optional)">
+            </div>
 
-    <div class="inventory-section">
-        <div class="analytics-grid">
-            <div class="stat-card"><small>MONTH</small><h2 id="mStat">0</h2></div>
-            <div class="stat-card"><small>TOTAL</small><h2 id="yStat">0</h2></div>
-            <div class="stat-card"><small>SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
-        </div>
-        <div id="invGrid" class="inv-grid"></div>
-    </div>
+            <select id="pCat">
+                <option value="" disabled selected>SELECT CATEGORY</option>
+                <option value="Cables">Cables</option>
+                <option value="Chargers">Chargers</option>
+                <option value="Earbuds">Earbuds</option>
+                <option value="Neck Band">Neck Band</option>
+                <option value="Speaker">Speaker</option>
+                <option value="Power Banks">Power Banks</option>
+                <option value="HeadPhones">Headphones</option>
+            </select>
+
+            <textarea id="pDesc" placeholder="Technical Specs..." rows="3"></textarea>
+            
+            <button id="saveBtn" class="save-btn">SYNC DATABASE</button>
+            <button onclick="logout()" style="background:none; border:none; color:#444; font-size:10px; margin-top:15px; cursor:pointer; width:100%;">TERMINATE SESSION</button>
+        </div>
+    </div>
+
+    <div class="inventory-section">
+        <div class="analytics-grid">
+            <div class="stat-card"><small>THIS MONTH</small><h2 id="mStat">0</h2></div>
+            <div class="stat-card"><small>YEARLY TOTAL</small><h2 id="yStat">0</h2></div>
+            <div class="stat-card"><small>ITEMS ON SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
+        </div>
+        <div id="invGrid" class="inv-grid"></div>
+    </div>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
-    const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
-    const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
+    const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
+    
+    let productImages = { img1: "", img2: "", img3: "" };
 
-    // --- 🔑 META CREDENTIALS ---
-    const FB_PAGE_ID = "110410364219842"; 
-    const FB_TOKEN = "PASTE_YOUR_EXTENDED_TOKEN_HERE"; // Yahan apna 2 month wala token paste karein
+    const speak = (txt) => {
+        const utter = new SpeechSynthesisUtterance(txt);
+        utter.pitch = 0.9; window.speechSynthesis.speak(utter);
+    };
 
-    let productImages = { img1: "", img2: "", img3: "" };
+    window.checkPass = () => {
+        const pass = document.getElementById('passInput').value;
+        signInWithEmailAndPassword(auth, "admin@haider.com", pass)
+            .then(() => speak("Welcome back, Sir."))
+            .catch(e => alert("Access Denied"));
+    };
 
-    const speak = (txt) => {
-        const utter = new SpeechSynthesisUtterance(txt);
-        utter.pitch = 0.9; window.speechSynthesis.speak(utter);
-    };
+    onAuthStateChanged(auth, (user) => {
+        document.getElementById('loginOverlay').style.display = user ? 'none' : 'flex';
+    });
 
-    window.checkPass = () => {
-        const pass = document.getElementById('passInput').value;
-        signInWithEmailAndPassword(auth, "admin@haider.com", pass)
-            .then(() => speak("System online."))
-            .catch(() => alert("Denied"));
-    };
+    window.logout = () => signOut(auth);
 
-    onAuthStateChanged(auth, (u) => document.getElementById('loginOverlay').style.display = u ? 'none' : 'flex');
+    window.jarvisAIScan = async () => {
+        const query = document.getElementById('aiQuery').value;
+        if(!query) return;
+        speak("Scanning neural network for " + query);
+        try {
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+                method: "POST", headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Search: ${query}. Respond ONLY JSON: {"name": "...", "brand": "...", "price": 0, "category": "Earbuds", "specs": "..."}` }] }] })
+            });
+            const data = await resp.json();
+            const res = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, ""));
+            document.getElementById('pName').value = res.name;
+            document.getElementById('pBrand').value = res.brand;
+            document.getElementById('pPrice').value = res.price;
+            document.getElementById('pCat').value = res.category;
+            document.getElementById('pDesc').value = res.specs;
+            speak("Analysis complete.");
+        } catch (e) { speak("Neural link failed."); }
+    };
 
-    window.uploadImg = async (input, key, txtId, progId) => {
-        const fd = new FormData(); fd.append("image", input.files[0]);
-        document.getElementById(txtId).innerText = "SYNC...";
-        try {
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-            const data = await res.json();
-            productImages[key] = data.data.url;
-            document.getElementById(progId).style.width = "100%";
-            document.getElementById(txtId).innerText = "READY";
-        } catch (e) { speak("Upload error"); }
-    };
+    window.uploadImg = async (input, key, txtId, progId) => {
+        const file = input.files[0];
+        if(!file) return;
+        document.getElementById(txtId).innerText = "SYNCING...";
+        const fd = new FormData(); fd.append("image", file);
+        try {
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+            const data = await res.json();
+            if(data.success) {
+                productImages[key] = data.data.url;
+                document.getElementById(progId).style.width = "100%";
+                document.getElementById(txtId).innerText = "READY";
+                speak(key + " synced.");
+            }
+        } catch (e) { speak("Upload failed."); }
+    };
 
-    const broadcastToMeta = async (p) => {
-        const msg = `🔥 *NEW ARRIVAL: ${p.name}* 🔥\n\n💰 Price: Rs ${p.onSale ? p.salePrice : p.price}\n📦 Brand: ${p.brand}\n\nTechnical Specs:\n${p.description}\n\n#HaiderStudio #JarvisAI`;
-        try {
-            await fetch(`https://graph.facebook.com/v19.0/${FB_PAGE_ID}/photos`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url: p.img, caption: msg, access_token: FB_TOKEN })
-            });
-            speak("Broadcasted to Haider Studio.");
-        } catch (e) { console.error("Meta Error"); }
-    };
+    document.getElementById('saveBtn').onclick = () => {
+        const d = new Date();
+        const product = {
+            name: document.getElementById('pName').value,
+            brand: document.getElementById('pBrand').value,
+            price: Number(document.getElementById('pPrice').value),
+            salePrice: Number(document.getElementById('pDiscountPrice').value) || null,
+            onSale: !!document.getElementById('pDiscountPrice').value,
+            category: document.getElementById('pCat').value,
+            description: document.getElementById('pDesc').value,
+            img: productImages.img1,
+            img2: productImages.img2 || "",
+            img3: productImages.img3 || "",
+            month: d.getMonth(),
+            year: d.getFullYear(),
+            timestamp: Date.now()
+        };
 
-    document.getElementById('saveBtn').onclick = async () => {
-        const p = {
-            name: document.getElementById('pName').value,
-            brand: document.getElementById('pBrand').value,
-            price: Number(document.getElementById('pPrice').value),
-            salePrice: Number(document.getElementById('pDiscountPrice').value) || null,
-            onSale: !!document.getElementById('pDiscountPrice').value,
-            category: document.getElementById('pCat').value,
-            description: document.getElementById('pDesc').value,
-            img: productImages.img1,
-            timestamp: Date.now()
-        };
+        if(!product.name || !product.img) return alert("Sir, Main Image and Name are required!");
 
-        if(!p.name || !p.img) return alert("Details required!");
+        push(ref(db, 'products'), product)
+            .then(() => {
+                speak("Database synchronization successful.");
+                location.reload();
+            })
+            .catch(err => alert("Sync Error"));
+    };
 
-        push(ref(db, 'products'), p).then(async () => {
-            speak("Database synced.");
-            await broadcastToMeta(p);
-            location.reload();
-        });
-    };
+    onValue(ref(db, 'products'), (snap) => {
+        const grid = document.getElementById('invGrid'); grid.innerHTML = "";
+        const now = new Date();
+        let m = 0, y = 0, s = 0;
 
-    onValue(ref(db, 'products'), (snap) => {
-        const grid = document.getElementById('invGrid'); grid.innerHTML = "";
-        if(snap.exists()){
-            Object.keys(snap.val()).reverse().forEach(id => {
-                const p = snap.val()[id];
-                grid.innerHTML += `<div class="inv-card">
-                    ${p.onSale ? '<div class="sale-tag">SALE</div>' : ''}
-                    <img src="${p.img}"><br><b>${p.name}</b><br>
-                    <span style="color:var(--gold)">Rs ${p.onSale ? p.salePrice : p.price}</span>
-                </div>`;
-            });
-        }
-    });
+        if(snap.exists()){
+            Object.keys(snap.val()).reverse().forEach(id => {
+                const p = snap.val()[id];
+                if(p.month === now.getMonth() && p.year === now.getFullYear()) m++;
+                if(p.year === now.getFullYear()) y++;
+                if(p.onSale) s++;
+
+                grid.innerHTML += `
+                    <div class="inv-card">
+                        ${p.onSale ? '<div class="sale-tag">SALE</div>' : ''}
+                        <button class="delete-btn" onclick="deleteItem('${id}')">×</button>
+                        <img src="${p.img}">
+                        <div style="font-size:11px; margin-top:5px; font-weight:600;">${p.name}</div>
+                        <div style="color:var(--gold); font-size:11px; font-weight:bold; margin-top:3px;">
+                            ${p.onSale ? `<span style="text-decoration:line-through; color:#555; font-size:9px;">Rs ${p.price}</span> Rs ${p.salePrice}` : `Rs ${p.price}`}
+                        </div>
+                    </div>`;
+            });
+            document.getElementById('mStat').innerText = m;
+            document.getElementById('yStat').innerText = y;
+            document.getElementById('sStat').innerText = s;
+        }
+    });
+
+    window.deleteItem = (id) => confirm("Purge this data?") && remove(ref(db, `products/${id}`));
 </script>
 </body>
 </html>
