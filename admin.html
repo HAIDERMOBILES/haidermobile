@@ -1,303 +1,537 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Neural Interface v6.0</title>
+
+    <title>Jarvis | Secure Neural Interface v5.2</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+        :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: #00f3ff; --green: #25d366; --red: #ff4757; }
+
         
-        :root { 
-            --accent: #00f3ff; 
-            --bg: #020617; 
-            --glass: rgba(15, 23, 42, 0.85);
-            --border: rgba(0, 243, 255, 0.2);
-            --text: #e2e8f0;
-            --danger: #ff0055;
-        }
 
-        body { 
-            font-family: 'Rajdhani', sans-serif; 
-            background: var(--bg);
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 50px 50px;
-            color: var(--text); 
-            margin: 0; 
-            padding: 20px; 
-            min-height: 100vh;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
+
         
-        #loginOverlay { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
-            z-index: 9999; display: flex; align-items: center; justify-content: center; 
-            backdrop-filter: blur(20px); 
-        }
-        #loginBox { 
-            text-align: center; background: var(--glass); padding: 50px; 
-            border-radius: 30px; border: 1px solid var(--accent); 
-            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2); width: 350px; 
-        }
+
+        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+
+        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); width: 320px; }
+
         
-        h2 { font-family: 'Syncopate', sans-serif; letter-spacing: 5px; font-size: 1.1rem; margin-bottom: 30px; color: var(--accent); }
 
-        .main-layout { 
-            display: grid; grid-template-columns: 400px 1fr; gap: 40px; 
-            max-width: 1600px; margin: auto; 
-        }
+        .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
+
         
-        .sidebar-card, .upload-card, .stat-card, .inv-card { 
-            background: var(--glass); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid var(--border); 
-            border-radius: 24px; 
-            padding: 25px; 
-            transition: 0.3s ease;
+
+        .ai-brain-box { 
+
+            background: #0f0f0f; border: 1px solid var(--gold); padding: 15px; border-radius: 20px; 
+
+            margin-bottom: 20px; position: relative; overflow: hidden;
+
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+
         }
 
-        .inv-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .upgrade-status { font-size: 8px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 5px; display: block; }
 
-        input, select, textarea { 
-            width: 100%; padding: 14px; margin-bottom: 15px; 
-            background: rgba(0,0,0,0.5); border: 1px solid var(--border); 
-            color: #fff; border-radius: 12px; font-family: 'Rajdhani'; font-size: 1rem;
-            box-sizing: border-box; outline: none;
-        }
-        input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 243, 255, 0.1); }
         
-        .action-btn { 
-            width: 100%; padding: 16px; background: transparent; 
-            border: 2px solid var(--accent); border-radius: 12px; 
-            font-weight: 700; cursor: pointer; font-family: 'Syncopate'; 
-            color: var(--accent); transition: 0.3s; letter-spacing: 2px;
+
+        .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+
+        .stat-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
+
+        .stat-card small { font-family: 'Orbitron'; font-size: 9px; color: var(--neon); }
+
+        .stat-card h2 { margin: 5px 0 0 0; font-size: 20px; }
+
+
+
+        .upload-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
+
+        .multi-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+
+        .upload-slot { border: 1px dashed #333; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.3s; position: relative; }
+
+        .upload-slot:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
+
+        
+
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; outline: none; transition: 0.3s; box-sizing: border-box; }
+
+        input:focus, select:focus { border-color: var(--gold); }
+
+        
+
+        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; transition: 0.3s; letter-spacing: 1px; }
+
+        .save-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+
+        
+
+        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+
+        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
+
+        .inv-card:hover { border-color: var(--gold); }
+
+        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
+
+        
+
+        .progress-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0%; background: var(--gold); transition: 0.3s; }
+
+        .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; z-index: 10; }
+
+        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: 'Orbitron'; }
+
+
+
+        @media (max-width: 800px) {
+
+            .main-layout { grid-template-columns: 1fr; }
+
+            .upload-card { position: relative; top: 0; }
+
         }
-        .action-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 30px var(--accent); }
 
-        .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-card { text-align: center; border-bottom: 3px solid var(--accent); }
-
-        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .inv-card img { width: 100%; height: 140px; object-fit: contain; border-radius: 15px; background: #fff; margin-bottom: 10px; }
-
-        .delete-trigger { 
-            position: absolute; top: 10px; right: 10px; background: var(--danger); 
-            border: none; color: white; border-radius: 50%; width: 25px; height: 25px; cursor: pointer;
-        }
-
-        @media (max-width: 1000px) { .main-layout { grid-template-columns: 1fr; } }
     </style>
+
 </head>
+
 <body>
 
+
+
 <div id="loginOverlay">
+
     <div id="loginBox">
-        <h2>SECURE LOGIN</h2>
-        <input type="password" id="passInput" placeholder="ACCESS CODE">
-        <button onclick="checkPass()" class="action-btn">AUTHENTICATE</button>
+
+        <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px; margin-bottom: 20px;">JARVIS CORE</h2>
+
+        <input type="password" id="passInput" placeholder="System Key">
+
+        <button onclick="checkPass()" class="save-btn">INITIALIZE CORE</button>
+
     </div>
+
 </div>
+
+
 
 <div class="main-layout">
+
     <div class="sidebar">
-        <div class="sidebar-card" style="margin-bottom: 25px;">
-            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <span style="font-size:10px; color:var(--accent); letter-spacing: 2px;">JARVIS AI SCANNER</span>
-                <div id="aiLog" style="font-size:10px; opacity:0.5;">IDLE</div>
-            </div>
+
+        <div class="ai-brain-box" id="aiBrain">
+
+            <span class="upgrade-status" id="sysStatus">SYSTEM: ACTIVE | ENCRYPTED</span>
+
             <div style="display:flex; gap:10px;">
-                <input type="text" id="aiQuery" placeholder="Scan Target..." style="margin:0;">
-                <button onclick="jarvisAIScan()" style="padding: 0 15px; background:var(--accent); border:none; color:#000; border-radius: 10px; cursor: pointer; font-weight:bold;">SCAN</button>
+
+                <input type="text" id="aiQuery" placeholder="Target product name..." style="margin:0;">
+
+                <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
+
             </div>
+
+            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family: 'Orbitron'; text-transform: uppercase;">Standing by, Sir.</div>
+
         </div>
+
+
 
         <div class="upload-card">
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:20px;">
-                <div class="stat-card" style="cursor:pointer; padding: 10px;" onclick="document.getElementById('f1').click()">
-                    <i class="fa fa-camera"></i><br><small id="t1">Main</small>
-                    <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1')">
+
+            <div class="multi-upload-grid">
+
+                <div class="upload-slot" onclick="document.getElementById('f1').click()">
+
+                    <i class="fa fa-camera"></i> <br><small id="t1">Main</small>
+
+                    <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
+
+                    <div class="progress-bar" id="p1"></div>
+
                 </div>
-                <div class="stat-card" style="cursor:pointer; padding: 10px;" onclick="document.getElementById('f2').click()">
-                    <i class="fa fa-plus"></i><br><small id="t2">Side</small>
-                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2')">
+
+                <div class="upload-slot" onclick="document.getElementById('f2').click()">
+
+                    <i class="fa fa-plus"></i> <br><small id="t2">Side</small>
+
+                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2', 'p2')">
+
+                    <div class="progress-bar" id="p2"></div>
+
                 </div>
-                <div class="stat-card" style="cursor:pointer; padding: 10px;" onclick="document.getElementById('f3').click()">
-                    <i class="fa fa-plus"></i><br><small id="t3">Back</small>
-                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3')">
+
+                <div class="upload-slot" onclick="document.getElementById('f3').click()">
+
+                    <i class="fa fa-plus"></i> <br><small id="t3">Back</small>
+
+                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3', 'p3')">
+
+                    <div class="progress-bar" id="p3"></div>
+
                 </div>
+
             </div>
 
-            <input type="text" id="pName" placeholder="PRODUCT TITLE">
-            <input type="text" id="pBrand" placeholder="MANUFACTURER">
+
+
+            <input type="text" id="pName" placeholder="Product Name">
+
+            <input type="text" id="pBrand" placeholder="Brand Name">
+
+            
+
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <input type="number" id="pPrice" placeholder="MSRP">
-                <input type="number" id="pDiscountPrice" placeholder="OFFER">
+
+                <input type="number" id="pPrice" placeholder="Reg. Price">
+
+                <input type="number" id="pDiscountPrice" placeholder="Sale Price (Optional)">
+
             </div>
+
+
 
             <select id="pCat">
-                <option value="" disabled selected>SELECTION CATEGORY</option>
+
+                <option value="" disabled selected>SELECT CATEGORY</option>
+
                 <option value="Cables">Cables</option>
+
                 <option value="Chargers">Chargers</option>
+
                 <option value="Earbuds">Earbuds</option>
+
+                <option value="Neck Band">Neck Band</option>
+
                 <option value="Speaker">Speaker</option>
+
                 <option value="Power Banks">Power Banks</option>
+
                 <option value="HeadPhones">Headphones</option>
+
             </select>
 
-            <textarea id="pDesc" placeholder="DATA SPECIFICATIONS..." rows="4"></textarea>
-            <button id="saveBtn" class="action-btn">UPLOAD TO CORE</button>
-            <button onclick="logout()" style="background:none; border:none; color:var(--danger); width:100%; margin-top:15px; cursor:pointer; font-family:'Syncopate'; font-size:9px; letter-spacing:1px;">DISCONNECT</button>
+
+
+            <textarea id="pDesc" placeholder="Technical Specs..." rows="3"></textarea>
+
+            
+
+            <button id="saveBtn" class="save-btn">SYNC DATABASE</button>
+
+            <button onclick="logout()" style="background:none; border:none; color:#444; font-size:10px; margin-top:15px; cursor:pointer; width:100%;">TERMINATE SESSION</button>
+
         </div>
+
     </div>
+
+
 
     <div class="inventory-section">
+
         <div class="analytics-grid">
-            <div class="stat-card"><small>Month Log</small><h2 id="mStat">0</h2></div>
-            <div class="stat-card"><small>Annual Matrix</small><h2 id="yStat">0</h2></div>
-            <div class="stat-card"><small>Active Promos</small><h2 id="sStat" style="color:var(--danger)">0</h2></div>
+
+            <div class="stat-card"><small>THIS MONTH</small><h2 id="mStat">0</h2></div>
+
+            <div class="stat-card"><small>YEARLY TOTAL</small><h2 id="yStat">0</h2></div>
+
+            <div class="stat-card"><small>ITEMS ON SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
+
         </div>
+
         <div id="invGrid" class="inv-grid"></div>
+
     </div>
+
 </div>
 
+
+
 <script type="module">
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
     import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+
+
     const firebaseConfig = {
+
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+
         authDomain: "web-app-4f3a1.firebaseapp.com",
+
         projectId: "web-app-4f3a1",
+
         databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+
         appId: "1:222099203820:web:778e204d2960181dfba7c9"
+
     };
 
+
+
     const app = initializeApp(firebaseConfig);
+
     const db = getDatabase(app);
+
     const auth = getAuth(app);
+
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
+
     const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
+
+    
 
     let productImages = { img1: "", img2: "", img3: "" };
 
-    const speak = (t) => {
-        const u = new SpeechSynthesisUtterance(t);
-        u.pitch = 0.8; window.speechSynthesis.speak(u);
+
+
+    const speak = (txt) => {
+
+        const utter = new SpeechSynthesisUtterance(txt);
+
+        utter.pitch = 0.9; window.speechSynthesis.speak(utter);
+
     };
+
+
 
     window.checkPass = () => {
-        const inputPass = document.getElementById('passInput').value;
-        // New Password Implementation
-        if (inputPass === "haider786") {
-            // Internally signing in using original Firebase Credentials
-            signInWithEmailAndPassword(auth, "admin@haider.com", "haider786") 
-                .then(() => speak("Welcome, Haider."))
-                .catch(() => {
-                    // Fallback if Firebase password is still the old one
-                    signInWithEmailAndPassword(auth, "admin@haider.com", "YOUR_OLD_FIREBASE_PASSWORD")
-                    .then(() => speak("Welcome, Sir."))
-                    .catch(() => alert("Firebase Auth Error"));
-                });
-        } else {
-            alert("ACCESS DENIED");
-        }
+
+        const pass = document.getElementById('passInput').value;
+
+        signInWithEmailAndPassword(auth, "admin@haider.com", pass)
+
+            .then(() => speak("Welcome back, Sir."))
+
+            .catch(e => alert("Access Denied"));
+
     };
 
-    onAuthStateChanged(auth, u => {
-        document.getElementById('loginOverlay').style.display = u ? 'none' : 'flex';
+
+
+    onAuthStateChanged(auth, (user) => {
+
+        document.getElementById('loginOverlay').style.display = user ? 'none' : 'flex';
+
     });
+
+
 
     window.logout = () => signOut(auth);
 
+
+
     window.jarvisAIScan = async () => {
-        const q = document.getElementById('aiQuery').value;
-        if(!q) return;
-        document.getElementById('aiLog').innerText = "SCANNING...";
+
+        const query = document.getElementById('aiQuery').value;
+
+        if(!query) return;
+
+        speak("Scanning neural network for " + query);
+
         try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-                method: "POST",
-                body: JSON.stringify({ contents: [{ parts: [{ text: `JSON only: {"name":"","brand":"","price":0,"category":"Earbuds","specs":""} for "${q}"` }] }] })
+
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+
+                method: "POST", headers: {"Content-Type": "application/json"},
+
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Search: ${query}. Respond ONLY JSON: {"name": "...", "brand": "...", "price": 0, "category": "Earbuds", "specs": "..."}` }] }] })
+
             });
-            const d = await r.json();
-            const res = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json|```/g, ""));
-            
+
+            const data = await resp.json();
+
+            const res = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, ""));
+
             document.getElementById('pName').value = res.name;
+
             document.getElementById('pBrand').value = res.brand;
+
             document.getElementById('pPrice').value = res.price;
+
             document.getElementById('pCat').value = res.category;
+
             document.getElementById('pDesc').value = res.specs;
-            document.getElementById('aiLog').innerText = "DONE";
-            speak("Analysis finished.");
-        } catch (e) { document.getElementById('aiLog').innerText = "FAIL"; }
+
+            speak("Analysis complete.");
+
+        } catch (e) { speak("Neural link failed."); }
+
     };
 
-    window.uploadImg = async (input, key, txtId) => {
+
+
+    window.uploadImg = async (input, key, txtId, progId) => {
+
         const file = input.files[0];
+
         if(!file) return;
-        document.getElementById(txtId).innerText = "...";
+
+        document.getElementById(txtId).innerText = "SYNCING...";
+
         const fd = new FormData(); fd.append("image", file);
+
         try {
-            const r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-            const d = await r.json();
-            if(d.success) {
-                productImages[key] = d.data.url;
-                document.getElementById(txtId).innerText = "OK";
-                document.getElementById(txtId).style.color = "var(--accent)";
+
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+
+            const data = await res.json();
+
+            if(data.success) {
+
+                productImages[key] = data.data.url;
+
+                document.getElementById(progId).style.width = "100%";
+
+                document.getElementById(txtId).innerText = "READY";
+
+                speak(key + " synced.");
+
             }
-        } catch (e) { alert("Upload Failed"); }
+
+        } catch (e) { speak("Upload failed."); }
+
     };
+
+
 
     document.getElementById('saveBtn').onclick = () => {
-        const p = {
+
+        const d = new Date();
+
+        const product = {
+
             name: document.getElementById('pName').value,
+
             brand: document.getElementById('pBrand').value,
+
             price: Number(document.getElementById('pPrice').value),
+
             salePrice: Number(document.getElementById('pDiscountPrice').value) || null,
+
             onSale: !!document.getElementById('pDiscountPrice').value,
+
             category: document.getElementById('pCat').value,
+
             description: document.getElementById('pDesc').value,
+
             img: productImages.img1,
-            img2: productImages.img2,
-            img3: productImages.img3,
-            month: new Date().getMonth(),
-            year: new Date().getFullYear(),
+
+            img2: productImages.img2 || "",
+
+            img3: productImages.img3 || "",
+
+            month: d.getMonth(),
+
+            year: d.getFullYear(),
+
             timestamp: Date.now()
+
         };
-        if(!p.name || !p.img) return alert("System requires product name and primary image.");
-        push(ref(db, 'products'), p).then(() => {
-            speak("Core updated.");
-            location.reload();
-        });
+
+
+
+        if(!product.name || !product.img) return alert("Sir, Main Image and Name are required!");
+
+
+
+        push(ref(db, 'products'), product)
+
+            .then(() => {
+
+                speak("Database synchronization successful.");
+
+                location.reload();
+
+            })
+
+            .catch(err => alert("Sync Error"));
+
     };
 
-    onValue(ref(db, 'products'), (s) => {
-        const grid = document.getElementById('invGrid');
-        grid.innerHTML = "";
-        let m=0, y=0, sale=0;
+
+
+    onValue(ref(db, 'products'), (snap) => {
+
+        const grid = document.getElementById('invGrid'); grid.innerHTML = "";
+
         const now = new Date();
-        if(s.exists()){
-            Object.keys(s.val()).reverse().forEach(id => {
-                const item = s.val()[id];
-                if(item.month === now.getMonth()) m++;
-                if(item.year === now.getFullYear()) y++;
-                if(item.onSale) sale++;
+
+        let m = 0, y = 0, s = 0;
+
+
+
+        if(snap.exists()){
+
+            Object.keys(snap.val()).reverse().forEach(id => {
+
+                const p = snap.val()[id];
+
+                if(p.month === now.getMonth() && p.year === now.getFullYear()) m++;
+
+                if(p.year === now.getFullYear()) y++;
+
+                if(p.onSale) s++;
+
+
+
                 grid.innerHTML += `
+
                     <div class="inv-card">
-                        <button class="delete-trigger" onclick="deleteItem('${id}')">×</button>
-                        <img src="${item.img}">
-                        <div style="font-size:13px; font-weight:bold;">${item.name}</div>
-                        <div style="color:var(--accent); font-size:15px; margin-top:5px;">Rs ${item.salePrice || item.price}</div>
+
+                        ${p.onSale ? '<div class="sale-tag">SALE</div>' : ''}
+
+                        <button class="delete-btn" onclick="deleteItem('${id}')">×</button>
+
+                        <img src="${p.img}">
+
+                        <div style="font-size:11px; margin-top:5px; font-weight:600;">${p.name}</div>
+
+                        <div style="color:var(--gold); font-size:11px; font-weight:bold; margin-top:3px;">
+
+                            ${p.onSale ? `<span style="text-decoration:line-through; color:#555; font-size:9px;">Rs ${p.price}</span> Rs ${p.salePrice}` : `Rs ${p.price}`}
+
+                        </div>
+
                     </div>`;
+
             });
+
             document.getElementById('mStat').innerText = m;
+
             document.getElementById('yStat').innerText = y;
-            document.getElementById('sStat').innerText = sale;
+
+            document.getElementById('sStat').innerText = s;
+
         }
+
     });
 
-    window.deleteItem = (id) => confirm("Purge this unit?") && remove(ref(db, `products/${id}`));
+
+
+    window.deleteItem = (id) => confirm("Purge this data?") && remove(ref(db, `products/${id}`));
+
 </script>
+
 </body>
+
 </html>
