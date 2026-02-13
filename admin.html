@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Secure Neural Interface v5.2</title>
+    <title>Jarvis | Secure Neural Interface v6.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
@@ -11,11 +11,13 @@
         
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
         
-        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); width: 320px; }
+        /* 🔐 Security Overlay */
+        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
+        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 50px rgba(212, 175, 55, 0.15); width: 320px; }
         
         .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
         
+        /* 🧠 AI Interface */
         .ai-brain-box { 
             background: #0f0f0f; border: 1px solid var(--gold); padding: 15px; border-radius: 20px; 
             margin-bottom: 20px; position: relative; overflow: hidden;
@@ -23,6 +25,7 @@
         }
         .upgrade-status { font-size: 8px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 5px; display: block; }
         
+        /* 📊 Analytics */
         .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
         .stat-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
         .stat-card small { font-family: 'Orbitron'; font-size: 9px; color: var(--neon); }
@@ -34,24 +37,20 @@
         .upload-slot:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
         
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; outline: none; transition: 0.3s; box-sizing: border-box; }
-        input:focus, select:focus { border-color: var(--gold); }
+        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
         
         .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; transition: 0.3s; letter-spacing: 1px; }
         .save-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
         
         .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
-        .inv-card:hover { border-color: var(--gold); }
         .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
         
         .progress-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0%; background: var(--gold); transition: 0.3s; }
-        .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; z-index: 10; }
-        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: 'Orbitron'; }
+        .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: 'Orbitron'; z-index: 5; }
 
-        @media (max-width: 800px) {
-            .main-layout { grid-template-columns: 1fr; }
-            .upload-card { position: relative; top: 0; }
-        }
+        @media (max-width: 800px) { .main-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -60,19 +59,20 @@
     <div id="loginBox">
         <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px; margin-bottom: 20px;">JARVIS CORE</h2>
         <input type="password" id="passInput" placeholder="System Key">
-        <button onclick="checkPass()" class="save-btn">INITIALIZE CORE</button>
+        <button onclick="checkPass()" id="loginBtn" class="save-btn">INITIALIZE CORE</button>
+        <p id="lockNotice" style="color:var(--red); font-size:10px; margin-top:10px; display:none;">System Locked: Too many attempts.</p>
     </div>
 </div>
 
 <div class="main-layout">
     <div class="sidebar">
-        <div class="ai-brain-box" id="aiBrain">
-            <span class="upgrade-status" id="sysStatus">SYSTEM: ACTIVE | ENCRYPTED</span>
+        <div class="ai-brain-box">
+            <span class="upgrade-status">SECURITY: ENCRYPTED | SESSION: ACTIVE</span>
             <div style="display:flex; gap:10px;">
                 <input type="text" id="aiQuery" placeholder="Target product name..." style="margin:0;">
-                <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
+                <button onclick="jarvisAIScan()" class="save-btn" style="width:80px; padding:0; font-size:10px;">SCAN</button>
             </div>
-            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family: 'Orbitron'; text-transform: uppercase;">Standing by, Sir.</div>
+            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family: 'Orbitron';">READY FOR SCAN...</div>
         </div>
 
         <div class="upload-card">
@@ -124,7 +124,7 @@
         <div class="analytics-grid">
             <div class="stat-card"><small>THIS MONTH</small><h2 id="mStat">0</h2></div>
             <div class="stat-card"><small>YEARLY TOTAL</small><h2 id="yStat">0</h2></div>
-            <div class="stat-card"><small>ITEMS ON SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
+            <div class="stat-card"><small>ON SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
         </div>
         <div id="invGrid" class="inv-grid"></div>
     </div>
@@ -150,33 +150,59 @@
     const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
     
     let productImages = { img1: "", img2: "", img3: "" };
+    let loginAttempts = 0;
 
     const speak = (txt) => {
         const utter = new SpeechSynthesisUtterance(txt);
         utter.pitch = 0.9; window.speechSynthesis.speak(utter);
     };
 
+    // --- 🔐 SECURITY LOGIC ---
     window.checkPass = () => {
         const pass = document.getElementById('passInput').value;
+        const btn = document.getElementById('loginBtn');
+
+        if(loginAttempts >= 5) {
+            document.getElementById('lockNotice').style.display = 'block';
+            btn.disabled = true;
+            return;
+        }
+
         signInWithEmailAndPassword(auth, "admin@haider.com", pass)
-            .then(() => speak("Welcome back, Sir."))
-            .catch(e => alert("Access Denied"));
+            .then(() => {
+                loginAttempts = 0;
+                speak("Welcome back, Sir. Secure link established.");
+            })
+            .catch(e => {
+                loginAttempts++;
+                speak("Access denied.");
+                alert("Security Alert: Invalid credentials.");
+            });
     };
 
     onAuthStateChanged(auth, (user) => {
         document.getElementById('loginOverlay').style.display = user ? 'none' : 'flex';
+        if(user) {
+            // Auto logout after 30 mins of inactivity
+            setTimeout(() => { logout(); }, 1800000);
+        }
     });
 
-    window.logout = () => signOut(auth);
+    window.logout = () => {
+        signOut(auth);
+        speak("Session terminated.");
+        location.reload();
+    };
 
+    // --- 🤖 AI SCAN ---
     window.jarvisAIScan = async () => {
         const query = document.getElementById('aiQuery').value;
         if(!query) return;
-        speak("Scanning neural network for " + query);
+        document.getElementById('aiLog').innerText = "SCANNING...";
         try {
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: "POST", headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Search: ${query}. Respond ONLY JSON: {"name": "...", "brand": "...", "price": 0, "category": "Earbuds", "specs": "..."}` }] }] })
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Respond ONLY JSON: {"name": "...", "brand": "...", "price": 0, "category": "Earbuds", "specs": "..."} for product: ${query}` }] }] })
             });
             const data = await resp.json();
             const res = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, ""));
@@ -185,15 +211,15 @@
             document.getElementById('pPrice').value = res.price;
             document.getElementById('pCat').value = res.category;
             document.getElementById('pDesc').value = res.specs;
+            document.getElementById('aiLog').innerText = "SCAN COMPLETE.";
             speak("Analysis complete.");
-        } catch (e) { speak("Neural link failed."); }
+        } catch (e) { speak("Neural link error."); }
     };
 
+    // --- 📸 UPLOAD ---
     window.uploadImg = async (input, key, txtId, progId) => {
-        const file = input.files[0];
-        if(!file) return;
+        const fd = new FormData(); fd.append("image", input.files[0]);
         document.getElementById(txtId).innerText = "SYNCING...";
-        const fd = new FormData(); fd.append("image", file);
         try {
             const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
             const data = await res.json();
@@ -203,9 +229,10 @@
                 document.getElementById(txtId).innerText = "READY";
                 speak(key + " synced.");
             }
-        } catch (e) { speak("Upload failed."); }
+        } catch (e) { speak("Link failed."); }
     };
 
+    // --- 💾 SAVE & SHARE ---
     document.getElementById('saveBtn').onclick = () => {
         const d = new Date();
         const product = {
@@ -224,16 +251,21 @@
             timestamp: Date.now()
         };
 
-        if(!product.name || !product.img) return alert("Sir, Main Image and Name are required!");
+        if(!product.name || !product.img) return alert("Critical: Data missing!");
 
-        push(ref(db, 'products'), product)
-            .then(() => {
-                speak("Database synchronization successful.");
-                location.reload();
-            })
-            .catch(err => alert("Sync Error"));
+        push(ref(db, 'products'), product).then(() => {
+            speak("Database synced. Generating social share.");
+            const shareText = `🔥 ${product.name} (${product.brand})\n💰 Price: Rs ${product.onSale ? product.salePrice : product.price}\n📦 Category: ${product.category}\n\nCheck out our latest stock!`;
+            const fbLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(product.img)}&quote=${encodeURIComponent(shareText)}`;
+            
+            if(confirm("Synced! Share on Facebook?")) {
+                window.open(fbLink, '_blank');
+            }
+            location.reload();
+        });
     };
 
+    // --- 📊 INVENTORY LOAD ---
     onValue(ref(db, 'products'), (snap) => {
         const grid = document.getElementById('invGrid'); grid.innerHTML = "";
         const now = new Date();
@@ -251,9 +283,9 @@
                         ${p.onSale ? '<div class="sale-tag">SALE</div>' : ''}
                         <button class="delete-btn" onclick="deleteItem('${id}')">×</button>
                         <img src="${p.img}">
-                        <div style="font-size:11px; margin-top:5px; font-weight:600;">${p.name}</div>
-                        <div style="color:var(--gold); font-size:11px; font-weight:bold; margin-top:3px;">
-                            ${p.onSale ? `<span style="text-decoration:line-through; color:#555; font-size:9px;">Rs ${p.price}</span> Rs ${p.salePrice}` : `Rs ${p.price}`}
+                        <div style="font-size:11px; font-weight:600;">${p.name}</div>
+                        <div style="color:var(--gold); font-size:11px; margin-top:3px;">
+                            ${p.onSale ? `<s>Rs ${p.price}</s> Rs ${p.salePrice}` : `Rs ${p.price}`}
                         </div>
                     </div>`;
             });
@@ -263,7 +295,7 @@
         }
     });
 
-    window.deleteItem = (id) => confirm("Purge this data?") && remove(ref(db, `products/${id}`));
+    window.deleteItem = (id) => confirm("Purge item?") && remove(ref(db, `products/${id}`));
 </script>
 </body>
 </html>
