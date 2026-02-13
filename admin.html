@@ -3,76 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Secure Neural Interface v6.0</title>
+    <title>Jarvis | Haider Studio v6.5</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
         :root { --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --neon: #00f3ff; --green: #25d366; --red: #ff4757; }
-        
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
-        
-        /* 🔐 Security Overlay */
         #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 50px rgba(212, 175, 55, 0.15); width: 320px; }
-        
+        #loginBox { text-align: center; background: #0d0d0d; padding: 40px; border-radius: 20px; border: 1px solid var(--gold); width: 320px; }
         .main-layout { display: grid; grid-template-columns: 420px 1fr; gap: 30px; max-width: 1500px; margin: auto; }
-        
-        /* 🧠 AI Interface */
-        .ai-brain-box { 
-            background: #0f0f0f; border: 1px solid var(--gold); padding: 15px; border-radius: 20px; 
-            margin-bottom: 20px; position: relative; overflow: hidden;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-        }
-        .upgrade-status { font-size: 8px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 5px; display: block; }
-        
-        /* 📊 Analytics */
+        .ai-brain-box { background: #0f0f0f; border: 1px solid var(--gold); padding: 15px; border-radius: 20px; margin-bottom: 20px; position: relative; }
         .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
         .stat-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
-        .stat-card small { font-family: 'Orbitron'; font-size: 9px; color: var(--neon); }
-        .stat-card h2 { margin: 5px 0 0 0; font-size: 20px; }
-
         .upload-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 24px; position: sticky; top: 20px; }
         .multi-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .upload-slot { border: 1px dashed #333; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.3s; position: relative; }
-        .upload-slot:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
-        
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; outline: none; transition: 0.3s; box-sizing: border-box; }
-        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
-        
-        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; transition: 0.3s; letter-spacing: 1px; }
-        .save-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
-        
+        .upload-slot { border: 1px dashed #333; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; position: relative; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 10px; font-size: 12px; }
+        .save-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; }
         .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
-        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
-        
-        .progress-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0%; background: var(--gold); transition: 0.3s; }
-        .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
-        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: 'Orbitron'; z-index: 5; }
-
-        @media (max-width: 800px) { .main-layout { grid-template-columns: 1fr; } }
+        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; }
+        .inv-card img { width: 100%; height: 100px; object-fit: contain; background: #fff; border-radius: 10px; }
+        .progress-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0%; background: var(--gold); }
+        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-family: 'Orbitron'; }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay">
     <div id="loginBox">
-        <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px; margin-bottom: 20px;">JARVIS CORE</h2>
+        <h2 style="font-family:'Orbitron'; color:var(--gold);">JARVIS CORE</h2>
         <input type="password" id="passInput" placeholder="System Key">
-        <button onclick="checkPass()" id="loginBtn" class="save-btn">INITIALIZE CORE</button>
-        <p id="lockNotice" style="color:var(--red); font-size:10px; margin-top:10px; display:none;">System Locked: Too many attempts.</p>
+        <button onclick="checkPass()" class="save-btn">INITIALIZE</button>
     </div>
 </div>
 
 <div class="main-layout">
     <div class="sidebar">
         <div class="ai-brain-box">
-            <span class="upgrade-status">SECURITY: ENCRYPTED | SESSION: ACTIVE</span>
+            <span style="font-size:8px; color:var(--neon); font-family:'Orbitron';">AUTO-BROADCAST: ENABLED</span>
             <div style="display:flex; gap:10px;">
-                <input type="text" id="aiQuery" placeholder="Target product name..." style="margin:0;">
+                <input type="text" id="aiQuery" placeholder="Scan product..." style="margin:0;">
                 <button onclick="jarvisAIScan()" class="save-btn" style="width:80px; padding:0; font-size:10px;">SCAN</button>
             </div>
-            <div id="aiLog" style="font-size:9px; color:#555; margin-top:8px; font-family: 'Orbitron';">READY FOR SCAN...</div>
         </div>
 
         <div class="upload-card">
@@ -96,35 +68,26 @@
 
             <input type="text" id="pName" placeholder="Product Name">
             <input type="text" id="pBrand" placeholder="Brand Name">
-            
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <input type="number" id="pPrice" placeholder="Reg. Price">
-                <input type="number" id="pDiscountPrice" placeholder="Sale Price (Optional)">
+                <input type="number" id="pPrice" placeholder="Price">
+                <input type="number" id="pDiscountPrice" placeholder="Sale Price">
             </div>
-
             <select id="pCat">
-                <option value="" disabled selected>SELECT CATEGORY</option>
-                <option value="Cables">Cables</option>
-                <option value="Chargers">Chargers</option>
                 <option value="Earbuds">Earbuds</option>
-                <option value="Neck Band">Neck Band</option>
+                <option value="Chargers">Chargers</option>
+                <option value="Cables">Cables</option>
                 <option value="Speaker">Speaker</option>
-                <option value="Power Banks">Power Banks</option>
-                <option value="HeadPhones">Headphones</option>
             </select>
-
-            <textarea id="pDesc" placeholder="Technical Specs..." rows="3"></textarea>
-            
-            <button id="saveBtn" class="save-btn">SYNC DATABASE</button>
-            <button onclick="logout()" style="background:none; border:none; color:#444; font-size:10px; margin-top:15px; cursor:pointer; width:100%;">TERMINATE SESSION</button>
+            <textarea id="pDesc" placeholder="Specs..." rows="3"></textarea>
+            <button id="saveBtn" class="save-btn">SYNC & BROADCAST</button>
         </div>
     </div>
 
     <div class="inventory-section">
         <div class="analytics-grid">
-            <div class="stat-card"><small>THIS MONTH</small><h2 id="mStat">0</h2></div>
-            <div class="stat-card"><small>YEARLY TOTAL</small><h2 id="yStat">0</h2></div>
-            <div class="stat-card"><small>ON SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
+            <div class="stat-card"><small>MONTH</small><h2 id="mStat">0</h2></div>
+            <div class="stat-card"><small>TOTAL</small><h2 id="yStat">0</h2></div>
+            <div class="stat-card"><small>SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
         </div>
         <div id="invGrid" class="inv-grid"></div>
     </div>
@@ -148,94 +111,53 @@
     const auth = getAuth(app);
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
     const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
-    
+
+    // --- 🔑 META CREDENTIALS ---
+    const FB_PAGE_ID = "110410364219842"; 
+    const FB_TOKEN = "PASTE_YOUR_EXTENDED_TOKEN_HERE"; // Yahan apna 2 month wala token paste karein
+
     let productImages = { img1: "", img2: "", img3: "" };
-    let loginAttempts = 0;
 
     const speak = (txt) => {
         const utter = new SpeechSynthesisUtterance(txt);
         utter.pitch = 0.9; window.speechSynthesis.speak(utter);
     };
 
-    // --- 🔐 SECURITY LOGIC ---
     window.checkPass = () => {
         const pass = document.getElementById('passInput').value;
-        const btn = document.getElementById('loginBtn');
-
-        if(loginAttempts >= 5) {
-            document.getElementById('lockNotice').style.display = 'block';
-            btn.disabled = true;
-            return;
-        }
-
         signInWithEmailAndPassword(auth, "admin@haider.com", pass)
-            .then(() => {
-                loginAttempts = 0;
-                speak("Welcome back, Sir. Secure link established.");
-            })
-            .catch(e => {
-                loginAttempts++;
-                speak("Access denied.");
-                alert("Security Alert: Invalid credentials.");
-            });
+            .then(() => speak("System online."))
+            .catch(() => alert("Denied"));
     };
 
-    onAuthStateChanged(auth, (user) => {
-        document.getElementById('loginOverlay').style.display = user ? 'none' : 'flex';
-        if(user) {
-            // Auto logout after 30 mins of inactivity
-            setTimeout(() => { logout(); }, 1800000);
-        }
-    });
+    onAuthStateChanged(auth, (u) => document.getElementById('loginOverlay').style.display = u ? 'none' : 'flex');
 
-    window.logout = () => {
-        signOut(auth);
-        speak("Session terminated.");
-        location.reload();
-    };
-
-    // --- 🤖 AI SCAN ---
-    window.jarvisAIScan = async () => {
-        const query = document.getElementById('aiQuery').value;
-        if(!query) return;
-        document.getElementById('aiLog').innerText = "SCANNING...";
-        try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-                method: "POST", headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Respond ONLY JSON: {"name": "...", "brand": "...", "price": 0, "category": "Earbuds", "specs": "..."} for product: ${query}` }] }] })
-            });
-            const data = await resp.json();
-            const res = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, ""));
-            document.getElementById('pName').value = res.name;
-            document.getElementById('pBrand').value = res.brand;
-            document.getElementById('pPrice').value = res.price;
-            document.getElementById('pCat').value = res.category;
-            document.getElementById('pDesc').value = res.specs;
-            document.getElementById('aiLog').innerText = "SCAN COMPLETE.";
-            speak("Analysis complete.");
-        } catch (e) { speak("Neural link error."); }
-    };
-
-    // --- 📸 UPLOAD ---
     window.uploadImg = async (input, key, txtId, progId) => {
         const fd = new FormData(); fd.append("image", input.files[0]);
-        document.getElementById(txtId).innerText = "SYNCING...";
+        document.getElementById(txtId).innerText = "SYNC...";
         try {
             const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
             const data = await res.json();
-            if(data.success) {
-                productImages[key] = data.data.url;
-                document.getElementById(progId).style.width = "100%";
-                document.getElementById(txtId).innerText = "READY";
-                speak(key + " synced.");
-            }
-        } catch (e) { speak("Link failed."); }
+            productImages[key] = data.data.url;
+            document.getElementById(progId).style.width = "100%";
+            document.getElementById(txtId).innerText = "READY";
+        } catch (e) { speak("Upload error"); }
     };
 
-    // --- 💾 SAVE & SHARE ---
-    document.getElementById('saveBtn').onclick = () => {
-        const d = new Date();
-        const product = {
+    const broadcastToMeta = async (p) => {
+        const msg = `🔥 *NEW ARRIVAL: ${p.name}* 🔥\n\n💰 Price: Rs ${p.onSale ? p.salePrice : p.price}\n📦 Brand: ${p.brand}\n\nTechnical Specs:\n${p.description}\n\n#HaiderStudio #JarvisAI`;
+        try {
+            await fetch(`https://graph.facebook.com/v19.0/${FB_PAGE_ID}/photos`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url: p.img, caption: msg, access_token: FB_TOKEN })
+            });
+            speak("Broadcasted to Haider Studio.");
+        } catch (e) { console.error("Meta Error"); }
+    };
+
+    document.getElementById('saveBtn').onclick = async () => {
+        const p = {
             name: document.getElementById('pName').value,
             brand: document.getElementById('pBrand').value,
             price: Number(document.getElementById('pPrice').value),
@@ -244,58 +166,31 @@
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
             img: productImages.img1,
-            img2: productImages.img2 || "",
-            img3: productImages.img3 || "",
-            month: d.getMonth(),
-            year: d.getFullYear(),
             timestamp: Date.now()
         };
 
-        if(!product.name || !product.img) return alert("Critical: Data missing!");
+        if(!p.name || !p.img) return alert("Details required!");
 
-        push(ref(db, 'products'), product).then(() => {
-            speak("Database synced. Generating social share.");
-            const shareText = `🔥 ${product.name} (${product.brand})\n💰 Price: Rs ${product.onSale ? product.salePrice : product.price}\n📦 Category: ${product.category}\n\nCheck out our latest stock!`;
-            const fbLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(product.img)}&quote=${encodeURIComponent(shareText)}`;
-            
-            if(confirm("Synced! Share on Facebook?")) {
-                window.open(fbLink, '_blank');
-            }
+        push(ref(db, 'products'), p).then(async () => {
+            speak("Database synced.");
+            await broadcastToMeta(p);
             location.reload();
         });
     };
 
-    // --- 📊 INVENTORY LOAD ---
     onValue(ref(db, 'products'), (snap) => {
         const grid = document.getElementById('invGrid'); grid.innerHTML = "";
-        const now = new Date();
-        let m = 0, y = 0, s = 0;
-
         if(snap.exists()){
             Object.keys(snap.val()).reverse().forEach(id => {
                 const p = snap.val()[id];
-                if(p.month === now.getMonth() && p.year === now.getFullYear()) m++;
-                if(p.year === now.getFullYear()) y++;
-                if(p.onSale) s++;
-
-                grid.innerHTML += `
-                    <div class="inv-card">
-                        ${p.onSale ? '<div class="sale-tag">SALE</div>' : ''}
-                        <button class="delete-btn" onclick="deleteItem('${id}')">×</button>
-                        <img src="${p.img}">
-                        <div style="font-size:11px; font-weight:600;">${p.name}</div>
-                        <div style="color:var(--gold); font-size:11px; margin-top:3px;">
-                            ${p.onSale ? `<s>Rs ${p.price}</s> Rs ${p.salePrice}` : `Rs ${p.price}`}
-                        </div>
-                    </div>`;
+                grid.innerHTML += `<div class="inv-card">
+                    ${p.onSale ? '<div class="sale-tag">SALE</div>' : ''}
+                    <img src="${p.img}"><br><b>${p.name}</b><br>
+                    <span style="color:var(--gold)">Rs ${p.onSale ? p.salePrice : p.price}</span>
+                </div>`;
             });
-            document.getElementById('mStat').innerText = m;
-            document.getElementById('yStat').innerText = y;
-            document.getElementById('sStat').innerText = s;
         }
     });
-
-    window.deleteItem = (id) => confirm("Purge item?") && remove(ref(db, `products/${id}`));
 </script>
 </body>
 </html>
