@@ -3,196 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Mobiles | Elite Command Center</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500;800&display=swap" rel="stylesheet">
+    <title>Haider Store | Premium Accessories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
         :root { 
-            --gold: #d4af37; --dark: #020202; --card: rgba(15, 15, 15, 0.95); 
-            --border: rgba(212, 175, 55, 0.3); --neon: 0 0 15px rgba(212, 175, 55, 0.4);
+            --primary: #005f6b; --text-dark: #2d3436; --text-light: #636e72; 
+            --bg-light: #f9f9f9; --white: #ffffff;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--dark); color: #fff; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
 
-        body::after {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 80%);
-            pointer-events: none; z-index: -1;
+        /* --- HEADER --- */
+        header {
+            background: var(--white); padding: 20px 8%; display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
         }
+        .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -1px; }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul li a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 15px; transition: 0.3s; }
+        nav ul li a:hover { color: var(--primary); }
 
-        header { 
-            position: fixed; top: 0; width: 100%; height: 85px; 
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(25px); 
-            z-index: 2000; border-bottom: 2px solid var(--border); 
-            display: flex; align-items: center; justify-content: space-between; padding: 0 5%; 
+        /* --- HERO SECTION --- */
+        .hero {
+            background: var(--white); margin: 40px 8%; border-radius: 20px;
+            display: flex; align-items: center; justify-content: space-around;
+            padding: 60px; overflow: hidden; border: 1px solid #eee;
         }
-        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 1.4rem; text-decoration: none; text-shadow: var(--neon); letter-spacing: 2px; }
-
-        .nav-links { display: flex; gap: 25px; list-style: none; align-items: center; }
-        .nav-link { 
-            color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 11px; 
-            letter-spacing: 1px; transition: 0.3s; cursor: pointer; padding: 10px 0;
+        .hero-content { max-width: 500px; }
+        .hero-content h1 { font-size: 3rem; margin-bottom: 20px; color: var(--text-dark); line-height: 1.2; }
+        .hero-content p { color: var(--text-light); margin-bottom: 30px; font-size: 1.1rem; }
+        .btn-main { 
+            background: var(--primary); color: var(--white); padding: 15px 35px; 
+            text-decoration: none; border-radius: 8px; font-weight: 600; transition: 0.3s;
         }
-        .nav-link:hover { color: var(--gold); text-shadow: var(--neon); }
+        .btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+        .hero-image img { max-width: 450px; border-radius: 10px; }
 
-        .menu-toggle { display: none; color: var(--gold); font-size: 1.5rem; cursor: pointer; }
-
-        /* Auth Icon Style */
-        .auth-trigger { font-size: 1.5rem; color: var(--gold); cursor: pointer; margin-right: 15px; transition: 0.3s; }
-        .auth-trigger:hover { transform: scale(1.1); text-shadow: var(--neon); }
-
-        /* Modal Styling */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            display: none; align-items: center; justify-content: center; z-index: 5000;
+        /* --- SEARCH & FILTER --- */
+        .controls { padding: 40px 8% 0; text-align: center; }
+        #searchBar {
+            width: 100%; max-width: 700px; padding: 18px 25px; border-radius: 50px;
+            border: 1px solid #ddd; outline: none; font-size: 16px; background: var(--white);
+            transition: 0.3s;
         }
-        .auth-card {
-            background: var(--card); border: 1px solid var(--gold); padding: 40px;
-            text-align: center; width: 90%; max-width: 400px; position: relative;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+        #searchBar:focus { border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
+        /* --- PRODUCT GRID --- */
+        .container { padding: 60px 8%; }
+        .section-title { margin-bottom: 40px; font-size: 28px; text-align: left; position: relative; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        
+        .p-card { 
+            background: var(--white); border-radius: 15px; padding: 20px; 
+            transition: 0.4s; border: 1px solid #eee; position: relative;
         }
-        .close-modal { position: absolute; top: 10px; right: 15px; color: var(--gold); cursor: pointer; font-size: 20px; }
+        .p-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        .p-img { height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .p-img img { max-width: 90%; max-height: 180px; object-fit: contain; }
+        .p-name { font-weight: 600; font-size: 17px; margin-bottom: 10px; color: var(--text-dark); height: 50px; overflow: hidden; }
+        .p-price { font-size: 18px; color: var(--primary); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .wa-small { color: #25d366; font-size: 20px; }
 
-        .nav-item { position: relative; }
-        .dropdown-menu {
-            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(20px);
-            background: var(--card); border: 1px solid var(--border); 
-            width: 220px; opacity: 0; visibility: hidden; transition: 0.4s;
-            padding: 10px 0; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
-            display: grid; grid-template-columns: 1fr;
-            max-height: 400px; overflow-y: auto;
-        }
-        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
-        .dropdown-menu a {
-            color: #aaa; padding: 10px 20px; text-decoration: none; font-size: 10px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.05); transition: 0.3s;
-            cursor: pointer; text-transform: uppercase;
-        }
-        .dropdown-menu a:hover { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding-left: 25px; }
-
-        .status-hub { display: flex; flex-direction: column; align-items: flex-end; font-size: 9px; color: var(--gold); }
-
-        .command-center { padding: 140px 5% 40px; max-width: 1400px; margin: 0 auto; text-align: center; }
-        #searchBar { 
-            width: 100%; max-width: 800px; padding: 18px 25px; background: rgba(20,20,20,0.8); 
-            border: 1px solid var(--border); border-radius: 4px; color: #fff; font-family: 'JetBrains Mono'; outline: none;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        #brandStrip { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 30px 0; }
-        .f-btn { 
-            background: transparent; color: #888; border: 1px solid #333; padding: 10px 20px; 
-            font-family: 'Orbitron'; font-size: 10px; cursor: pointer; transition: 0.3s;
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-        }
-        .f-btn.active, .f-btn:hover { color: #000; background: var(--gold); border-color: var(--gold); font-weight: bold; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 0 5% 100px; max-width: 1400px; margin: 0 auto; }
-        .p-card { background: var(--card); border: 1px solid var(--border); padding: 15px; transition: 0.4s; cursor: pointer; position: relative; }
-        .p-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
-        .p-img-box { height: 240px; background: #fff; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 4px; }
-        .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
-        .p-name { font-family: 'Orbitron'; font-size: 1rem; color: #fff; margin: 10px 0; line-height: 1.4; height: 2.8em; overflow: hidden; }
-        .p-price { color: var(--gold); font-weight: 900; font-family: 'Orbitron'; font-size: 1.2rem; }
-
-        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; z-index: 3000; transition: 0.3s; }
+        /* --- FOOTER --- */
+        footer { background: #f1f2f6; padding: 70px 8% 30px; margin-top: 50px; border-top: 1px solid #eee; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; margin-bottom: 40px; }
+        .footer-col h4 { margin-bottom: 25px; color: var(--primary); font-size: 18px; }
+        .footer-col p, .footer-col li { color: var(--text-light); font-size: 14px; margin-bottom: 12px; list-style: none; }
+        .footer-col a { color: var(--text-light); text-decoration: none; transition: 0.3s; }
+        .footer-col a:hover { color: var(--primary); padding-left: 5px; }
+        .footer-bottom { border-top: 1px solid #ddd; padding-top: 20px; text-align: center; font-size: 13px; color: var(--text-light); }
 
         @media (max-width: 768px) {
-            header { height: 70px; padding: 0 4%; }
-            .logo { font-size: 1rem; }
-            .menu-toggle { display: block; order: -1; }
-            .nav-links {
-                position: absolute; top: 70px; left: -100%; width: 100%; 
-                background: rgba(5,5,5,0.98); flex-direction: column; 
-                padding: 30px; transition: 0.4s; border-bottom: 1px solid var(--border);
-            }
-            .nav-links.active { left: 0; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 10px 80px; }
-            .p-img-box { height: 160px; }
+            .hero { flex-direction: column; text-align: center; padding: 40px 20px; }
+            .hero-image img { max-width: 100%; margin-top: 30px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            header { padding: 15px 5%; }
+            nav { display: none; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-    <a href="index.html" class="logo">HAIDER STORE</a>
-    
+    <a href="#" class="logo">HAIDER STORE</a>
     <nav>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html" class="nav-link">HOME</a></li>
-            <li><a href="about.html" class="nav-link">ABOUT US</a></li>
-            <li class="nav-item">
-                <span class="nav-link">SHOP <i class="fas fa-chevron-down" style="font-size: 8px; margin-left: 3px;"></i></span>
-                <div class="dropdown-menu">
-                    <a onclick="setFilter('ALL', 'Cables')">Cables</a>
-                    <a onclick="setFilter('ALL', 'Chargers')">Chargers</a>
-                    <a onclick="setFilter('ALL', 'Car Charger')">Car Charger</a>
-                    <a onclick="setFilter('ALL', 'Clip Charger')">Clip Charger</a>
-                    <a onclick="setFilter('ALL', 'Card Reader')">Card Reader</a>
-                    <a onclick="setFilter('ALL', 'Neck Band')">Neck Band</a>
-                    <a onclick="setFilter('ALL', 'Earbuds')">Earbuds</a>
-                    <a onclick="setFilter('ALL', 'Handfree')">Handfree</a>
-                    <a onclick="setFilter('ALL', 'Speaker')">Speaker</a>
-                    <a onclick="setFilter('ALL', 'Power Banks')">Power Banks</a>
-                    <a onclick="setFilter('ALL', 'OTG Connectors')">OTG Connectors</a>
-                    <a onclick="setFilter('ALL', 'Battery')">Battery</a>
-                    <a onclick="setFilter('ALL', 'HeadPhones')">Headphones</a>
-                    <a onclick="setFilter('ALL', 'ALL')" style="color:var(--gold); font-weight: bold; border:none;">[ SHOW ALL ]</a>
-                </div>
-            </li>
-            <li><a href="contact.html" class="nav-link">CONTACT</a></li>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
         </ul>
     </nav>
-
-    <div style="display: flex; align-items: center;">
-        <i class="fas fa-user-circle auth-trigger" onclick="toggleAuthModal()"></i>
-        <div class="status-hub">
-            <span id="authStatusText"><i class="fas fa-circle" style="font-size: 6px; color: #25d366;"></i> SCANNING_DB</span>
-            <span id="itemCount">UNITS: 00</span>
-        </div>
-    </div>
 </header>
 
-<div id="authModal" class="modal-overlay">
-    <div class="auth-card">
-        <span class="close-modal" onclick="toggleAuthModal()">&times;</span>
-        <h2 style="font-family: 'Orbitron'; color: var(--gold); margin-bottom: 20px; font-size: 1.2rem;">SYSTEM_ACCESS</h2>
-        <p style="font-size: 10px; margin-bottom: 30px; color: #888;">PLEASE AUTHORIZE TO UNLOCK EXCLUSIVE FEATURES</p>
-        
-        <button class="f-btn" onclick="loginWithGithub()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: #24292e; color: #fff;">
-            <i class="fab fa-github" style="font-size: 1.2rem;"></i> ACCESS_VIA_GITHUB
-        </button>
+<section class="hero">
+    <div class="hero-content">
+        <h1>Upgrade Your Digital Life</h1>
+        <p>Premium mobile and computer accessories curated for the modern professional. Quality guaranteed.</p>
+        <a href="#shop" class="btn-main">Explore Collection</a>
     </div>
+    <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?q=80&w=500" alt="Tech Gear">
+    </div>
+</section>
+
+<div class="controls">
+    <input type="text" id="searchBar" placeholder="Search for products (e.g. Charger, Buds)...">
 </div>
 
-<div class="command-center">
-    <input type="text" id="searchBar" placeholder="SCAN_DATABASE: ENTER MODEL OR SPEC...">
-    <div id="brandStrip"></div>
+<div class="container" id="shop">
+    <h2 class="section-title">Featured Products</h2>
+    <div id="productGrid" class="grid">
+        </div>
 </div>
 
-<div id="productGrid" class="grid">
-    <div style="grid-column: 1/-1; text-align: center; padding: 100px; color: var(--gold); letter-spacing: 3px;">INITIALIZING_SYSTEM...</div>
-</div>
-
-<a href="https://wa.me/923279518790" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
-<script>
-    function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
-    function toggleAuthModal() {
-        const modal = document.getElementById('authModal');
-        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
-    }
-</script>
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Haider Store</h4>
+            <p>Your trusted partner for authentic tech accessories in Pakistan. We deliver quality at your doorstep.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Shipping Rates</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Refund Policy</a></li>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <p><i class="fas fa-phone"></i> +92 327 9518790</p>
+            <p><i class="fas fa-envelope"></i> contact@haiderstore.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> Karachi, Pakistan</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 HAIDER STORE. All rights reserved.
+    </div>
+</footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getAuth, GithubAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -204,76 +160,29 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const auth = getAuth(app);
-    const provider = new GithubAuthProvider();
-
-    // 🚀 GitHub Login Function
-    window.loginWithGithub = () => {
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                alert("ACCESS_GRANTED: " + result.user.displayName);
-                toggleAuthModal();
-            }).catch((error) => {
-                alert("AUTH_ERROR: " + error.message);
-            });
-    };
-
-    // Monitor Auth State
-    onAuthStateChanged(auth, (user) => {
-        const statusText = document.getElementById('authStatusText');
-        if (user) {
-            statusText.innerHTML = `<i class="fas fa-circle" style="font-size: 6px; color: #25d366;"></i> ${user.displayName.toUpperCase()}`;
-        } else {
-            statusText.innerHTML = `<i class="fas fa-circle" style="font-size: 6px; color: #ff4444;"></i> OFFLINE_MODE`;
-        }
-    });
-
-    let allProducts = [];
-    let activeBrand = 'ALL';
-    let activeCat = 'ALL';
 
     onValue(ref(db, 'products'), (snap) => {
         if (snap.exists()) {
-            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            syncBrands();
-            updateUI();
+            const products = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            window.allProducts = products;
+            render(products);
         }
     });
 
-    function syncBrands() {
-        const brands = ['ALL', ...new Set(allProducts.map(p => p.brand ? p.brand.toUpperCase() : 'UNKNOWN'))];
-        document.getElementById('brandStrip').innerHTML = brands.map(b => `
-            <button class="f-btn ${b === activeBrand ? 'active' : ''}" onclick="window.setFilter('${b}', 'ALL')">
-                [ ${b} ]
-            </button>
-        `).join('');
-    }
-
-    window.setFilter = (brand, cat) => {
-        activeBrand = brand; activeCat = cat;
-        updateUI();
-    };
-
-    function updateUI() {
+    function render(products) {
         const query = document.getElementById('searchBar').value.toLowerCase();
-        const filtered = allProducts.filter(p => {
-            const mBrand = activeBrand === 'ALL' || (p.brand && p.brand.toUpperCase() === activeBrand);
-            const mCat = activeCat === 'ALL' || (p.category && p.category.toLowerCase() === activeCat.toLowerCase());
-            return mBrand && mCat && p.name.toLowerCase().includes(query);
-        });
-
-        document.getElementById('itemCount').innerText = `UNITS: ${filtered.length.toString().padStart(2, '0')}`;
-        document.getElementById('productGrid').innerHTML = filtered.map(p => `
+        document.getElementById('productGrid').innerHTML = products.filter(p => p.name.toLowerCase().includes(query)).map(p => `
             <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
-                <div class="p-img-box"><img src="${p.img}" onerror="this.src='https://via.placeholder.com/300'"></div>
-                <div style="font-size: 8px; color: var(--gold);">${p.brand || 'TECH'}</div>
+                <div class="p-img"><img src="${p.img}"></div>
                 <h3 class="p-name">${p.name}</h3>
-                <div class="p-price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
+                <div class="p-price">
+                    Rs ${new Intl.NumberFormat('en-PK').format(p.price)}
+                    <i class="fab fa-whatsapp wa-small"></i>
+                </div>
             </div>
         `).join('');
     }
-
-    document.getElementById('searchBar').oninput = updateUI;
+    document.getElementById('searchBar').oninput = () => render(window.allProducts);
 </script>
 </body>
 </html>
