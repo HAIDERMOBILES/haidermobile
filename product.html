@@ -10,7 +10,7 @@
     
     <style>
         :root { 
-            --primary: #005f6b; /* Teal Accent */
+            --primary: #005f6b; 
             --text-dark: #2d3436; 
             --text-light: #636e72; 
             --bg-light: #f4f7f6; 
@@ -31,10 +31,9 @@
         .back-btn { text-decoration: none; color: var(--text-light); font-size: 14px; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .back-btn:hover { color: var(--primary); }
 
-        /* --- PRODUCT GRID --- */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        /* --- MAIN PRODUCT CONTAINER --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
         
-        /* Left: Image Container */
         .img-display { 
             background: var(--white); border-radius: 20px; padding: 40px; 
             border: 1px solid var(--border); display: flex; justify-content: center; align-items: center;
@@ -42,33 +41,45 @@
         }
         .img-display img { max-width: 100%; max-height: 450px; object-fit: contain; }
 
-        /* Right: Product Details */
         .details-box { padding: 20px 0; }
         .p-category { font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
         .p-title { font-size: 2.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; line-height: 1.2; }
         .p-price { font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: 25px; }
-        .p-desc { color: var(--text-light); font-size: 16px; margin-bottom: 35px; border-top: 1px solid var(--border); padding-top: 25px; max-width: 500px; }
+        .p-desc { color: var(--text-light); font-size: 16px; margin-bottom: 35px; border-top: 1px solid var(--border); padding-top: 25px; }
 
-        /* Action Buttons */
-        .actions { display: flex; flex-direction: column; gap: 15px; }
         .btn-wa { 
             background: #25d366; color: white; padding: 18px 30px; border-radius: 10px; 
             text-decoration: none; font-weight: 700; text-align: center; font-size: 17px;
             display: flex; align-items: center; justify-content: center; gap: 12px; transition: 0.3s;
             box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
         }
-        .btn-wa:hover { background: #1ebe57; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(37, 211, 102, 0.3); }
+        .btn-wa:hover { background: #1ebe57; transform: translateY(-3px); }
 
-        /* Trust Points */
         .trust-points { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .point { font-size: 13px; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
-        .point i { color: var(--primary); font-size: 16px; }
+        .point i { color: var(--primary); }
 
-        /* Responsive */
+        /* --- RELATED PRODUCTS SECTION --- */
+        .related-section { padding: 60px 8% 40px; background: #fff; margin-top: 50px; border-top: 1px solid var(--border); }
+        .related-title { font-size: 22px; margin-bottom: 30px; color: var(--text-dark); border-left: 4px solid var(--primary); padding-left: 15px; }
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
+        .rel-card { 
+            border: 1px solid var(--border); border-radius: 12px; padding: 15px; cursor: pointer; 
+            transition: 0.3s; background: var(--white); text-decoration: none; color: inherit;
+        }
+        .rel-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: var(--primary); }
+        .rel-img { height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .rel-img img { max-width: 100%; max-height: 130px; object-fit: contain; }
+        .rel-name { font-size: 14px; font-weight: 600; height: 35px; overflow: hidden; margin-bottom: 5px; }
+        .rel-price { color: var(--primary); font-weight: 700; }
+
+        footer { text-align: center; padding: 40px; color: var(--text-light); font-size: 13px; background: var(--bg-light); }
+
         @media (max-width: 992px) {
-            .container { grid-template-columns: 1fr; gap: 40px; }
-            .img-display { min-height: 350px; padding: 20px; }
-            .p-title { font-size: 1.8rem; }
+            .container { grid-template-columns: 1fr; }
+            .img-display { min-height: 350px; }
+            .related-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -79,22 +90,22 @@
     <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Shop</a>
 </header>
 
-<div class="container" id="productContainer">
-    <div style="grid-column: 1/-1; text-align: center; padding: 100px;">
-        <i class="fas fa-circle-notch fa-spin" style="font-size: 40px; color: var(--primary);"></i>
-        <p style="margin-top: 15px; color: var(--text-light);">Loading specifications...</p>
+<div class="container" id="mainProduct">
     </div>
-</div>
+
+<section class="related-section">
+    <h3 class="related-title">You May Also Like</h3>
+    <div class="related-grid" id="relatedGrid">
+        </div>
+</section>
 
 <footer>
-    <div style="text-align: center; padding: 40px; color: var(--text-light); font-size: 13px;">
-        &copy; 2026 HAIDER STORE. Quality Guaranteed.
-    </div>
+    &copy; 2026 HAIDER STORE. All Rights Reserved.
 </footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -113,38 +124,58 @@
         get(ref(db, `products/${productId}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 const p = snapshot.val();
-                document.getElementById('productContainer').innerHTML = `
-                    <div class="img-display">
-                        <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/600'">
-                    </div>
-                    <div class="details-box">
-                        <span class="p-category">${p.category || 'Tech Accessory'} | ${p.brand || 'Premium'}</span>
-                        <h1 class="p-title">${p.name}</h1>
-                        <div class="p-price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
-                        <p class="p-desc">
-                            ${p.desc || 'This premium product is built with high-quality materials to ensure durability and top-notch performance. Perfect for your daily tech needs.'}
-                        </p>
-                        
-                        <div class="actions">
-                            <a href="https://wa.me/923279518790?text=I want to order: ${p.name}%0APrice: Rs ${p.price}" class="btn-wa">
-                                <i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP
-                            </a>
-                        </div>
+                renderProduct(p);
+                loadRelated(p.category, productId);
+            }
+        });
+    }
 
-                        <div class="trust-points">
-                            <div class="point"><i class="fas fa-truck-fast"></i> Fast Home Delivery</div>
-                            <div class="point"><i class="fas fa-shield-alt"></i> Quality Checked</div>
-                            <div class="point"><i class="fas fa-undo"></i> Easy Returns</div>
-                            <div class="point"><i class="fas fa-headset"></i> 24/7 Support</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                document.getElementById('productContainer').innerHTML = "<h2 style='grid-column: 1/-1; text-align: center;'>Product Not Found</h2>";
+    function renderProduct(p) {
+        document.getElementById('mainProduct').innerHTML = `
+            <div class="img-display">
+                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/600'">
+            </div>
+            <div class="details-box">
+                <span class="p-category">${p.category || 'Tech'} | ${p.brand || 'Premium'}</span>
+                <h1 class="p-title">${p.name}</h1>
+                <div class="p-price">Rs ${new Intl.NumberFormat('en-PK').format(p.price)}</div>
+                <p class="p-desc">${p.desc || 'High-quality accessory designed for durability and performance. Experience the best technology with Haider Store.'}</p>
+                <a href="https://wa.me/923279518790?text=I am interested in: ${p.name}" class="btn-wa">
+                    <i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP
+                </a>
+                <div class="trust-points">
+                    <div class="point"><i class="fas fa-truck-fast"></i> Fast Shipping</div>
+                    <div class="point"><i class="fas fa-shield-alt"></i> Quality Check</div>
+                    <div class="point"><i class="fas fa-undo"></i> 7 Days Return</div>
+                    <div class="point"><i class="fas fa-award"></i> Original Product</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function loadRelated(category, currentId) {
+        onValue(ref(db, 'products'), (snap) => {
+            if (snap.exists()) {
+                const all = snap.val();
+                const related = Object.keys(all)
+                    .map(id => ({ id, ...all[id] }))
+                    .filter(item => item.category === category && item.id !== currentId)
+                    .slice(0, 4);
+
+                if(related.length > 0) {
+                    document.getElementById('relatedGrid').innerHTML = related.map(item => `
+                        <a href="product.html?id=${item.id}" class="rel-card">
+                            <div class="rel-img"><img src="${item.img}"></div>
+                            <h4 class="rel-name">${item.name}</h4>
+                            <div class="rel-price">Rs ${new Intl.NumberFormat('en-PK').format(item.price)}</div>
+                        </a>
+                    `).join('');
+                } else {
+                    document.getElementById('relatedGrid').innerHTML = "<p>No related products found.</p>";
+                }
             }
         });
     }
 </script>
-
 </body>
 </html>
