@@ -3,119 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Store | Premium Accessories</title>
+    <title>Haider Store | Premium Tech Accessories</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
         :root { 
-            --primary: #005f6b; --text-dark: #2d3436; --text-light: #636e72; 
-            --bg-light: #f9f9f9; --white: #ffffff;
+            --primary: #005f6b; /* Teal color from your image */
+            --text-dark: #2d3436; 
+            --text-light: #636e72; 
+            --bg-light: #f4f7f6; 
+            --white: #ffffff;
+            --border-color: #e0e0e0;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
 
-        /* --- HEADER --- */
+        /* --- HEADER & NAVIGATION --- */
         header {
             background: var(--white); padding: 20px 8%; display: flex;
             justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 2000;
         }
-        .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -1px; }
-        nav ul { display: flex; list-style: none; gap: 30px; }
-        nav ul li a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 15px; transition: 0.3s; }
-        nav ul li a:hover { color: var(--primary); }
+        .logo { font-size: 22px; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+        
+        .nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
+        .nav-link { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 14px; transition: 0.3s; cursor: pointer; }
+        .nav-link:hover { color: var(--primary); }
+
+        /* --- SHOP DROPDOWN --- */
+        .nav-item { position: relative; }
+        .dropdown-menu {
+            position: absolute; top: 100%; left: 0; background: var(--white);
+            border: 1px solid var(--border-color); width: 200px; opacity: 0; visibility: hidden;
+            transition: 0.3s; padding: 10px 0; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 8px; margin-top: 10px;
+        }
+        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; }
+        .dropdown-menu a {
+            color: var(--text-dark); padding: 10px 20px; text-decoration: none; font-size: 13px;
+            display: block; transition: 0.2s; cursor: pointer;
+        }
+        .dropdown-menu a:hover { background: #f0f7f8; color: var(--primary); }
 
         /* --- HERO SECTION --- */
         .hero {
-            background: var(--white); margin: 40px 8%; border-radius: 20px;
-            display: flex; align-items: center; justify-content: space-around;
-            padding: 60px; overflow: hidden; border: 1px solid #eee;
+            background: var(--white); margin: 30px 8%; border-radius: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 50px; border: 1px solid var(--border-color);
         }
-        .hero-content { max-width: 500px; }
-        .hero-content h1 { font-size: 3rem; margin-bottom: 20px; color: var(--text-dark); line-height: 1.2; }
-        .hero-content p { color: var(--text-light); margin-bottom: 30px; font-size: 1.1rem; }
+        .hero-content { max-width: 450px; }
+        .hero-content h1 { font-size: 2.5rem; color: var(--text-dark); margin-bottom: 15px; }
+        .hero-content p { color: var(--text-light); margin-bottom: 25px; }
         .btn-main { 
-            background: var(--primary); color: var(--white); padding: 15px 35px; 
-            text-decoration: none; border-radius: 8px; font-weight: 600; transition: 0.3s;
+            background: var(--primary); color: var(--white); padding: 12px 30px; 
+            text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;
         }
-        .btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
-        .hero-image img { max-width: 450px; border-radius: 10px; }
+        .hero-image img { max-width: 400px; border-radius: 8px; }
 
-        /* --- SEARCH & FILTER --- */
-        .controls { padding: 40px 8% 0; text-align: center; }
+        /* --- SEARCH & FILTERS --- */
+        .controls { padding: 0 8%; text-align: center; margin-bottom: 40px; }
         #searchBar {
-            width: 100%; max-width: 700px; padding: 18px 25px; border-radius: 50px;
-            border: 1px solid #ddd; outline: none; font-size: 16px; background: var(--white);
-            transition: 0.3s;
+            width: 100%; max-width: 600px; padding: 15px 25px; border-radius: 50px;
+            border: 1px solid var(--border-color); outline: none; font-size: 15px;
+            transition: 0.3s; background: var(--white);
         }
-        #searchBar:focus { border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        #searchBar:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,95,107,0.1); }
 
         /* --- PRODUCT GRID --- */
-        .container { padding: 60px 8%; }
-        .section-title { margin-bottom: 40px; font-size: 28px; text-align: left; position: relative; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .container { padding: 0 8% 60px; }
+        .section-title { font-size: 24px; margin-bottom: 30px; font-weight: 700; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
         
         .p-card { 
-            background: var(--white); border-radius: 15px; padding: 20px; 
-            transition: 0.4s; border: 1px solid #eee; position: relative;
+            background: var(--white); border-radius: 12px; padding: 20px; 
+            transition: 0.3s; border: 1px solid var(--border-color); cursor: pointer;
         }
-        .p-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
-        .p-img { height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-        .p-img img { max-width: 90%; max-height: 180px; object-fit: contain; }
-        .p-name { font-weight: 600; font-size: 17px; margin-bottom: 10px; color: var(--text-dark); height: 50px; overflow: hidden; }
-        .p-price { font-size: 18px; color: var(--primary); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-        .wa-small { color: #25d366; font-size: 20px; }
+        .p-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: var(--primary); }
+        .p-img-box { height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; background: #fff; }
+        .p-img-box img { max-width: 90%; max-height: 180px; object-fit: contain; }
+        .p-name { font-weight: 600; font-size: 16px; margin-bottom: 8px; color: var(--text-dark); height: 45px; overflow: hidden; }
+        .p-price { color: var(--primary); font-weight: 700; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .wa-icon { color: #25d366; font-size: 18px; }
 
         /* --- FOOTER --- */
-        footer { background: #f1f2f6; padding: 70px 8% 30px; margin-top: 50px; border-top: 1px solid #eee; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; margin-bottom: 40px; }
-        .footer-col h4 { margin-bottom: 25px; color: var(--primary); font-size: 18px; }
-        .footer-col p, .footer-col li { color: var(--text-light); font-size: 14px; margin-bottom: 12px; list-style: none; }
-        .footer-col a { color: var(--text-light); text-decoration: none; transition: 0.3s; }
-        .footer-col a:hover { color: var(--primary); padding-left: 5px; }
-        .footer-bottom { border-top: 1px solid #ddd; padding-top: 20px; text-align: center; font-size: 13px; color: var(--text-light); }
+        footer { background: #e9eeed; padding: 60px 8% 30px; border-top: 1px solid var(--border-color); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
+        .footer-col p, .footer-col li { font-size: 14px; color: var(--text-light); margin-bottom: 10px; list-style: none; }
+        .footer-bottom { border-top: 1px solid #d0d0d0; margin-top: 40px; padding-top: 20px; text-align: center; font-size: 12px; color: var(--text-light); }
 
+        /* MOBILE FIXES */
         @media (max-width: 768px) {
-            .hero { flex-direction: column; text-align: center; padding: 40px 20px; }
-            .hero-image img { max-width: 100%; margin-top: 30px; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
             header { padding: 15px 5%; }
-            nav { display: none; }
+            .nav-links { display: none; }
+            .hero { flex-direction: column; text-align: center; padding: 30px; }
+            .hero-image { display: none; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .p-img-box { height: 140px; }
+            .p-name { font-size: 13px; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="#" class="logo">HAIDER STORE</a>
+    <a href="index.html" class="logo">HAIDER STORE</a>
     <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Shop</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item">
+                <span class="nav-link">Shop <i class="fas fa-chevron-down" style="font-size: 10px;"></i></span>
+                <div class="dropdown-menu">
+                    <a onclick="setFilter('ALL', 'Cables')">Cables</a>
+                    <a onclick="setFilter('ALL', 'Chargers')">Chargers</a>
+                    <a onclick="setFilter('ALL', 'Earbuds')">Earbuds</a>
+                    <a onclick="setFilter('ALL', 'Neck Band')">Neck Band</a>
+                    <a onclick="setFilter('ALL', 'Handfree')">Handfree</a>
+                    <a onclick="setFilter('ALL', 'Speaker')">Speaker</a>
+                    <a onclick="setFilter('ALL', 'Power Banks')">Power Banks</a>
+                    <a onclick="setFilter('ALL', 'Battery')">Battery</a>
+                    <a onclick="setFilter('ALL', 'HeadPhones')">Headphones</a>
+                    <a onclick="setFilter('ALL', 'ALL')" style="font-weight: bold; color: var(--primary);">[ Show All ]</a>
+                </div>
+            </li>
+            <li><a href="#" class="nav-link">About</a></li>
+            <li><a href="#" class="nav-link">Contact</a></li>
         </ul>
     </nav>
+    <div id="itemCount" style="font-size: 12px; font-weight: bold; color: var(--primary);">UNITS: 00</div>
 </header>
 
 <section class="hero">
     <div class="hero-content">
-        <h1>Upgrade Your Digital Life</h1>
-        <p>Premium mobile and computer accessories curated for the modern professional. Quality guaranteed.</p>
-        <a href="#shop" class="btn-main">Explore Collection</a>
+        <h1>Explore Collection</h1>
+        <p>Premium mobile and computer accessories designed for performance and style.</p>
+        <a href="#shop-start" class="btn-main">Shop Now</a>
     </div>
     <div class="hero-image">
-        <img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?q=80&w=500" alt="Tech Gear">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=600" alt="Tech Accessories">
     </div>
 </section>
 
-<div class="controls">
+<div class="controls" id="shop-start">
     <input type="text" id="searchBar" placeholder="Search for products (e.g. Charger, Buds)...">
 </div>
 
-<div class="container" id="shop">
+<div class="container">
     <h2 class="section-title">Featured Products</h2>
     <div id="productGrid" class="grid">
         </div>
@@ -124,25 +160,27 @@
 <footer>
     <div class="footer-grid">
         <div class="footer-col">
-            <h4>Haider Store</h4>
-            <p>Your trusted partner for authentic tech accessories in Pakistan. We deliver quality at your doorstep.</p>
-        </div>
-        <div class="footer-col">
             <h4>Quick Links</h4>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Shipping Rates</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Refund Policy</a></li>
+            <li>Privacy Policy</li>
+            <li>Shipping</li>
+            <li>Returns</li>
         </div>
         <div class="footer-col">
-            <h4>Contact Us</h4>
-            <p><i class="fas fa-phone"></i> +92 327 9518790</p>
-            <p><i class="fas fa-envelope"></i> contact@haiderstore.com</p>
-            <p><i class="fas fa-map-marker-alt"></i> Karachi, Pakistan</p>
+            <h4>Contact Info</h4>
+            <p>Phone: +92 327 9518790</p>
+            <p>Email: info@haiderstore.com</p>
+        </div>
+        <div class="footer-col">
+            <h4>Follow Us</h4>
+            <div style="display: flex; gap: 15px; font-size: 20px; color: var(--primary);">
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-twitter"></i>
+            </div>
         </div>
     </div>
     <div class="footer-bottom">
-        &copy; 2026 HAIDER STORE. All rights reserved.
+        &copy; 2026 HAIDER STORE. All Rights Reserved.
     </div>
 </footer>
 
@@ -161,28 +199,43 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    let allProducts = [];
+    let activeCat = 'ALL';
+
     onValue(ref(db, 'products'), (snap) => {
         if (snap.exists()) {
-            const products = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            window.allProducts = products;
-            render(products);
+            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            updateUI();
         }
     });
 
-    function render(products) {
+    window.setFilter = (brand, cat) => {
+        activeCat = cat;
+        updateUI();
+    };
+
+    function updateUI() {
         const query = document.getElementById('searchBar').value.toLowerCase();
-        document.getElementById('productGrid').innerHTML = products.filter(p => p.name.toLowerCase().includes(query)).map(p => `
+        const filtered = allProducts.filter(p => {
+            const mCat = activeCat === 'ALL' || (p.category && p.category.toLowerCase() === activeCat.toLowerCase());
+            return mCat && p.name.toLowerCase().includes(query);
+        });
+
+        document.getElementById('itemCount').innerText = `UNITS: ${filtered.length.toString().padStart(2, '0')}`;
+        document.getElementById('productGrid').innerHTML = filtered.map(p => `
             <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
-                <div class="p-img"><img src="${p.img}"></div>
+                <div class="p-img-box"><img src="${p.img}" onerror="this.src='https://via.placeholder.com/300'"></div>
                 <h3 class="p-name">${p.name}</h3>
                 <div class="p-price">
                     Rs ${new Intl.NumberFormat('en-PK').format(p.price)}
-                    <i class="fab fa-whatsapp wa-small"></i>
+                    <i class="fab fa-whatsapp wa-icon"></i>
                 </div>
             </div>
         `).join('');
     }
-    document.getElementById('searchBar').oninput = () => render(window.allProducts);
+
+    document.getElementById('searchBar').oninput = updateUI;
 </script>
+
 </body>
 </html>
