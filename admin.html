@@ -3,200 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis | Secure Neural Interface v5.2</title>
+    <title>Jarvis Admin | Haider Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
         
         :root { 
-            --gold: #d4af37; 
-            --bg: #050505; 
-            --card: #0d0d0d; 
-            --border: #1a1a1a; 
-            --neon: #00f3ff; 
-            --green: #25d366; 
-            --red: #ff4757; 
+            --primary: #005f6b; --bg: #f4f7f6; --white: #ffffff; --text: #2d3436; --border: #e0e0e0; --red: #ff4757; 
         }
 
-        /* Essential Reset to prevent overlapping */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: #fff; 
-            padding: 20px; 
-            overflow-x: hidden; 
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
         
-        #loginOverlay { 
-            position: fixed; 
-            inset: 0; 
-            background: #000; 
-            z-index: 9999; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            backdrop-filter: blur(10px); 
-        }
+        #loginOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        #loginBox { text-align: center; background: var(--white); padding: 40px; border-radius: 20px; width: 90%; max-width: 380px; }
 
-        #loginBox { 
-            text-align: center; 
-            background: #0d0d0d; 
-            padding: 40px; 
-            border-radius: 20px; 
-            border: 1px solid var(--gold); 
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); 
-            width: 90%;
-            max-width: 350px; 
-        }
-        
-        /* Responsive Grid Logic */
-        .main-layout { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 30px; 
-            max-width: 1400px; 
-            margin: auto; 
-        }
+        .main-layout { display: flex; flex-direction: column; gap: 30px; max-width: 1400px; margin: auto; }
 
         @media (min-width: 1024px) {
             .main-layout { flex-direction: row; align-items: flex-start; }
-            .sidebar { width: 420px; flex-shrink: 0; position: sticky; top: 20px; }
+            .sidebar { width: 400px; flex-shrink: 0; position: sticky; top: 20px; }
             .inventory-section { flex-grow: 1; }
         }
         
-        .ai-brain-box { 
-            background: #0f0f0f; 
-            border: 1px solid var(--gold); 
-            padding: 20px; 
-            border-radius: 20px; 
-            margin-bottom: 20px; 
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-        }
-
-        .input-group { display: flex; gap: 10px; margin-top: 5px; }
-
-        .upgrade-status { font-size: 8px; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 5px; display: block; }
+        .card { background: var(--white); border: 1px solid var(--border); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
         
-        .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
-        .stat-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; border-bottom: 2px solid var(--gold); }
-        .stat-card small { font-family: 'Orbitron'; font-size: 8px; color: var(--neon); display: block; }
-        .stat-card h2 { margin-top: 5px; font-size: 18px; }
+        /* Banner Section Styling */
+        .banner-upload { background: #e0f2f1; border: 2px dashed var(--primary); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
 
-        .upload-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 24px; }
-        
-        .multi-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .upload-slot { border: 1px dashed #333; padding: 15px 5px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.3s; position: relative; font-size: 11px; }
-        .upload-slot:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
-        
+        .multi-upload { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .slot { border: 2px dashed var(--border); padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; font-size: 11px; position: relative; }
+        .prog { position: absolute; bottom: 0; left: 0; height: 4px; background: var(--primary); width: 0%; transition: 0.3s; border-radius: 2px; }
+
         input, select, textarea { 
-            width: 100%; 
-            padding: 12px; 
-            margin-bottom: 12px; 
-            background: #000; 
-            border: 1px solid #222; 
-            color: #fff; 
-            border-radius: 10px; 
-            font-size: 14px; 
-            outline: none; 
-            display: block;
+            width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 14px;
         }
         
-        input:focus, select:focus { border-color: var(--gold); }
-        
-        .save-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; color: #000; transition: 0.3s; letter-spacing: 1px; }
-        .save-btn:hover { transform: scale(1.01); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
-        
-        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .inv-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; text-align: center; position: relative; transition: 0.3s; }
-        .inv-card:hover { border-color: var(--gold); }
-        .inv-card img { width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 10px; margin-bottom: 8px; }
-        
-        .progress-bar { position: absolute; bottom: 0; left: 0; height: 3px; width: 0%; background: var(--gold); transition: 0.3s; }
-        .delete-btn { position: absolute; right: 8px; top: 8px; border: none; background: var(--red); color: white; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; z-index: 10; }
-        .sale-tag { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: 'Orbitron'; }
+        .btn-sync { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 1px; }
+        .btn-sync:hover { background: #004a54; }
+
+        .inv-card { background: var(--white); border: 1px solid var(--border); border-radius: 15px; padding: 12px; position: relative; margin-bottom: 15px; }
+        .inv-card img { width: 100%; height: 140px; object-fit: contain; border-radius: 10px; }
+        .del-btn { position: absolute; top: 5px; right: 5px; background: var(--red); color: white; border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay">
     <div id="loginBox">
-        <h2 style="font-family:'Orbitron'; color:var(--gold); letter-spacing: 3px; margin-bottom: 20px;">JARVIS CORE</h2>
-        <input type="password" id="passInput" placeholder="System Key">
-        <button onclick="checkPass()" class="save-btn">INITIALIZE CORE</button>
+        <h2 style="color:var(--primary); margin-bottom: 20px;">SYSTEM ACCESS</h2>
+        <input type="password" id="passInput" placeholder="Enter Admin Key">
+        <button onclick="checkPass()" class="btn-sync">LOGIN</button>
     </div>
 </div>
 
 <div class="main-layout">
     <div class="sidebar">
-        <div class="ai-brain-box" id="aiBrain">
-            <span class="upgrade-status" id="sysStatus">SYSTEM: ACTIVE | ENCRYPTED</span>
-            <div class="input-group">
-                <input type="text" id="aiQuery" placeholder="Target product name..." style="margin-bottom:0;">
-                <button onclick="jarvisAIScan()" id="aiStatusBtn" style="background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:8px; cursor:pointer; font-family:'Orbitron'; font-size:10px; padding:0 15px;">SCAN</button>
+        <div class="card">
+            <h3 style="color:var(--primary); margin-bottom: 10px;"><i class="fa fa-ad"></i> Hero Poster</h3>
+            <p style="font-size: 11px; margin-bottom: 10px;">Main page ka bara banner change karein:</p>
+            <div class="banner-upload" onclick="document.getElementById('fBanner').click()">
+                <i class="fa fa-cloud-upload-alt"></i> <br><span id="tBanner">Upload Banner</span>
+                <input type="file" id="fBanner" hidden onchange="uploadToImgBB(this, 'hero', 'tBanner', 'pBanner')">
+                <div class="prog" id="pBanner"></div>
             </div>
-            <div id="aiLog" style="font-size:9px; color:#555; margin-top:12px; font-family: 'Orbitron'; text-transform: uppercase;">Standing by, Sir.</div>
+            <button onclick="updateHeroBanner()" class="btn-sync" style="padding: 10px; font-size: 12px;">UPDATE BANNER</button>
         </div>
 
-        <div class="upload-card">
-            <div class="multi-upload-grid">
-                <div class="upload-slot" onclick="document.getElementById('f1').click()">
-                    <i class="fa fa-camera"></i> <br><small id="t1">Main</small>
-                    <input type="file" id="f1" hidden onchange="uploadImg(this, 'img1', 't1', 'p1')">
-                    <div class="progress-bar" id="p1"></div>
+        <div class="card">
+            <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fa fa-plus-circle"></i> Add Product</h3>
+            
+            <label style="font-size: 12px; font-weight: 600;">Product Photos (3 Slots)</label>
+            <div class="multi-upload">
+                <div class="slot" onclick="document.getElementById('f1').click()">
+                    <i class="fa fa-image"></i> <br><span id="t1">Main</span>
+                    <input type="file" id="f1" hidden onchange="uploadToImgBB(this, 'img1', 't1', 'p1')">
+                    <div class="prog" id="p1"></div>
                 </div>
-                <div class="upload-slot" onclick="document.getElementById('f2').click()">
-                    <i class="fa fa-plus"></i> <br><small id="t2">Side</small>
-                    <input type="file" id="f2" hidden onchange="uploadImg(this, 'img2', 't2', 'p2')">
-                    <div class="progress-bar" id="p2"></div>
+                <div class="slot" onclick="document.getElementById('f2').click()">
+                    <i class="fa fa-plus"></i> <br><span id="t2">Side</span>
+                    <input type="file" id="f2" hidden onchange="uploadToImgBB(this, 'img2', 't2', 'p2')">
+                    <div class="prog" id="p2"></div>
                 </div>
-                <div class="upload-slot" onclick="document.getElementById('f3').click()">
-                    <i class="fa fa-plus"></i> <br><small id="t3">Back</small>
-                    <input type="file" id="f3" hidden onchange="uploadImg(this, 'img3', 't3', 'p3')">
-                    <div class="progress-bar" id="p3"></div>
+                <div class="slot" onclick="document.getElementById('f3').click()">
+                    <i class="fa fa-plus"></i> <br><span id="t3">Back</span>
+                    <input type="file" id="f3" hidden onchange="uploadToImgBB(this, 'img3', 't3', 'p3')">
+                    <div class="prog" id="p3"></div>
                 </div>
             </div>
 
             <input type="text" id="pName" placeholder="Product Name">
-            <input type="text" id="pBrand" placeholder="Brand Name">
+            <input type="text" id="pBrand" placeholder="Brand Name (Samsung, Apple, etc.)">
             
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <input type="number" id="pPrice" placeholder="Reg. Price">
-                <input type="number" id="pDiscountPrice" placeholder="Sale Price (Optional)">
+                <input type="number" id="pPrice" placeholder="Price (PKR)">
+                <select id="pCat">
+                    <option value="Cables">Cables</option>
+                    <option value="Chargers">Chargers</option>
+                    <option value="Earbuds">Earbuds</option>
+                    <option value="Neck Band">Neck Band</option>
+                    <option value="Speaker">Speaker</option>
+                    <option value="LCD">LCD Screens</option>
+                </select>
             </div>
-
-            <select id="pCat">
-                <option value="" disabled selected>SELECT CATEGORY</option>
-                <option value="Cables">Cables</option>
-                <option value="Chargers">Chargers</option>
-                <option value="Earbuds">Earbuds</option>
-                <option value="Neck Band">Neck Band</option>
-                <option value="Speaker">Speaker</option>
-                <option value="Power Banks">Power Banks</option>
-                <option value="HeadPhones">Headphones</option>
-            </select>
-
-            <textarea id="pDesc" placeholder="Technical Specs..." rows="3"></textarea>
+            <textarea id="pDesc" placeholder="Product Specs..." rows="2"></textarea>
             
-            <button id="saveBtn" class="save-btn">SYNC DATABASE</button>
-            <button onclick="logout()" style="background:none; border:none; color:#444; font-size:10px; margin-top:15px; cursor:pointer; width:100%;">TERMINATE SESSION</button>
+            <button id="saveBtn" class="btn-sync">SYNC PRODUCT</button>
         </div>
     </div>
 
     <div class="inventory-section">
-        <div class="analytics-grid">
-            <div class="stat-card"><small>THIS MONTH</small><h2 id="mStat">0</h2></div>
-            <div class="stat-card"><small>YEARLY TOTAL</small><h2 id="yStat">0</h2></div>
-            <div class="stat-card"><small>ITEMS ON SALE</small><h2 id="sStat" style="color:var(--red)">0</h2></div>
-        </div>
-        <div id="invGrid" class="inv-grid"></div>
+        <div id="invGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;"></div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -211,60 +134,23 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
-    const GEMINI_KEY = "AIzaSyAPyEt5gae1VdRIbI-ThQbJPu8L2QKTQjU"; 
     
-    let productImages = { img1: "", img2: "", img3: "" };
-
-    const speak = (txt) => {
-        const utter = new SpeechSynthesisUtterance(txt);
-        utter.pitch = 0.9; window.speechSynthesis.speak(utter);
-    };
+    let productImages = { img1: "", img2: "", img3: "", hero: "" };
 
     window.checkPass = () => {
         const pass = document.getElementById('passInput').value;
-        signInWithEmailAndPassword(auth, "admin@haider.com", pass)
-            .then(() => speak("Welcome back, Sir."))
-            .catch(e => alert("Access Denied"));
+        signInWithEmailAndPassword(auth, "admin@haider.com", pass).catch(() => alert("Access Denied"));
     };
 
     onAuthStateChanged(auth, (user) => {
         document.getElementById('loginOverlay').style.display = user ? 'none' : 'flex';
     });
 
-    window.logout = () => signOut(auth);
-
-    window.jarvisAIScan = async () => {
-        const query = document.getElementById('aiQuery').value;
-        if(!query) return;
-        document.getElementById('aiLog').innerText = "Analyzing neural network...";
-        speak("Scanning for " + query);
-        try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-                method: "POST", headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Search: ${query}. Respond ONLY JSON: {"name": "...", "brand": "...", "price": 0, "category": "Earbuds", "specs": "..."}` }] }] })
-            });
-            const data = await resp.json();
-            const rawText = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "");
-            const res = JSON.parse(rawText);
-            
-            document.getElementById('pName').value = res.name;
-            document.getElementById('pBrand').value = res.brand;
-            document.getElementById('pPrice').value = res.price;
-            document.getElementById('pCat').value = res.category;
-            document.getElementById('pDesc').value = res.specs;
-            
-            document.getElementById('aiLog').innerText = "Target Identified.";
-            speak("Analysis complete.");
-        } catch (e) { 
-            document.getElementById('aiLog').innerText = "Neural link failed.";
-            speak("Neural link failed."); 
-        }
-    };
-
-    window.uploadImg = async (input, key, txtId, progId) => {
+    // Upload function for both Products and Hero Banner
+    window.uploadToImgBB = async (input, key, txtId, progId) => {
         const file = input.files[0];
         if(!file) return;
-        document.getElementById(txtId).innerText = "SYNCING...";
+        document.getElementById(txtId).innerText = "UPLOADING...";
         const fd = new FormData(); fd.append("image", file);
         try {
             const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
@@ -273,69 +159,59 @@
                 productImages[key] = data.data.url;
                 document.getElementById(progId).style.width = "100%";
                 document.getElementById(txtId).innerText = "READY";
-                speak(key + " synced.");
             }
-        } catch (e) { speak("Upload failed."); }
+        } catch (e) { alert("Upload Failed"); }
     };
 
+    // Update Hero Banner specifically
+    window.updateHeroBanner = () => {
+        if(!productImages.hero) return alert("Please upload a banner image first!");
+        set(ref(db, 'settings/heroBanner'), productImages.hero).then(() => {
+            alert("Main Banner Updated!");
+        });
+    };
+
+    // Save Product
     document.getElementById('saveBtn').onclick = () => {
-        const d = new Date();
         const product = {
             name: document.getElementById('pName').value,
             brand: document.getElementById('pBrand').value,
             price: Number(document.getElementById('pPrice').value),
-            salePrice: Number(document.getElementById('pDiscountPrice').value) || null,
-            onSale: !!document.getElementById('pDiscountPrice').value,
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
             img: productImages.img1,
-            img2: productImages.img2 || "",
-            img3: productImages.img3 || "",
-            month: d.getMonth(),
-            year: d.getFullYear(),
+            img2: productImages.img2,
+            img3: productImages.img3,
             timestamp: Date.now()
         };
 
-        if(!product.name || !product.img) return alert("Sir, Main Image and Name are required!");
+        if(!product.name || !product.img) return alert("Required: Main Image & Name!");
 
-        push(ref(db, 'products'), product)
-            .then(() => {
-                speak("Database synchronization successful.");
-                location.reload();
-            })
-            .catch(err => alert("Sync Error"));
+        push(ref(db, 'products'), product).then(() => {
+            alert("Product Synced!");
+            location.reload();
+        });
     };
 
+    // Load Items
     onValue(ref(db, 'products'), (snap) => {
         const grid = document.getElementById('invGrid'); grid.innerHTML = "";
-        const now = new Date();
-        let m = 0, y = 0, s = 0;
-
         if(snap.exists()){
             Object.keys(snap.val()).reverse().forEach(id => {
                 const p = snap.val()[id];
-                if(p.month === now.getMonth() && p.year === now.getFullYear()) m++;
-                if(p.year === now.getFullYear()) y++;
-                if(p.onSale) s++;
-
                 grid.innerHTML += `
                     <div class="inv-card">
-                        ${p.onSale ? '<div class="sale-tag">SALE</div>' : ''}
-                        <button class="delete-btn" onclick="deleteItem('${id}')">×</button>
+                        <button class="del-btn" onclick="deleteItem('${id}')">×</button>
                         <img src="${p.img}">
-                        <div style="font-size:11px; margin-top:5px; font-weight:600;">${p.name}</div>
-                        <div style="color:var(--gold); font-size:11px; font-weight:bold; margin-top:3px;">
-                            ${p.onSale ? `<span style="text-decoration:line-through; color:#555; font-size:9px;">Rs ${p.price}</span> Rs ${p.salePrice}` : `Rs ${p.price}`}
-                        </div>
+                        <div style="font-size:12px; font-weight:600; margin-top:5px;">${p.name}</div>
+                        <div style="font-size:10px; color:var(--primary);">${p.brand || 'No Brand'}</div>
+                        <div style="font-weight:bold; margin-top:5px;">Rs ${p.price}</div>
                     </div>`;
             });
-            document.getElementById('mStat').innerText = m;
-            document.getElementById('yStat').innerText = y;
-            document.getElementById('sStat').innerText = s;
         }
     });
 
-    window.deleteItem = (id) => confirm("Purge this data?") && remove(ref(db, `products/${id}`));
+    window.deleteItem = (id) => confirm("Delete this?") && remove(ref(db, `products/${id}`));
 </script>
 </body>
 </html>
