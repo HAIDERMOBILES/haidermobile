@@ -11,12 +11,13 @@
     <style>
         :root { 
             --primary: #005f6b; --text-dark: #1a1a1a; --white: #ffffff; --accent: #ff4d4d;
+            --footer-bg: #0d1117;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; }
 
-        /* --- ✨ ANIMATIONS (WAPIS ADD KAR DIYE) --- */
+        /* --- ✨ ANIMATIONS --- */
         .reveal { opacity: 0; transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .slide-left { transform: translateX(-80px); }
         .zoom-in { transform: scale(0.85); }
@@ -69,16 +70,62 @@
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; transition: 0.4s; }
         .price-box { font-size: 18px; font-weight: 700; color: var(--primary); margin-top: 10px; }
 
-        /* --- FOOTER --- */
-        footer { background: #111; color: #fff; padding: 70px 8% 30px; margin-top: 80px; }
-        .f-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; }
-        .f-col h4 { font-size: 18px; margin-bottom: 25px; color: var(--primary); text-transform: uppercase; }
-        .f-col p, .f-col li { color: #aaa; font-size: 14px; list-style: none; margin-bottom: 15px; line-height: 1.6; }
+        /* --- ✨ MODERN FOOTER STYLING --- */
+        footer {
+            background: var(--footer-bg);
+            color: #ffffff;
+            padding: 80px 8% 20px;
+            margin-top: 100px;
+            border-top: 5px solid var(--primary);
+        }
+        .f-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+            gap: 40px;
+        }
+        .f-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+        }
+        .f-col h4::after {
+            content: '';
+            position: absolute; left: 0; bottom: -8px;
+            width: 35px; height: 2px; background: var(--accent);
+        }
+        .f-col p, .f-col li {
+            color: #b2bec3; font-size: 14px;
+            margin-bottom: 12px; line-height: 1.8;
+        }
+        .f-col ul { list-style: none; }
+        .f-col a { color: #b2bec3; text-decoration: none; transition: 0.3s; }
+        .f-col a:hover { color: var(--primary); padding-left: 8px; }
+        
+        .social-links { display: flex; gap: 12px; margin-top: 20px; }
+        .social-links a {
+            width: 38px; height: 38px; background: #1a1f26;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; color: white; transition: 0.4s;
+        }
+        .social-links a:hover { background: var(--primary); transform: translateY(-5px); }
+
+        .f-bottom {
+            border-top: 1px solid #1a1f26;
+            margin-top: 60px; padding-top: 25px;
+            text-align: center; font-size: 13px; color: #636e72;
+        }
 
         @media (max-width: 768px) {
             .hero-container { height: 250px; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .nav-links { display: none; }
+            .f-grid { grid-template-columns: 1fr; text-align: center; }
+            .f-col h4::after { left: 50%; transform: translateX(-50%); }
+            .social-links { justify-content: center; }
         }
     </style>
 </head>
@@ -123,7 +170,7 @@
 </header>
 
 <section class="hero-container">
-    <img src="https://via.placeholder.com/1920x600" id="syncBanner">
+    <img src="https://via.placeholder.com/1920x600" id="syncBanner" style="width: 100%; height: 100%; object-fit: cover;">
 </section>
 
 <div class="brand-section reveal zoom-in">
@@ -138,7 +185,7 @@
 <div id="earbudsSec">
     <div class="section-header reveal slide-left"><h2>Wireless Earbuds</h2></div>
     <div class="container reveal slide-left">
-        <img src="https://royalx.pk/cdn/shop/files/Earbuds_Banner.jpg" class="cat-banner">
+        <img src="https://via.placeholder.com/1400x400" id="earBannerSync" class="cat-banner">
         <div id="earbudsGrid" class="grid"></div>
     </div>
 </div>
@@ -146,7 +193,7 @@
 <div id="headphonesSec">
     <div class="section-header reveal zoom-in"><h2>Premium Headphones</h2></div>
     <div class="container reveal zoom-in">
-        <img src="https://royalx.pk/cdn/shop/files/RHP-1500-Main-Banner.jpg" class="cat-banner">
+        <img src="https://via.placeholder.com/1400x400" id="headBannerSync" class="cat-banner">
         <div id="headphonesGrid" class="grid"></div>
     </div>
 </div>
@@ -161,14 +208,39 @@
 <footer>
     <div class="f-grid">
         <div class="f-col">
-            <h4>HAIDER STORE</h4>
-            <p>Premium Tech Accessories in Pakistan.</p>
+            <h4 style="color: #fff; border:none;">HAIDER STORE</h4>
+            <p>Premium Tech Accessories in Pakistan. We provide high-quality audio and power gadgets with speed and trust.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/923279518790"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="f-col">
+            <h4>Shop</h4>
+            <ul>
+                <li><a onclick="setFilter('Earbuds')">Wireless Earbuds</a></li>
+                <li><a onclick="setFilter('HeadPhones')">Headphones</a></li>
+                <li><a onclick="setFilter('Watches')">Smart Watches</a></li>
+            </ul>
+        </div>
+        <div class="f-col">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="#">Shipping Policy</a></li>
+                <li><a href="#">Return & Refund</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
         </div>
         <div class="f-col">
             <h4>Contact Details</h4>
-            <p><i class="fas fa-phone"></i> +92 327 9518790</p>
-            <p><i class="fas fa-map-marker-alt"></i> Market Road, PK</p>
+            <p><i class="fas fa-phone-alt" style="color:var(--primary); margin-right:10px;"></i> +92 327 9518790</p>
+            <p><i class="fas fa-envelope" style="color:var(--primary); margin-right:10px;"></i> info@haiderstore.com</p>
+            <p><i class="fas fa-map-marker-alt" style="color:var(--primary); margin-right:10px;"></i> Market Road, PK</p>
         </div>
+    </div>
+    <div class="f-bottom">
+        <p>&copy; 2026 <b>Haider Store</b>. All Rights Reserved. Designed for Rashid Sahab.</p>
     </div>
 </footer>
 
@@ -195,7 +267,10 @@
     }
     window.addEventListener("scroll", reveal);
 
+    // 🔥 BANNERS SYNC
     onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
+    onValue(ref(db, 'settings/earbudsBanner'), s => { if(s.exists()) document.getElementById('earBannerSync').src = s.val(); });
+    onValue(ref(db, 'settings/headphonesBanner'), s => { if(s.exists()) document.getElementById('headBannerSync').src = s.val(); });
 
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
@@ -220,7 +295,7 @@
                     document.getElementById('accessoriesGrid').innerHTML += card;
                 }
             });
-            setTimeout(reveal, 500); // Initial reveal
+            setTimeout(reveal, 500);
         }
     });
 
