@@ -3,106 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jarvis Admin | Haider Store</title>
+    <title>Admin | Haider Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
         
         :root { 
-            --primary: #005f6b; /* Aapki web ka main Teal color */
-            --bg: #f4f7f6; 
+            --primary: #005f6b; 
+            --bg: #f8fafc; 
             --white: #ffffff; 
-            --text: #2d3436; 
-            --border: #e0e0e0; 
-            --red: #ff4757; 
-            --green: #2ecc71;
-            --dark: #004a54;
+            --text: #1e293b; 
+            --border: #e2e8f0; 
+            --red: #ef4444; 
+            --green: #22c55e;
+            --dark: #00444d;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-        /* --- LOGIN --- */
-        #loginOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        #loginBox { text-align: center; background: var(--white); padding: 40px; border-radius: 25px; width: 90%; max-width: 380px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .brand-header {
+            background: var(--primary);
+            color: white;
+            padding: 18px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .brand-header h1 { font-family: 'Orbitron'; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; }
 
-        /* --- LAYOUT --- */
-        .admin-wrapper { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 15px; max-width: 1400px; margin: auto; }
+        #loginOverlay { position: fixed; inset: 0; background: var(--white); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        #loginBox { text-align: center; width: 85%; max-width: 350px; }
+
+        .admin-wrapper { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 15px; max-width: 1300px; margin: auto; }
 
         @media (min-width: 1024px) {
-            .admin-wrapper { grid-template-columns: 450px 1fr; padding: 30px; height: 100vh; overflow: hidden; }
-            .scroll-sec { height: calc(100vh - 60px); overflow-y: auto; padding-right: 15px; }
-            .scroll-sec::-webkit-scrollbar { width: 6px; }
-            .scroll-sec::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+            .admin-wrapper { grid-template-columns: 420px 1fr; padding: 30px; height: calc(100vh - 70px); }
+            .scroll-sec { height: 100%; overflow-y: auto; padding-right: 15px; }
+            .scroll-sec::-webkit-scrollbar { width: 5px; }
+            .scroll-sec::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         }
 
-        .header-title { font-family: 'Orbitron'; color: var(--primary); text-align: center; margin-bottom: 25px; font-size: 1.3rem; letter-spacing: 2px; font-weight: 700; }
+        .card { background: var(--white); border: 1px solid var(--border); padding: 22px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        h3 { margin-bottom: 18px; color: var(--primary); font-family: 'Orbitron'; font-size: 11px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
 
-        .card { background: var(--white); border: 1px solid var(--border); padding: 22px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        h3 { margin-bottom: 18px; color: var(--primary); font-family: 'Orbitron'; font-size: 12px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .grid-up { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
+        .up-box { background: #f8fafc; border: 2px dashed #cbd5e1; padding: 12px; border-radius: 12px; text-align: center; cursor: pointer; position: relative; overflow: hidden; }
+        .up-box i { display: block; margin-bottom: 4px; color: var(--primary); font-size: 20px; }
+        .up-box span { font-size: 10px; font-weight: 600; color: #64748b; }
+        .prog { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--green); width: 0%; transition: 0.3s; }
 
-        /* UPLOAD BOXES */
-        .upload-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
-        .upload-box { background: #f9fbfb; border: 2px dashed #d1d8d8; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
-        .upload-box:hover { border-color: var(--primary); background: #f0f7f7; }
-        .upload-box i { display: block; margin-bottom: 8px; color: var(--primary); font-size: 22px; }
-        .upload-box span { font-size: 11px; font-weight: 600; color: #555; }
-        
-        .prog { position: absolute; bottom: 0; left: 0; height: 4px; background: var(--primary); width: 0%; transition: 0.4s; }
+        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 12px; background: #fff; font-size: 14px; outline: none; transition: 0.2s; color: var(--text); }
+        input:focus { border-color: var(--primary); background: #f0fdfa; }
+        .btn-sync { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 1px; }
 
-        /* INPUTS */
-        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-size: 14px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,95,107,0.1); }
+        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+        .inv-card { background: var(--white); border-radius: 12px; padding: 10px; border: 1px solid var(--border); position: relative; text-align: center; }
+        .inv-card img { width: 100%; height: 90px; object-fit: contain; margin-bottom: 8px; }
+        .inv-name { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .del-btn { position: absolute; top: 5px; right: 5px; background: var(--red); color: white; border: none; width: 24px; height: 24px; border-radius: 6px; font-size: 14px; cursor: pointer; }
 
-        .btn-sync { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 1px; transition: 0.3s; }
-        .btn-sync:hover { background: var(--dark); transform: translateY(-2px); }
-
-        /* INVENTORY */
-        .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .inv-card { background: var(--white); border-radius: 15px; padding: 15px; border: 1px solid var(--border); position: relative; text-align: center; transition: 0.3s; }
-        .inv-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .inv-card img { width: 100%; height: 110px; object-fit: contain; margin-bottom: 10px; }
-        .inv-name { font-size: 12px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .inv-price { font-size: 11px; color: var(--primary); font-weight: 700; margin-top: 4px; }
-        .del-btn { position: absolute; top: -5px; right: -5px; background: var(--red); color: white; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 8px rgba(255,71,87,0.3); }
-
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 12px 30px; border-radius: 50px; font-size: 13px; font-weight: 600; display: none; z-index: 10000; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 12px 25px; border-radius: 50px; font-size: 12px; display: none; z-index: 10000; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay">
     <div id="loginBox">
-        <i class="fa fa-shield-halved" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
-        <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">JARVIS ACCESS</h2>
-        <input type="password" id="passInput" placeholder="Enter Admin Key">
-        <button onclick="checkPass()" class="btn-sync">LOGIN SYSTEM</button>
+        <i class="fa fa-lock" style="font-size: 40px; color: var(--primary); margin-bottom: 20px;"></i>
+        <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">ADMIN LOGIN</h2>
+        <input type="password" id="passInput" placeholder="System Key">
+        <button onclick="checkPass()" class="btn-sync">UNLOCK</button>
     </div>
+</div>
+
+<div class="brand-header">
+    <h1>HAIDER STORE</h1>
 </div>
 
 <div class="admin-wrapper">
     <div class="scroll-sec">
-        <div class="header-title">HAIDER STORE</div>
-
         <div class="card">
-            <h3><i class="fa fa-sync-alt"></i> Auto-Sync Banners</h3>
-            <div class="upload-grid">
-                <div class="upload-box" onclick="document.getElementById('fHero').click()">
-                    <i class="fa fa-house"></i><span id="tHero">Hero Home</span>
+            <h3><i class="fa fa-sync-alt"></i> Banner Auto-Sync</h3>
+            <div class="grid-up">
+                <div class="up-box" onclick="document.getElementById('fHero').click()">
+                    <i class="fa fa-tv"></i><span id="tHero">Hero Home</span>
                     <input type="file" id="fHero" hidden onchange="uploadToFirebase(this, 'settings/heroBanner', 'tHero', 'pHero')">
                     <div class="prog" id="pHero"></div>
                 </div>
-                <div class="upload-box" onclick="document.getElementById('fEar').click()">
+                <div class="up-box" onclick="document.getElementById('fEar').click()">
                     <i class="fa fa-headphones"></i><span id="tEar">Earbuds</span>
                     <input type="file" id="fEar" hidden onchange="uploadToFirebase(this, 'settings/earbudsBanner', 'tEar', 'pEar')">
                     <div class="prog" id="pEar"></div>
                 </div>
-                <div class="upload-box" onclick="document.getElementById('fHand').click()">
+                <div class="up-box" onclick="document.getElementById('fHand').click()">
                     <i class="fa fa-plug"></i><span id="tHand">Handfree</span>
                     <input type="file" id="fHand" hidden onchange="uploadToFirebase(this, 'settings/handfreeBanner', 'tHand', 'pHand')">
                     <div class="prog" id="pHand"></div>
                 </div>
-                <div class="upload-box" onclick="document.getElementById('fChar').click()">
+                <div class="up-box" onclick="document.getElementById('fChar').click()">
                     <i class="fa fa-bolt"></i><span id="tChar">Chargers</span>
                     <input type="file" id="fChar" hidden onchange="uploadToFirebase(this, 'settings/chargerBanner', 'tChar', 'pChar')">
                     <div class="prog" id="pChar"></div>
@@ -111,28 +113,30 @@
         </div>
 
         <div class="card">
-            <h3><i class="fa fa-cart-plus"></i> Deploy New Product</h3>
-            <div class="upload-grid" style="grid-template-columns: repeat(3, 1fr);">
-                <div class="upload-box" onclick="document.getElementById('f1').click()">
-                    <i class="fa fa-image"></i><span id="t1">Img 1</span>
+            <h3><i class="fa fa-plus-circle"></i> Add Product</h3>
+            <div class="grid-3">
+                <div class="up-box" onclick="document.getElementById('f1').click()">
+                    <i class="fa fa-camera"></i><span id="t1">Img 1</span>
                     <input type="file" id="f1" hidden onchange="uploadProductImg(this, 'img1', 't1', 'p1')">
                     <div class="prog" id="p1"></div>
                 </div>
-                <div class="upload-box" onclick="document.getElementById('f2').click()">
+                <div class="up-box" onclick="document.getElementById('f2').click()">
                     <i class="fa fa-image"></i><span id="t2">Img 2</span>
                     <input type="file" id="f2" hidden onchange="uploadProductImg(this, 'img2', 't2', 'p2')">
                     <div class="prog" id="p2"></div>
                 </div>
-                <div class="upload-box" onclick="document.getElementById('f3').click()">
+                <div class="up-box" onclick="document.getElementById('f3').click()">
                     <i class="fa fa-image"></i><span id="t3">Img 3</span>
                     <input type="file" id="f3" hidden onchange="uploadProductImg(this, 'img3', 't3', 'p3')">
                     <div class="prog" id="p3"></div>
                 </div>
             </div>
-            <input type="text" id="pName" placeholder="Product Name">
-            <input type="number" id="pPrice" placeholder="Price (PKR)">
+            
+            <input type="text" id="pName" placeholder="Product Name (e.g. M10 Earbuds)">
+            <input type="text" id="pBrand" placeholder="Brand Name (e.g. Samsung, TWS)"> <input type="number" id="pPrice" placeholder="Price (PKR)">
+            
             <select id="pCat">
-                <option value="" disabled selected>Select Category</option>
+                <option value="" disabled selected>Category</option>
                 <option value="Data Cables">Data Cables</option>
                 <option value="Fast Chargers">Fast Chargers</option>
                 <option value="Earbuds">Earbuds</option>
@@ -141,14 +145,15 @@
                 <option value="Smart Watches">Smart Watches</option>
                 <option value="Wireless MIC">Wireless MIC</option>
             </select>
-            <textarea id="pDesc" placeholder="Product details / Features..." rows="3"></textarea>
-            <button id="saveBtn" class="btn-sync">SYNC TO STORE</button>
+
+            <textarea id="pDesc" placeholder="Full Description..." rows="2"></textarea>
+            <button id="saveBtn" class="btn-sync">UPLOAD TO STORE</button>
         </div>
     </div>
 
     <div class="scroll-sec">
         <div class="card" style="min-height: 90%;">
-            <h3><i class="fa fa-warehouse"></i> Live Store Inventory</h3>
+            <h3><i class="fa fa-warehouse"></i> Live Inventory</h3>
             <div id="invGrid" class="inv-grid"></div>
         </div>
     </div>
@@ -176,46 +181,47 @@
     
     let pImgs = { img1: "", img2: "", img3: "" };
 
-    window.checkPass = () => { signInWithEmailAndPassword(auth, "admin@haider.com", document.getElementById('passInput').value).catch(() => alert("Access Denied")); };
+    window.checkPass = () => { signInWithEmailAndPassword(auth, "admin@haider.com", document.getElementById('passInput').value).catch(() => alert("Wrong Key!")); };
     onAuthStateChanged(auth, u => { document.getElementById('loginOverlay').style.display = u ? 'none' : 'flex'; });
 
     const showToast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); };
 
     window.uploadToFirebase = async (i, path, tId, pId) => {
         const file = i.files[0]; if(!file) return;
-        document.getElementById(tId).innerText = "Syncing...";
+        document.getElementById(tId).innerText = "...";
         const fd = new FormData(); fd.append("image", file);
         const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
         const data = await res.json();
         if(data.success) {
             set(ref(db, path), data.data.url).then(() => {
                 document.getElementById(pId).style.width = "100%";
-                document.getElementById(tId).innerText = "Live ✅";
-                showToast("✅ Banner Updated");
+                document.getElementById(tId).innerText = "LIVE ✅";
+                showToast("Banner Updated!");
             });
         }
     };
 
     window.uploadProductImg = async (i, key, tId, pId) => {
         const file = i.files[0]; if(!file) return;
-        document.getElementById(tId).innerText = "Wait...";
+        document.getElementById(tId).innerText = "⏳";
         const fd = new FormData(); fd.append("image", file);
         const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
         const data = await res.json();
-        if(data.success) { pImgs[key] = data.data.url; document.getElementById(pId).style.width = "100%"; document.getElementById(tId).innerText = "Ready"; }
+        if(data.success) { pImgs[key] = data.data.url; document.getElementById(pId).style.width = "100%"; document.getElementById(tId).innerText = "READY"; }
     };
 
     document.getElementById('saveBtn').onclick = () => {
         const p = {
             name: document.getElementById('pName').value,
+            brand: document.getElementById('pBrand').value, // Saving brand name
             price: Number(document.getElementById('pPrice').value),
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
             img: pImgs.img1, img2: pImgs.img2, img3: pImgs.img3,
             timestamp: Date.now()
         };
-        if(!p.name || !p.img || !p.category) return alert("Fill all required fields!");
-        push(ref(db, 'products'), p).then(() => { showToast("🚀 Product Deployed!"); setTimeout(() => location.reload(), 1000); });
+        if(!p.name || !p.img || !p.category) return alert("Fill Name, Category & Main Image!");
+        push(ref(db, 'products'), p).then(() => { showToast("🚀 Product Live!"); setTimeout(() => location.reload(), 1000); });
     };
 
     onValue(ref(db, 'products'), snap => {
@@ -223,18 +229,12 @@
         if(snap.exists()){
             Object.keys(snap.val()).reverse().forEach(id => {
                 const p = snap.val()[id];
-                grid.innerHTML += `
-                <div class="inv-card">
-                    <button class="del-btn" onclick="deleteItem('${id}')">×</button>
-                    <img src="${p.img}">
-                    <div class="inv-name">${p.name}</div>
-                    <div class="inv-price">Rs. ${p.price}</div>
-                </div>`;
+                grid.innerHTML += `<div class="inv-card"><button class="del-btn" onclick="deleteItem('${id}')">×</button><img src="${p.img}"><div class="inv-name">${p.name}</div><div style="font-size:11px;color:var(--primary);font-weight:700;">Rs. ${p.price}</div></div>`;
             });
         }
     });
 
-    window.deleteItem = id => confirm("Remove this product?") && remove(ref(db, `products/${id}`));
+    window.deleteItem = id => confirm("Delete from Store?") && remove(ref(db, `products/${id}`));
 </script>
 </body>
 </html>
