@@ -243,8 +243,8 @@
         <div class="f-col">
             <h4>Support</h4>
             <ul>
-                <li><a href="#">Shipping Policy</a></li>
-                <li><a href="#">Return Policy</a></li>
+                <li><a href="shipping.html">Shipping Policy</a></li>
+                <li><a href="return.html">Return Policy</a></li>
             </ul>
         </div>
         <div class="f-col">
@@ -357,7 +357,6 @@
                 (p.category && p.category.toLowerCase().includes(query))
             );
             
-            // Hide normal sections and show results in accessories grid
             document.querySelectorAll('.cat-sec-wrap').forEach(s => s.style.display = 'none');
             document.getElementById('accessoriesSec').style.display = 'block';
             document.getElementById('accTitle').innerText = "Search: " + query;
@@ -373,7 +372,7 @@
                 </div>`;
             });
 
-            toggleSearch(); // Close search bar
+            toggleSearch();
             window.scrollTo({ top: 400, behavior: 'smooth' });
         }
     };
