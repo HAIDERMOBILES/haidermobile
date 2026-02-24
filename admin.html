@@ -32,7 +32,17 @@
             z-index: 100;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .brand-header h1 { font-family: 'Orbitron'; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; }
+        /* HAIDER (White) and STORE (Red) styling */
+        .brand-header h1 { 
+            font-family: 'Orbitron'; 
+            font-size: 1.2rem; 
+            letter-spacing: 3px; 
+            text-transform: uppercase; 
+            color: var(--white);
+        }
+        .brand-header h1 span { 
+            color: var(--red); 
+        }
 
         #loginOverlay { position: fixed; inset: 0; background: var(--white); z-index: 9999; display: flex; align-items: center; justify-content: center; }
         #loginBox { text-align: center; width: 85%; max-width: 350px; }
@@ -81,11 +91,30 @@
 </div>
 
 <div class="brand-header">
-    <h1>HAIDER STORE</h1>
+    <h1>HAIDER <span>STORE</span></h1>
 </div>
 
 <div class="admin-wrapper">
     <div class="scroll-sec">
+        <div class="card">
+            <h3><i class="fa fa-magic"></i> Store Look & Sale</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                    <label style="font-size: 10px; font-weight: bold; color: #64748b;">Header Color</label>
+                    <input type="color" id="storeHeaderColor" style="height: 50px; padding: 5px; cursor: pointer;">
+                </div>
+                <div>
+                    <label style="font-size: 10px; font-weight: bold; color: #64748b;">Sale Status</label>
+                    <select id="storeSaleStatus">
+                        <option value="flex">Show Sale Bar</option>
+                        <option value="none">Hide Sale Bar</option>
+                    </select>
+                </div>
+            </div>
+            <input type="text" id="storeSaleText" placeholder="Sale Text (e.g. 50% OFF ON ALL ITEMS)">
+            <button onclick="updateStoreLook()" class="btn-sync" style="background: var(--green); padding: 12px; font-size: 12px;">UPDATE STORE LOOK</button>
+        </div>
+
         <div class="card">
             <h3><i class="fa fa-sync-alt"></i> Banner Auto-Sync</h3>
             <div class="grid-up">
@@ -186,6 +215,26 @@
 
     const showToast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); };
 
+    window.updateStoreLook = () => {
+        const lookData = {
+            headerColor: document.getElementById('storeHeaderColor').value,
+            saleStatus: document.getElementById('storeSaleStatus').value,
+            saleText: document.getElementById('storeSaleText').value
+        };
+        set(ref(db, 'settings/storeLook'), lookData).then(() => {
+            showToast("Store Look Updated! 🎨");
+        });
+    };
+
+    onValue(ref(db, 'settings/storeLook'), snap => {
+        if(snap.exists()){
+            const d = snap.val();
+            document.getElementById('storeHeaderColor').value = d.headerColor || "#005f6b";
+            document.getElementById('storeSaleStatus').value = d.saleStatus || "none";
+            document.getElementById('storeSaleText').value = d.saleText || "";
+        }
+    });
+
     window.uploadToFirebase = async (i, path, tId, pId) => {
         const file = i.files[0]; if(!file) return;
         document.getElementById(tId).innerText = "...";
@@ -213,7 +262,7 @@
     document.getElementById('saveBtn').onclick = () => {
         const p = {
             name: document.getElementById('pName').value,
-            brand: document.getElementById('pBrand').value, // Saving brand name
+            brand: document.getElementById('pBrand').value,
             price: Number(document.getElementById('pPrice').value),
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
