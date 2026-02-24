@@ -4,57 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shipping Policy | Haider Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --primary: #005f6b; --text-dark: #1a1a1a; --white: #ffffff; --accent: #ff4d4d; --footer-bg: #0d1117; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Jost', sans-serif; line-height: 1.6; color: var(--text-dark); }
-        
-        header { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 3000; }
-        .logo { font-size: 24px; font-weight: 700; color: #000; text-decoration: none; }
-        
-        .content-sec { padding: 60px 10%; max-width: 1000px; margin: auto; min-height: 60vh; }
-        .content-sec h1 { font-size: 32px; color: var(--primary); margin-bottom: 30px; text-transform: uppercase; border-left: 5px solid var(--accent); padding-left: 15px; }
-        .content-sec h3 { margin-top: 25px; margin-bottom: 10px; color: #333; }
-        .content-sec p { margin-bottom: 15px; color: #555; }
-        .content-sec ul { margin-left: 20px; margin-bottom: 20px; color: #555; }
+        :root { 
+            --primary: #005f6b; 
+            --header-bg: #004040; 
+            --accent: #ff4d4d; 
+            --text-dark: #1a1a1a; 
+            --text-muted: #555;
+            --white: #ffffff; 
+            --footer-bg: #0d1117; 
+        }
 
-        footer { background: var(--footer-bg); color: #ffffff; padding: 60px 8% 20px; border-top: 5px solid var(--primary); }
-        .f-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Jost', sans-serif; line-height: 1.6; color: var(--text-dark); background-color: #f4f7f8; }
+        
+        /* --- HEADER --- */
+        header { 
+            background: var(--header-bg); 
+            padding: 15px 8%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 3000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px; 
+            font-weight: 700; 
+            color: var(--white); 
+            text-decoration: none; 
+            letter-spacing: 2px;
+        }
+        .logo span { color: var(--accent); }
+        
+        nav { display: flex; gap: 20px; align-items: center; }
+        .nav-link { 
+            text-decoration: none; 
+            color: var(--white); 
+            font-weight: 500; 
+            font-size: 14px;
+            opacity: 0.9;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .nav-link:hover { color: var(--accent); opacity: 1; }
+
+        /* --- CONTENT SECTION --- */
+        .content-sec { 
+            padding: 50px 8%; 
+            max-width: 900px; 
+            margin: 40px auto; 
+            min-height: 60vh; 
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .content-sec h1 { 
+            font-size: 30px; 
+            color: var(--primary); 
+            margin-bottom: 25px; 
+            text-transform: uppercase; 
+            border-left: 5px solid var(--accent); 
+            padding-left: 15px; 
+            font-family: 'Orbitron', sans-serif;
+        }
+        .content-sec h3 { margin-top: 25px; margin-bottom: 10px; color: var(--header-bg); font-weight: 700; }
+        .content-sec p, .content-sec li { color: var(--text-muted); font-size: 16px; }
+        .content-sec ul { margin-left: 20px; margin-bottom: 20px; }
+
+        /* --- FOOTER --- */
+        footer { 
+            background: var(--footer-bg); 
+            color: var(--white); 
+            padding: 50px 8% 20px; 
+            border-top: 4px solid var(--primary); 
+        }
+        .f-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .f-grid h4 { color: var(--primary); text-transform: uppercase; margin-bottom: 20px; font-size: 16px; letter-spacing: 1px; }
+        .f-grid a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .f-grid a:hover { color: var(--white); }
+        .f-grid p { font-size: 14px; opacity: 0.7; line-height: 1.8; }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="index.html" class="logo">HAIDER STORE</a>
-    <a href="index.html" style="text-decoration: none; color: var(--primary); font-weight: 600;"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+    <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
+    <nav>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#products" class="nav-link">Shop</a>
+        <a href="index.html" class="nav-link" style="background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 5px;"><i class="fas fa-arrow-left"></i> Back</a>
+    </nav>
 </header>
 
 <div class="content-sec">
     <h1>Shipping Policy</h1>
-    <p>Haider Store provides premium tech accessories across Pakistan. We ensure that your products reach you safely and on time.</p>
+    <p>At <strong>Haider Store</strong>, we prioritize fast and secure delivery of your premium tech gear. We deliver all across Pakistan with care.</p>
     
-    <h3>Delivery Time</h3>
+    <h3>Delivery Timelines</h3>
     <ul>
         <li><strong>Inside Punjab:</strong> 2 to 3 working days.</li>
-        <li><strong>Other Provinces:</strong> 3 to 5 working days.</li>
+        <li><strong>Sindh, KPK, Balochistan:</strong> 3 to 5 working days.</li>
     </ul>
 
     <h3>Shipping Charges</h3>
-    <p>Standard shipping charges are applicable nationwide. However, we offer <strong>Free Shipping</strong> on orders above a certain value (Check cart for details).</p>
+    <p>Standard shipping charges apply. Enjoy <strong>Free Shipping</strong> on orders above Rs. 3,000.</p>
 
-    <h3>Order Tracking</h3>
-    <p>Once your order is dispatched, you will receive a tracking number via WhatsApp or SMS to monitor your shipment's progress.</p>
+    <h3>Tracking Your Order</h3>
+    <p>Once dispatched, you will receive a tracking ID via <strong>WhatsApp</strong> to keep an eye on your shipment.</p>
 
-    <h3>Cash on Delivery (COD)</h3>
-    <p>We offer Cash on Delivery service all over Pakistan for your convenience and trust.</p>
+    <h3>Cash on Delivery</h3>
+    <p>We provide COD (Cash on Delivery) nationwide so you can pay with confidence at your doorstep.</p>
 </div>
 
 <footer>
     <div class="f-grid">
-        <div><h4>HAIDER STORE</h4><p>Premium Tech Accessories in Pakistan.</p></div>
-        <div><h4>Contact</h4><p>+92 327 9518790</p></div>
+        <div>
+            <h4 style="color: #fff; font-family: 'Orbitron';">HAIDER <span>STORE</span></h4>
+            <p>Premium Tech Accessories in Pakistan. Quality and Trust are our top priorities.</p>
+        </div>
+        <div>
+            <h4>Quick Links</h4>
+            <ul style="list-style: none;">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#products">All Products</a></li>
+                <li><a href="return.html">Return Policy</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Contact Support</h4>
+            <p><i class="fab fa-whatsapp" style="color: #25d366;"></i> +92 327 9518790</p>
+            <p><i class="far fa-envelope"></i> info@haiderstore.com</p>
+        </div>
+    </div>
+    <div style="text-align: center; margin-top: 40px; font-size: 12px; opacity: 0.4; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+        &copy; 2026 HAIDER STORE. All Rights Reserved.
     </div>
 </footer>
 
