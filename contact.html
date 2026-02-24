@@ -7,14 +7,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --primary: #005f6b; --text-dark: #1a1a1a; --white: #ffffff; --footer-bg: #0d1117; --accent: #ff4d4d; --bg-light: #f4f7f6; }
+        :root { 
+            --primary: #005f6b; 
+            --header-dark: #004040; /* Dark Green Color */
+            --text-dark: #1a1a1a; 
+            --white: #ffffff; 
+            --footer-bg: #0d1117; 
+            --accent: #ff4d4d; 
+            --bg-light: #f4f7f6; 
+        }
+        
         body { font-family: 'Jost', sans-serif; color: var(--text-dark); margin: 0; background-color: var(--white); }
         
-        header { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 3000; }
-        .logo { font-size: 24px; font-weight: 700; color: #000; text-decoration: none; }
-        .nav-home { text-decoration: none; color: var(--primary); font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-        .nav-home:hover { color: var(--accent); }
+        /* --- 🟢 DARK GREEN HEADER --- */
+        header { 
+            background: var(--header-dark); 
+            padding: 15px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            position: sticky; 
+            top: 0; 
+            z-index: 3000; 
+        }
+        
+        .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; letter-spacing: 1px; }
+        
+        .nav-home { 
+            text-decoration: none; 
+            color: var(--white) !important; 
+            font-weight: 600; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            opacity: 0.9;
+        }
+        .nav-home:hover { opacity: 1; color: var(--accent) !important; }
 
+        /* Contact Hero remains Teal for contrast, or you can change to --header-dark */
         .contact-hero { background: var(--primary); color: white; padding: 60px 5%; text-align: center; }
         .contact-hero h1 { font-size: 36px; margin: 0; letter-spacing: 1px; }
 
@@ -37,7 +69,6 @@
         .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .btn-submit:hover { background: #004a54; transform: translateY(-2px); }
 
-        /* Social Links Updated */
         .social-links { margin-top: 20px; display: flex; gap: 20px; justify-content: center; }
         .social-links a { color: var(--primary); font-size: 24px; transition: 0.3s; }
         .social-links a:hover { color: var(--accent); transform: scale(1.2); }
