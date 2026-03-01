@@ -213,40 +213,42 @@
     const auth = getAuth(app);
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
     
-    // Yahan maine aapki nayi UID set kar di hai!
+    // Aapki Nayi UID
     const ADMIN_UID = "Dl3g2ceIJHdZL2eMcToR93xiFzs2"; 
     
     let pImgs = { img1: "", img2: "", img3: "" };
 
-    // Login Functionality
+    // UPDATED LOGIN: Mobile ke liye spaces remove karna aur error alert dikhana
     window.checkPass = () => { 
-        const email = document.getElementById('emailInput').value;
-        const pass = document.getElementById('passInput').value;
+        const email = document.getElementById('emailInput').value.trim();
+        const pass = document.getElementById('passInput').value.trim();
         
         signInWithEmailAndPassword(auth, email, pass)
-            .catch(() => {
+            .then(() => {
+                // Login successful hone pe alert dikhaye ga
+                alert("Login Successful! Welcome Admin.");
+            })
+            .catch((error) => {
+                // Masla aane pe screen par laal message aur popup dikhaye ga
+                alert("Login Error: " + error.message);
                 document.getElementById('errorMsg').style.display = 'block';
             }); 
     };
 
-    // Logout Functionality
     window.logoutAdmin = () => {
         signOut(auth).then(() => {
             window.location.reload();
         });
     }
 
-    // Security Check: Sirf authorized Admin ko access do
     onAuthStateChanged(auth, u => { 
         if(u && u.uid === ADMIN_UID) {
-            // Agar theek admin login hai toh dashboard dikhao
             document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('mainAdminArea').style.display = 'grid'; // Grid display activate karein
+            document.getElementById('mainAdminArea').style.display = 'grid'; 
         } else {
-            // Agar koi aur login hai ya logout hai toh login form dikhao
             document.getElementById('loginOverlay').style.display = 'flex';
             document.getElementById('mainAdminArea').style.display = 'none';
-            if(u) signOut(auth); // Agar galat user login hua toh usay sign out kar do
+            if(u) signOut(auth); 
         }
     });
 
