@@ -167,8 +167,15 @@
             </div>
             
             <input type="text" id="pName" placeholder="Product Name (e.g. M10 Earbuds)">
-            <input type="text" id="pBrand" placeholder="Brand Name (e.g. Samsung, TWS)"> <input type="number" id="pPrice" placeholder="Price (PKR)">
+            <input type="text" id="pBrand" placeholder="Brand Name (e.g. Samsung, TWS)"> 
+            <input type="number" id="pPrice" placeholder="New Price (PKR)">
             
+            <div class="grid-3">
+                <input type="number" id="pOldPrice" placeholder="Old Price">
+                <input type="number" id="pStock" placeholder="Total Stock">
+                <input type="number" id="pSold" placeholder="Sold Items">
+            </div>
+
             <select id="pCat">
                 <option value="" disabled selected>Category</option>
                 <option value="Data Cables">Data Cables</option>
@@ -218,18 +225,15 @@
     
     let pImgs = { img1: "", img2: "", img3: "" };
 
-    // UPDATED LOGIN: Mobile ke liye spaces remove karna aur error alert dikhana
     window.checkPass = () => { 
         const email = document.getElementById('emailInput').value.trim();
         const pass = document.getElementById('passInput').value.trim();
         
         signInWithEmailAndPassword(auth, email, pass)
             .then(() => {
-                // Login successful hone pe alert dikhaye ga
                 alert("Login Successful! Welcome Admin.");
             })
             .catch((error) => {
-                // Masla aane pe screen par laal message aur popup dikhaye ga
                 alert("Login Error: " + error.message);
                 document.getElementById('errorMsg').style.display = 'block';
             }); 
@@ -299,10 +303,16 @@
     };
 
     document.getElementById('saveBtn').onclick = () => {
+        // 🚀 JavaScript mein in 3 nayi cheezon ka data Database mein bhejne ka code
         const p = {
             name: document.getElementById('pName').value,
             brand: document.getElementById('pBrand').value,
             price: Number(document.getElementById('pPrice').value),
+            
+            oldPrice: Number(document.getElementById('pOldPrice').value) || 0,
+            stock: Number(document.getElementById('pStock').value) || 0,
+            sold: Number(document.getElementById('pSold').value) || 0,
+            
             category: document.getElementById('pCat').value,
             description: document.getElementById('pDesc').value,
             img: pImgs.img1, img2: pImgs.img2, img3: pImgs.img3,
