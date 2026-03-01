@@ -245,8 +245,9 @@
         });
     }
 
+    // Yahan changing ki gayi hai: email check kar rahe hain instead of UID
     onAuthStateChanged(auth, u => { 
-        if(u && u.uid === ADMIN_UID) {
+        if(u && u.email === "r.haidar0066@gmail.com") {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainAdminArea').style.display = 'grid'; 
         } else {
@@ -303,7 +304,6 @@
     };
 
     document.getElementById('saveBtn').onclick = () => {
-        // 🚀 JavaScript mein in 3 nayi cheezon ka data Database mein bhejne ka code
         const p = {
             name: document.getElementById('pName').value,
             brand: document.getElementById('pBrand').value,
