@@ -160,11 +160,12 @@
         .cart-footer { padding: 20px; border-top: 1px solid #eee; background: #fafafa; }
         .total-sec { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; margin-bottom: 15px; color: var(--text-dark); }
         .checkout-btn {
-            width: 100%; padding: 15px; background: var(--primary); color: white;
+            width: 100%; padding: 15px; background: #25d366; color: white;
             border: none; border-radius: 8px; font-size: 16px; font-weight: 600;
             cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .checkout-btn:hover { background: var(--header-dark); }
+        .checkout-btn:hover { background: #128c7e; }
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; }
         .cart-overlay.active { opacity: 1; visibility: visible; }
         .cart-icon-container { position: relative; cursor: pointer; display: flex; align-items: center; }
@@ -173,6 +174,9 @@
             color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark);
         }
+        /* New: Quantity Control Styling */
+        .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+        .qty-btn { width: 22px; height: 22px; background: #eee; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -190,7 +194,7 @@
             <span>Total:</span>
             <span id="cartTotal" style="color: var(--primary);">Rs. 0</span>
         </div>
-        <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        <button class="checkout-btn" onclick="checkout()"><i class="fab fa-whatsapp"></i> Order on WhatsApp</button>
     </div>
 </div>
 
@@ -455,13 +459,13 @@
         }
     };
 
-    // --- 🛒 NEW CART LOGIC ADDED HERE ---
+    // --- 🛒 UPDATED CART LOGIC (WITH QTY & WHATSAPP) ---
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
 
     window.toggleCart = () => {
         document.getElementById('cartSidebar').classList.toggle('open');
         document.getElementById('cartOverlay').classList.toggle('active');
-        window.updateCart(); // Jab open ho to refresh kar de
+        window.updateCart();
     };
 
     window.updateCart = () => {
@@ -484,7 +488,12 @@
                         <img src="${item.image}" alt="Product">
                         <div class="cart-item-details">
                             <div class="cart-item-title">${item.name}</div>
-                            <div class="cart-item-price">Rs. ${Number(item.price).toLocaleString()} x ${item.quantity}</div>
+                            <div class="cart-item-price">Rs. ${Number(item.price).toLocaleString()}</div>
+                            <div class="qty-controls">
+                                <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                            </div>
                         </div>
                         <i class="fas fa-trash cart-item-remove" onclick="removeFromCart(${index})"></i>
                     </div>
@@ -497,19 +506,33 @@
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
     };
 
+    window.changeQty = (index, delta) => {
+        cart[index].quantity += delta;
+        if(cart[index].quantity < 1) {
+            removeFromCart(index);
+        } else {
+            window.updateCart();
+        }
+    };
+
     window.removeFromCart = (index) => {
         cart.splice(index, 1);
         window.updateCart();
     };
 
     window.checkout = () => {
-        if(cart.length === 0) return alert("Your cart is empty! Please add items first.");
+        if(cart.length === 0) return alert("Your cart is empty!");
         
-        // WhatsApp Checkout ki taraf ishara
-        alert("Agla step WhatsApp Checkout form banana hai! 🚀");
+        let message = "🛍️ *New Order from Haider Store*%0A%0A";
+        cart.forEach((item, index) => {
+            message += `*${index + 1}.* ${item.name}%0A   Qty: ${item.quantity} | Price: Rs.${item.price}%0A%0A`;
+        });
+        message += `💰 *Total: ${document.getElementById('cartTotal').innerText}*%0A%0APlease confirm my order.`;
+
+        const whatsappNum = "923279518790";
+        window.open(`https://wa.me/${whatsappNum}?text=${message}`, '_blank');
     };
 
-    // Page Load hote hi cart update kardo
     window.addEventListener('load', window.updateCart);
 
 </script>
