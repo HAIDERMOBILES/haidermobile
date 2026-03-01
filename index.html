@@ -120,26 +120,79 @@
         .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
         .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
 
-        /* --- MOBILE RESPONSIVE (UPDATED FOR PERFECT GRID) --- */
+        /* --- MOBILE RESPONSIVE (PRESERVED) --- */
         @media (max-width: 768px) {
             .hero-container { height: 250px; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            
-            /* Mobile Grid Fixes added below */
             .p-card { padding: 8px; }
             .p-img-box { height: 160px; margin-bottom: 8px; }
             .p-card h3 { font-size: 13px !important; line-height: 1.3; }
             .price-box { font-size: 15px; margin-top: 5px; }
-
             .nav-links { display: none; }
             .menu-btn { display: block; }
             .f-grid { grid-template-columns: 1fr; text-align: center; }
             .f-col h4::after { left: 50%; transform: translateX(-50%); }
             .social-links { justify-content: center; }
         }
+
+        /* --- 🛒 NEW CART CSS ADDED HERE --- */
+        .cart-sidebar {
+            position: fixed; top: 0; right: -100%; width: 350px; max-width: 100%; height: 100vh;
+            background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 10000; display: flex; flex-direction: column;
+        }
+        .cart-sidebar.open { right: 0; }
+        .cart-header {
+            padding: 20px; background: var(--header-dark); color: white;
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent);
+        }
+        .cart-header h2 { font-size: 18px; font-weight: 600; }
+        .close-cart { background: none; border: none; color: white; font-size: 24px; cursor: pointer; transition: 0.2s; }
+        .close-cart:hover { color: var(--accent); transform: scale(1.1); }
+        .cart-items { flex: 1; padding: 15px; overflow-y: auto; }
+        .cart-item { display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; margin-bottom: 15px; }
+        .cart-item img { width: 60px; height: 60px; object-fit: contain; background: #f9f9f9; border-radius: 8px; padding: 5px; }
+        .cart-item-details { flex: 1; }
+        .cart-item-title { font-size: 14px; font-weight: 600; line-height: 1.3; margin-bottom: 5px; }
+        .cart-item-price { font-size: 13px; color: var(--primary); font-weight: 700; }
+        .cart-item-remove { color: #ff4d4d; cursor: pointer; font-size: 16px; padding: 5px; transition: 0.2s; }
+        .cart-item-remove:hover { color: #d32f2f; transform: scale(1.1); }
+        .cart-footer { padding: 20px; border-top: 1px solid #eee; background: #fafafa; }
+        .total-sec { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; margin-bottom: 15px; color: var(--text-dark); }
+        .checkout-btn {
+            width: 100%; padding: 15px; background: var(--primary); color: white;
+            border: none; border-radius: 8px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .checkout-btn:hover { background: var(--header-dark); }
+        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .cart-overlay.active { opacity: 1; visibility: visible; }
+        .cart-icon-container { position: relative; cursor: pointer; display: flex; align-items: center; }
+        .cart-badge {
+            position: absolute; top: -8px; right: -10px; background: var(--accent);
+            color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark);
+        }
     </style>
 </head>
 <body>
+
+<div id="cartOverlay" class="cart-overlay" onclick="toggleCart()"></div>
+<div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+        <i class="fas fa-times close-cart" onclick="toggleCart()"></i>
+    </div>
+    <div class="cart-items" id="cartItemsContainer">
+        </div>
+    <div class="cart-footer">
+        <div class="total-sec">
+            <span>Total:</span>
+            <span id="cartTotal" style="color: var(--primary);">Rs. 0</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    </div>
+</div>
 
 <div id="searchOverlay" class="search-overlay">
     <div class="search-container">
@@ -209,9 +262,12 @@
             <li><a href="contact.html" class="nav-link">Contact</a></li>
         </ul>
     </nav>
-    <div style="display: flex; gap: 20px; font-size: 18px; cursor: pointer;">
-        <i class="fas fa-search" onclick="toggleSearch()"></i>
-        <i class="fas fa-shopping-bag"></i>
+    <div style="display: flex; gap: 20px; font-size: 18px; align-items: center;">
+        <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer;"></i>
+        <div class="cart-icon-container" onclick="toggleCart()">
+            <i class="fas fa-shopping-bag" style="cursor: pointer;"></i>
+            <span id="cartBadge" class="cart-badge">0</span>
+        </div>
     </div>
 </header>
 
@@ -398,6 +454,64 @@
             window.scrollTo({ top: 400, behavior: 'smooth' });
         }
     };
+
+    // --- 🛒 NEW CART LOGIC ADDED HERE ---
+    let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
+
+    window.toggleCart = () => {
+        document.getElementById('cartSidebar').classList.toggle('open');
+        document.getElementById('cartOverlay').classList.toggle('active');
+        window.updateCart(); // Jab open ho to refresh kar de
+    };
+
+    window.updateCart = () => {
+        const container = document.getElementById('cartItemsContainer');
+        const badge = document.getElementById('cartBadge');
+        const totalEl = document.getElementById('cartTotal');
+        
+        container.innerHTML = ""; 
+        let totalAmount = 0;
+        let totalItems = 0;
+
+        if (cart.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color:#888; margin-top:50px;">Your cart is empty ☹️</p>`;
+        } else {
+            cart.forEach((item, index) => {
+                totalAmount += (item.price * item.quantity);
+                totalItems += item.quantity;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="Product">
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div class="cart-item-price">Rs. ${Number(item.price).toLocaleString()} x ${item.quantity}</div>
+                        </div>
+                        <i class="fas fa-trash cart-item-remove" onclick="removeFromCart(${index})"></i>
+                    </div>
+                `;
+            });
+        }
+
+        if(badge) badge.innerText = totalItems;
+        if(totalEl) totalEl.innerText = `Rs. ${totalAmount.toLocaleString()}`;
+        localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
+    };
+
+    window.removeFromCart = (index) => {
+        cart.splice(index, 1);
+        window.updateCart();
+    };
+
+    window.checkout = () => {
+        if(cart.length === 0) return alert("Your cart is empty! Please add items first.");
+        
+        // WhatsApp Checkout ki taraf ishara
+        alert("Agla step WhatsApp Checkout form banana hai! 🚀");
+    };
+
+    // Page Load hote hi cart update kardo
+    window.addEventListener('load', window.updateCart);
+
 </script>
 </body>
 </html>
