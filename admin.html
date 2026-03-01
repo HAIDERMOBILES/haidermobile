@@ -45,9 +45,9 @@
         }
 
         #loginOverlay { position: fixed; inset: 0; background: var(--white); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        #loginBox { text-align: center; width: 85%; max-width: 350px; }
+        #loginBox { text-align: center; width: 85%; max-width: 350px; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 
-        .admin-wrapper { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 15px; max-width: 1300px; margin: auto; }
+        .admin-wrapper { display: none; /* Default hidden until logged in */ grid-template-columns: 1fr; gap: 20px; padding: 15px; max-width: 1300px; margin: auto; }
 
         @media (min-width: 1024px) {
             .admin-wrapper { grid-template-columns: 420px 1fr; padding: 30px; height: calc(100vh - 70px); }
@@ -84,17 +84,22 @@
 <div id="loginOverlay">
     <div id="loginBox">
         <i class="fa fa-lock" style="font-size: 40px; color: var(--primary); margin-bottom: 20px;"></i>
-        <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">ADMIN LOGIN</h2>
-        <input type="password" id="passInput" placeholder="System Key">
+        <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">ADMIN ACCESS</h2>
+        <input type="email" id="emailInput" placeholder="Admin Email">
+        <input type="password" id="passInput" placeholder="System Key (Password)">
         <button onclick="checkPass()" class="btn-sync">UNLOCK</button>
+        <p id="errorMsg" style="color:var(--red); font-size:12px; margin-top:10px; display:none;">Invalid Credentials!</p>
     </div>
 </div>
 
 <div class="brand-header">
-    <h1>HAIDER <span>STORE</span></h1>
+    <div style="display:flex; justify-content:space-between; align-items:center; max-width: 1300px; margin: auto;">
+        <h1>HAIDER <span>STORE</span></h1>
+        <button onclick="logoutAdmin()" style="background:none; border:none; color:white; cursor:pointer; font-size:14px;"><i class="fa fa-sign-out-alt"></i> Logout</button>
+    </div>
 </div>
 
-<div class="admin-wrapper">
+<div class="admin-wrapper" id="mainAdminArea">
     <div class="scroll-sec">
         <div class="card">
             <h3><i class="fa fa-magic"></i> Store Look & Sale</h3>
@@ -193,7 +198,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -207,11 +212,41 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
     const IMGBB_KEY = "6d9d7a90a22cdb8a25ed839df7365b8c";
+    const ADMIN_UID = "NX8VyVaLpQNhUFnKGR1kiCoPTth1"; // Aapki UID yahan fix kar di hai
     
     let pImgs = { img1: "", img2: "", img3: "" };
 
-    window.checkPass = () => { signInWithEmailAndPassword(auth, "admin@haider.com", document.getElementById('passInput').value).catch(() => alert("Wrong Key!")); };
-    onAuthStateChanged(auth, u => { document.getElementById('loginOverlay').style.display = u ? 'none' : 'flex'; });
+    // Login Functionality
+    window.checkPass = () => { 
+        const email = document.getElementById('emailInput').value;
+        const pass = document.getElementById('passInput').value;
+        
+        signInWithEmailAndPassword(auth, email, pass)
+            .catch(() => {
+                document.getElementById('errorMsg').style.display = 'block';
+            }); 
+    };
+
+    // Logout Functionality
+    window.logoutAdmin = () => {
+        signOut(auth).then(() => {
+            window.location.reload();
+        });
+    }
+
+    // Security Check: Sirf authorized Admin ko access do
+    onAuthStateChanged(auth, u => { 
+        if(u && u.uid === ADMIN_UID) {
+            // Agar theek admin login hai toh dashboard dikhao
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainAdminArea').style.display = 'grid'; // Grid display activate karein
+        } else {
+            // Agar koi aur login hai ya logout hai toh login form dikhao
+            document.getElementById('loginOverlay').style.display = 'flex';
+            document.getElementById('mainAdminArea').style.display = 'none';
+            if(u) signOut(auth); // Agar galat user login hua toh usay sign out kar do
+        }
+    });
 
     const showToast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); };
 
