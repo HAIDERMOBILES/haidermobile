@@ -22,6 +22,7 @@
             --white: #ffffff; 
             --accent: #ff4d4d; /* Red for STORE */
             --footer-bg: #0d1117;
+            --success: #27ae60;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -101,11 +102,24 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
         .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; }
 
-        .p-card { transition: 0.3s; text-align: center; padding: 15px; cursor: pointer; border: 1px solid transparent; }
+        /* --- 🛒 UPGRADED PRODUCT CARDS --- */
+        .p-card { transition: 0.3s; text-align: center; padding: 15px; cursor: pointer; border: 1px solid transparent; position: relative; }
         .p-card:hover { border: 1px solid #eee; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
         .p-img-box { width: 100%; height: 240px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        
+        /* New Upgrade Styles */
+        .discount-badge {
+            position: absolute; top: 12px; left: 12px; background: var(--accent);
+            color: white; font-size: 10px; font-weight: 700; padding: 4px 8px;
+            border-radius: 4px; z-index: 5; text-transform: uppercase;
+        }
+        .old-price { text-decoration: line-through; color: #999; font-size: 14px; margin-right: 8px; font-weight: 400; }
         .price-box { font-size: 18px; font-weight: 700; color: var(--primary); margin-top: 10px; }
+        .stock-status { font-size: 11px; font-weight: 600; margin-top: 8px; }
+        .stock-low { color: var(--accent); }
+        .stock-in { color: var(--success); }
+        .sold-text { font-size: 11px; color: #777; margin-top: 5px; display: block; font-weight: 400; }
 
         /* --- FOOTER (PRESERVED) --- */
         footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
@@ -120,22 +134,7 @@
         .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
         .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
 
-        /* --- MOBILE RESPONSIVE (PRESERVED) --- */
-        @media (max-width: 768px) {
-            .hero-container { height: 250px; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .p-card { padding: 8px; }
-            .p-img-box { height: 160px; margin-bottom: 8px; }
-            .p-card h3 { font-size: 13px !important; line-height: 1.3; }
-            .price-box { font-size: 15px; margin-top: 5px; }
-            .nav-links { display: none; }
-            .menu-btn { display: block; }
-            .f-grid { grid-template-columns: 1fr; text-align: center; }
-            .f-col h4::after { left: 50%; transform: translateX(-50%); }
-            .social-links { justify-content: center; }
-        }
-
-        /* --- 🛒 NEW CART CSS ADDED HERE --- */
+        /* --- CART SIDEBAR (PRESERVED) --- */
         .cart-sidebar {
             position: fixed; top: 0; right: -100%; width: 350px; max-width: 100%; height: 100vh;
             background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -174,9 +173,23 @@
             color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark);
         }
-        /* New: Quantity Control Styling */
         .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
         .qty-btn { width: 22px; height: 22px; background: #eee; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
+
+        /* --- MOBILE RESPONSIVE (PRESERVED) --- */
+        @media (max-width: 768px) {
+            .hero-container { height: 250px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .p-card { padding: 8px; }
+            .p-img-box { height: 160px; margin-bottom: 8px; }
+            .p-card h3 { font-size: 13px !important; line-height: 1.3; }
+            .price-box { font-size: 15px; margin-top: 5px; }
+            .nav-links { display: none; }
+            .menu-btn { display: block; }
+            .f-grid { grid-template-columns: 1fr; text-align: center; }
+            .f-col h4::after { left: 50%; transform: translateX(-50%); }
+            .social-links { justify-content: center; }
+        }
     </style>
 </head>
 <body>
@@ -187,8 +200,7 @@
         <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
         <i class="fas fa-times close-cart" onclick="toggleCart()"></i>
     </div>
-    <div class="cart-items" id="cartItemsContainer">
-        </div>
+    <div class="cart-items" id="cartItemsContainer"></div>
     <div class="cart-footer">
         <div class="total-sec">
             <span>Total:</span>
@@ -364,7 +376,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- UTILITIES (PRESERVED) ---
     window.toggleMenu = () => {
         document.getElementById('drawer').classList.toggle('open');
         document.getElementById('overlay').classList.toggle('active');
@@ -385,13 +396,11 @@
     }
     window.addEventListener("scroll", reveal);
 
-    // --- BANNERS SYNC (PRESERVED) ---
     onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
     onValue(ref(db, 'settings/earbudsBanner'), s => { if(s.exists()) document.getElementById('earBannerSync').src = s.val(); });
     onValue(ref(db, 'settings/handfreeBanner'), s => { if(s.exists()) document.getElementById('handfreeBannerSync').src = s.val(); });
     onValue(ref(db, 'settings/chargerBanner'), s => { if(s.exists()) document.getElementById('chargerBannerSync').src = s.val(); });
 
-    // --- PRODUCT FETCHING & FILTERING (PRESERVED) ---
     let allProducts = [];
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
@@ -400,6 +409,7 @@
         }
     });
 
+    // --- 🛠️ MODIFIED RENDER FUNCTION WITH UPGRADES ---
     function renderProducts(data) {
         const grids = { 'Earbuds': 'earbudsGrid', 'Handfree': 'handfreeGrid', 'Fast Chargers': 'chargerGrid' };
         Object.values(grids).forEach(id => {
@@ -409,7 +419,27 @@
         document.getElementById('accessoriesGrid').innerHTML = '';
 
         data.forEach(p => {
-            const card = `<div class="p-card" onclick="location.href='product.html?id=${p.id}'"><div class="p-img-box"><img src="${p.img}"></div><h3 style="font-size:15px; margin: 8px 0; font-weight:500;">${p.name}</h3><div class="price-box">Rs.${Number(p.price).toLocaleString()}</div></div>`;
+            // Logic for Upgrades
+            const price = Number(p.price);
+            const oldPrice = p.oldPrice ? Number(p.oldPrice) : null;
+            const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
+            const stock = p.stock || 0;
+            const soldCount = p.soldCount || "150+";
+
+            const badgeHtml = discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : '';
+            const priceHtml = oldPrice ? `<span class="old-price">Rs.${oldPrice.toLocaleString()}</span> Rs.${price.toLocaleString()}` : `Rs.${price.toLocaleString()}`;
+            const stockHtml = stock < 5 ? `<div class="stock-status stock-low">Only ${stock} left!</div>` : `<div class="stock-status stock-in">In Stock</div>`;
+
+            const card = `
+                <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
+                    ${badgeHtml}
+                    <div class="p-img-box"><img src="${p.img}"></div>
+                    <h3 style="font-size:15px; margin: 8px 0; font-weight:500;">${p.name}</h3>
+                    <div class="price-box">${priceHtml}</div>
+                    ${stockHtml}
+                    <span class="sold-text"><i class="fas fa-shopping-cart"></i> ${soldCount} Sold</span>
+                </div>`;
+
             const gridId = grids[p.category] || 'accessoriesGrid';
             if(document.getElementById(gridId)) document.getElementById(gridId).innerHTML += card;
         });
@@ -426,8 +456,27 @@
             const fil = allProducts.filter(p => p.category === c);
             const grid = document.getElementById('accessoriesGrid');
             grid.innerHTML = fil.length ? '' : '<p style="text-align:center; padding:50px;">No products found.</p>';
+            
             fil.forEach(p => { 
-                grid.innerHTML += `<div class="p-card" onclick="location.href='product.html?id=${p.id}'"><div class="p-img-box"><img src="${p.img}"></div><h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3><div class="price-box">Rs.${Number(p.price).toLocaleString()}</div></div>`; 
+                const price = Number(p.price);
+                const oldPrice = p.oldPrice ? Number(p.oldPrice) : null;
+                const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
+                const stock = p.stock || 0;
+                const soldCount = p.soldCount || "150+";
+
+                const badgeHtml = discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : '';
+                const priceHtml = oldPrice ? `<span class="old-price">Rs.${oldPrice.toLocaleString()}</span> Rs.${price.toLocaleString()}` : `Rs.${price.toLocaleString()}`;
+                const stockHtml = stock < 5 ? `<div class="stock-status stock-low">Only ${stock} left!</div>` : `<div class="stock-status stock-in">In Stock</div>`;
+
+                grid.innerHTML += `
+                    <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
+                        ${badgeHtml}
+                        <div class="p-img-box"><img src="${p.img}"></div>
+                        <h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3>
+                        <div class="price-box">${priceHtml}</div>
+                        ${stockHtml}
+                        <span class="sold-text"><i class="fas fa-shopping-cart"></i> ${soldCount} Sold</span>
+                    </div>`; 
             });
         }
         if(window.innerWidth < 768) {
@@ -437,7 +486,6 @@
         window.scrollTo({ top: 400, behavior: 'smooth' });
     };
 
-    // --- SEARCH FUNCTIONALITY (PRESERVED) ---
     window.handleSearch = (event) => {
         if (event.key === "Enter") {
             const query = event.target.value.toLowerCase().trim();
@@ -451,15 +499,33 @@
             document.getElementById('accTitle').innerText = "Search: " + query;
             const grid = document.getElementById('accessoriesGrid');
             grid.innerHTML = filtered.length ? '' : '<p style="text-align:center; padding:50px;">No products found for "' + query + '".</p>';
+            
             filtered.forEach(p => {
-                grid.innerHTML += `<div class="p-card" onclick="location.href='product.html?id=${p.id}'"><div class="p-img-box"><img src="${p.img}"></div><h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3><div class="price-box">Rs.${Number(p.price).toLocaleString()}</div></div>`;
+                const price = Number(p.price);
+                const oldPrice = p.oldPrice ? Number(p.oldPrice) : null;
+                const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
+                const stock = p.stock || 0;
+                const soldCount = p.soldCount || "150+";
+
+                const badgeHtml = discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : '';
+                const priceHtml = oldPrice ? `<span class="old-price">Rs.${oldPrice.toLocaleString()}</span> Rs.${price.toLocaleString()}` : `Rs.${price.toLocaleString()}`;
+                const stockHtml = stock < 5 ? `<div class="stock-status stock-low">Only ${stock} left!</div>` : `<div class="stock-status stock-in">In Stock</div>`;
+
+                grid.innerHTML += `
+                    <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
+                        ${badgeHtml}
+                        <div class="p-img-box"><img src="${p.img}"></div>
+                        <h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3>
+                        <div class="price-box">${priceHtml}</div>
+                        ${stockHtml}
+                        <span class="sold-text"><i class="fas fa-shopping-cart"></i> ${soldCount} Sold</span>
+                    </div>`;
             });
             toggleSearch(); 
             window.scrollTo({ top: 400, behavior: 'smooth' });
         }
     };
 
-    // --- 🛒 UPDATED CART LOGIC (WITH QTY & WHATSAPP) ---
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
 
     window.toggleCart = () => {
@@ -522,19 +588,16 @@
 
     window.checkout = () => {
         if(cart.length === 0) return alert("Your cart is empty!");
-        
         let message = "🛍️ *New Order from Haider Store*%0A%0A";
         cart.forEach((item, index) => {
             message += `*${index + 1}.* ${item.name}%0A   Qty: ${item.quantity} | Price: Rs.${item.price}%0A%0A`;
         });
         message += `💰 *Total: ${document.getElementById('cartTotal').innerText}*%0A%0APlease confirm my order.`;
-
         const whatsappNum = "923279518790";
         window.open(`https://wa.me/${whatsappNum}?text=${message}`, '_blank');
     };
 
     window.addEventListener('load', window.updateCart);
-
 </script>
 </body>
 </html>
