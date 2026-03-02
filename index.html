@@ -28,14 +28,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; }
 
-        /* --- ✨ ANIMATIONS (PRESERVED) --- */
+        /* --- ✨ ANIMATIONS --- */
         .reveal { opacity: 0; transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .slide-left { transform: translateX(-80px); }
         .zoom-in { transform: scale(0.85); }
         .slide-right { transform: translateX(80px); }
         .active { opacity: 1; transform: translateX(0) scale(1); }
 
-        /* --- HEADER (DARK GREEN & WHITE TEXT) --- */
+        /* --- HEADER --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -43,7 +43,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 3000;
         }
         .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; letter-spacing: 1px; }
-        .logo span { color: var(--accent); } /* "STORE" in Red */
+        .logo span { color: var(--accent); } 
         
         .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
         .nav-link { text-decoration: none; color: var(--white) !important; font-weight: 500; font-size: 15px; cursor: pointer; transition: 0.3s; opacity: 0.9; }
@@ -51,7 +51,7 @@
         
         header .fas { color: var(--white) !important; }
 
-        /* MEGA MENU (PRESERVED) */
+        /* MEGA MENU */
         .nav-item { position: static; }
         .mega-menu {
             position: absolute; top: 100%; left: 0; width: 100%; background: var(--white);
@@ -64,7 +64,7 @@
         .menu-col a { display: block; color: var(--text-dark); text-decoration: none; font-size: 14px; padding: 6px 0; cursor: pointer; transition: 0.2s; }
         .menu-col a:hover { color: var(--accent); padding-left: 5px; }
 
-        /* --- SEARCH OVERLAY (PRESERVED) --- */
+        /* SEARCH OVERLAY */
         .search-overlay {
             position: fixed; top: -100%; left: 0; width: 100%; height: 110px;
             background: var(--white); z-index: 5000; display: flex; align-items: center;
@@ -76,9 +76,8 @@
             width: 100%; padding: 12px 25px; border: 2px solid #f0f0f0; border-radius: 30px; 
             font-size: 16px; outline: none; font-family: 'Jost', sans-serif; transition: 0.3s;
         }
-        .search-container input:focus { border-color: var(--primary); }
 
-        /* MOBILE HAMBURGER (PRESERVED) */
+        /* MOBILE DRAWER */
         .menu-btn { display: none; font-size: 22px; cursor: pointer; color: var(--white) !important; }
         .mobile-drawer {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
@@ -88,32 +87,23 @@
         .mobile-drawer.open { left: 0; }
         .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3500; display: none; }
         .drawer-overlay.active { display: block; }
-        .drawer-links { list-style: none; margin-top: 20px; }
         .drawer-links h4 { font-size: 12px; color: var(--primary); margin: 20px 0 10px; text-transform: uppercase; }
         .drawer-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; display: block; padding: 10px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
 
-        /* --- HERO & BRANDS --- */
+        /* HERO & PRODUCTS */
         .hero-container { height: 480px; background: #f4f4f4; overflow: hidden; position: relative; }
-
-        /* --- PRODUCT SECTIONS --- */
         .section-header { text-align: center; margin: 60px 0 30px; }
         .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; }
         .container { padding: 0 5% 40px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
         .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; }
 
-        /* --- 🛒 UPGRADED PRODUCT CARDS --- */
         .p-card { transition: 0.3s; text-align: center; padding: 15px; cursor: pointer; border: 1px solid transparent; position: relative; }
         .p-card:hover { border: 1px solid #eee; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
         .p-img-box { width: 100%; height: 240px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
         
-        /* New Upgrade Styles */
-        .discount-badge {
-            position: absolute; top: 12px; left: 12px; background: var(--accent);
-            color: white; font-size: 10px; font-weight: 700; padding: 4px 8px;
-            border-radius: 4px; z-index: 5; text-transform: uppercase;
-        }
+        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
         .old-price { text-decoration: line-through; color: #999; font-size: 14px; margin-right: 8px; font-weight: 400; }
         .price-box { font-size: 18px; font-weight: 700; color: var(--primary); margin-top: 10px; }
         .stock-status { font-size: 11px; font-weight: 600; margin-top: 8px; }
@@ -121,7 +111,7 @@
         .stock-in { color: var(--success); }
         .sold-text { font-size: 11px; color: #777; margin-top: 5px; display: block; font-weight: 400; }
 
-        /* --- FOOTER (PRESERVED) --- */
+        /* FOOTER */
         footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
         .f-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 40px; }
         .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--primary); text-transform: uppercase; position: relative; }
@@ -134,56 +124,28 @@
         .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
         .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
 
-        /* --- CART SIDEBAR (PRESERVED) --- */
+        /* CART SIDEBAR */
         .cart-sidebar {
             position: fixed; top: 0; right: -100%; width: 350px; max-width: 100%; height: 100vh;
             background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             z-index: 10000; display: flex; flex-direction: column;
         }
         .cart-sidebar.open { right: 0; }
-        .cart-header {
-            padding: 20px; background: var(--header-dark); color: white;
-            display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent);
-        }
-        .cart-header h2 { font-size: 18px; font-weight: 600; }
-        .close-cart { background: none; border: none; color: white; font-size: 24px; cursor: pointer; transition: 0.2s; }
-        .close-cart:hover { color: var(--accent); transform: scale(1.1); }
+        .cart-header { padding: 20px; background: var(--header-dark); color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
         .cart-items { flex: 1; padding: 15px; overflow-y: auto; }
         .cart-item { display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; margin-bottom: 15px; }
         .cart-item img { width: 60px; height: 60px; object-fit: contain; background: #f9f9f9; border-radius: 8px; padding: 5px; }
-        .cart-item-details { flex: 1; }
-        .cart-item-title { font-size: 14px; font-weight: 600; line-height: 1.3; margin-bottom: 5px; }
-        .cart-item-price { font-size: 13px; color: var(--primary); font-weight: 700; }
-        .cart-item-remove { color: #ff4d4d; cursor: pointer; font-size: 16px; padding: 5px; transition: 0.2s; }
-        .cart-item-remove:hover { color: #d32f2f; transform: scale(1.1); }
-        .cart-footer { padding: 20px; border-top: 1px solid #eee; background: #fafafa; }
-        .total-sec { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; margin-bottom: 15px; color: var(--text-dark); }
-        .checkout-btn {
-            width: 100%; padding: 15px; background: #25d366; color: white;
-            border: none; border-radius: 8px; font-size: 16px; font-weight: 600;
-            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .checkout-btn:hover { background: #128c7e; }
-        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; }
-        .cart-overlay.active { opacity: 1; visibility: visible; }
-        .cart-icon-container { position: relative; cursor: pointer; display: flex; align-items: center; }
+        .checkout-btn { width: 100%; padding: 15px; background: #25d366; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
         .cart-badge {
             position: absolute; top: -8px; right: -10px; background: var(--accent);
             color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark);
         }
-        .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
-        .qty-btn { width: 22px; height: 22px; background: #eee; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
 
-        /* --- MOBILE RESPONSIVE (PRESERVED) --- */
         @media (max-width: 768px) {
             .hero-container { height: 250px; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .p-card { padding: 8px; }
-            .p-img-box { height: 160px; margin-bottom: 8px; }
-            .p-card h3 { font-size: 13px !important; line-height: 1.3; }
-            .price-box { font-size: 15px; margin-top: 5px; }
             .nav-links { display: none; }
             .menu-btn { display: block; }
             .f-grid { grid-template-columns: 1fr; text-align: center; }
@@ -194,15 +156,15 @@
 </head>
 <body>
 
-<div id="cartOverlay" class="cart-overlay" onclick="toggleCart()"></div>
+<div id="cartOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; display:none;" onclick="toggleCart()"></div>
 <div id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
         <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
-        <i class="fas fa-times close-cart" onclick="toggleCart()"></i>
+        <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer; font-size:24px;"></i>
     </div>
     <div class="cart-items" id="cartItemsContainer"></div>
-    <div class="cart-footer">
-        <div class="total-sec">
+    <div class="cart-footer" style="padding:20px; border-top:1px solid #eee; background:#fafafa;">
+        <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:700; margin-bottom:15px;">
             <span>Total:</span>
             <span id="cartTotal" style="color: var(--primary);">Rs. 0</span>
         </div>
@@ -212,7 +174,7 @@
 
 <div id="searchOverlay" class="search-overlay">
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for products (Press Enter)..." onkeyup="handleSearch(event)">
+        <input type="text" id="searchInput" placeholder="Search for products..." onkeyup="handleSearch(event)">
         <i class="fas fa-times" onclick="toggleSearch()" style="font-size: 22px; cursor: pointer;"></i>
     </div>
 </div>
@@ -233,7 +195,6 @@
         <h4>Audio</h4>
         <a onclick="setFilter('Earbuds')">Earbuds</a>
         <a onclick="setFilter('Handfree')">Handfree</a>
-        <a onclick="setFilter('Headphones')">Headphones</a>
         <h4>Life Style</h4>
         <a onclick="setFilter('Smart Watches')">Smart Watches</a>
         <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
@@ -280,8 +241,8 @@
     </nav>
     <div style="display: flex; gap: 20px; font-size: 18px; align-items: center;">
         <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer;"></i>
-        <div class="cart-icon-container" onclick="toggleCart()">
-            <i class="fas fa-shopping-bag" style="cursor: pointer;"></i>
+        <div style="position:relative; cursor:pointer;" onclick="toggleCart()">
+            <i class="fas fa-shopping-bag"></i>
             <span id="cartBadge" class="cart-badge">0</span>
         </div>
     </div>
@@ -290,7 +251,7 @@
 <section class="hero-container">
     <img src="https://via.placeholder.com/1920x600" id="syncBanner" style="width: 100%; height: 100%; object-fit: cover;">
 </section>
-    
+
 <div id="mainContent">
     <div id="earbudsSec" class="cat-sec-wrap">
         <div class="section-header reveal slide-left"><h2>Wireless Earbuds</h2></div>
@@ -305,14 +266,6 @@
         <div class="container reveal zoom-in">
             <img src="https://via.placeholder.com/1400x400" id="handfreeBannerSync" class="cat-banner">
             <div id="handfreeGrid" class="grid"></div>
-        </div>
-    </div>
-
-    <div id="chargerSec" class="cat-sec-wrap">
-        <div class="section-header reveal slide-right"><h2>Fast Chargers</h2></div>
-        <div class="container reveal slide-right">
-            <img src="https://via.placeholder.com/1400x400" id="chargerBannerSync" class="cat-banner">
-            <div id="chargerGrid" class="grid"></div>
         </div>
     </div>
 
@@ -376,19 +329,10 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    window.toggleMenu = () => {
-        document.getElementById('drawer').classList.toggle('open');
-        document.getElementById('overlay').classList.toggle('active');
-    };
+    let allProducts = [];
+    let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
 
-    window.toggleSearch = () => {
-        const overlay = document.getElementById('searchOverlay');
-        overlay.classList.toggle('active');
-        if(overlay.classList.contains('active')) {
-            setTimeout(() => document.getElementById('searchInput').focus(), 300);
-        }
-    };
-
+    // Animation & UI Functions
     function reveal() {
         document.querySelectorAll(".reveal").forEach(r => {
             if (r.getBoundingClientRect().top < window.innerHeight - 80) r.classList.add("active");
@@ -396,12 +340,20 @@
     }
     window.addEventListener("scroll", reveal);
 
-    onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
-    onValue(ref(db, 'settings/earbudsBanner'), s => { if(s.exists()) document.getElementById('earBannerSync').src = s.val(); });
-    onValue(ref(db, 'settings/handfreeBanner'), s => { if(s.exists()) document.getElementById('handfreeBannerSync').src = s.val(); });
-    onValue(ref(db, 'settings/chargerBanner'), s => { if(s.exists()) document.getElementById('chargerBannerSync').src = s.val(); });
+    window.toggleMenu = () => {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('active');
+    };
+    window.toggleSearch = () => document.getElementById('searchOverlay').classList.toggle('active');
+    window.toggleCart = () => {
+        const sidebar = document.getElementById('cartSidebar');
+        sidebar.classList.toggle('open');
+        document.getElementById('cartOverlay').style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        updateCartUI();
+    };
 
-    let allProducts = [];
+    // Firebase Sync
+    onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
@@ -409,195 +361,80 @@
         }
     });
 
-    // --- 🛠️ MODIFIED RENDER FUNCTION WITH UPGRADES ---
     function renderProducts(data) {
-        const grids = { 'Earbuds': 'earbudsGrid', 'Handfree': 'handfreeGrid', 'Fast Chargers': 'chargerGrid' };
-        Object.values(grids).forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.innerHTML = '';
-        });
+        const grids = { 'Earbuds': 'earbudsGrid', 'Handfree': 'handfreeGrid' };
+        Object.values(grids).forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ''; });
         document.getElementById('accessoriesGrid').innerHTML = '';
 
         data.forEach(p => {
-            // Logic for Upgrades
             const price = Number(p.price);
-            const oldPrice = p.oldPrice ? Number(p.oldPrice) : null;
+            const oldPrice = p.oldPrice || null;
             const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
-            const stock = p.stock || 0;
-            const soldCount = p.soldCount || "150+";
-
-            const badgeHtml = discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : '';
-            const priceHtml = oldPrice ? `<span class="old-price">Rs.${oldPrice.toLocaleString()}</span> Rs.${price.toLocaleString()}` : `Rs.${price.toLocaleString()}`;
-            const stockHtml = stock < 5 ? `<div class="stock-status stock-low">Only ${stock} left!</div>` : `<div class="stock-status stock-in">In Stock</div>`;
-
+            
             const card = `
-                <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
-                    ${badgeHtml}
-                    <div class="p-img-box"><img src="${p.img}"></div>
-                    <h3 style="font-size:15px; margin: 8px 0; font-weight:500;">${p.name}</h3>
-                    <div class="price-box">${priceHtml}</div>
-                    ${stockHtml}
-                    <span class="sold-text"><i class="fas fa-shopping-cart"></i> ${soldCount} Sold</span>
+                <div class="p-card">
+                    ${discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : ''}
+                    <div onclick="location.href='product.html?id=${p.id}'">
+                        <div class="p-img-box"><img src="${p.img}"></div>
+                        <h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3>
+                        <div class="price-box">Rs.${price.toLocaleString()}</div>
+                    </div>
+                    <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:8px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer;">ADD TO CART</button>
                 </div>`;
 
             const gridId = grids[p.category] || 'accessoriesGrid';
             if(document.getElementById(gridId)) document.getElementById(gridId).innerHTML += card;
         });
-        setTimeout(reveal, 500);
+        reveal();
     }
 
-    window.setFilter = (c) => {
-        if(c === 'ALL') { location.reload(); }
-        else {
-            document.querySelectorAll('.cat-sec-wrap').forEach(s => s.style.display = 'none');
-            const acc = document.getElementById('accessoriesSec');
-            acc.style.display = 'block';
-            document.getElementById('accTitle').innerText = c;
-            const fil = allProducts.filter(p => p.category === c);
-            const grid = document.getElementById('accessoriesGrid');
-            grid.innerHTML = fil.length ? '' : '<p style="text-align:center; padding:50px;">No products found.</p>';
-            
-            fil.forEach(p => { 
-                const price = Number(p.price);
-                const oldPrice = p.oldPrice ? Number(p.oldPrice) : null;
-                const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
-                const stock = p.stock || 0;
-                const soldCount = p.soldCount || "150+";
-
-                const badgeHtml = discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : '';
-                const priceHtml = oldPrice ? `<span class="old-price">Rs.${oldPrice.toLocaleString()}</span> Rs.${price.toLocaleString()}` : `Rs.${price.toLocaleString()}`;
-                const stockHtml = stock < 5 ? `<div class="stock-status stock-low">Only ${stock} left!</div>` : `<div class="stock-status stock-in">In Stock</div>`;
-
-                grid.innerHTML += `
-                    <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
-                        ${badgeHtml}
-                        <div class="p-img-box"><img src="${p.img}"></div>
-                        <h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3>
-                        <div class="price-box">${priceHtml}</div>
-                        ${stockHtml}
-                        <span class="sold-text"><i class="fas fa-shopping-cart"></i> ${soldCount} Sold</span>
-                    </div>`; 
-            });
-        }
-        if(window.innerWidth < 768) {
-            const dr = document.getElementById('drawer');
-            if(dr.classList.contains('open')) toggleMenu();
-        }
-        window.scrollTo({ top: 400, behavior: 'smooth' });
+    window.addToCart = (id) => {
+        const p = allProducts.find(x => x.id === id);
+        const exist = cart.find(x => x.id === id);
+        if(exist) exist.quantity++;
+        else cart.push({ id: p.id, name: p.name, price: p.price, image: p.img, quantity: 1 });
+        updateCartUI();
+        toggleCart();
     };
 
-    window.handleSearch = (event) => {
-        if (event.key === "Enter") {
-            const query = event.target.value.toLowerCase().trim();
-            if(!query) return;
-            const filtered = allProducts.filter(p => 
-                p.name.toLowerCase().includes(query) || 
-                (p.category && p.category.toLowerCase().includes(query))
-            );
-            document.querySelectorAll('.cat-sec-wrap').forEach(s => s.style.display = 'none');
-            document.getElementById('accessoriesSec').style.display = 'block';
-            document.getElementById('accTitle').innerText = "Search: " + query;
-            const grid = document.getElementById('accessoriesGrid');
-            grid.innerHTML = filtered.length ? '' : '<p style="text-align:center; padding:50px;">No products found for "' + query + '".</p>';
-            
-            filtered.forEach(p => {
-                const price = Number(p.price);
-                const oldPrice = p.oldPrice ? Number(p.oldPrice) : null;
-                const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
-                const stock = p.stock || 0;
-                const soldCount = p.soldCount || "150+";
-
-                const badgeHtml = discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : '';
-                const priceHtml = oldPrice ? `<span class="old-price">Rs.${oldPrice.toLocaleString()}</span> Rs.${price.toLocaleString()}` : `Rs.${price.toLocaleString()}`;
-                const stockHtml = stock < 5 ? `<div class="stock-status stock-low">Only ${stock} left!</div>` : `<div class="stock-status stock-in">In Stock</div>`;
-
-                grid.innerHTML += `
-                    <div class="p-card" onclick="location.href='product.html?id=${p.id}'">
-                        ${badgeHtml}
-                        <div class="p-img-box"><img src="${p.img}"></div>
-                        <h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3>
-                        <div class="price-box">${priceHtml}</div>
-                        ${stockHtml}
-                        <span class="sold-text"><i class="fas fa-shopping-cart"></i> ${soldCount} Sold</span>
-                    </div>`;
-            });
-            toggleSearch(); 
-            window.scrollTo({ top: 400, behavior: 'smooth' });
-        }
-    };
-
-    let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-
-    window.toggleCart = () => {
-        document.getElementById('cartSidebar').classList.toggle('open');
-        document.getElementById('cartOverlay').classList.toggle('active');
-        window.updateCart();
-    };
-
-    window.updateCart = () => {
+    function updateCartUI() {
         const container = document.getElementById('cartItemsContainer');
         const badge = document.getElementById('cartBadge');
         const totalEl = document.getElementById('cartTotal');
         
-        container.innerHTML = ""; 
-        let totalAmount = 0;
-        let totalItems = 0;
+        container.innerHTML = cart.length ? '' : '<p style="text-align:center; padding:20px;">Cart is empty!</p>';
+        let total = 0, count = 0;
 
-        if (cart.length === 0) {
-            container.innerHTML = `<p style="text-align:center; color:#888; margin-top:50px;">Your cart is empty ☹️</p>`;
-        } else {
-            cart.forEach((item, index) => {
-                totalAmount += (item.price * item.quantity);
-                totalItems += item.quantity;
-                container.innerHTML += `
-                    <div class="cart-item">
-                        <img src="${item.image}" alt="Product">
-                        <div class="cart-item-details">
-                            <div class="cart-item-title">${item.name}</div>
-                            <div class="cart-item-price">Rs. ${Number(item.price).toLocaleString()}</div>
-                            <div class="qty-controls">
-                                <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                                <span>${item.quantity}</span>
-                                <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
-                            </div>
+        cart.forEach((item, i) => {
+            total += (item.price * item.quantity);
+            count += item.quantity;
+            container.innerHTML += `
+                <div class="cart-item">
+                    <img src="${item.image}">
+                    <div style="flex:1;">
+                        <div style="font-size:14px; font-weight:600;">${item.name}</div>
+                        <div>Rs. ${item.price}</div>
+                        <div style="margin-top:5px;">
+                            <button onclick="changeQty(${i},-1)">-</button> ${item.quantity} <button onclick="changeQty(${i},1)">+</button>
                         </div>
-                        <i class="fas fa-trash cart-item-remove" onclick="removeFromCart(${index})"></i>
                     </div>
-                `;
-            });
-        }
-
-        if(badge) badge.innerText = totalItems;
-        if(totalEl) totalEl.innerText = `Rs. ${totalAmount.toLocaleString()}`;
-        localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
-    };
-
-    window.changeQty = (index, delta) => {
-        cart[index].quantity += delta;
-        if(cart[index].quantity < 1) {
-            removeFromCart(index);
-        } else {
-            window.updateCart();
-        }
-    };
-
-    window.removeFromCart = (index) => {
-        cart.splice(index, 1);
-        window.updateCart();
-    };
-
-    window.checkout = () => {
-        if(cart.length === 0) return alert("Your cart is empty!");
-        let message = "🛍️ *New Order from Haider Store*%0A%0A";
-        cart.forEach((item, index) => {
-            message += `*${index + 1}.* ${item.name}%0A   Qty: ${item.quantity} | Price: Rs.${item.price}%0A%0A`;
+                    <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
+                </div>`;
         });
-        message += `💰 *Total: ${document.getElementById('cartTotal').innerText}*%0A%0APlease confirm my order.`;
-        const whatsappNum = "923279518790";
-        window.open(`https://wa.me/${whatsappNum}?text=${message}`, '_blank');
+        badge.innerText = count;
+        totalEl.innerText = `Rs. ${total.toLocaleString()}`;
+        localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
+    }
+
+    window.changeQty = (i, d) => { cart[i].quantity += d; if(cart[i].quantity < 1) cart.splice(i, 1); updateCartUI(); };
+    window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
+    window.checkout = () => {
+        let msg = "🛍️ *New Order*%0A";
+        cart.forEach(item => msg += `• ${item.name} (x${item.quantity})%0A`);
+        window.open(`https://wa.me/923279518790?text=${msg}%0A💰 *Total: ${document.getElementById('cartTotal').innerText}*`);
     };
 
-    window.addEventListener('load', window.updateCart);
+    updateCartUI();
 </script>
 </body>
 </html>
