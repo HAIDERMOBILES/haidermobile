@@ -72,7 +72,7 @@
         .related-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 40px; }
         .related-title { font-size: 26px; font-weight: 700; margin-bottom: 30px; text-align: center; }
         .related-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;
         }
         .rel-card { 
             background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 15px; 
@@ -80,7 +80,7 @@
         }
         .rel-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.07); }
         .rel-img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 12px; }
-        .rel-name { font-weight: 600; font-size: 15px; margin-bottom: 8px; display: block; color: #333; }
+        .rel-name { font-weight: 600; font-size: 15px; margin-bottom: 8px; display: block; color: #333; height: 40px; overflow: hidden; }
         .rel-price { color: var(--primary); font-weight: 700; font-size: 16px; }
 
         /* --- FOOTER --- */
@@ -137,7 +137,9 @@
 
     <div class="related-section">
         <h2 class="related-title">Explore More Items</h2>
-        <div class="related-grid" id="relatedGrid"></div>
+        <div class="related-grid" id="relatedGrid">
+            <p style="text-align:center; grid-column: 1/-1; color:#999;">Loading related products...</p>
+        </div>
     </div>
 </div>
 
@@ -145,7 +147,7 @@
     <div class="f-cols">
         <div class="f-links">
             <h3 style="margin-bottom:15px; font-weight:700;">HAIDER STORE</h3>
-            <p style="opacity:0.6; font-size:14px; line-height:1.6;">Your one-stop shop for premium tech accessories and gadgets in Pakistan.</p>
+            <p style="opacity:0.6; font-size:14px; line-height:1.6;">Your one-stop shop for premium tech accessories in Pakistan.</p>
         </div>
         <div class="f-links">
             <h4>Quick Links</h4>
@@ -157,19 +159,17 @@
             <h4>Policies</h4>
             <a href="shipping.html">Shipping Policy</a>
             <a href="return.html">Return & Refund</a>
-            <a href="privacy.html">Privacy Policy</a>
         </div>
         <div class="f-links">
             <h4>Support</h4>
             <p style="font-size:14px; opacity:0.7;"><i class="fab fa-whatsapp"></i> +92 327 9518790</p>
-            <p style="font-size:14px; opacity:0.7; margin-top:10px;"><i class="far fa-envelope"></i> info@haiderstore.com</p>
         </div>
     </div>
 </footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, get, limitToLast, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -185,18 +185,17 @@
     let productData = null;
 
     if (productId) {
+        // 1. Fetch Main Product
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
                 productData = s.val();
                 document.getElementById('pName').innerText = productData.name;
                 document.getElementById('pPrice').innerText = `Rs. ${Number(productData.price).toLocaleString()}`;
                 
-                // Load Slider Images
                 const wrapper = document.getElementById('sliderWrapper');
                 const imgs = [productData.img, productData.img2, productData.img3].filter(x => x);
                 wrapper.innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
                 
-                // Auto Slide Logic
                 let step = 0;
                 if(imgs.length > 1) {
                     setInterval(() => {
@@ -205,32 +204,41 @@
                     }, 4000);
                 }
 
-                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Assalam-o-Alaikum! I'm interested in: ${productData.name}`;
+                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Assalam-o-Alaikum! I want to order: ${productData.name}`;
                 
+                // 2. Load Related Products (Guaranteed Fix)
                 loadRelated();
             }
         });
     }
 
-    async function loadRelated() {
-        const snap = await get(query(ref(db, 'products'), limitToLast(10)));
-        const grid = document.getElementById('relatedGrid');
-        if (snap.exists()) {
-            let html = '';
-            snap.forEach((child) => {
-                const p = child.val();
-                if (child.key !== productId) {
-                    html += `
-                        <a href="product-details.html?id=${child.key}" class="rel-card">
-                            <img src="${p.img}" class="rel-img">
-                            <span class="rel-name">${p.name}</span>
-                            <span class="rel-price">Rs. ${Number(p.price).toLocaleString()}</span>
-                        </a>
-                    `;
-                }
-            });
-            grid.innerHTML = html;
-        }
+    function loadRelated() {
+        get(ref(db, 'products')).then((snapshot) => {
+            const grid = document.getElementById('relatedGrid');
+            if (snapshot.exists()) {
+                let html = '';
+                let count = 0;
+                snapshot.forEach((child) => {
+                    const p = child.val();
+                    const pId = child.key;
+
+                    // Show 8 products, skip the current one
+                    if (pId !== productId && count < 8) {
+                        html += `
+                            <a href="product-details.html?id=${pId}" class="rel-card">
+                                <img src="${p.img}" class="rel-img">
+                                <span class="rel-name">${p.name}</span>
+                                <span class="rel-price">Rs. ${Number(p.price).toLocaleString()}</span>
+                            </a>
+                        `;
+                        count++;
+                    }
+                });
+                grid.innerHTML = html;
+            } else {
+                grid.innerHTML = "<p>No other products found.</p>";
+            }
+        });
     }
 
     document.getElementById('addBtn').onclick = () => {
@@ -239,12 +247,12 @@
         cart.push({ id: productId, name: productData.name, price: productData.price, image: productData.img, quantity: 1 });
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
         document.getElementById('cartBadge').innerText = cart.length;
-        alert("Success! Product added to your cart.");
+        alert("Success! Product added to cart.");
     };
 
-    // Initialize Cart Badge
-    const cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-    document.getElementById('cartBadge').innerText = cart.length;
+    // Initial Cart Badge Update
+    const initialCart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
+    document.getElementById('cartBadge').innerText = initialCart.length;
 </script>
 
 </body>
