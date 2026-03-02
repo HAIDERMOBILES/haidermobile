@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
-        /* --- CSS COPIED FROM INDEX --- */
         :root { 
             --primary: #005f6b; 
             --header-dark: #004040; 
@@ -23,6 +22,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; }
 
+        /* --- HEADER (EXACT INDEX STYLE) --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -54,12 +54,12 @@
         .slider-container { position: relative; width: 100%; height: 480px; background: #f9f9f9; border-radius: 15px; overflow: hidden; border: 1px solid #eee; display: flex; align-items: center; }
         .slider-wrapper { display: flex; transition: transform 0.6s ease; height: 100%; width: 100%; }
         .img-box { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        .img-box img { max-width: 85%; max-height: 85%; object-fit: contain; transition: 0.3s; }
+        .img-box img:hover { transform: scale(1.1); }
         .p-info-side { display: flex; flex-direction: column; gap: 15px; justify-content: center; }
-        .p-title { font-size: 32px; font-weight: 700; }
+        .p-title { font-size: 32px; font-weight: 700; color: #111; }
         .p-price { font-size: 28px; color: var(--primary); font-weight: 700; }
         
-        /* TABS */
         .tabs-container { background: #f9f9f9; padding: 30px; border-radius: 15px; margin-top: 40px; border: 1px solid #eee; }
         .tabs-nav { display: flex; gap: 20px; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
         .tab-btn { background: none; border: none; padding: 10px 0; font-weight: 700; cursor: pointer; color: #777; }
@@ -67,46 +67,34 @@
         .tab-content { display: none; line-height: 1.6; }
         .tab-content.active { display: block; }
 
-        /* RELATED PRODUCTS */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .p-card { border: 1px solid #eee; padding: 15px; text-align: center; border-radius: 10px; cursor: pointer; }
+        .p-card { border: 1px solid #eee; padding: 15px; text-align: center; border-radius: 10px; cursor: pointer; transition: 0.3s; }
         .p-card img { width: 100%; height: 180px; object-fit: contain; }
 
-        /* --- FIXED FOOTER CSS (EXACT INDEX MATCH) --- */
+        /* --- FIXED FOOTER (INDEX COLORS) --- */
         footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
-        .f-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 40px; }
+        .f-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
         .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--primary); text-transform: uppercase; position: relative; }
         .f-col h4::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 35px; height: 2px; background: var(--accent); }
-        .f-col p { color: #ffffff; opacity: 0.8; font-size: 14px; }
+        .f-col p { color: #ffffff; opacity: 0.8; font-size: 14px; margin-bottom: 10px; }
         .f-col ul { list-style: none; }
-        .f-col ul li { margin-bottom: 10px; }
-        
-        /* Fixed Purple/Blue Issue */
-        .f-col a { 
-            text-decoration: none !important; 
-            color: #ffffff !important; 
-            opacity: 0.8; 
-            transition: 0.3s; 
-            font-size: 14px;
-        }
-        .f-col a:hover { opacity: 1; color: var(--accent) !important; }
+        .f-col a { text-decoration: none !important; color: #ffffff !important; opacity: 0.8; transition: 0.3s; font-size: 14px; display: block; margin-bottom: 10px; }
+        .f-col a:hover { opacity: 1; color: var(--accent) !important; padding-left: 5px; }
 
         .social-links { display: flex; gap: 15px; margin-top: 20px; }
-        .social-links a { color: #fff !important; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .social-links a { width: 35px !important; height: 35px !important; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white !important; }
 
-        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--accent); color: white; font-size: 10px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--accent); color: white; font-size: 10px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark); }
         .btn-wa { display: block; padding: 15px; background: #25d366; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 700; text-align: center; margin-top: 10px; }
         .btn-cart { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-        @media (max-width: 768px) { .top-section { grid-template-columns: 1fr; } .f-grid { grid-template-columns: 1fr; text-align: center; } .f-col h4::after { left: 50%; transform: translateX(-50%); } .social-links { justify-content: center; } }
+        @media (max-width: 768px) { .top-section { grid-template-columns: 1fr; } .nav-links { display: none; } .f-grid { grid-template-columns: 1fr; text-align: center; } .f-col h4::after { left: 50%; transform: translateX(-50%); } .social-links { justify-content: center; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="display:flex; align-items:center; gap:15px;">
-        <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
-    </div>
+    <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
     <nav>
         <ul class="nav-links">
             <li><a href="index.html" class="nav-link">Home</a></li>
@@ -128,6 +116,10 @@
                         <a href="index.html">Smart Watches</a>
                         <a href="index.html">Wireless MIC</a>
                     </div>
+                    <div class="menu-col">
+                        <h4>Shop</h4>
+                        <a href="index.html" style="font-weight:bold; color:var(--accent) !important;">View All</a>
+                    </div>
                 </div>
             </li>
             <li><a href="about.html" class="nav-link">About</a></li>
@@ -135,7 +127,7 @@
         </ul>
     </nav>
     <div style="display: flex; gap: 20px; font-size: 18px; align-items: center; color: white;">
-        <i class="fas fa-search"></i>
+        <i class="fas fa-search" style="cursor:pointer;"></i>
         <div style="position:relative; cursor:pointer;" onclick="location.href='index.html'">
             <i class="fas fa-shopping-bag"></i>
             <span id="cartBadge" class="cart-badge">0</span>
@@ -147,29 +139,23 @@
     <div class="top-section">
         <div class="slider-container"><div class="slider-wrapper" id="sliderWrapper"></div></div>
         <div class="p-info-side">
-            <h1 class="p-title" id="pName">Loading...</h1>
+            <h1 class="p-title" id="pName">Loading Product...</h1>
             <div class="p-price" id="pPrice">Rs. 0</div>
-            <div style="margin-top: 15px;">
-                <button class="btn-cart" onclick="addToCartPage()">ADD TO CART</button>
-                <a id="waLink" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
-            </div>
+            <p style="color:var(--success); font-weight:600;"><i class="fas fa-truck-moving"></i> Free Shipping on orders above Rs. 3,000</p>
+            <button class="btn-cart" id="addToCartBtn">ADD TO CART</button>
+            <a id="waLink" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
         </div>
     </div>
+
     <div class="tabs-container">
         <div class="tabs-nav">
-            <button class="tab-btn active" onclick="openTab(event, 'desc')">Description</button>
-            <button class="tab-btn" onclick="openTab(event, 'policy')">Policies</button>
+            <button class="tab-btn active">Description</button>
         </div>
-        <div id="desc" class="tab-content active"><p id="fullDesc"></p></div>
-        <div id="policy" class="tab-content">
-            <p><b>Shipping:</b> 2-4 working days delivery.</p>
-            <p><b>Returns:</b> 7 days check warranty.</p>
-        </div>
+        <div class="tab-content active"><p id="fullDesc" style="white-space: pre-line;"></p></div>
     </div>
-    <div class="related-section">
-        <h2 style="margin: 40px 0 20px;">You May Also Like</h2>
-        <div id="relatedGrid" class="grid"></div>
-    </div>
+
+    <h2 style="margin: 40px 0 20px; font-size: 22px;">You May Also Like</h2>
+    <div id="relatedGrid" class="grid"></div>
 </div>
 
 <footer>
@@ -178,25 +164,20 @@
             <h4 style="color: #fff; border:none;">HAIDER STORE</h4>
             <p>Premium Tech Accessories in Pakistan.</p>
             <div class="social-links">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="https://facebook.com/HaiderStudio.co" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/h.m4213803/" target="_blank"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
         <div class="f-col">
             <h4>Shop</h4>
-            <ul>
-                <li><a href="index.html">Earbuds</a></li>
-                <li><a href="index.html">Handfree</a></li>
-                <li><a href="index.html">Smart Watches</a></li>
-            </ul>
+            <a href="index.html">Earbuds</a>
+            <a href="index.html">Handfree</a>
+            <a href="index.html">Smart Watches</a>
         </div>
         <div class="f-col">
             <h4>Support</h4>
-            <ul>
-                <li><a href="#">Shipping Policy</a></li>
-                <li><a href="#">Return Policy</a></li>
-            </ul>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="return.html">Return Policy</a>
         </div>
         <div class="f-col">
             <h4>Contact</h4>
@@ -210,8 +191,66 @@
 </footer>
 
 <script type="module">
-    // ... (Firebase Script Same as pichli file) ...
-    // ... Isme koi change nahi hai ...
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, get, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    if (productId) {
+        get(ref(db, `products/${productId}`)).then((s) => {
+            if (s.exists()) {
+                const p = s.val();
+                document.getElementById('pName').innerText = p.name;
+                document.getElementById('pPrice').innerText = `Rs. ${Number(p.price).toLocaleString()}`;
+                document.getElementById('fullDesc').innerText = p.description;
+                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam! I want to order ${p.name}`;
+                
+                const wrapper = document.getElementById('sliderWrapper');
+                const images = [p.img, p.img2 || p.img, p.img3 || p.img];
+                wrapper.innerHTML = images.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
+                
+                // Auto Slider logic
+                let step = 0; setInterval(() => { step = (step + 1) % 3; wrapper.style.transform = `translateX(-${step * 100}%)`; }, 4000);
+            }
+        });
+
+        get(query(ref(db, 'products'), limitToLast(6))).then((snap) => {
+            const grid = document.getElementById('relatedGrid');
+            snap.forEach(child => {
+                if(child.key !== productId) {
+                    const p = child.val();
+                    grid.innerHTML += `
+                        <div class="p-card" onclick="location.href='product.html?id=${child.key}'">
+                            <img src="${p.img}">
+                            <h4 style="font-size:14px; margin-top:10px;">${p.name}</h4>
+                            <div style="color:var(--primary); font-weight:700;">Rs. ${Number(p.price).toLocaleString()}</div>
+                        </div>`;
+                }
+            });
+        });
+    }
+
+    // Update Cart Badge
+    function updateBadge() {
+        const cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
+        document.getElementById('cartBadge').innerText = cart.length;
+    }
+    updateBadge();
+
+    document.getElementById('addToCartBtn').onclick = () => {
+        alert("Added to Cart!");
+    };
 </script>
 
 </body>
