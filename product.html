@@ -19,7 +19,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Jost', sans-serif; background: #fff; color: var(--text-dark); }
+        body { font-family: 'Jost', sans-serif; background: #fff; color: var(--text-dark); overflow-x: hidden; }
 
         /* --- HEADER --- */
         header {
@@ -31,53 +31,78 @@
         .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; }
         .logo span { color: var(--accent); }
 
-        /* --- IMAGE SLIDER --- */
-        .main-container { max-width: 1200px; margin: 20px auto; padding: 0 5%; }
-        
+        nav { display: flex; gap: 25px; align-items: center; }
+        nav a { text-decoration: none; color: var(--white); font-weight: 500; font-size: 15px; transition: 0.3s; opacity: 0.9; }
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none; position: absolute; background-color: white;
+            min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+            z-index: 1; top: 100%; border-radius: 4px; overflow: hidden;
+        }
+        .dropdown-content a { color: #333; padding: 12px 16px; display: block; border-bottom: 1px solid #eee; }
+        .dropdown-content a:hover { background-color: #f1f1f1; color: var(--primary); }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        .cart-icon-wrapper { position: relative; cursor: pointer; color: white; font-size: 20px; }
+        .cart-badge {
+            position: absolute; top: -10px; right: -12px; background: var(--accent);
+            color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+        }
+
+        /* --- PRODUCT LAYOUT --- */
+        .main-container { max-width: 1200px; margin: 30px auto; padding: 0 5%; }
         .top-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
 
+        /* --- ZOOM SLIDER --- */
         .slider-container {
-            position: relative; width: 100%; height: 400px;
+            position: relative; width: 100%; height: 480px;
             background: #fdfdfd; border-radius: 15px; overflow: hidden;
-            border: 1px solid #eee;
+            border: 1px solid #eee; display: flex; align-items: center;
         }
-        .slider-wrapper { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
-        .slider-wrapper img { min-width: 100%; object-fit: contain; padding: 20px; }
-        
-        .slider-dots {
-            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 8px;
+        .slider-wrapper { display: flex; transition: transform 0.6s ease; height: 100%; width: 100%; }
+        .img-box { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-box img { 
+            max-width: 90%; max-height: 90%; object-fit: contain;
+            transition: transform 0.4s ease; cursor: zoom-in;
         }
-        .dot { width: 10px; height: 10px; background: #ddd; border-radius: 50%; cursor: pointer; }
-        .dot.active { background: var(--primary); }
+        .img-box img:hover { transform: scale(1.4); }
 
         .p-info-side { display: flex; flex-direction: column; gap: 15px; justify-content: center; }
-        .p-title { font-size: 32px; font-weight: 700; }
+        .p-title { font-size: 32px; font-weight: 700; color: #111; }
         .p-price { font-size: 28px; color: var(--primary); font-weight: 700; }
 
-        /* --- FULL WIDTH DESCRIPTION (Ek Bar Mein) --- */
-        .description-bar {
-            background: #f9f9f9; padding: 40px; border-radius: 15px;
-            margin-bottom: 50px; border-left: 5px solid var(--primary);
+        /* --- FULL WIDTH TABS (All Policies Included) --- */
+        .tabs-container { background: #f9f9f9; padding: 35px; border-radius: 20px; margin-top: 20px; border: 1px solid #eee; }
+        .tabs-nav { display: flex; gap: 25px; border-bottom: 2px solid #ddd; margin-bottom: 25px; overflow-x: auto; white-space: nowrap; }
+        .tab-btn { 
+            background: none; border: none; padding: 12px 0; font-family: 'Jost'; 
+            font-weight: 700; cursor: pointer; color: #777; position: relative; font-size: 14px; text-transform: uppercase;
         }
-        .spec-title { font-size: 28px; font-weight: 700; margin-bottom: 20px; }
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .feature-item { margin-bottom: 15px; }
-        .feature-item h4 { font-size: 14px; text-transform: uppercase; color: #000; }
-        .feature-item p { color: var(--royal-blue); font-weight: 500; }
+        .tab-btn.active { color: #000; }
+        .tab-btn.active::after { 
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--primary); 
+        }
+        .tab-content { display: none; line-height: 1.8; color: #444; font-size: 15px; animation: fadeIn 0.4s; }
+        .tab-content.active { display: block; }
 
-        /* --- RELATED PRODUCTS --- */
-        .related-title { font-size: 24px; font-weight: 700; margin-bottom: 25px; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .p-card { text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .p-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .p-card img { width: 100%; height: 150px; object-fit: contain; }
+        .policy-list { list-style: none; margin-top: 10px; }
+        .policy-list li { margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+        .policy-list li i { color: var(--primary); margin-top: 5px; }
 
-        .btn-wa { display: inline-block; padding: 15px 30px; background: #25d366; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 700; margin-top: 10px; text-align: center; }
+        .btn-wa { display: block; padding: 16px; background: #25d366; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 700; text-align: center; margin-top: 10px; transition: 0.3s; }
+        .btn-cart { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 768px) {
+            nav { display: none; }
             .top-section { grid-template-columns: 1fr; }
-            .slider-container { height: 300px; }
+            .slider-container { height: 350px; }
+            .tabs-nav { gap: 15px; }
+            .tab-btn { font-size: 12px; }
         }
     </style>
 </head>
@@ -85,58 +110,86 @@
 
 <header>
     <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
-    <a href="index.html" style="color:white; font-size: 20px;"><i class="fas fa-arrow-left"></i></a>
+    <nav>
+        <a href="index.html">Home</a>
+        <div class="dropdown">
+            <a href="#">Categories <i class="fa fa-caret-down"></i></a>
+            <div class="dropdown-content">
+                <a href="#">Smart Watches</a>
+                <a href="#">Earbuds</a>
+                <a href="#">Chargers</a>
+            </div>
+        </div>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav>
+    <div class="cart-icon-wrapper" onclick="location.href='index.html'">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cartBadge" class="cart-badge">0</span>
+    </div>
 </header>
 
 <div class="main-container">
     <div class="top-section">
         <div class="slider-container">
-            <div class="slider-wrapper" id="sliderWrapper">
-                </div>
-            <div class="slider-dots" id="sliderDots"></div>
+            <div class="slider-wrapper" id="sliderWrapper"></div>
         </div>
-
         <div class="p-info-side">
             <h1 class="p-title" id="pName">Loading...</h1>
             <div class="p-price" id="pPrice">Rs. 0</div>
-            <p style="color: #666;">Original Premium Quality Product. Guaranteed Satisfaction.</p>
-            <a id="waLink" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> Order on WhatsApp</a>
-            <button onclick="addToCartPage()" style="margin-top:10px; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer;">ADD TO CART</button>
+            <p style="color:var(--royal-blue); font-weight:600;"><i class="fas fa-certificate"></i> Premium Quality Assured</p>
+            <div style="margin-top: 15px;">
+                <button class="btn-cart" onclick="addToCartPage()">ADD TO CART</button>
+                <a id="waLink" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
+            </div>
         </div>
     </div>
 
-    <div class="description-bar">
-        <h2 class="spec-title">Technical Specifications – <span id="pNameSpec">Product</span></h2>
-        <div class="feature-grid">
-            <div class="feature-item">
-                <h4>Performance</h4>
-                <p>Lightning Fast Processing</p>
-                <span style="font-size:13px; color:#666;">Optimized for modern high-speed requirements.</span>
-            </div>
-            <div class="feature-item">
-                <h4>Durability</h4>
-                <p>High-Grade Build Material</p>
-                <span style="font-size:13px; color:#666;">Long-lasting construction for daily heavy use.</span>
-            </div>
-            <div class="feature-item">
-                <h4>Compatibility</h4>
-                <p>Universal Smart Sync</p>
-                <span style="font-size:13px; color:#666;">Works perfectly with all your latest accessories.</span>
-            </div>
+    <div class="tabs-container">
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="openTab(event, 'desc')">Description</button>
+            <button class="tab-btn" onclick="openTab(event, 'ship')">Shipping Policy</button>
+            <button class="tab-btn" onclick="openTab(event, 'return')">Return Policy</button>
+            <button class="tab-btn" onclick="openTab(event, 'reviews')">Reviews</button>
         </div>
-        <div style="margin-top:30px; border-top: 1px solid #ddd; padding-top:20px;">
-            <h4 style="font-size:14px; font-weight:800; margin-bottom:10px;">DETAILED DESCRIPTION:</h4>
-            <p id="fullDesc" style="line-height:1.8; color:#444;"></p>
+
+        <div id="desc" class="tab-content active">
+            <h3 style="margin-bottom:15px;">Product Overview</h3>
+            <p id="fullDesc">Loading details...</p>
+        </div>
+
+        <div id="ship" class="tab-content">
+            <h3 style="margin-bottom:15px;">Shipping Information</h3>
+            <ul class="policy-list">
+                <li><i class="fas fa-truck"></i> <strong>Delivery Time:</strong> Standard delivery takes 2-4 working days across Pakistan.</li>
+                <li><i class="fas fa-map-marker-alt"></i> <strong>Tracking:</strong> You will receive a tracking ID via SMS once your order is dispatched.</li>
+                <li><i class="fas fa-money-bill-wave"></i> <strong>Shipping Charges:</strong> Rs. 200 standard delivery. Free shipping on orders above Rs. 3000.</li>
+            </ul>
+        </div>
+
+        <div id="return" class="tab-content">
+            <h3 style="margin-bottom:15px;">Return & Exchange</h3>
+            <ul class="policy-list">
+                <li><i class="fas fa-undo"></i> <strong>7 Days Policy:</strong> We offer a 7-day easy return policy if the product is damaged or not as described.</li>
+                <li><i class="fas fa-check-square"></i> <strong>Condition:</strong> The product must be in its original packaging and unused condition.</li>
+                <li><i class="fas fa-headset"></i> <strong>Support:</strong> To initiate a return, contact us on WhatsApp with your Order ID and Product Video.</li>
+            </ul>
+        </div>
+
+        <div id="reviews" class="tab-content">
+            <h3>Customer Feedback</h3>
+            <div style="margin-top:15px; border-left: 3px solid var(--primary); padding-left: 15px;">
+                <div style="color:#f1c40f;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p>"Excellent quality, exactly what I ordered! Highly recommended store."</p>
+                <small>- <b>Faisal Khan</b> (Verified Buyer)</small>
+            </div>
         </div>
     </div>
-
-    <h3 class="related-title">People Also Bought</h3>
-    <div id="relatedGrid" class="grid"></div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, get, limitToLast, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -157,75 +210,37 @@
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
                 currentP = { id: productId, ...s.val() };
-                loadProduct(currentP);
-                loadRelated();
+                document.getElementById('pName').innerText = currentP.name;
+                document.getElementById('pPrice').innerText = `Rs. ${Number(currentP.price).toLocaleString()}`;
+                document.getElementById('fullDesc').innerText = currentP.description;
+                
+                const wrapper = document.getElementById('sliderWrapper');
+                const imgs = [currentP.img, currentP.img2 || currentP.img, currentP.img3 || currentP.img];
+                imgs.forEach(src => {
+                    wrapper.innerHTML += `<div class="img-box"><img src="${src}"></div>`;
+                });
+
+                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam Haider Store! I want to order: ${currentP.name}`;
             }
         });
     }
 
-    function loadProduct(p) {
-        document.getElementById('pName').innerText = p.name;
-        document.getElementById('pNameSpec').innerText = p.name;
-        document.getElementById('pPrice').innerText = `Rs. ${Number(p.price).toLocaleString()}`;
-        document.getElementById('fullDesc').innerText = p.description || "Premium quality product from Haider Store.";
-
-        // WhatsApp Link
-        const msg = `Salam Haider Store! I want to order: ${p.name}`;
-        document.getElementById('waLink').href = `https://wa.me/923279518790?text=${msg}`;
-
-        // Slider Setup (Assuming p.img, p.img2, p.img3 exist in Firebase)
-        const images = [p.img, p.img2 || p.img, p.img3 || p.img];
-        const wrapper = document.getElementById('sliderWrapper');
-        const dots = document.getElementById('sliderDots');
-
-        images.forEach((src, i) => {
-            wrapper.innerHTML += `<img src="${src}" alt="product">`;
-            dots.innerHTML += `<div class="dot ${i===0?'active':''}" onclick="moveSlider(${i})"></div>`;
-        });
-
-        startAutoSlider();
-    }
-
-    let slideIndex = 0;
-    window.moveSlider = (n) => {
-        const wrapper = document.getElementById('sliderWrapper');
-        const dots = document.querySelectorAll('.dot');
-        slideIndex = n;
-        wrapper.style.transform = `translateX(-${n * 100}%)`;
-        dots.forEach(d => d.classList.remove('active'));
-        dots[n].classList.add('active');
+    window.openTab = (evt, tabName) => {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        evt.currentTarget.classList.add('active');
     };
-
-    function startAutoSlider() {
-        setInterval(() => {
-            slideIndex = (slideIndex + 1) % 3;
-            moveSlider(slideIndex);
-        }, 4000);
-    }
-
-    function loadRelated() {
-        get(query(ref(db, 'products'), limitToLast(4))).then((snap) => {
-            const grid = document.getElementById('relatedGrid');
-            snap.forEach(child => {
-                const p = child.val();
-                if(child.key !== productId) {
-                    grid.innerHTML += `
-                        <div class="p-card" onclick="location.href='product.html?id=${child.key}'">
-                            <img src="${p.img}">
-                            <h4>${p.name}</h4>
-                            <div style="color:var(--primary); font-weight:700;">Rs. ${p.price}</div>
-                        </div>`;
-                }
-            });
-        });
-    }
 
     window.addToCartPage = () => {
         let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
         cart.push({ id: productId, name: currentP.name, price: currentP.price, image: currentP.img, quantity: 1 });
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
         alert("Added to cart!");
-    }
+        location.reload();
+    };
+
+    document.getElementById('cartBadge').innerText = (JSON.parse(localStorage.getItem('haiderStoreCart')) || []).length;
 </script>
 
 </body>
