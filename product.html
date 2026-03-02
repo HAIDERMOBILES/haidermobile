@@ -15,12 +15,13 @@
             --text-dark: #1a1a1a; 
             --white: #ffffff; 
             --accent: #ff4d4d;
-            --royal-blue: #0056b3; /* Screenshot wala blue color */
+            --royal-blue: #0056b3;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background: #fff; color: var(--text-dark); }
 
+        /* --- HEADER --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -30,53 +31,53 @@
         .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; }
         .logo span { color: var(--accent); }
 
-        .product-container {
-            max-width: 1200px; margin: 40px auto; padding: 0 5%;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-        }
-
-        .p-image-box {
-            background: #f9f9f9; border-radius: 12px; padding: 30px;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid #eee; height: fit-content;
-        }
-        .p-image-box img { max-width: 100%; height: auto; }
-
-        /* --- ROYALX STYLE TABS --- */
-        .tabs-nav {
-            display: flex; gap: 40px; border-bottom: 1px solid #ddd;
-            margin-bottom: 25px; padding-bottom: 10px;
-        }
-        .tab-link {
-            font-size: 18px; font-weight: 500; color: #666;
-            text-decoration: none; cursor: pointer; position: relative;
-        }
-        .tab-link.active { color: #000; }
-        .tab-link.active::after {
-            content: ''; position: absolute; bottom: -12px; left: 0;
-            width: 100%; height: 2px; background: #000;
-        }
-
-        /* --- CONTENT STYLING (Screenshot Match) --- */
-        .tab-content { line-height: 1.6; }
-        .intro-text { color: var(--royal-blue); font-weight: 500; margin-bottom: 25px; font-size: 16px; }
-        .intro-text b { color: #000; font-weight: 700; }
-
-        .spec-title { font-size: 36px; font-weight: 700; margin-bottom: 25px; color: #1a1a1a; }
+        /* --- IMAGE SLIDER --- */
+        .main-container { max-width: 1200px; margin: 20px auto; padding: 0 5%; }
         
-        .feature-block { margin-bottom: 20px; }
-        .feature-block h4 { font-size: 14px; text-transform: uppercase; font-weight: 700; color: #000; margin-bottom: 5px; }
-        .feature-block p { color: var(--royal-blue); font-size: 15px; margin-bottom: 3px; }
-        .feature-block span { color: #444; font-size: 14px; }
+        .top-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
 
-        /* --- BUTTONS --- */
-        .action-btns { display: flex; gap: 10px; margin-top: 30px; }
-        .btn-cart { flex: 1; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; }
-        .btn-wa { flex: 1; padding: 15px; background: #25d366; color: #fff; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; }
+        .slider-container {
+            position: relative; width: 100%; height: 400px;
+            background: #fdfdfd; border-radius: 15px; overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .slider-wrapper { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
+        .slider-wrapper img { min-width: 100%; object-fit: contain; padding: 20px; }
+        
+        .slider-dots {
+            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px;
+        }
+        .dot { width: 10px; height: 10px; background: #ddd; border-radius: 50%; cursor: pointer; }
+        .dot.active { background: var(--primary); }
+
+        .p-info-side { display: flex; flex-direction: column; gap: 15px; justify-content: center; }
+        .p-title { font-size: 32px; font-weight: 700; }
+        .p-price { font-size: 28px; color: var(--primary); font-weight: 700; }
+
+        /* --- FULL WIDTH DESCRIPTION (Ek Bar Mein) --- */
+        .description-bar {
+            background: #f9f9f9; padding: 40px; border-radius: 15px;
+            margin-bottom: 50px; border-left: 5px solid var(--primary);
+        }
+        .spec-title { font-size: 28px; font-weight: 700; margin-bottom: 20px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .feature-item { margin-bottom: 15px; }
+        .feature-item h4 { font-size: 14px; text-transform: uppercase; color: #000; }
+        .feature-item p { color: var(--royal-blue); font-weight: 500; }
+
+        /* --- RELATED PRODUCTS --- */
+        .related-title { font-size: 24px; font-weight: 700; margin-bottom: 25px; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .p-card { text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .p-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .p-card img { width: 100%; height: 150px; object-fit: contain; }
+
+        .btn-wa { display: inline-block; padding: 15px 30px; background: #25d366; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 700; margin-top: 10px; text-align: center; }
 
         @media (max-width: 768px) {
-            .product-container { grid-template-columns: 1fr; }
-            .spec-title { font-size: 26px; }
+            .top-section { grid-template-columns: 1fr; }
+            .slider-container { height: 300px; }
         }
     </style>
 </head>
@@ -84,65 +85,58 @@
 
 <header>
     <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
-    <a href="index.html" style="color:white;"><i class="fas fa-arrow-left"></i></a>
+    <a href="index.html" style="color:white; font-size: 20px;"><i class="fas fa-arrow-left"></i></a>
 </header>
 
-<div class="product-container">
-    <div class="p-image-side">
-        <div class="p-image-box">
-            <img id="mainImg" src="" alt="Product">
+<div class="main-container">
+    <div class="top-section">
+        <div class="slider-container">
+            <div class="slider-wrapper" id="sliderWrapper">
+                </div>
+            <div class="slider-dots" id="sliderDots"></div>
         </div>
-        <div class="action-btns">
-            <button class="btn-cart" onclick="addToCartPage()">ADD TO CART</button>
-            <a id="waLink" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> WHATSAPP</a>
+
+        <div class="p-info-side">
+            <h1 class="p-title" id="pName">Loading...</h1>
+            <div class="p-price" id="pPrice">Rs. 0</div>
+            <p style="color: #666;">Original Premium Quality Product. Guaranteed Satisfaction.</p>
+            <a id="waLink" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> Order on WhatsApp</a>
+            <button onclick="addToCartPage()" style="margin-top:10px; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer;">ADD TO CART</button>
+        </div>
+    </div>
+
+    <div class="description-bar">
+        <h2 class="spec-title">Technical Specifications – <span id="pNameSpec">Product</span></h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h4>Performance</h4>
+                <p>Lightning Fast Processing</p>
+                <span style="font-size:13px; color:#666;">Optimized for modern high-speed requirements.</span>
+            </div>
+            <div class="feature-item">
+                <h4>Durability</h4>
+                <p>High-Grade Build Material</p>
+                <span style="font-size:13px; color:#666;">Long-lasting construction for daily heavy use.</span>
+            </div>
+            <div class="feature-item">
+                <h4>Compatibility</h4>
+                <p>Universal Smart Sync</p>
+                <span style="font-size:13px; color:#666;">Works perfectly with all your latest accessories.</span>
+            </div>
+        </div>
+        <div style="margin-top:30px; border-top: 1px solid #ddd; padding-top:20px;">
+            <h4 style="font-size:14px; font-weight:800; margin-bottom:10px;">DETAILED DESCRIPTION:</h4>
+            <p id="fullDesc" style="line-height:1.8; color:#444;"></p>
         </div>
     </div>
 
-    <div class="p-info-side">
-        <div class="tabs-nav">
-            <div class="tab-link active">Description</div>
-            <div class="tab-link">Material</div>
-            <div class="tab-link">Reviews</div>
-        </div>
-
-        <div class="tab-content">
-            <p class="intro-text">
-                Stay powered up anywhere with the <b id="pTitle1">Product Name</b>. 
-                Delivers lightning-fast performance and premium build quality. 
-                Compact, durable, and travel-friendly design. Perfect choice for daily use.
-            </p>
-
-            <h2 class="spec-title">Technical Specifications – <span id="pTitle2">Product</span></h2>
-
-            <div class="feature-block">
-                <h4>Premium Performance</h4>
-                <p>Supports High-Speed Functionality</p>
-                <span>Efficiently handles modern tasks and accessories in less time.</span>
-            </div>
-
-            <div class="feature-block">
-                <h4>Build Quality</h4>
-                <p>High-Grade Material Construction</p>
-                <span>Ensures durability and long-term reliability for users.</span>
-            </div>
-
-            <div class="feature-block">
-                <h4>Smart Protection</h4>
-                <p>Advanced Security Features</p>
-                <span>Smart detection adjusts output automatically for optimal performance.</span>
-            </div>
-
-            <div style="margin-top:20px; border-top: 1px solid #eee; padding-top:20px;">
-                <h4 style="font-size:14px; margin-bottom:10px;">PRODUCT DETAILS:</h4>
-                <p id="fullDesc" style="color:#555; line-height:1.8;"></p>
-            </div>
-        </div>
-    </div>
+    <h3 class="related-title">People Also Bought</h3>
+    <div id="relatedGrid" class="grid"></div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, get, limitToLast, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -163,14 +157,66 @@
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
                 currentP = { id: productId, ...s.val() };
-                document.getElementById('pTitle1').innerText = currentP.name;
-                document.getElementById('pTitle2').innerText = currentP.name;
-                document.getElementById('mainImg').src = currentP.img;
-                document.getElementById('fullDesc').innerText = currentP.description || "No additional details provided.";
-                
-                const msg = `Salam Haider Store! I want to order: ${currentP.name}`;
-                document.getElementById('waLink').href = `https://wa.me/923279518790?text=${msg}`;
+                loadProduct(currentP);
+                loadRelated();
             }
+        });
+    }
+
+    function loadProduct(p) {
+        document.getElementById('pName').innerText = p.name;
+        document.getElementById('pNameSpec').innerText = p.name;
+        document.getElementById('pPrice').innerText = `Rs. ${Number(p.price).toLocaleString()}`;
+        document.getElementById('fullDesc').innerText = p.description || "Premium quality product from Haider Store.";
+
+        // WhatsApp Link
+        const msg = `Salam Haider Store! I want to order: ${p.name}`;
+        document.getElementById('waLink').href = `https://wa.me/923279518790?text=${msg}`;
+
+        // Slider Setup (Assuming p.img, p.img2, p.img3 exist in Firebase)
+        const images = [p.img, p.img2 || p.img, p.img3 || p.img];
+        const wrapper = document.getElementById('sliderWrapper');
+        const dots = document.getElementById('sliderDots');
+
+        images.forEach((src, i) => {
+            wrapper.innerHTML += `<img src="${src}" alt="product">`;
+            dots.innerHTML += `<div class="dot ${i===0?'active':''}" onclick="moveSlider(${i})"></div>`;
+        });
+
+        startAutoSlider();
+    }
+
+    let slideIndex = 0;
+    window.moveSlider = (n) => {
+        const wrapper = document.getElementById('sliderWrapper');
+        const dots = document.querySelectorAll('.dot');
+        slideIndex = n;
+        wrapper.style.transform = `translateX(-${n * 100}%)`;
+        dots.forEach(d => d.classList.remove('active'));
+        dots[n].classList.add('active');
+    };
+
+    function startAutoSlider() {
+        setInterval(() => {
+            slideIndex = (slideIndex + 1) % 3;
+            moveSlider(slideIndex);
+        }, 4000);
+    }
+
+    function loadRelated() {
+        get(query(ref(db, 'products'), limitToLast(4))).then((snap) => {
+            const grid = document.getElementById('relatedGrid');
+            snap.forEach(child => {
+                const p = child.val();
+                if(child.key !== productId) {
+                    grid.innerHTML += `
+                        <div class="p-card" onclick="location.href='product.html?id=${child.key}'">
+                            <img src="${p.img}">
+                            <h4>${p.name}</h4>
+                            <div style="color:var(--primary); font-weight:700;">Rs. ${p.price}</div>
+                        </div>`;
+                }
+            });
         });
     }
 
@@ -178,9 +224,8 @@
         let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
         cart.push({ id: productId, name: currentP.name, price: currentP.price, image: currentP.img, quantity: 1 });
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
-        alert("Product added to cart!");
-        window.location.href = 'index.html';
-    };
+        alert("Added to cart!");
+    }
 </script>
 
 </body>
