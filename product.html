@@ -45,7 +45,7 @@
 
         /* --- PRODUCT AREA --- */
         .main-container { max-width: 1200px; margin: 30px auto; padding: 0 5%; }
-        .top-section { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; margin-bottom: 60px; }
+        .top-section { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; margin-bottom: 40px; }
 
         .slider-container {
             position: relative; width: 100%; height: 500px;
@@ -63,13 +63,18 @@
         .trust-badge { display: flex; align-items: center; gap: 10px; color: #555; font-size: 14px; font-weight: 500; }
         .trust-badge i { color: var(--primary); }
 
+        /* --- DESCRIPTION SECTION --- */
+        .desc-section { background: #f9f9f9; padding: 30px; border-radius: 15px; margin-top: 20px; border: 1px solid #eee; }
+        .desc-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #000; text-transform: uppercase; border-bottom: 2px solid var(--primary); display: inline-block; }
+        .desc-text { line-height: 1.8; color: #444; font-size: 16px; white-space: pre-line; }
+
         .btn-wa { display: block; padding: 18px; background: #25d366; color: #fff; border-radius: 12px; text-decoration: none; font-weight: 700; text-align: center; font-size: 16px; transition: 0.3s; }
         .btn-wa:hover { background: #1ebe57; transform: translateY(-2px); }
         .btn-cart { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s; }
         .btn-cart:hover { opacity: 0.9; transform: translateY(-2px); }
 
         /* --- RELATED PRODUCTS --- */
-        .related-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 40px; }
+        .related-section { margin-top: 60px; border-top: 1px solid #eee; padding-top: 40px; }
         .related-title { font-size: 26px; font-weight: 700; margin-bottom: 30px; text-align: center; }
         .related-grid { 
             display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;
@@ -86,14 +91,11 @@
         /* --- FOOTER --- */
         footer { background: var(--footer-bg); color: #ffffff; padding: 60px 8% 30px; margin-top: 100px; border-top: 4px solid var(--primary); }
         .f-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
-        .f-links h4 { color: var(--primary); margin-bottom: 20px; font-size: 16px; text-transform: uppercase; }
-        .f-links a { color: #fff !important; text-decoration: none; opacity: 0.7; display: block; margin-bottom: 12px; font-size: 14px; transition: 0.3s; }
-        .f-links a:hover { opacity: 1; color: var(--accent) !important; padding-left: 5px; }
+        .f-links a { color: #fff !important; text-decoration: none; opacity: 0.7; display: block; margin-bottom: 12px; font-size: 14px; }
 
         @media (max-width: 768px) {
             .top-section { grid-template-columns: 1fr; }
             .slider-container { height: 380px; }
-            .p-title { font-size: 28px; }
             .related-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
@@ -135,11 +137,15 @@
         </div>
     </div>
 
+    <div class="desc-section">
+        <h3 class="desc-title">Product Description</h3>
+        <p class="desc-text" id="fullDesc">Loading details...</p>
+    </div>
+
     <div class="related-section">
-        <h2 class="related-title">Explore More Items</h2>
+        <h2 class="related-title">More Items You'll Love</h2>
         <div class="related-grid" id="relatedGrid">
-            <p style="text-align:center; grid-column: 1/-1; color:#999;">Loading related products...</p>
-        </div>
+            </div>
     </div>
 </div>
 
@@ -147,22 +153,12 @@
     <div class="f-cols">
         <div class="f-links">
             <h3 style="margin-bottom:15px; font-weight:700;">HAIDER STORE</h3>
-            <p style="opacity:0.6; font-size:14px; line-height:1.6;">Your one-stop shop for premium tech accessories in Pakistan.</p>
-        </div>
-        <div class="f-links">
-            <h4>Quick Links</h4>
-            <a href="index.html">All Products</a>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact Us</a>
-        </div>
-        <div class="f-links">
-            <h4>Policies</h4>
-            <a href="shipping.html">Shipping Policy</a>
-            <a href="return.html">Return & Refund</a>
+            <p style="opacity:0.6; font-size:14px;">Premium Tech Accessories in Pakistan.</p>
         </div>
         <div class="f-links">
             <h4>Support</h4>
-            <p style="font-size:14px; opacity:0.7;"><i class="fab fa-whatsapp"></i> +92 327 9518790</p>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="return.html">Return & Refund</a>
         </div>
     </div>
 </footer>
@@ -185,28 +181,30 @@
     let productData = null;
 
     if (productId) {
-        // 1. Fetch Main Product
+        // 1. Fetch Main Product Details
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
                 productData = s.val();
                 document.getElementById('pName').innerText = productData.name;
                 document.getElementById('pPrice').innerText = `Rs. ${Number(productData.price).toLocaleString()}`;
+                document.getElementById('fullDesc').innerText = productData.description || "No description available.";
                 
                 const wrapper = document.getElementById('sliderWrapper');
                 const imgs = [productData.img, productData.img2, productData.img3].filter(x => x);
                 wrapper.innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
                 
+                // Auto Slider Animation
                 let step = 0;
                 if(imgs.length > 1) {
                     setInterval(() => {
                         step = (step + 1) % imgs.length;
                         wrapper.style.transform = `translateX(-${step * 100}%)`;
-                    }, 4000);
+                    }, 4500);
                 }
 
-                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Assalam-o-Alaikum! I want to order: ${productData.name}`;
+                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam! I want to order: ${productData.name}`;
                 
-                // 2. Load Related Products (Guaranteed Fix)
+                // 2. Load Related Products (Fixed & Working)
                 loadRelated();
             }
         });
@@ -221,8 +219,7 @@
                 snapshot.forEach((child) => {
                     const p = child.val();
                     const pId = child.key;
-
-                    // Show 8 products, skip the current one
+                    // Skip current product, show others
                     if (pId !== productId && count < 8) {
                         html += `
                             <a href="product-details.html?id=${pId}" class="rel-card">
@@ -235,24 +232,23 @@
                     }
                 });
                 grid.innerHTML = html;
-            } else {
-                grid.innerHTML = "<p>No other products found.</p>";
             }
-        });
+        }).catch(err => console.log("Related products error:", err));
     }
 
+    // Cart System
     document.getElementById('addBtn').onclick = () => {
         if(!productData) return;
         let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
         cart.push({ id: productId, name: productData.name, price: productData.price, image: productData.img, quantity: 1 });
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
         document.getElementById('cartBadge').innerText = cart.length;
-        alert("Success! Product added to cart.");
+        alert("Added to Cart!");
     };
 
-    // Initial Cart Badge Update
-    const initialCart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-    document.getElementById('cartBadge').innerText = initialCart.length;
+    // Update Cart Badge on Load
+    const cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
+    document.getElementById('cartBadge').innerText = cart.length;
 </script>
 
 </body>
