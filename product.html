@@ -47,6 +47,7 @@
         .main-container { max-width: 1200px; margin: 30px auto; padding: 0 5%; }
         .top-section { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; margin-bottom: 40px; }
 
+        /* --- SLIDER & ZOOM --- */
         .slider-container {
             position: relative; width: 100%; height: 500px;
             background: #fdfdfd; border-radius: 20px; overflow: hidden;
@@ -183,54 +184,67 @@
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        if (!productId) return;
+        if (!productId) {
+            console.error("No product ID found in URL");
+            return;
+        }
 
-        // Reset Scroll
+        // Reset Scroll to Top
         window.scrollTo(0, 0);
         
-        // Clear old slider interval if exists
+        // Clear previous slider interval
         if(sliderInterval) clearInterval(sliderInterval);
 
+        // Fetch Data from Firebase
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
                 const productData = s.val();
                 
-                // Update Text Content
+                // Update Product Info
                 document.getElementById('pName').innerText = productData.name;
                 document.getElementById('pPrice').innerText = `Rs. ${Number(productData.price).toLocaleString()}`;
                 document.getElementById('fullDesc').innerText = productData.description || "No description available.";
                 document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam! I want to order: ${productData.name}`;
 
-                // Update Slider Images
+                // Update Images (img, img2, img3)
                 const wrapper = document.getElementById('sliderWrapper');
                 const imgs = [productData.img, productData.img2, productData.img3].filter(x => x);
-                wrapper.innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
-                wrapper.style.transform = `translateX(0)`; // Reset position
+                wrapper.innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}" alt="product"></div>`).join('');
+                wrapper.style.transform = `translateX(0)`; 
 
-                // Restart Auto Slider
+                // Start Auto Slider
                 let step = 0;
                 if(imgs.length > 1) {
                     sliderInterval = setInterval(() => {
                         step = (step + 1) % imgs.length;
                         wrapper.style.transform = `translateX(-${step * 100}%)`;
-                    }, 4500);
+                    }, 4000);
                 }
 
-                // Load Related
+                // Load Related Products
                 loadRelated(productId);
 
-                // Add to Cart Event (Re-bind with new data)
+                // Add to Cart Logic
                 document.getElementById('addBtn').onclick = () => {
                     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-                    cart.push({ id: productId, name: productData.name, price: productData.price, image: productData.img, quantity: 1 });
+                    cart.push({ 
+                        id: productId, 
+                        name: productData.name, 
+                        price: productData.price, 
+                        image: productData.img, 
+                        quantity: 1 
+                    });
                     localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
                     updateCartBadge();
                     alert("Added to Cart!");
                 };
+            } else {
+                document.getElementById('pName').innerText = "Product Not Found";
             }
-        });
+        }).catch(err => console.error("Firebase Error:", err));
     }
 
+    // --- RELATED PRODUCTS LOAD (FIXED FOR GITHUB) ---
     function loadRelated(currentId) {
         get(ref(db, 'products')).then((snapshot) => {
             const grid = document.getElementById('relatedGrid');
@@ -241,9 +255,9 @@
                     const p = child.val();
                     const pId = child.key;
                     if (pId !== currentId && count < 8) {
-                        // Click handles refresh automatically
+                        // FIXED: Using location.search to prevent 404 errors on GitHub
                         html += `
-                            <div class="rel-card" onclick="window.location.href='product-details.html?id=${pId}'">
+                            <div class="rel-card" onclick="window.location.search='?id=${pId}'">
                                 <img src="${p.img}" class="rel-img">
                                 <span class="rel-name">${p.name}</span>
                                 <span class="rel-price">Rs. ${Number(p.price).toLocaleString()}</span>
@@ -262,12 +276,14 @@
         document.getElementById('cartBadge').innerText = cart.length;
     }
 
-    // Run on load
+    // Initialize on first load
     initPage();
     updateCartBadge();
 
-    // IMPORTANT: Watch for URL changes (Back button or same page navigation)
-    window.addEventListener('popstate', initPage);
+    // Watch for back/forward browser buttons
+    window.addEventListener('popstate', () => {
+        location.reload(); 
+    });
 
 </script>
 
