@@ -22,7 +22,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background: #fff; color: var(--text-dark); overflow-x: hidden; }
 
-        /* --- HEADER (FIXED) --- */
+        /* --- HEADER --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -47,7 +47,6 @@
         .main-container { max-width: 1200px; margin: 30px auto; padding: 0 5%; }
         .top-section { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; margin-bottom: 40px; }
 
-        /* --- ZOOM & SLIDER CSS --- */
         .slider-container {
             position: relative; width: 100%; height: 500px;
             background: #fdfdfd; border-radius: 20px; overflow: hidden;
@@ -61,7 +60,6 @@
             transition: transform 0.5s ease; 
             cursor: zoom-in;
         }
-        /* ZOOM EFFECT ON HOVER */
         .img-box img:hover { transform: scale(1.3); }
 
         .p-info-side { display: flex; flex-direction: column; gap: 20px; justify-content: center; }
@@ -71,7 +69,6 @@
         .trust-badge { display: flex; align-items: center; gap: 10px; color: #555; font-size: 14px; font-weight: 500; }
         .trust-badge i { color: var(--primary); }
 
-        /* --- DESCRIPTION --- */
         .desc-section { background: #f9f9f9; padding: 30px; border-radius: 15px; margin-top: 20px; border: 1px solid #eee; }
         .desc-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #000; text-transform: uppercase; border-bottom: 2px solid var(--primary); display: inline-block; }
         .desc-text { line-height: 1.8; color: #444; font-size: 16px; white-space: pre-line; }
@@ -85,17 +82,16 @@
         .related-section { margin-top: 60px; border-top: 1px solid #eee; padding-top: 40px; }
         .related-title { font-size: 26px; font-weight: 700; margin-bottom: 30px; text-align: center; }
         .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .rel-card { background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 15px; transition: 0.3s; text-decoration: none; color: inherit; text-align: center; }
+        .rel-card { background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 15px; transition: 0.3s; text-decoration: none; color: inherit; text-align: center; cursor: pointer; }
         .rel-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.07); }
         .rel-img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 12px; }
         .rel-name { font-weight: 600; font-size: 15px; margin-bottom: 8px; display: block; color: #333; height: 40px; overflow: hidden; }
         .rel-price { color: var(--primary); font-weight: 700; font-size: 16px; }
 
-        /* --- FOOTER (RE-ADDED) --- */
+        /* --- FOOTER --- */
         footer { background: var(--footer-bg); color: #ffffff; padding: 60px 8% 30px; margin-top: 100px; border-top: 4px solid var(--primary); }
         .f-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
         .f-links a { color: #fff !important; text-decoration: none; opacity: 0.7; display: block; margin-bottom: 12px; font-size: 14px; }
-        .f-links a:hover { opacity: 1; color: var(--accent) !important; }
 
         @media (max-width: 768px) {
             .top-section { grid-template-columns: 1fr; }
@@ -180,36 +176,62 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const productId = new URLSearchParams(window.location.search).get('id');
-    let productData = null;
+    let sliderInterval;
 
-    if (productId) {
+    // --- MAIN LOADING FUNCTION ---
+    function initPage() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) return;
+
+        // Reset Scroll
+        window.scrollTo(0, 0);
+        
+        // Clear old slider interval if exists
+        if(sliderInterval) clearInterval(sliderInterval);
+
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
-                productData = s.val();
+                const productData = s.val();
+                
+                // Update Text Content
                 document.getElementById('pName').innerText = productData.name;
                 document.getElementById('pPrice').innerText = `Rs. ${Number(productData.price).toLocaleString()}`;
                 document.getElementById('fullDesc').innerText = productData.description || "No description available.";
-                
+                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam! I want to order: ${productData.name}`;
+
+                // Update Slider Images
                 const wrapper = document.getElementById('sliderWrapper');
                 const imgs = [productData.img, productData.img2, productData.img3].filter(x => x);
                 wrapper.innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
-                
+                wrapper.style.transform = `translateX(0)`; // Reset position
+
+                // Restart Auto Slider
                 let step = 0;
                 if(imgs.length > 1) {
-                    setInterval(() => {
+                    sliderInterval = setInterval(() => {
                         step = (step + 1) % imgs.length;
                         wrapper.style.transform = `translateX(-${step * 100}%)`;
                     }, 4500);
                 }
 
-                document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam! I want to order: ${productData.name}`;
-                loadRelated();
+                // Load Related
+                loadRelated(productId);
+
+                // Add to Cart Event (Re-bind with new data)
+                document.getElementById('addBtn').onclick = () => {
+                    let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
+                    cart.push({ id: productId, name: productData.name, price: productData.price, image: productData.img, quantity: 1 });
+                    localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
+                    updateCartBadge();
+                    alert("Added to Cart!");
+                };
             }
         });
     }
 
-    function loadRelated() {
+    function loadRelated(currentId) {
         get(ref(db, 'products')).then((snapshot) => {
             const grid = document.getElementById('relatedGrid');
             if (snapshot.exists()) {
@@ -218,15 +240,14 @@
                 snapshot.forEach((child) => {
                     const p = child.val();
                     const pId = child.key;
-                    if (pId !== productId && count < 8) {
+                    if (pId !== currentId && count < 8) {
+                        // Click handles refresh automatically
                         html += `
-                            <a href="./product-details.html?id=${pId}" 
-                               onclick="window.location.href='./product-details.html?id=${pId}'; setTimeout(()=>location.reload(), 10);" 
-                               class="rel-card">
+                            <div class="rel-card" onclick="window.location.href='product-details.html?id=${pId}'">
                                 <img src="${p.img}" class="rel-img">
                                 <span class="rel-name">${p.name}</span>
                                 <span class="rel-price">Rs. ${Number(p.price).toLocaleString()}</span>
-                            </a>
+                            </div>
                         `;
                         count++;
                     }
@@ -236,17 +257,18 @@
         });
     }
 
-    // Cart System
-    document.getElementById('addBtn').onclick = () => {
-        if(!productData) return;
-        let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-        cart.push({ id: productId, name: productData.name, price: productData.price, image: productData.img, quantity: 1 });
-        localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
+    function updateCartBadge() {
+        const cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
         document.getElementById('cartBadge').innerText = cart.length;
-        alert("Added to Cart!");
-    };
+    }
 
-    document.getElementById('cartBadge').innerText = (JSON.parse(localStorage.getItem('haiderStoreCart')) || []).length;
+    // Run on load
+    initPage();
+    updateCartBadge();
+
+    // IMPORTANT: Watch for URL changes (Back button or same page navigation)
+    window.addEventListener('popstate', initPage);
+
 </script>
 
 </body>
