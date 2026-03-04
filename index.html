@@ -96,7 +96,7 @@
         .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; }
         .container { padding: 0 5% 40px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; }
+        .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; object-fit: cover; }
 
         .p-card { transition: 0.3s; text-align: center; padding: 15px; cursor: pointer; border: 1px solid transparent; position: relative; }
         .p-card:hover { border: 1px solid #eee; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
@@ -104,12 +104,8 @@
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
         
         .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
-        .old-price { text-decoration: line-through; color: #999; font-size: 14px; margin-right: 8px; font-weight: 400; }
         .price-box { font-size: 18px; font-weight: 700; color: var(--primary); margin-top: 10px; }
-        .stock-status { font-size: 11px; font-weight: 600; margin-top: 8px; }
-        .stock-low { color: var(--accent); }
-        .stock-in { color: var(--success); }
-        .sold-text { font-size: 11px; color: #777; margin-top: 5px; display: block; font-weight: 400; }
+        .p-brand { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         /* FOOTER */
         footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
@@ -195,10 +191,10 @@
         <h4>Audio</h4>
         <a onclick="setFilter('Earbuds')">Earbuds</a>
         <a onclick="setFilter('Handfree')">Handfree</a>
+        <a onclick="setFilter('Headphones')">Headphones</a>
         <h4>Life Style</h4>
         <a onclick="setFilter('Smart Watches')">Smart Watches</a>
         <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
-        <a onclick="setFilter('ALL')" style="color:var(--accent); font-weight:bold; margin-top:20px;">View All Shop</a>
     </div>
 </div>
 
@@ -239,7 +235,7 @@
             <li><a href="contact.html" class="nav-link">Contact</a></li>
         </ul>
     </nav>
-    <div style="display: flex; gap: 20px; font-size: 18px; align-items: center;">
+    <div style="display: flex; gap: 20px; font-size: 18px; align-items: center; color:white;">
         <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer;"></i>
         <div style="position:relative; cursor:pointer;" onclick="toggleCart()">
             <i class="fas fa-shopping-bag"></i>
@@ -249,32 +245,42 @@
 </header>
 
 <section class="hero-container">
-    <img src="https://via.placeholder.com/1920x600" id="syncBanner" style="width: 100%; height: 100%; object-fit: cover;">
+    <img src="" id="syncBanner" style="width: 100%; height: 100%; object-fit: cover; background: #f0f0f0;">
 </section>
 
 <div id="mainContent">
-    <div id="earbudsSec" class="cat-sec-wrap">
+    
+    <div id="earbudsSec" style="display:none;">
         <div class="section-header reveal slide-left"><h2>Wireless Earbuds</h2></div>
         <div class="container reveal slide-left">
-            <img src="https://via.placeholder.com/1400x400" id="earBannerSync" class="cat-banner">
+            <img src="" id="earBannerSync" class="cat-banner">
             <div id="earbudsGrid" class="grid"></div>
         </div>
     </div>
 
-    <div id="handfreeSec" class="cat-sec-wrap">
-        <div class="section-header reveal zoom-in"><h2>Premium Handfree</h2></div>
+    <div id="headSec" style="display:none;">
+        <div class="section-header reveal zoom-in"><h2>Wireless Headphones</h2></div>
         <div class="container reveal zoom-in">
-            <img src="https://via.placeholder.com/1400x400" id="handfreeBannerSync" class="cat-banner">
-            <div id="handfreeGrid" class="grid"></div>
+            <img src="" id="headBannerSync" class="cat-banner">
+            <div id="headphoneGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="chargerSec" style="display:none;">
+        <div class="section-header reveal slide-right"><h2>Chargers & Data Cables</h2></div>
+        <div class="container reveal slide-right">
+            <img src="" id="chargerBannerSync" class="cat-banner">
+            <div id="chargerGrid" class="grid"></div>
         </div>
     </div>
 
     <div id="accessoriesSec">
-        <div class="section-header reveal zoom-in"><h2 id="accTitle">More Accessories</h2></div>
+        <div class="section-header reveal zoom-in"><h2 id="accTitle">Premium Accessories</h2></div>
         <div class="container reveal zoom-in">
             <div id="accessoriesGrid" class="grid"></div>
         </div>
     </div>
+
 </div>
 
 <footer>
@@ -332,7 +338,7 @@
     let allProducts = [];
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
 
-    // Animation & UI Functions
+    // --- UI Logic ---
     function reveal() {
         document.querySelectorAll(".reveal").forEach(r => {
             if (r.getBoundingClientRect().top < window.innerHeight - 80) r.classList.add("active");
@@ -352,8 +358,13 @@
         updateCartUI();
     };
 
-    // Firebase Sync
+    // --- Firebase Banner Sync ---
     onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
+    onValue(ref(db, 'settings/earbudsBanner'), s => { if(s.exists()) document.getElementById('earBannerSync').src = s.val(); });
+    onValue(ref(db, 'settings/headphoneBanner'), s => { if(s.exists()) document.getElementById('headBannerSync').src = s.val(); });
+    onValue(ref(db, 'settings/chargerBanner'), s => { if(s.exists()) document.getElementById('chargerBannerSync').src = s.val(); });
+
+    // --- Product Fetch & Sorting ---
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
@@ -362,32 +373,43 @@
     });
 
     function renderProducts(data) {
-        const grids = { 'Earbuds': 'earbudsGrid', 'Handfree': 'handfreeGrid' };
-        Object.values(grids).forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ''; });
-        document.getElementById('accessoriesGrid').innerHTML = '';
+        const grids = {
+            ear: document.getElementById('earbudsGrid'),
+            head: document.getElementById('headphoneGrid'),
+            char: document.getElementById('chargerGrid'),
+            acc: document.getElementById('accessoriesGrid')
+        };
+        Object.values(grids).forEach(g => g.innerHTML = '');
+
+        let counts = { ear:0, head:0, char:0 };
 
         data.forEach(p => {
-            const price = Number(p.price);
-            const oldPrice = p.oldPrice || null;
-            const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
-            
             const card = `
                 <div class="p-card">
-                    ${discount > 0 ? `<div class="discount-badge">${discount}% OFF</div>` : ''}
+                    <span class="p-brand">${p.brand || ''}</span>
                     <div onclick="location.href='product.html?id=${p.id}'">
                         <div class="p-img-box"><img src="${p.img}"></div>
                         <h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3>
-                        <div class="price-box">Rs.${price.toLocaleString()}</div>
+                        <div class="price-box">Rs.${Number(p.price).toLocaleString()}</div>
                     </div>
-                    <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:8px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer;">ADD TO CART</button>
+                    <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:600;">ADD TO CART</button>
                 </div>`;
 
-            const gridId = grids[p.category] || 'accessoriesGrid';
-            if(document.getElementById(gridId)) document.getElementById(gridId).innerHTML += card;
+            if (p.category === 'Earbuds') { grids.ear.innerHTML += card; counts.ear++; }
+            else if (p.category === 'Headphones') { grids.head.innerHTML += card; counts.head++; }
+            else if (p.category === 'Fast Chargers' || p.category === 'Data Cables') { grids.char.innerHTML += card; counts.char++; }
+            else { grids.acc.innerHTML += card; }
         });
+
+        // Toggle sections based on availability
+        document.getElementById('earbudsSec').style.display = counts.ear > 0 ? 'block' : 'none';
+        document.getElementById('headSec').style.display = counts.head > 0 ? 'block' : 'none';
+        document.getElementById('chargerSec').style.display = counts.char > 0 ? 'block' : 'none';
+        
         reveal();
     }
 
+    // --- Cart & Checkout ---
     window.addToCart = (id) => {
         const p = allProducts.find(x => x.id === id);
         const exist = cart.find(x => x.id === id);
@@ -415,7 +437,9 @@
                         <div style="font-size:14px; font-weight:600;">${item.name}</div>
                         <div>Rs. ${item.price}</div>
                         <div style="margin-top:5px;">
-                            <button onclick="changeQty(${i},-1)">-</button> ${item.quantity} <button onclick="changeQty(${i},1)">+</button>
+                            <button onclick="changeQty(${i},-1)" style="padding:2px 8px;">-</button> 
+                            <span style="margin:0 10px;">${item.quantity}</span> 
+                            <button onclick="changeQty(${i},1)" style="padding:2px 8px;">+</button>
                         </div>
                     </div>
                     <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
@@ -428,10 +452,12 @@
 
     window.changeQty = (i, d) => { cart[i].quantity += d; if(cart[i].quantity < 1) cart.splice(i, 1); updateCartUI(); };
     window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
+    
     window.checkout = () => {
-        let msg = "🛍️ *New Order*%0A";
-        cart.forEach(item => msg += `• ${item.name} (x${item.quantity})%0A`);
-        window.open(`https://wa.me/923279518790?text=${msg}%0A💰 *Total: ${document.getElementById('cartTotal').innerText}*`);
+        let msg = "🛍️ *New Order from Haider Store*%0A%0A";
+        cart.forEach(item => msg += `• ${item.name} (x${item.quantity}) - Rs.${item.price}%0A`);
+        msg += `%0A💰 *Total Amount: ${document.getElementById('cartTotal').innerText}*`;
+        window.open(`https://wa.me/923279518790?text=${msg}`);
     };
 
     updateCartUI();
