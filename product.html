@@ -144,8 +144,7 @@
 
     <div class="related-section">
         <h2 class="related-title">More Items You'll Love</h2>
-        <div class="related-grid" id="relatedGrid">
-            </div>
+        <div class="related-grid" id="relatedGrid"></div>
     </div>
 </div>
 
@@ -181,7 +180,10 @@
     let productData = null;
 
     if (productId) {
-        // 1. Fetch Main Product Details
+        loadMainProduct();
+    }
+
+    function loadMainProduct() {
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
                 productData = s.val();
@@ -193,7 +195,6 @@
                 const imgs = [productData.img, productData.img2, productData.img3].filter(x => x);
                 wrapper.innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
                 
-                // Auto Slider Animation
                 let step = 0;
                 if(imgs.length > 1) {
                     setInterval(() => {
@@ -204,7 +205,6 @@
 
                 document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam! I want to order: ${productData.name}`;
                 
-                // 2. Load Related Products (Fixed & Working)
                 loadRelated();
             }
         });
@@ -219,10 +219,12 @@
                 snapshot.forEach((child) => {
                     const p = child.val();
                     const pId = child.key;
-                    // Skip current product, show others
                     if (pId !== productId && count < 8) {
+                        // FIX: Added ./ and onclick for guaranteed reload
                         html += `
-                            <a href="product-details.html?id=${pId}" class="rel-card">
+                            <a href="./product-details.html?id=${pId}" 
+                               onclick="window.location.href='./product-details.html?id=${pId}'; setTimeout(()=>location.reload(), 10);" 
+                               class="rel-card">
                                 <img src="${p.img}" class="rel-img">
                                 <span class="rel-name">${p.name}</span>
                                 <span class="rel-price">Rs. ${Number(p.price).toLocaleString()}</span>
@@ -236,6 +238,9 @@
         }).catch(err => console.log("Related products error:", err));
     }
 
+    // Force reload when user goes back/forward in browser
+    window.onpopstate = () => location.reload();
+
     // Cart System
     document.getElementById('addBtn').onclick = () => {
         if(!productData) return;
@@ -246,7 +251,6 @@
         alert("Added to Cart!");
     };
 
-    // Update Cart Badge on Load
     const cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
     document.getElementById('cartBadge').innerText = cart.length;
 </script>
