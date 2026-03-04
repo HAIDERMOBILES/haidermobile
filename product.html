@@ -22,7 +22,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background: #fff; color: var(--text-dark); overflow-x: hidden; }
 
-        /* --- HEADER --- */
+        /* --- HEADER (FIXED) --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -47,14 +47,22 @@
         .main-container { max-width: 1200px; margin: 30px auto; padding: 0 5%; }
         .top-section { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; margin-bottom: 40px; }
 
+        /* --- ZOOM & SLIDER CSS --- */
         .slider-container {
             position: relative; width: 100%; height: 500px;
             background: #fdfdfd; border-radius: 20px; overflow: hidden;
             border: 1px solid #eee; display: flex; align-items: center;
         }
         .slider-wrapper { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; width: 100%; }
-        .img-box { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .img-box img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        .img-box { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-box img { 
+            max-width: 90%; max-height: 90%; 
+            object-fit: contain; 
+            transition: transform 0.5s ease; 
+            cursor: zoom-in;
+        }
+        /* ZOOM EFFECT ON HOVER */
+        .img-box img:hover { transform: scale(1.3); }
 
         .p-info-side { display: flex; flex-direction: column; gap: 20px; justify-content: center; }
         .p-title { font-size: 38px; font-weight: 700; color: #111; line-height: 1.1; }
@@ -63,7 +71,7 @@
         .trust-badge { display: flex; align-items: center; gap: 10px; color: #555; font-size: 14px; font-weight: 500; }
         .trust-badge i { color: var(--primary); }
 
-        /* --- DESCRIPTION SECTION --- */
+        /* --- DESCRIPTION --- */
         .desc-section { background: #f9f9f9; padding: 30px; border-radius: 15px; margin-top: 20px; border: 1px solid #eee; }
         .desc-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #000; text-transform: uppercase; border-bottom: 2px solid var(--primary); display: inline-block; }
         .desc-text { line-height: 1.8; color: #444; font-size: 16px; white-space: pre-line; }
@@ -76,22 +84,18 @@
         /* --- RELATED PRODUCTS --- */
         .related-section { margin-top: 60px; border-top: 1px solid #eee; padding-top: 40px; }
         .related-title { font-size: 26px; font-weight: 700; margin-bottom: 30px; text-align: center; }
-        .related-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;
-        }
-        .rel-card { 
-            background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 15px; 
-            transition: 0.3s; text-decoration: none; color: inherit; text-align: center;
-        }
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .rel-card { background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 15px; transition: 0.3s; text-decoration: none; color: inherit; text-align: center; }
         .rel-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.07); }
         .rel-img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 12px; }
         .rel-name { font-weight: 600; font-size: 15px; margin-bottom: 8px; display: block; color: #333; height: 40px; overflow: hidden; }
         .rel-price { color: var(--primary); font-weight: 700; font-size: 16px; }
 
-        /* --- FOOTER --- */
+        /* --- FOOTER (RE-ADDED) --- */
         footer { background: var(--footer-bg); color: #ffffff; padding: 60px 8% 30px; margin-top: 100px; border-top: 4px solid var(--primary); }
         .f-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
         .f-links a { color: #fff !important; text-decoration: none; opacity: 0.7; display: block; margin-bottom: 12px; font-size: 14px; }
+        .f-links a:hover { opacity: 1; color: var(--accent) !important; }
 
         @media (max-width: 768px) {
             .top-section { grid-template-columns: 1fr; }
@@ -180,10 +184,6 @@
     let productData = null;
 
     if (productId) {
-        loadMainProduct();
-    }
-
-    function loadMainProduct() {
         get(ref(db, `products/${productId}`)).then((s) => {
             if (s.exists()) {
                 productData = s.val();
@@ -204,7 +204,6 @@
                 }
 
                 document.getElementById('waLink').href = `https://wa.me/923279518790?text=Salam! I want to order: ${productData.name}`;
-                
                 loadRelated();
             }
         });
@@ -220,7 +219,6 @@
                     const p = child.val();
                     const pId = child.key;
                     if (pId !== productId && count < 8) {
-                        // FIX: Added ./ and onclick for guaranteed reload
                         html += `
                             <a href="./product-details.html?id=${pId}" 
                                onclick="window.location.href='./product-details.html?id=${pId}'; setTimeout(()=>location.reload(), 10);" 
@@ -235,11 +233,8 @@
                 });
                 grid.innerHTML = html;
             }
-        }).catch(err => console.log("Related products error:", err));
+        });
     }
-
-    // Force reload when user goes back/forward in browser
-    window.onpopstate = () => location.reload();
 
     // Cart System
     document.getElementById('addBtn').onclick = () => {
@@ -251,8 +246,7 @@
         alert("Added to Cart!");
     };
 
-    const cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-    document.getElementById('cartBadge').innerText = cart.length;
+    document.getElementById('cartBadge').innerText = (JSON.parse(localStorage.getItem('haiderStoreCart')) || []).length;
 </script>
 
 </body>
