@@ -71,7 +71,7 @@
         .img-box img { max-width: 90%; max-height: 90%; object-fit: contain; cursor: zoom-in; }
 
         .slider-dots { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; cursor: pointer; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; cursor: pointer; transition: 0.3s; }
         .dot.active { background: var(--primary); width: 25px; border-radius: 10px; }
 
         .p-price { font-size: 36px; color: var(--primary); font-weight: 800; margin: 10px 0; }
@@ -216,8 +216,9 @@
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
     let currentProduct = null;
     let currentStep = 0;
+    let sliderInterval;
 
-    // --- CART LOGIC (SYNCED WITH INDEX) ---
+    // --- CART LOGIC ---
     window.toggleCart = () => {
         const sidebar = document.getElementById('cartSidebar');
         sidebar.classList.toggle('open');
@@ -230,6 +231,7 @@
         const badge = document.getElementById('cartBadge');
         const totalEl = document.getElementById('cartTotal');
         
+        if(!container) return;
         container.innerHTML = cart.length ? '' : '<p style="text-align:center; padding:20px;">Cart is empty!</p>';
         let total = 0, count = 0;
 
@@ -249,8 +251,8 @@
                     <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
                 </div>`;
         });
-        badge.innerText = count;
-        totalEl.innerText = `Rs. ${total.toLocaleString()}`;
+        if(badge) badge.innerText = count;
+        if(totalEl) totalEl.innerText = `Rs. ${total.toLocaleString()}`;
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
     }
 
@@ -261,6 +263,34 @@
         cart.forEach(item => msg += `• ${item.name} (x${item.quantity})%0A`);
         window.open(`https://wa.me/923279518790?text=${msg}%0A💰 *Total: ${document.getElementById('cartTotal').innerText}*`);
     };
+
+    // --- SLIDER NAVIGATION LOGIC ---
+    window.updateSlider = (index, total) => {
+        currentStep = index;
+        const wrapper = document.getElementById('sliderWrapper');
+        if(wrapper) {
+            wrapper.style.transform = `translateX(-${currentStep * 100}%)`;
+            document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentStep));
+        }
+        resetAutoSlide(total); // Reset timer when user clicks manually
+    };
+
+    function startAutoSlide(total) {
+        if(total <= 1) return;
+        sliderInterval = setInterval(() => {
+            currentStep = (currentStep + 1) % total;
+            const wrapper = document.getElementById('sliderWrapper');
+            if(wrapper) {
+                wrapper.style.transform = `translateX(-${currentStep * 100}%)`;
+                document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentStep));
+            }
+        }, 5000); // 5 Seconds slide time
+    }
+
+    function resetAutoSlide(total) {
+        clearInterval(sliderInterval);
+        startAutoSlide(total);
+    }
 
     // --- PRODUCT LOADING ---
     function initPage() {
@@ -276,20 +306,16 @@
                 document.getElementById('fullDesc').innerText = currentProduct.description || "";
                 document.getElementById('waLink').href = `https://wa.me/923279518790?text=I want to order: ${currentProduct.name}`;
 
-                // Images
+                // Images Logic
                 const imgs = [currentProduct.img, currentProduct.img2, currentProduct.img3].filter(x => x);
                 document.getElementById('sliderWrapper').innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
-                document.getElementById('sliderDots').innerHTML = imgs.map((_, i) => `<div class="dot ${i==0?'active':''}" onclick="currentStep=${i}; updateSlider(${imgs.length})"></div>`).join('');
+                document.getElementById('sliderDots').innerHTML = imgs.map((_, i) => `<div class="dot ${i==0?'active':''}" onclick="updateSlider(${i}, ${imgs.length})"></div>`).join('');
 
+                startAutoSlide(imgs.length);
                 loadRelated(productId);
             }
         });
     }
-
-    window.updateSlider = (total) => {
-        document.getElementById('sliderWrapper').style.transform = `translateX(-${currentStep * 100}%)`;
-        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentStep));
-    };
 
     document.getElementById('addMainBtn').onclick = () => {
         if(!currentProduct) return;
@@ -303,7 +329,7 @@
     function loadRelated(currentId) {
         get(ref(db, 'products')).then((snapshot) => {
             const grid = document.getElementById('relatedGrid');
-            if (snapshot.exists()) {
+            if (snapshot.exists() && grid) {
                 let list = [];
                 snapshot.forEach(c => { if(c.key !== currentId) list.push({...c.val(), id: c.key}) });
                 list.sort(() => Math.random() - 0.5);
