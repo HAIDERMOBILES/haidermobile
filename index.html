@@ -17,16 +17,16 @@
     <style>
         :root { 
             --primary: #005f6b; 
-            --header-dark: #004040; /* Dark Green */
+            --header-dark: #004040; 
             --text-dark: #1a1a1a; 
             --white: #ffffff; 
-            --accent: #ff4d4d; /* Red for STORE */
+            --accent: #ff4d4d; 
             --footer-bg: #0d1117;
             --success: #27ae60;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; }
+        body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
 
         /* --- ✨ ANIMATIONS --- */
         .reveal { opacity: 0; transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -114,7 +114,7 @@
         .f-col h4::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 35px; height: 2px; background: var(--accent); }
         .f-col ul { list-style: none; }
         .f-col ul li { margin-bottom: 10px; }
-        .f-col a { text-decoration: none; color: #ffffff; opacity: 0.8; transition: 0.3s; }
+        .f-col a { text-decoration: none; color: #ffffff; opacity: 0.8; transition: 0.3s; cursor: pointer; }
         .f-col a:hover { opacity: 1; color: var(--accent); }
         .social-links { display: flex; gap: 15px; margin-top: 20px; }
         .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
@@ -274,7 +274,7 @@
         </div>
     </div>
 
-    <div id="accessoriesSec">
+    <div id="accessoriesSec" style="display:none;">
         <div class="section-header reveal zoom-in"><h2 id="accTitle">Premium Accessories</h2></div>
         <div class="container reveal zoom-in">
             <div id="accessoriesGrid" class="grid"></div>
@@ -350,7 +350,15 @@
         document.getElementById('drawer').classList.toggle('open');
         document.getElementById('overlay').classList.toggle('active');
     };
-    window.toggleSearch = () => document.getElementById('searchOverlay').classList.toggle('active');
+    
+    window.toggleSearch = () => {
+        const searchBox = document.getElementById('searchOverlay');
+        searchBox.classList.toggle('active');
+        if(searchBox.classList.contains('active')) {
+            setTimeout(() => document.getElementById('searchInput').focus(), 100);
+        }
+    };
+
     window.toggleCart = () => {
         const sidebar = document.getElementById('cartSidebar');
         sidebar.classList.toggle('open');
@@ -368,11 +376,12 @@
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            renderProducts(allProducts);
+            renderProducts(allProducts, 'ALL');
         }
     });
 
-    function renderProducts(data) {
+    // Modified to handle searching and category filtering smoothly
+    function renderProducts(data, filterType = 'ALL') {
         const grids = {
             ear: document.getElementById('earbudsGrid'),
             head: document.getElementById('headphoneGrid'),
@@ -381,7 +390,7 @@
         };
         Object.values(grids).forEach(g => g.innerHTML = '');
 
-        let counts = { ear:0, head:0, char:0 };
+        let counts = { ear:0, head:0, char:0, acc:0 };
 
         data.forEach(p => {
             const card = `
@@ -395,19 +404,73 @@
                     <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:600;">ADD TO CART</button>
                 </div>`;
 
-            if (p.category === 'Earbuds') { grids.ear.innerHTML += card; counts.ear++; }
-            else if (p.category === 'Headphones') { grids.head.innerHTML += card; counts.head++; }
-            else if (p.category === 'Fast Chargers' || p.category === 'Data Cables') { grids.char.innerHTML += card; counts.char++; }
-            else { grids.acc.innerHTML += card; }
+            // Agar user ne specific search/filter kiya hai, toh sab kuch ek hi grid (Accessories) mein show hoga
+            if(filterType !== 'ALL') {
+                 grids.acc.innerHTML += card; 
+                 counts.acc++;
+            } else {
+                if (p.category === 'Earbuds') { grids.ear.innerHTML += card; counts.ear++; }
+                else if (p.category === 'Headphones') { grids.head.innerHTML += card; counts.head++; }
+                else if (p.category === 'Fast Chargers' || p.category === 'Data Cables') { grids.char.innerHTML += card; counts.char++; }
+                else { grids.acc.innerHTML += card; counts.acc++; }
+            }
         });
 
-        // Toggle sections based on availability
-        document.getElementById('earbudsSec').style.display = counts.ear > 0 ? 'block' : 'none';
-        document.getElementById('headSec').style.display = counts.head > 0 ? 'block' : 'none';
-        document.getElementById('chargerSec').style.display = counts.char > 0 ? 'block' : 'none';
+        // Toggle sections based on availability and mode
+        if(filterType !== 'ALL') {
+            document.getElementById('earbudsSec').style.display = 'none';
+            document.getElementById('headSec').style.display = 'none';
+            document.getElementById('chargerSec').style.display = 'none';
+            document.getElementById('accessoriesSec').style.display = counts.acc > 0 ? 'block' : 'none';
+        } else {
+            document.getElementById('earbudsSec').style.display = counts.ear > 0 ? 'block' : 'none';
+            document.getElementById('headSec').style.display = counts.head > 0 ? 'block' : 'none';
+            document.getElementById('chargerSec').style.display = counts.char > 0 ? 'block' : 'none';
+            document.getElementById('accessoriesSec').style.display = counts.acc > 0 ? 'block' : 'none';
+        }
         
         reveal();
     }
+
+    // --- Search & Filter Logic (NEWLY ADDED) ---
+    window.setFilter = (category) => {
+        // Close menus
+        document.getElementById('drawer').classList.remove('open');
+        document.getElementById('overlay').classList.remove('active');
+        
+        // Filter data
+        let filtered = category === 'ALL' ? allProducts : allProducts.filter(p => p.category === category);
+        
+        // Update UI Text & Hero Banner
+        document.getElementById('accTitle').innerText = category === 'ALL' ? 'Premium Accessories' : category + ' Products';
+        document.querySelector('.hero-container').style.display = category === 'ALL' ? 'block' : 'none';
+        
+        // Render
+        renderProducts(filtered, category);
+        
+        // Scroll to results
+        setTimeout(() => document.getElementById('mainContent').scrollIntoView({behavior: "smooth"}), 100);
+    };
+
+    window.handleSearch = (e) => {
+        const term = e.target.value.toLowerCase();
+        
+        if(term.length > 0) {
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || (p.brand && p.brand.toLowerCase().includes(term)));
+            document.querySelector('.hero-container').style.display = 'none';
+            document.getElementById('accTitle').innerText = `Search Results for "${term}"`;
+            renderProducts(filtered, 'SEARCH');
+        } else {
+            document.querySelector('.hero-container').style.display = 'block';
+            document.getElementById('accTitle').innerText = 'Premium Accessories';
+            renderProducts(allProducts, 'ALL');
+        }
+        
+        if(e.key === 'Enter') {
+            toggleSearch(); 
+            document.getElementById('mainContent').scrollIntoView({behavior: "smooth"});
+        }
+    };
 
     // --- Cart & Checkout ---
     window.addToCart = (id) => {
@@ -437,9 +500,9 @@
                         <div style="font-size:14px; font-weight:600;">${item.name}</div>
                         <div>Rs. ${item.price}</div>
                         <div style="margin-top:5px;">
-                            <button onclick="changeQty(${i},-1)" style="padding:2px 8px;">-</button> 
+                            <button onclick="changeQty(${i},-1)" style="padding:2px 8px; cursor:pointer;">-</button> 
                             <span style="margin:0 10px;">${item.quantity}</span> 
-                            <button onclick="changeQty(${i},1)" style="padding:2px 8px;">+</button>
+                            <button onclick="changeQty(${i},1)" style="padding:2px 8px; cursor:pointer;">+</button>
                         </div>
                     </div>
                     <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
@@ -454,6 +517,7 @@
     window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
     
     window.checkout = () => {
+        if(cart.length === 0) return alert("Your cart is empty!");
         let msg = "🛍️ *New Order from Haider Store*%0A%0A";
         cart.forEach(item => msg += `• ${item.name} (x${item.quantity}) - Rs.${item.price}%0A`);
         msg += `%0A💰 *Total Amount: ${document.getElementById('cartTotal').innerText}*`;
