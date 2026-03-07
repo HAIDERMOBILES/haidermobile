@@ -270,46 +270,54 @@
         }
     });
 
+    // 🚀 FULLY FIXED: Banner Upload handling Ad-Blocker/Brave blocks
     window.uploadBanner = async (i, path, tId, pId) => {
+        const file = i.files[0]; if(!file) return;
+        document.getElementById(tId).innerText = "⏳";
+        const fd = new FormData(); fd.append("image", file);
+        
         try {
-            const file = i.files[0]; if(!file) return;
-            document.getElementById(tId).innerText = "...";
-            const fd = new FormData(); fd.append("image", file);
             const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
             const json = await res.json();
+            
             if(json.success) {
                 await set(ref(db, path), json.data.url);
                 document.getElementById(pId).style.width = "100%";
                 document.getElementById(tId).innerText = "LIVE ✅";
                 showToast("Banner Updated Successfully!");
             } else {
-                alert("Upload Failed: " + json.error.message);
-                document.getElementById(tId).innerText = "Error";
+                alert("Upload Failed: " + (json.error ? json.error.message : "Unknown error"));
+                document.getElementById(tId).innerText = "Error ❌";
             }
         } catch (error) {
-            alert("Network Error: " + error.message);
-            document.getElementById(tId).innerText = "Error";
+            console.error("Fetch error:", error);
+            alert("Network Error (Failed to fetch) 🚫\nBrowser ka Ad-Blocker/Shield off karein ya connection check karein!");
+            document.getElementById(tId).innerText = "Failed ❌";
         }
     };
 
+    // 🚀 FULLY FIXED: Product Upload handling Ad-Blocker/Brave blocks
     window.uploadProdImg = async (i, key, tId, pId) => {
+        const file = i.files[0]; if(!file) return;
+        document.getElementById(tId).innerText = "⏳";
+        const fd = new FormData(); fd.append("image", file);
+        
         try {
-            const file = i.files[0]; if(!file) return;
-            document.getElementById(tId).innerText = "⏳";
-            const fd = new FormData(); fd.append("image", file);
             const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
             const json = await res.json();
+            
             if(json.success) {
                 pImgs[key] = json.data.url;
                 document.getElementById(pId).style.width = "100%";
-                document.getElementById(tId).innerText = "READY";
+                document.getElementById(tId).innerText = "READY ✅";
             } else {
-                alert("Image Upload Failed: " + json.error.message);
-                document.getElementById(tId).innerText = "Error";
+                alert("Image Upload Failed: " + (json.error ? json.error.message : "Unknown error"));
+                document.getElementById(tId).innerText = "Error ❌";
             }
         } catch (error) {
-            alert("Network Error: " + error.message);
-            document.getElementById(tId).innerText = "Error";
+            console.error("Fetch error:", error);
+            alert("Network Error (Failed to fetch) 🚫\nBrowser ka Ad-Blocker off karein ya connection check karein!");
+            document.getElementById(tId).innerText = "Failed ❌";
         }
     };
 
