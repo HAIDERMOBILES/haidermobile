@@ -37,6 +37,8 @@
         @media (min-width: 1024px) {
             .admin-wrapper { grid-template-columns: 450px 1fr; padding: 30px; height: calc(100vh - 70px); }
             .scroll-sec { height: 100%; overflow-y: auto; padding-right: 15px; }
+            .scroll-sec::-webkit-scrollbar { width: 5px; }
+            .scroll-sec::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         }
 
         .card { background: var(--white); border: 1px solid var(--border); padding: 22px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
@@ -55,9 +57,28 @@
         .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
         .inv-card { background: var(--white); border-radius: 12px; padding: 10px; border: 1px solid var(--border); position: relative; text-align: center; }
         .inv-card img { width: 100%; height: 85px; object-fit: contain; margin-bottom: 8px; }
-        .del-btn { position: absolute; top: 5px; right: 5px; background: var(--red); color: white; border: none; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; }
+        .del-btn { position: absolute; top: 5px; right: 5px; background: var(--red); color: white; border: none; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; font-weight:bold; }
 
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 12px 25px; border-radius: 50px; font-size: 12px; display: none; z-index: 10000; }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 12px 25px; border-radius: 50px; font-size: 12px; display: none; z-index: 10000; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+
+        /* =========================================
+           📱 MOBILE GRID FIX (For Mobile View)
+           ========================================= */
+        @media (max-width: 768px) {
+            .admin-wrapper { padding: 10px; gap: 15px; }
+            .card { padding: 15px; border-radius: 14px; }
+            div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; gap: 10px !important; }
+            input, select, textarea { padding: 12px; font-size: 13px; margin-bottom: 10px; }
+            .btn-sync { padding: 14px; font-size: 12px; }
+            .grid-up { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+            .up-box { padding: 10px 5px; }
+            .up-box i { font-size: 16px; margin-bottom: 2px; }
+            .up-box span { font-size: 9px; }
+            .inv-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+            .inv-card { padding: 8px; }
+            .inv-card img { height: 80px; }
+            .del-btn { width: 22px; height: 22px; font-size: 12px; top: 4px; right: 4px; }
+        }
     </style>
 </head>
 <body>
@@ -68,7 +89,7 @@
         <h2 style="font-family:'Orbitron';">ADMIN ACCESS</h2>
         <input type="email" id="emailInput" placeholder="Admin Email">
         <input type="password" id="passInput" placeholder="Password">
-        <button onclick="checkPass()" class="btn-sync">UNLOCK</button>
+        <button onclick="checkPass()" id="loginBtn" class="btn-sync">UNLOCK</button>
     </div>
 </div>
 
@@ -196,13 +217,37 @@
 
     let pImgs = { img1: "", img2: "", img3: "" };
 
-    window.checkPass = () => signInWithEmailAndPassword(auth, document.getElementById('emailInput').value, document.getElementById('passInput').value);
+    const showToast = (msg) => {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
+    };
+
+    window.checkPass = () => {
+        document.getElementById('loginBtn').innerText = "Checking...";
+        signInWithEmailAndPassword(auth, document.getElementById('emailInput').value, document.getElementById('passInput').value)
+        .catch(err => {
+            alert("Login Error: " + err.message);
+            document.getElementById('loginBtn').innerText = "UNLOCK";
+        });
+    };
+
     onAuthStateChanged(auth, u => {
-        if(u && u.email === "r.haidar0066@gmail.com") {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('mainAdminArea').style.display = 'grid';
+        if(u) {
+            if(u.email === "r.haidar0066@gmail.com") {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainAdminArea').style.display = 'grid';
+            } else {
+                alert("Unauthorized Email!");
+                signOut(auth);
+            }
+        } else {
+            document.getElementById('loginOverlay').style.display = 'flex';
+            document.getElementById('mainAdminArea').style.display = 'none';
         }
     });
+
     window.logoutAdmin = () => signOut(auth).then(()=>location.reload());
 
     window.updateStoreLook = () => {
@@ -211,7 +256,9 @@
             saleStatus: document.getElementById('storeSaleStatus').value,
             saleText: document.getElementById('storeSaleText').value
         };
-        set(ref(db, 'settings/storeLook'), data).then(() => alert("Updated!"));
+        set(ref(db, 'settings/storeLook'), data)
+        .then(() => showToast("Store Look Updated! 🎨"))
+        .catch(err => alert("Store Look Error: " + err.message));
     };
 
     onValue(ref(db, 'settings/storeLook'), snap => {
@@ -224,29 +271,45 @@
     });
 
     window.uploadBanner = async (i, path, tId, pId) => {
-        const file = i.files[0]; if(!file) return;
-        document.getElementById(tId).innerText = "...";
-        const fd = new FormData(); fd.append("image", file);
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-        const json = await res.json();
-        if(json.success) {
-            set(ref(db, path), json.data.url).then(() => {
+        try {
+            const file = i.files[0]; if(!file) return;
+            document.getElementById(tId).innerText = "...";
+            const fd = new FormData(); fd.append("image", file);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+            const json = await res.json();
+            if(json.success) {
+                await set(ref(db, path), json.data.url);
                 document.getElementById(pId).style.width = "100%";
                 document.getElementById(tId).innerText = "LIVE ✅";
-            });
+                showToast("Banner Updated Successfully!");
+            } else {
+                alert("Upload Failed: " + json.error.message);
+                document.getElementById(tId).innerText = "Error";
+            }
+        } catch (error) {
+            alert("Network Error: " + error.message);
+            document.getElementById(tId).innerText = "Error";
         }
     };
 
     window.uploadProdImg = async (i, key, tId, pId) => {
-        const file = i.files[0]; if(!file) return;
-        document.getElementById(tId).innerText = "⏳";
-        const fd = new FormData(); fd.append("image", file);
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-        const json = await res.json();
-        if(json.success) {
-            pImgs[key] = json.data.url;
-            document.getElementById(pId).style.width = "100%";
-            document.getElementById(tId).innerText = "READY";
+        try {
+            const file = i.files[0]; if(!file) return;
+            document.getElementById(tId).innerText = "⏳";
+            const fd = new FormData(); fd.append("image", file);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+            const json = await res.json();
+            if(json.success) {
+                pImgs[key] = json.data.url;
+                document.getElementById(pId).style.width = "100%";
+                document.getElementById(tId).innerText = "READY";
+            } else {
+                alert("Image Upload Failed: " + json.error.message);
+                document.getElementById(tId).innerText = "Error";
+            }
+        } catch (error) {
+            alert("Network Error: " + error.message);
+            document.getElementById(tId).innerText = "Error";
         }
     };
 
@@ -260,8 +323,17 @@
             img: pImgs.img1, img2: pImgs.img2, img3: pImgs.img3,
             timestamp: Date.now()
         };
-        if(!p.name || !p.img) return alert("Fill Name and Main Image!");
-        push(ref(db, 'products'), p).then(() => location.reload());
+        if(!p.name || !p.img || !p.category) return alert("Error: Name, Category aur Main Image zaroori hain!");
+        
+        document.getElementById('saveBtn').innerText = "UPLOADING...";
+        
+        push(ref(db, 'products'), p).then(() => {
+            showToast("Product Uploaded! 🚀");
+            setTimeout(() => location.reload(), 1500);
+        }).catch(err => {
+            alert("Firebase Error: " + err.message);
+            document.getElementById('saveBtn').innerText = "UPLOAD TO STORE";
+        });
     };
 
     onValue(ref(db, 'products'), snap => {
@@ -269,12 +341,18 @@
         if(snap.exists()) {
             Object.keys(snap.val()).reverse().forEach(id => {
                 const p = snap.val()[id];
-                grid.innerHTML += `<div class="inv-card"><button class="del-btn" onclick="deleteItem('${id}')">×</button><img src="${p.img}"><div>${p.name}</div><div style="font-size:10px; color:#666">${p.brand || 'No Brand'}</div><div style="color:var(--primary); font-weight:bold">Rs.${p.price}</div></div>`;
+                grid.innerHTML += `<div class="inv-card"><button class="del-btn" onclick="deleteItem('${id}')">×</button><img src="${p.img}" loading="lazy"><div>${p.name}</div><div style="font-size:10px; color:#666">${p.brand || 'No Brand'}</div><div style="color:var(--primary); font-weight:bold">Rs.${p.price}</div></div>`;
             });
         }
     });
 
-    window.deleteItem = id => confirm("Delete?") && remove(ref(db, `products/${id}`));
+    window.deleteItem = id => {
+        if(confirm("Are you sure you want to delete this?")) {
+            remove(ref(db, `products/${id}`))
+            .then(() => showToast("Item Deleted! 🗑️"))
+            .catch(err => alert("Delete Error: " + err.message));
+        }
+    };
 </script>
 </body>
 </html>
