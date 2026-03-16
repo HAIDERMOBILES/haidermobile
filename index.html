@@ -16,10 +16,9 @@
     
     <style>
         :root { 
-            /* Logo Inspired Premium Color Palette */
-            --header-dark: #002b26; /* Dark Green from Logo */
-            --accent: #c5a059;      /* Golden from Logo */
-            --primary: #004d45;     /* Professional Teal/Green */
+            --header-dark: #002b26; 
+            --accent: #c5a059;      
+            --primary: #004d45;     
             --text-dark: #1a1a1a; 
             --white: #ffffff; 
             --footer-bg: #0d1117;
@@ -456,13 +455,16 @@
         reveal();
     }
 
+    // UPDATED setFilter to close mobile drawer
     window.setFilter = (category) => {
-        toggleMenu();
+        if(document.getElementById('drawer').classList.contains('open')) {
+            toggleMenu();
+        }
         let filtered = category === 'ALL' ? allProducts : allProducts.filter(p => p.category === category);
         document.getElementById('accTitle').innerText = category === 'ALL' ? 'Premium Accessories' : category + ' Products';
         document.querySelector('.hero-container').style.display = category === 'ALL' ? 'block' : 'none';
         renderProducts(filtered, category);
-        setTimeout(() => document.getElementById('mainContent').scrollIntoView({behavior: "smooth"}), 100);
+        setTimeout(() => window.scrollTo({top: 0, behavior: "smooth"}), 100);
     };
 
     window.handleSearch = (e) => {
