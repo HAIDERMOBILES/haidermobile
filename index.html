@@ -104,7 +104,12 @@
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
         
         .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
-        .price-box { font-size: 18px; font-weight: 700; color: var(--primary); margin-top: 10px; }
+        
+        /* UPDATED PRICE BOX CSS */
+        .price-box { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 10px; }
+        .old-price { font-size: 13px; color: #888; text-decoration: line-through; font-weight: 400; }
+        .current-price { font-size: 18px; font-weight: 700; color: var(--primary); }
+
         .p-brand { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         /* FOOTER */
@@ -380,7 +385,7 @@
         }
     });
 
-    // Modified to handle searching and category filtering smoothly
+    // UPDATED RENDER FUNCTION WITH DISCOUNT LOGIC
     function renderProducts(data, filterType = 'ALL') {
         const grids = {
             ear: document.getElementById('earbudsGrid'),
@@ -393,18 +398,28 @@
         let counts = { ear:0, head:0, char:0, acc:0 };
 
         data.forEach(p => {
+            // Logic for Discount Badge
+            let discountBadge = "";
+            if (p.oldPrice && Number(p.oldPrice) > Number(p.price)) {
+                let discPercent = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100);
+                discountBadge = `<span class="discount-badge">-${discPercent}% OFF</span>`;
+            }
+
             const card = `
                 <div class="p-card">
+                    ${discountBadge}
                     <span class="p-brand">${p.brand || ''}</span>
                     <div onclick="location.href='product.html?id=${p.id}'">
                         <div class="p-img-box"><img src="${p.img}"></div>
                         <h3 style="font-size:15px; margin: 8px 0;">${p.name}</h3>
-                        <div class="price-box">Rs.${Number(p.price).toLocaleString()}</div>
+                        <div class="price-box">
+                            ${p.oldPrice ? `<span class="old-price">Rs. ${Number(p.oldPrice).toLocaleString()}</span>` : ''}
+                            <span class="current-price">Rs. ${Number(p.price).toLocaleString()}</span>
+                        </div>
                     </div>
                     <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:600;">ADD TO CART</button>
                 </div>`;
 
-            // Agar user ne specific search/filter kiya hai, toh sab kuch ek hi grid (Accessories) mein show hoga
             if(filterType !== 'ALL') {
                  grids.acc.innerHTML += card; 
                  counts.acc++;
@@ -416,7 +431,6 @@
             }
         });
 
-        // Toggle sections based on availability and mode
         if(filterType !== 'ALL') {
             document.getElementById('earbudsSec').style.display = 'none';
             document.getElementById('headSec').style.display = 'none';
@@ -432,29 +446,18 @@
         reveal();
     }
 
-    // --- Search & Filter Logic (NEWLY ADDED) ---
     window.setFilter = (category) => {
-        // Close menus
         document.getElementById('drawer').classList.remove('open');
         document.getElementById('overlay').classList.remove('active');
-        
-        // Filter data
         let filtered = category === 'ALL' ? allProducts : allProducts.filter(p => p.category === category);
-        
-        // Update UI Text & Hero Banner
         document.getElementById('accTitle').innerText = category === 'ALL' ? 'Premium Accessories' : category + ' Products';
         document.querySelector('.hero-container').style.display = category === 'ALL' ? 'block' : 'none';
-        
-        // Render
         renderProducts(filtered, category);
-        
-        // Scroll to results
         setTimeout(() => document.getElementById('mainContent').scrollIntoView({behavior: "smooth"}), 100);
     };
 
     window.handleSearch = (e) => {
         const term = e.target.value.toLowerCase();
-        
         if(term.length > 0) {
             const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || (p.brand && p.brand.toLowerCase().includes(term)));
             document.querySelector('.hero-container').style.display = 'none';
@@ -465,14 +468,12 @@
             document.getElementById('accTitle').innerText = 'Premium Accessories';
             renderProducts(allProducts, 'ALL');
         }
-        
         if(e.key === 'Enter') {
             toggleSearch(); 
             document.getElementById('mainContent').scrollIntoView({behavior: "smooth"});
         }
     };
 
-    // --- Cart & Checkout ---
     window.addToCart = (id) => {
         const p = allProducts.find(x => x.id === id);
         const exist = cart.find(x => x.id === id);
@@ -486,10 +487,8 @@
         const container = document.getElementById('cartItemsContainer');
         const badge = document.getElementById('cartBadge');
         const totalEl = document.getElementById('cartTotal');
-        
         container.innerHTML = cart.length ? '' : '<p style="text-align:center; padding:20px;">Cart is empty!</p>';
         let total = 0, count = 0;
-
         cart.forEach((item, i) => {
             total += (item.price * item.quantity);
             count += item.quantity;
@@ -515,7 +514,6 @@
 
     window.changeQty = (i, d) => { cart[i].quantity += d; if(cart[i].quantity < 1) cart.splice(i, 1); updateCartUI(); };
     window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
-    
     window.checkout = () => {
         if(cart.length === 0) return alert("Your cart is empty!");
         let msg = "🛍️ *New Order from Haider Store*%0A%0A";
@@ -523,7 +521,6 @@
         msg += `%0A💰 *Total Amount: ${document.getElementById('cartTotal').innerText}*`;
         window.open(`https://wa.me/923279518790?text=${msg}`);
     };
-
     updateCartUI();
 </script>
 </body>
