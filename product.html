@@ -74,7 +74,12 @@
         .dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; cursor: pointer; transition: 0.3s; }
         .dot.active { background: var(--primary); width: 25px; border-radius: 10px; }
 
-        .p-price { font-size: 36px; color: var(--primary); font-weight: 800; margin: 10px 0; }
+        /* DISCOUNT & PRICE STYLES */
+        .price-wrapper { margin: 15px 0; }
+        .p-old-price { font-size: 18px; color: #888; text-decoration: line-through; margin-bottom: 2px; display: block; }
+        .p-price { font-size: 36px; color: var(--primary); font-weight: 800; }
+        .p-detail-badge { background: var(--accent); color: white; padding: 4px 10px; border-radius: 5px; font-size: 14px; font-weight: 700; margin-left: 10px; vertical-align: middle; }
+
         .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
         .btn-cart-main { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
         .btn-wa-main { width: 100%; padding: 16px; background: transparent; color: #25d366; border: 2px solid #25d366; border-radius: 12px; text-decoration: none; text-align: center; font-weight: 700; }
@@ -144,7 +149,12 @@
 
         <div class="p-info-side">
             <h1 class="p-title" id="pName">Loading Product...</h1>
-            <div class="p-price" id="pPrice">Rs. 0</div>
+            
+            <div class="price-wrapper">
+                <span id="pOldPrice" class="p-old-price"></span>
+                <span class="p-price" id="pPrice">Rs. 0</span>
+                <span id="pDiscBadge" class="p-detail-badge" style="display:none;"></span>
+            </div>
             
             <div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 10px; font-size: 14px;">
                 <p><i class="fas fa-check-circle" style="color:var(--success)"></i> In Stock & Ready to Ship</p>
@@ -272,7 +282,7 @@
             wrapper.style.transform = `translateX(-${currentStep * 100}%)`;
             document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentStep));
         }
-        resetAutoSlide(total); // Reset timer when user clicks manually
+        resetAutoSlide(total); 
     };
 
     function startAutoSlide(total) {
@@ -284,7 +294,7 @@
                 wrapper.style.transform = `translateX(-${currentStep * 100}%)`;
                 document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentStep));
             }
-        }, 5000); // 5 Seconds slide time
+        }, 5000); 
     }
 
     function resetAutoSlide(total) {
@@ -302,11 +312,20 @@
             if (s.exists()) {
                 currentProduct = { id: productId, ...s.val() };
                 document.getElementById('pName').innerText = currentProduct.name;
+                
+                // Discount Calculation for Detail Page
+                if (currentProduct.oldPrice && Number(currentProduct.oldPrice) > Number(currentProduct.price)) {
+                    document.getElementById('pOldPrice').innerText = `Rs. ${Number(currentProduct.oldPrice).toLocaleString()}`;
+                    let discPercent = Math.round(((currentProduct.oldPrice - currentProduct.price) / currentProduct.oldPrice) * 100);
+                    const badge = document.getElementById('pDiscBadge');
+                    badge.innerText = `${discPercent}% OFF`;
+                    badge.style.display = 'inline-block';
+                }
+
                 document.getElementById('pPrice').innerText = `Rs. ${Number(currentProduct.price).toLocaleString()}`;
                 document.getElementById('fullDesc').innerText = currentProduct.description || "";
                 document.getElementById('waLink').href = `https://wa.me/923279518790?text=I want to order: ${currentProduct.name}`;
 
-                // Images Logic
                 const imgs = [currentProduct.img, currentProduct.img2, currentProduct.img3].filter(x => x);
                 document.getElementById('sliderWrapper').innerHTML = imgs.map(src => `<div class="img-box"><img src="${src}"></div>`).join('');
                 document.getElementById('sliderDots').innerHTML = imgs.map((_, i) => `<div class="dot ${i==0?'active':''}" onclick="updateSlider(${i}, ${imgs.length})"></div>`).join('');
@@ -333,13 +352,25 @@
                 let list = [];
                 snapshot.forEach(c => { if(c.key !== currentId) list.push({...c.val(), id: c.key}) });
                 list.sort(() => Math.random() - 0.5);
-                grid.innerHTML = list.slice(0, 8).map(p => `
-                    <div style="text-align:center; cursor:pointer; border:1px solid #eee; padding:10px; border-radius:10px;" onclick="window.location.search='?id=${p.id}'">
-                        <img src="${p.img}" style="width:100%; height:150px; object-fit:contain;">
-                        <p style="font-size:13px; font-weight:600; margin:5px 0;">${p.name}</p>
-                        <p style="color:var(--primary); font-weight:700;">Rs. ${p.price}</p>
-                    </div>
-                `).join('');
+                
+                grid.innerHTML = list.slice(0, 8).map(p => {
+                    // Logic for related products discount
+                    let oldPriceHtml = "";
+                    if(p.oldPrice && Number(p.oldPrice) > Number(p.price)) {
+                        oldPriceHtml = `<span style="font-size:11px; text-decoration:line-through; color:#888; margin-right:5px;">Rs. ${p.oldPrice}</span>`;
+                    }
+                    
+                    return `
+                        <div style="text-align:center; cursor:pointer; border:1px solid #eee; padding:10px; border-radius:10px;" onclick="window.location.search='?id=${p.id}'">
+                            <img src="${p.img}" style="width:100%; height:150px; object-fit:contain;">
+                            <p style="font-size:13px; font-weight:600; margin:5px 0;">${p.name}</p>
+                            <div style="display:flex; justify-content:center; align-items:center;">
+                                ${oldPriceHtml}
+                                <p style="color:var(--primary); font-weight:700;">Rs. ${p.price}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             }
         });
     }
