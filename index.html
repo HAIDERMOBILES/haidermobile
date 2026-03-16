@@ -8,21 +8,23 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-apple-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Haider Store">
-    <link rel="icon" type="image/png" href="YOUR_LOGO_URL_HERE">
-    <link rel="apple-touch-icon" href="YOUR_LOGO_URL_HERE">
+    <link rel="icon" type="image/png" href="green.jpg">
+    <link rel="apple-touch-icon" href="green.jpg">
     
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
         :root { 
-            --primary: #005f6b; 
-            --header-dark: #004040; 
+            /* Logo Inspired Premium Color Palette */
+            --header-dark: #002b26; /* Dark Green from Logo */
+            --accent: #c5a059;      /* Golden from Logo */
+            --primary: #004d45;     /* Professional Teal/Green */
             --text-dark: #1a1a1a; 
             --white: #ffffff; 
-            --accent: #ff4d4d; 
             --footer-bg: #0d1117;
             --success: #27ae60;
+            --discount: #ff4d4d;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,12 +40,12 @@
         /* --- HEADER --- */
         header {
             background: var(--header-dark); 
-            padding: 15px 5%; display: flex;
+            padding: 12px 5%; display: flex;
             justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 3000;
+            border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 3000;
         }
-        .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; letter-spacing: 1px; }
-        .logo span { color: var(--accent); } 
+        .logo-img { height: 45px; width: auto; vertical-align: middle; transition: 0.3s; }
+        .logo-img:hover { transform: scale(1.05); }
         
         .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
         .nav-link { text-decoration: none; color: var(--white) !important; font-weight: 500; font-size: 15px; cursor: pointer; transition: 0.3s; opacity: 0.9; }
@@ -93,54 +95,48 @@
         /* HERO & PRODUCTS */
         .hero-container { height: 480px; background: #f4f4f4; overflow: hidden; position: relative; }
         .section-header { text-align: center; margin: 60px 0 30px; }
-        .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; }
+        .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; letter-spacing: 1px; }
         .container { padding: 0 5% 40px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; object-fit: cover; }
+        .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
 
-        /* GRID UNIFORM SIZE FIX */
+        /* GRID CARDS */
         .p-card { 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%; 
+            display: flex; flex-direction: column; justify-content: space-between; height: 100%; 
             transition: 0.3s; text-align: center; padding: 15px; cursor: pointer; border: 1px solid transparent; position: relative; 
+            background: #fff; border-radius: 12px;
         }
-        .p-card:hover { border: 1px solid #eee; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
+        .p-card:hover { border: 1px solid var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
         .p-img-box { width: 100%; height: 240px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
         .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
         
         .p-card h3 { 
-            font-size: 15px; 
-            min-height: 42px; /* Text box height fix */
-            margin: 8px 0; 
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 15px; min-height: 42px; margin: 8px 0; 
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
         
-        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
+        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--discount); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
         
-        /* UPDATED PRICE BOX CSS */
         .price-box { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 10px; }
         .old-price { font-size: 13px; color: #888; text-decoration: line-through; font-weight: 400; }
         .current-price { font-size: 18px; font-weight: 700; color: var(--primary); }
 
         .p-brand { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .add-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--header-dark); color: var(--accent); border: 1px solid var(--accent); border-radius: 5px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .add-btn:hover { background: var(--accent); color: #000; }
 
         /* FOOTER */
-        footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
+        footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 4px solid var(--accent); }
         .f-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 40px; }
-        .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--primary); text-transform: uppercase; position: relative; }
-        .f-col h4::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 35px; height: 2px; background: var(--accent); }
+        .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--accent); text-transform: uppercase; position: relative; }
+        .f-col h4::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 35px; height: 2px; background: var(--white); }
         .f-col ul { list-style: none; }
         .f-col ul li { margin-bottom: 10px; }
         .f-col a { text-decoration: none; color: #ffffff; opacity: 0.8; transition: 0.3s; cursor: pointer; }
         .f-col a:hover { opacity: 1; color: var(--accent); }
         .social-links { display: flex; gap: 15px; margin-top: 20px; }
         .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
-        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+        .social-links a:hover { background: var(--accent); color: #000; transform: translateY(-3px); }
 
         /* CART SIDEBAR */
         .cart-sidebar {
@@ -157,12 +153,12 @@
         
         .cart-badge {
             position: absolute; top: -8px; right: -10px; background: var(--accent);
-            color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
+            color: #000; font-size: 10px; font-weight: 800; width: 18px; height: 18px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark);
         }
 
         @media (max-width: 768px) {
-            .hero-container { height: auto; min-height: 180px; } /* Fixed Hero for Mobile */
+            .hero-container { height: auto; min-height: 180px; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .nav-links { display: none; }
             .menu-btn { display: block; }
@@ -200,7 +196,7 @@
 <div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
 <div class="mobile-drawer" id="drawer">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span class="logo" style="color:#000 !important; font-size:20px;">HAIDER <span style="color:var(--accent)">STORE</span></span>
+        <img src="green.jpg" alt="Logo" style="height:40px;">
         <i class="fas fa-times" onclick="toggleMenu()" style="font-size:22px; cursor:pointer; color:#000 !important;"></i>
     </div>
     <div class="drawer-links">
@@ -214,7 +210,7 @@
         <a onclick="setFilter('Earbuds')">Earbuds</a>
         <a onclick="setFilter('Handfree')">Handfree</a>
         <a onclick="setFilter('Headphones')">Headphones</a>
-        <h4>Life Style</h4>
+        <h4>Lifestyle</h4>
         <a onclick="setFilter('Smart Watches')">Smart Watches</a>
         <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
     </div>
@@ -223,7 +219,9 @@
 <header>
     <div style="display:flex; align-items:center; gap:15px;">
         <i class="fas fa-bars menu-btn" onclick="toggleMenu()"></i>
-        <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
+        <a href="index.html" class="logo">
+            <img src="green.jpg" alt="Haider Store" class="logo-img">
+        </a>
     </div>
     <nav>
         <ul class="nav-links">
@@ -243,7 +241,7 @@
                         <a onclick="setFilter('Headphones')">Headphones</a>
                     </div>
                     <div class="menu-col">
-                        <h4>Life Style</h4>
+                        <h4>Lifestyle</h4>
                         <a onclick="setFilter('Smart Watches')">Smart Watches</a>
                         <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
                     </div>
@@ -281,7 +279,7 @@
     </div>
 
     <div id="headSec" style="display:none;">
-        <div class="section-header reveal zoom-in"><h2>Wireless Headphones</h2></div>
+        <div class="section-header reveal zoom-in"><h2>Premium Headphones</h2></div>
         <div class="container reveal zoom-in">
             <img src="" id="headBannerSync" class="cat-banner">
             <div id="headphoneGrid" class="grid"></div>
@@ -289,7 +287,7 @@
     </div>
 
     <div id="chargerSec" style="display:none;">
-        <div class="section-header reveal slide-right"><h2>Chargers & Data Cables</h2></div>
+        <div class="section-header reveal slide-right"><h2>Chargers & Cables</h2></div>
         <div class="container reveal slide-right">
             <img src="" id="chargerBannerSync" class="cat-banner">
             <div id="chargerGrid" class="grid"></div>
@@ -308,8 +306,8 @@
 <footer>
     <div class="f-grid">
         <div class="f-col">
-            <h4 style="color: #fff; border:none;">HAIDER STORE</h4>
-            <p>Premium Tech Accessories in Pakistan.</p>
+            <img src="green.jpg" style="height:50px; margin-bottom:15px; border-radius: 5px;">
+            <p>Your ultimate destination for premium mobile accessories in Pakistan.</p>
             <div class="social-links">
                 <a href="https://www.facebook.com/HaiderStudio.co" target="_blank"><i class="fab fa-facebook-f"></i></a>
                 <a href="https://www.instagram.com/h.m4213803/" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -320,7 +318,7 @@
             <h4>Shop</h4>
             <ul>
                 <li><a onclick="setFilter('Earbuds')">Earbuds</a></li>
-                <li><a onclick="setFilter('Handfree')">Handfree</a></li>
+                <li><a onclick="setFilter('Fast Chargers')">Chargers</a></li>
                 <li><a onclick="setFilter('Smart Watches')">Smart Watches</a></li>
             </ul>
         </div>
@@ -333,8 +331,8 @@
         </div>
         <div class="f-col">
             <h4>Contact</h4>
-            <p>+92 327 9518790</p>
-            <p>info@haiderstore.com</p>
+            <p><i class="fas fa-phone"></i> +92 327 9518790</p>
+            <p><i class="fas fa-envelope"></i> info@haiderstore.com</p>
         </div>
     </div>
     <div style="text-align:center; padding-top:40px; font-size:13px; color:#636e72; border-top:1px solid #1a1f26; margin-top:40px;">
@@ -414,16 +412,13 @@
         let counts = { ear:0, head:0, char:0, acc:0 };
 
         data.forEach(p => {
-            let discountBadge = "";
-            if (p.oldPrice && Number(p.oldPrice) > Number(p.price)) {
-                let discPercent = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100);
-                discountBadge = `<span class="discount-badge">-${discPercent}% OFF</span>`;
-            }
+            let discBadge = (p.oldPrice && Number(p.oldPrice) > Number(p.price)) ? 
+                `<span class="discount-badge">-${Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)}% OFF</span>` : "";
 
             const card = `
                 <div class="p-card">
                     <div>
-                        ${discountBadge}
+                        ${discBadge}
                         <span class="p-brand">${p.brand || ''}</span>
                         <div onclick="location.href='product.html?id=${p.id}'">
                             <div class="p-img-box"><img src="${p.img}"></div>
@@ -434,12 +429,11 @@
                             </div>
                         </div>
                     </div>
-                    <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:600;">ADD TO CART</button>
+                    <button class="add-btn" onclick="addToCart('${p.id}')">ADD TO CART</button>
                 </div>`;
 
             if(filterType !== 'ALL') {
-                 grids.acc.innerHTML += card; 
-                 counts.acc++;
+                 grids.acc.innerHTML += card; counts.acc++;
             } else {
                 if (p.category === 'Earbuds') { grids.ear.innerHTML += card; counts.ear++; }
                 else if (p.category === 'Headphones') { grids.head.innerHTML += card; counts.head++; }
@@ -459,13 +453,11 @@
             document.getElementById('chargerSec').style.display = counts.char > 0 ? 'block' : 'none';
             document.getElementById('accessoriesSec').style.display = counts.acc > 0 ? 'block' : 'none';
         }
-        
         reveal();
     }
 
     window.setFilter = (category) => {
-        document.getElementById('drawer').classList.remove('open');
-        document.getElementById('overlay').classList.remove('active');
+        toggleMenu();
         let filtered = category === 'ALL' ? allProducts : allProducts.filter(p => p.category === category);
         document.getElementById('accTitle').innerText = category === 'ALL' ? 'Premium Accessories' : category + ' Products';
         document.querySelector('.hero-container').style.display = category === 'ALL' ? 'block' : 'none';
@@ -502,8 +494,6 @@
 
     function updateCartUI() {
         const container = document.getElementById('cartItemsContainer');
-        const badge = document.getElementById('cartBadge');
-        const totalEl = document.getElementById('cartTotal');
         container.innerHTML = cart.length ? '' : '<p style="text-align:center; padding:20px;">Cart is empty!</p>';
         let total = 0, count = 0;
         cart.forEach((item, i) => {
@@ -524,8 +514,8 @@
                     <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
                 </div>`;
         });
-        badge.innerText = count;
-        totalEl.innerText = `Rs. ${total.toLocaleString()}`;
+        document.getElementById('cartBadge').innerText = count;
+        document.getElementById('cartTotal').innerText = `Rs. ${total.toLocaleString()}`;
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
     }
 
