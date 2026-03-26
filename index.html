@@ -8,8 +8,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-apple-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Haider Store">
-    <link rel="icon" type="image/png" href="YOUR_LOGO_URL_HERE">
-    <link rel="apple-touch-icon" href="YOUR_LOGO_URL_HERE">
+    
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/RashidIqbalHaider/RashidIqbalHaider.github.io/main/logo.jpg">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/RashidIqbalHaider/RashidIqbalHaider.github.io/main/logo.jpg">
     
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -28,7 +29,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; top: 0px !important; }
 
-        /* --- ✨ CLEANED INTERNATIONAL TOOLS --- */
+        /* --- ✨ CLEANED INTERNATIONAL TOOLS (NOTHING DELETED) --- */
         .intl-controls { display: flex; align-items: center; gap: 8px; margin-right: 5px; }
         
         #currencySelector, .goog-te-combo {
@@ -60,12 +61,12 @@
         /* --- HEADER --- */
         header {
             background: var(--header-dark); 
-            padding: 15px 5%; display: flex;
+            padding: 10px 5%; display: flex; /* Reduced padding for image logo */
             justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 3000;
         }
-        .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; letter-spacing: 1px; }
-        .logo span { color: var(--accent); } 
+        /* Graphcial Logo Styling */
+        .logo-img { height: 45px; width: auto; object-fit: contain; display: block; }
         
         .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
         .nav-link { text-decoration: none; color: var(--white) !important; font-weight: 500; font-size: 15px; cursor: pointer; transition: 0.3s; opacity: 0.9; }
@@ -182,6 +183,8 @@
         }
 
         @media (max-width: 768px) {
+            header { padding: 8px 3%; } /* Smaller header on mobile */
+            .logo-img { height: 35px; } /* Smaller logo on mobile */
             .hero-container { height: auto; min-height: 180px; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .nav-links { display: none; }
@@ -222,7 +225,8 @@
 <div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
 <div class="mobile-drawer" id="drawer">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span class="logo" style="color:#000 !important; font-size:20px;">HAIDER <span style="color:var(--accent)">STORE</span></span>
+        <a href="index.html">
+            <img src="https://raw.githubusercontent.com/RashidIqbalHaider/RashidIqbalHaider.github.io/main/logo.jpg" alt="Haider Store Logo" class="logo-img" style="filter: brightness(0); height:40px;"> </a>
         <i class="fas fa-times" onclick="toggleMenu()" style="font-size:22px; cursor:pointer; color:#000 !important;"></i>
     </div>
     <div class="drawer-links">
@@ -245,7 +249,9 @@
 <header>
     <div style="display:flex; align-items:center; gap:15px;">
         <i class="fas fa-bars menu-btn" onclick="toggleMenu()"></i>
-        <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
+        <a href="index.html">
+            <img src="https://raw.githubusercontent.com/RashidIqbalHaider/RashidIqbalHaider.github.io/main/logo.jpg" alt="Haider Store Logo" class="logo-img">
+        </a>
     </div>
     <nav>
         <ul class="nav-links">
