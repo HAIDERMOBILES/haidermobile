@@ -13,13 +13,16 @@
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/HAIDERMOBILES/haidermobile/a70723121c6a0944b6b830600840c33130d1ae3d/logo.jpg">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/HAIDERMOBILES/haidermobile/a70723121c6a0944b6b830600840c33130d1ae3d/logo.jpg">
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
         :root { 
             --primary: #005f6b; 
-            --header-dark: #004040; 
+            /* --header-dark placeholder, will be dynamic */
+            --header-dark-fallback: #004040; /* Original Color as Fallback */
             --text-dark: #1a1a1a; 
             --white: #ffffff; 
             --accent: #ff4d4d; 
@@ -52,16 +55,21 @@
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon, .goog-tooltip { display: none !important; }
         .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
 
-        /* --- HEADER --- */
+        /* --- HEADER (Updated for Dynamic Color) --- */
         header {
-            background: var(--header-dark); 
+            /* Initial fallback background */
+            background: var(--header-dark-fallback); 
             padding: 8px 5%; display: flex;
             justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 3000;
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            position: sticky; top: 0; z-index: 3000;
+            /* ✨ Transition for smooth color change */
+            transition: background 0.5s ease-in-out; 
         }
+        
         /* LOGO IMAGE STYLING */
         .logo-container img {
-            height: 50px; /* Adjust height as needed */
+            height: 50px; 
             width: auto;
             display: block;
             border-radius: 4px;
@@ -86,7 +94,7 @@
         .drawer-links h4 { font-size: 12px; color: var(--primary); margin: 20px 0 10px; text-transform: uppercase; }
         .drawer-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; display: block; padding: 10px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
 
-        /* ... [Keeping all other product grid and cart styles identical to previous version] ... */
+        /* ... [Rest of the product grid and cart styles identical] ... */
         .hero-container { height: 480px; background: #f4f4f4; overflow: hidden; position: relative; }
         .section-header { text-align: center; margin: 60px 0 30px; }
         .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; }
@@ -113,7 +121,7 @@
         
         .cart-sidebar { position: fixed; top: 0; right: -100%; width: 350px; max-width: 100%; height: 100vh; background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: 0.4s; z-index: 10000; display: flex; flex-direction: column; }
         .cart-sidebar.open { right: 0; }
-        .cart-header { padding: 20px; background: var(--header-dark); color: white; display: flex; justify-content: space-between; align-items: center; }
+        .cart-header { padding: 20px; background: var(--header-dark-fallback); color: white; display: flex; justify-content: space-between; align-items: center; transition: background 0.5s ease-in-out; }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark); }
 
         @media (max-width: 768px) {
@@ -130,8 +138,7 @@
 
 <div id="cartOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; display:none;" onclick="toggleCart()"></div>
 <div id="cartSidebar" class="cart-sidebar">
-    <div class="cart-header">
-        <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+    <div class="cart-header" id="cartHeaderDynamic"> <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
         <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer; font-size:24px;"></i>
     </div>
     <div class="cart-items" id="cartItemsContainer"></div>
@@ -167,11 +174,11 @@
     </div>
 </div>
 
-<header>
+<header id="mainHeaderDynamic"> 
     <div style="display:flex; align-items:center; gap:15px;">
         <i class="fas fa-bars menu-btn" onclick="toggleMenu()"></i>
         <a href="index.html" class="logo-container">
-            <img src="https://raw.githubusercontent.com/HAIDERMOBILES/haidermobile/a70723121c6a0944b6b830600840c33130d1ae3d/logo.jpg" alt="Haider Store Logo">
+            <img src="https://raw.githubusercontent.com/HAIDERMOBILES/haidermobile/a70723121c6a0944b6b830600840c33130d1ae3d/logo.jpg" alt="Haider Store Logo" id="logoImg" crossOrigin="anonymous">
         </a>
     </div>
     <nav>
@@ -210,6 +217,56 @@
     </div>
 </div>
 
+<script>
+    const logo = document.getElementById('logoImg');
+    const header = document.getElementById('mainHeaderDynamic');
+    const cartHeader = document.getElementById('cartHeaderDynamic');
+    const colorThief = new ColorThief();
+
+    function setDynamicHeaderColor() {
+        // analyze logo and get dominant color
+        let dominantColor;
+        try {
+            dominantColor = colorThief.getColor(logo);
+        } catch (error) {
+            console.warn("Could not extract color from logo, using fallback.");
+            return; // Exit if failed, fallback remains
+        }
+        
+        // dominantColor is an array of [R, G, B]
+        const rgbColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+        
+        // Apply color to Header background
+        header.style.background = rgbColor;
+        cartHeader.style.background = rgbColor;
+
+        // ✨ OPTIONAL: Smart Text Color (Light or Dark text based on background brightness)
+        // This makes sure text remains readable
+        const brightness = Math.round(((parseInt(dominantColor[0]) * 299) +
+                          (parseInt(dominantColor[1]) * 587) +
+                          (parseInt(dominantColor[2]) * 114)) / 1000);
+        
+        if (brightness > 125) {
+            // Bright background -> use Dark text
+            document.querySelectorAll('#mainHeaderDynamic .nav-link, #mainHeaderDynamic .fas, #mainHeaderDynamic .logo-container').forEach(el => el.style.color = '#000000');
+            document.getElementById('cartBadge').style.borderColor = rgbColor; // Fix badge border
+        } else {
+            // Dark background -> use White text
+            document.querySelectorAll('#mainHeaderDynamic .nav-link, #mainHeaderDynamic .fas, #mainHeaderDynamic .logo-container').forEach(el => el.style.color = '#ffffff');
+            document.getElementById('cartBadge').style.borderColor = rgbColor; // Fix badge border
+        }
+    }
+
+    // Run when logo image is loaded
+    if (logo.complete) {
+        setDynamicHeaderColor();
+    } else {
+        logo.addEventListener('load', function() {
+            setDynamicHeaderColor();
+        });
+    }
+</script>
+
 <script type="module">
     // [Keeping your original Firebase and Logic Script here - Unchanged]
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -225,9 +282,6 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-
-    // [Logic for loading products, cart, search etc as per your file]
-    // ...
 </script>
 
 <script type="text/javascript">
