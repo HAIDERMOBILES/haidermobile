@@ -26,7 +26,32 @@
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
+        body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; top: 0px !important; }
+
+        /* --- ✨ INTERNATIONAL TOOLS STYLING --- */
+        .intl-controls { display: flex; align-items: center; gap: 8px; margin-right: 5px; }
+        
+        #currencySelector {
+            background: rgba(255,255,255,0.12);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            outline: none;
+            font-family: 'Jost', sans-serif;
+        }
+        #currencySelector option { color: #333; }
+
+        .goog-te-gadget-simple {
+            background-color: rgba(255,255,255,0.12) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            padding: 4px !important;
+            border-radius: 4px !important;
+        }
+        .goog-te-menu-value span { color: white !important; font-size: 11px !important; text-transform: uppercase; }
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
 
         /* --- ✨ ANIMATIONS --- */
         .reveal { opacity: 0; transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -112,7 +137,7 @@
         
         .p-card h3 { 
             font-size: 15px; 
-            min-height: 42px; /* Text box height fix */
+            min-height: 42px;
             margin: 8px 0; 
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -122,11 +147,9 @@
         
         .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
         
-        /* UPDATED PRICE BOX CSS */
         .price-box { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 10px; }
         .old-price { font-size: 13px; color: #888; text-decoration: line-through; font-weight: 400; }
         .current-price { font-size: 18px; font-weight: 700; color: var(--primary); }
-
         .p-brand { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         /* FOOTER */
@@ -162,13 +185,15 @@
         }
 
         @media (max-width: 768px) {
-            .hero-container { height: auto; min-height: 180px; } /* Fixed Hero for Mobile */
+            .hero-container { height: auto; min-height: 180px; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .nav-links { display: none; }
             .menu-btn { display: block; }
             .f-grid { grid-template-columns: 1fr; text-align: center; }
             .f-col h4::after { left: 50%; transform: translateX(-50%); }
             .social-links { justify-content: center; }
+            .intl-controls { gap: 4px; }
+            #currencySelector { max-width: 65px; font-size: 10px; }
         }
     </style>
 </head>
@@ -257,10 +282,30 @@
             <li><a href="contact.html" class="nav-link">Contact</a></li>
         </ul>
     </nav>
-    <div style="display: flex; gap: 20px; font-size: 18px; align-items: center; color:white;">
-        <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer;"></i>
+    <div style="display: flex; gap: 12px; align-items: center; color:white;">
+        <div class="intl-controls">
+            <select id="currencySelector" onchange="changeCurrency(this.value)">
+                <optgroup label="Popular">
+                    <option value="PKR">PKR (Rs)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="SAR">SAR (SR)</option>
+                    <option value="AED">AED (Dh)</option>
+                    <option value="INR">INR (₹)</option>
+                    <option value="GBP">GBP (£)</option>
+                </optgroup>
+                <optgroup label="Others">
+                    <option value="EUR">EUR (€)</option>
+                    <option value="CAD">CAD ($)</option>
+                    <option value="TRY">TRY (₺)</option>
+                    <option value="KWD">KWD (KD)</option>
+                </optgroup>
+            </select>
+            <div id="google_translate_element"></div>
+        </div>
+        
+        <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer; font-size: 16px;"></i>
         <div style="position:relative; cursor:pointer;" onclick="toggleCart()">
-            <i class="fas fa-shopping-bag"></i>
+            <i class="fas fa-shopping-bag" style="font-size: 16px;"></i>
             <span id="cartBadge" class="cart-badge">0</span>
         </div>
     </div>
@@ -271,7 +316,6 @@
 </section>
 
 <div id="mainContent">
-    
     <div id="earbudsSec" style="display:none;">
         <div class="section-header reveal slide-left"><h2>Wireless Earbuds</h2></div>
         <div class="container reveal slide-left">
@@ -302,7 +346,6 @@
             <div id="accessoriesGrid" class="grid"></div>
         </div>
     </div>
-
 </div>
 
 <footer>
@@ -360,6 +403,26 @@
     let allProducts = [];
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
 
+    // --- 🌍 CURRENCY ENGINE ---
+    const currencyData = {
+        PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, SAR: { s: "SR", r: 0.013 },
+        AED: { s: "Dh", r: 0.013 }, INR: { s: "₹", r: 0.30 }, GBP: { s: "£", r: 0.0028 },
+        EUR: { s: "€", r: 0.0033 }, CAD: { s: "C$", r: 0.0048 }, TRY: { s: "₺", r: 0.11 }, KWD: { s: "KD", r: 0.0011 }
+    };
+    let currentCurrency = localStorage.getItem('haiderCurrency') || 'PKR';
+
+    window.changeCurrency = (code) => {
+        currentCurrency = code;
+        localStorage.setItem('haiderCurrency', code);
+        renderProducts(allProducts, 'ALL');
+        updateCartUI();
+    };
+
+    function formatPrice(val) {
+        const c = currencyData[currentCurrency] || currencyData.PKR;
+        return `${c.s} ${(val * c.r).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}`;
+    }
+
     // --- UI Logic ---
     function reveal() {
         document.querySelectorAll(".reveal").forEach(r => {
@@ -388,16 +451,16 @@
         updateCartUI();
     };
 
-    // --- Firebase Banner Sync ---
+    // --- Firebase Sync ---
     onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
     onValue(ref(db, 'settings/earbudsBanner'), s => { if(s.exists()) document.getElementById('earBannerSync').src = s.val(); });
     onValue(ref(db, 'settings/headphoneBanner'), s => { if(s.exists()) document.getElementById('headBannerSync').src = s.val(); });
     onValue(ref(db, 'settings/chargerBanner'), s => { if(s.exists()) document.getElementById('chargerBannerSync').src = s.val(); });
 
-    // --- Product Fetch & Sorting ---
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            document.getElementById('currencySelector').value = currentCurrency;
             renderProducts(allProducts, 'ALL');
         }
     });
@@ -410,7 +473,6 @@
             acc: document.getElementById('accessoriesGrid')
         };
         Object.values(grids).forEach(g => g.innerHTML = '');
-
         let counts = { ear:0, head:0, char:0, acc:0 };
 
         data.forEach(p => {
@@ -429,17 +491,16 @@
                             <div class="p-img-box"><img src="${p.img}"></div>
                             <h3>${p.name}</h3>
                             <div class="price-box">
-                                ${p.oldPrice ? `<span class="old-price">Rs. ${Number(p.oldPrice).toLocaleString()}</span>` : ''}
-                                <span class="current-price">Rs. ${Number(p.price).toLocaleString()}</span>
+                                ${p.oldPrice ? `<span class="old-price">${formatPrice(p.oldPrice)}</span>` : ''}
+                                <span class="current-price">${formatPrice(p.price)}</span>
                             </div>
                         </div>
                     </div>
                     <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:600;">ADD TO CART</button>
                 </div>`;
 
-            if(filterType !== 'ALL') {
-                 grids.acc.innerHTML += card; 
-                 counts.acc++;
+            if(filterType !== 'ALL' && filterType !== 'SEARCH') {
+                 grids.acc.innerHTML += card; counts.acc++;
             } else {
                 if (p.category === 'Earbuds') { grids.ear.innerHTML += card; counts.ear++; }
                 else if (p.category === 'Headphones') { grids.head.innerHTML += card; counts.head++; }
@@ -448,18 +509,11 @@
             }
         });
 
-        if(filterType !== 'ALL') {
-            document.getElementById('earbudsSec').style.display = 'none';
-            document.getElementById('headSec').style.display = 'none';
-            document.getElementById('chargerSec').style.display = 'none';
-            document.getElementById('accessoriesSec').style.display = counts.acc > 0 ? 'block' : 'none';
-        } else {
-            document.getElementById('earbudsSec').style.display = counts.ear > 0 ? 'block' : 'none';
-            document.getElementById('headSec').style.display = counts.head > 0 ? 'block' : 'none';
-            document.getElementById('chargerSec').style.display = counts.char > 0 ? 'block' : 'none';
-            document.getElementById('accessoriesSec').style.display = counts.acc > 0 ? 'block' : 'none';
-        }
-        
+        const isFiltered = filterType !== 'ALL' && filterType !== 'SEARCH';
+        document.getElementById('earbudsSec').style.display = !isFiltered && counts.ear > 0 ? 'block' : 'none';
+        document.getElementById('headSec').style.display = !isFiltered && counts.head > 0 ? 'block' : 'none';
+        document.getElementById('chargerSec').style.display = !isFiltered && counts.char > 0 ? 'block' : 'none';
+        document.getElementById('accessoriesSec').style.display = counts.acc > 0 ? 'block' : 'none';
         reveal();
     }
 
@@ -478,17 +532,12 @@
         if(term.length > 0) {
             const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || (p.brand && p.brand.toLowerCase().includes(term)));
             document.querySelector('.hero-container').style.display = 'none';
-            document.getElementById('accTitle').innerText = `Search Results for "${term}"`;
+            document.getElementById('accTitle').innerText = `Search: "${term}"`;
             renderProducts(filtered, 'SEARCH');
         } else {
-            document.querySelector('.hero-container').style.display = 'block';
-            document.getElementById('accTitle').innerText = 'Premium Accessories';
-            renderProducts(allProducts, 'ALL');
+            setFilter('ALL');
         }
-        if(e.key === 'Enter') {
-            toggleSearch(); 
-            document.getElementById('mainContent').scrollIntoView({behavior: "smooth"});
-        }
+        if(e.key === 'Enter') { toggleSearch(); document.getElementById('mainContent').scrollIntoView({behavior: "smooth"}); }
     };
 
     window.addToCart = (id) => {
@@ -514,31 +563,39 @@
                     <img src="${item.image}">
                     <div style="flex:1;">
                         <div style="font-size:14px; font-weight:600;">${item.name}</div>
-                        <div>Rs. ${item.price}</div>
+                        <div>${formatPrice(item.price)}</div>
                         <div style="margin-top:5px;">
-                            <button onclick="changeQty(${i},-1)" style="padding:2px 8px; cursor:pointer;">-</button> 
+                            <button onclick="changeQty(${i},-1)" style="padding:2px 8px;">-</button> 
                             <span style="margin:0 10px;">${item.quantity}</span> 
-                            <button onclick="changeQty(${i},1)" style="padding:2px 8px; cursor:pointer;">+</button>
+                            <button onclick="changeQty(${i},1)" style="padding:2px 8px;">+</button>
                         </div>
                     </div>
                     <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
                 </div>`;
         });
         badge.innerText = count;
-        totalEl.innerText = `Rs. ${total.toLocaleString()}`;
+        totalEl.innerText = formatPrice(total);
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
     }
 
     window.changeQty = (i, d) => { cart[i].quantity += d; if(cart[i].quantity < 1) cart.splice(i, 1); updateCartUI(); };
     window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
     window.checkout = () => {
-        if(cart.length === 0) return alert("Your cart is empty!");
-        let msg = "🛍️ *New Order from Haider Store*%0A%0A";
-        cart.forEach(item => msg += `• ${item.name} (x${item.quantity}) - Rs.${item.price}%0A`);
-        msg += `%0A💰 *Total Amount: ${document.getElementById('cartTotal').innerText}*`;
+        if(cart.length === 0) return;
+        let msg = "🛍️ *New Order - Haider Store*%0A";
+        cart.forEach(item => msg += `• ${item.name} (x${item.quantity}) - ${formatPrice(item.price)}%0A`);
+        msg += `%0A💰 *Total: ${document.getElementById('cartTotal').innerText}*`;
         window.open(`https://wa.me/923279518790?text=${msg}`);
     };
     updateCartUI();
 </script>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,ur,ar,fr,es,de,zh-CN,tr', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
