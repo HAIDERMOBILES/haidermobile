@@ -28,30 +28,27 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; top: 0px !important; }
 
-        /* --- ✨ INTERNATIONAL TOOLS STYLING --- */
+        /* --- ✨ CLEANED INTERNATIONAL TOOLS --- */
         .intl-controls { display: flex; align-items: center; gap: 8px; margin-right: 5px; }
         
-        #currencySelector {
-            background: rgba(255,255,255,0.12);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 4px 6px;
-            border-radius: 4px;
-            font-size: 11px;
+        #currencySelector, .goog-te-combo {
+            background: rgba(255,255,255,0.12) !important;
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            padding: 4px 6px !important;
+            border-radius: 4px !important;
+            font-size: 11px !important;
             cursor: pointer;
             outline: none;
-            font-family: 'Jost', sans-serif;
+            font-family: 'Jost', sans-serif !important;
         }
-        #currencySelector option { color: #333; }
 
-        .goog-te-gadget-simple {
-            background-color: rgba(255,255,255,0.12) !important;
-            border: 1px solid rgba(255,255,255,0.2) !important;
-            padding: 4px !important;
-            border-radius: 4px !important;
-        }
-        .goog-te-menu-value span { color: white !important; font-size: 11px !important; text-transform: uppercase; }
-        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        /* Google Translate Faltu Elements Hide Karein */
+        .goog-te-gadget { color: transparent !important; font-size: 0 !important; }
+        .goog-te-gadget .goog-te-combo { margin: 0 !important; color: white !important; }
+        .goog-te-gadget .goog-te-combo option { color: #333; background: #fff; }
+        .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon, .goog-tooltip { display: none !important; }
+        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
 
         /* --- ✨ ANIMATIONS --- */
         .reveal { opacity: 0; transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
