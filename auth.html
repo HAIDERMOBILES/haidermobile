@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Login | Haider Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
-        .card { background: white; padding: 30px; border-radius: 10px; width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #005f6b; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        body { font-family: 'Jost', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+        .card { background: white; padding: 30px; border-radius: 10px; width: 300px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #005f6b; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: 600; }
+        .google-btn { background: #4285F4; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     </style>
 </head>
 <body>
@@ -17,12 +19,13 @@
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="pass" placeholder="Password">
     <button id="btn">LOGIN</button>
-    <p id="toggle" style="cursor:pointer; color:blue; font-size:12px; margin-top:15px;">New? Sign Up instead</p>
+    <button class="google-btn" id="googleBtn"><i class="fab fa-google"></i> Login with Google</button>
+    <p id="toggle" style="cursor:pointer; color:#005f6b; font-size:12px; margin-top:15px;">New? Sign Up instead</p>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -34,6 +37,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
     let isLogin = true;
 
     document.getElementById('toggle').onclick = () => {
@@ -48,9 +52,12 @@
         try {
             if(isLogin) await signInWithEmailAndPassword(auth, email, pass);
             else await createUserWithEmailAndPassword(auth, email, pass);
-            alert("Success!");
             window.location.href = "index.html";
         } catch(e) { alert(e.message); }
+    };
+
+    document.getElementById('googleBtn').onclick = () => {
+        signInWithPopup(auth, provider).then(() => window.location.href = "index.html");
     };
 </script>
 </body>
