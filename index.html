@@ -28,7 +28,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; top: 0px !important; }
 
-        /* --- ✨ CLEANED INTERNATIONAL TOOLS --- */
         .intl-controls { display: flex; align-items: center; gap: 8px; margin-right: 5px; }
         
         #currencySelector, .goog-te-combo {
@@ -43,14 +42,12 @@
             font-family: 'Jost', sans-serif !important;
         }
 
-        /* --- ✨ ANIMATIONS --- */
         .reveal { opacity: 0; transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .slide-left { transform: translateX(-80px); }
         .zoom-in { transform: scale(0.85); }
         .slide-right { transform: translateX(80px); }
         .active { opacity: 1; transform: translateX(0) scale(1); }
 
-        /* --- HEADER --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -66,7 +63,6 @@
         
         header .fas { color: var(--white) !important; }
 
-        /* MEGA MENU */
         .nav-item { position: static; }
         .mega-menu {
             position: absolute; top: 100%; left: 0; width: 100%; background: var(--white);
@@ -79,7 +75,6 @@
         .menu-col a { display: block; color: var(--text-dark); text-decoration: none; font-size: 14px; padding: 6px 0; cursor: pointer; transition: 0.2s; }
         .menu-col a:hover { color: var(--accent); padding-left: 5px; }
 
-        /* SEARCH OVERLAY */
         .search-overlay {
             position: fixed; top: -100%; left: 0; width: 100%; height: 110px;
             background: var(--white); z-index: 5000; display: flex; align-items: center;
@@ -92,7 +87,6 @@
             font-size: 16px; outline: none; font-family: 'Jost', sans-serif; transition: 0.3s;
         }
 
-        /* MOBILE DRAWER */
         .menu-btn { display: none; font-size: 22px; cursor: pointer; color: var(--white) !important; }
         .mobile-drawer {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
@@ -105,7 +99,6 @@
         .drawer-links h4 { font-size: 12px; color: var(--primary); margin: 20px 0 10px; text-transform: uppercase; }
         .drawer-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; display: block; padding: 10px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
 
-        /* HERO & PRODUCTS */
         .hero-container { height: 480px; background: #f4f4f4; overflow: hidden; position: relative; }
         .section-header { text-align: center; margin: 60px 0 30px; }
         .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; }
@@ -113,7 +106,6 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
         .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; object-fit: cover; }
 
-        /* GRID UNIFORM SIZE FIX */
         .p-card { 
             display: flex;
             flex-direction: column;
@@ -142,7 +134,6 @@
         .current-price { font-size: 18px; font-weight: 700; color: var(--primary); }
         .p-brand { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
-        /* FOOTER */
         footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
         .f-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 40px; }
         .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--primary); text-transform: uppercase; position: relative; }
@@ -155,7 +146,6 @@
         .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
         .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
 
-        /* CART SIDEBAR */
         .cart-sidebar {
             position: fixed; top: 0; right: -100%; width: 350px; max-width: 100%; height: 100vh;
             background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -293,17 +283,22 @@
             <div id="google_translate_element"></div>
         </div>
         
+        <div id="userAccount" style="display: flex; align-items: center; gap: 10px; margin-left: 5px;">
+            <a href="auth.html" id="loginLink" style="color:white; text-decoration:none; font-size:14px; display: flex; align-items:center; gap:5px;">
+                <i class="fas fa-user-circle" style="font-size:18px;"></i> Login
+            </a>
+            <div id="userInfo" style="display: none; align-items: center; gap: 10px;">
+                <span id="userNameDisplay" style="color:white; font-size:12px; font-weight:500; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                <i class="fas fa-sign-out-alt" onclick="logout()" style="color:var(--accent); cursor:pointer; font-size:16px;" title="Logout"></i>
+            </div>
+        </div>
+
         <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer; font-size: 16px;"></i>
         <div style="position:relative; cursor:pointer;" onclick="toggleCart()">
             <i class="fas fa-shopping-bag" style="font-size: 16px;"></i>
             <span id="cartBadge" class="cart-badge">0</span>
         </div>
     </div>
-    <div id="userAccount" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-    <a href="auth.html" id="loginLink" style="color:white; text-decoration:none; font-size:14px;"><i class="fas fa-user"></i> Login</a>
-    <span id="userNameDisplay" style="color:white; font-size:12px; display:none;"></span>
-    <i class="fas fa-sign-out-alt" id="logoutBtn" style="color:white; display:none; cursor:pointer;" onclick="logout()"></i>
-</div>
 </header>
 
 <section class="hero-container">
@@ -383,6 +378,8 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    // 🆕 Auth imports added
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -394,11 +391,12 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    // 🆕 Auth initialize added
+    const auth = getAuth(app);
 
     let allProducts = [];
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
 
-    // --- 🌍 CURRENCY ENGINE ---
     const currencyData = {
         PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, SAR: { s: "SR", r: 0.013 },
         AED: { s: "Dh", r: 0.013 }, INR: { s: "₹", r: 0.30 }, GBP: { s: "£", r: 0.0028 },
@@ -418,7 +416,6 @@
         return `${c.s} ${(val * c.r).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}`;
     }
 
-    // --- UI Logic ---
     function reveal() {
         document.querySelectorAll(".reveal").forEach(r => {
             if (r.getBoundingClientRect().top < window.innerHeight - 80) r.classList.add("active");
@@ -446,7 +443,6 @@
         updateCartUI();
     };
 
-    // --- Firebase Sync ---
     onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
     onValue(ref(db, 'settings/earbudsBanner'), s => { if(s.exists()) document.getElementById('earBannerSync').src = s.val(); });
     onValue(ref(db, 'settings/headphoneBanner'), s => { if(s.exists()) document.getElementById('headBannerSync').src = s.val(); });
@@ -572,6 +568,29 @@
         totalEl.innerText = formatPrice(total);
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
     }
+
+    // 🆕 Login status listener added
+    onAuthStateChanged(auth, (user) => {
+        const loginLink = document.getElementById('loginLink');
+        const userInfo = document.getElementById('userInfo');
+        const userName = document.getElementById('userNameDisplay');
+
+        if (user) {
+            if(loginLink) loginLink.style.display = 'none';
+            if(userInfo) userInfo.style.display = 'flex';
+            if(userName) userName.innerText = user.displayName || user.email.split('@')[0];
+        } else {
+            if(loginLink) loginLink.style.display = 'flex';
+            if(userInfo) userInfo.style.display = 'none';
+        }
+    });
+
+    // 🆕 Logout function added
+    window.logout = () => {
+        if(confirm("Are you sure you want to logout?")) {
+            signOut(auth).then(() => location.reload());
+        }
+    };
 
     window.changeQty = (i, d) => { cart[i].quantity += d; if(cart[i].quantity < 1) cart.splice(i, 1); updateCartUI(); };
     window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
