@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haider Store | Premium Tech</title>
     
-    <!-- Modern Fonts & UI Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -16,41 +15,33 @@
         .nav-link { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #1e293b; transition: 0.3s; cursor: pointer; }
         .nav-link:hover { color: #f97316; }
         
-        /* Skeleton Animation */
         @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
         .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 800px 100%; animation: shimmer 1.5s infinite linear; border-radius: 1rem; }
         
-        /* Custom Toast */
         .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #0f172a; color: white; padding: 1rem 2rem; border-radius: 1rem; z-index: 9999; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 10px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         .toast.show { transform: translateX(-50%) translateY(0); }
         
-        /* Currency & Translate Styling */
         #currencySelector, .goog-te-combo { background: #f1f5f9 !important; border: none !important; padding: 5px 10px !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 700 !important; cursor: pointer; outline: none; }
         .goog-te-gadget span { display: none !important; }
     </style>
 </head>
 <body>
 
-<!-- Notification Toast -->
 <div id="toast" class="toast"><i class="fas fa-check-circle text-orange-500"></i> <span id="toastMsg">Added to cart!</span></div>
 
-<!-- Top Announcement Bar -->
 <div id="annBar" class="bg-slate-900 text-white text-[10px] font-bold py-2.5 text-center uppercase tracking-[0.2em] relative z-[6000]">
     Free Delivery on Orders Above Rs. 3000
 </div>
 
-<!-- Navigation -->
 <nav class="glass sticky top-0 z-[5000] border-b border-slate-100">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <!-- Logo & Mobile Menu Icon -->
         <div class="flex items-center gap-6">
             <button onclick="toggleMenu()" class="lg:hidden text-slate-900"><i class="fas fa-bars-staggered text-xl"></i></button>
-            <a href="index.html" class="text-2xl font-black tracking-tighter text-slate-900 uppercase">
+            <a href="index.php" class="text-2xl font-black tracking-tighter text-slate-900 uppercase">
                 HAIDER<span class="text-orange-500">STORE.</span>
             </a>
         </div>
 
-        <!-- Desktop Menu -->
         <div class="hidden lg:flex items-center space-x-8">
             <a onclick="setFilter('ALL')" class="nav-link">Home</a>
             <a onclick="setFilter('Earbuds')" class="nav-link">Earbuds</a>
@@ -58,7 +49,6 @@
             <a onclick="setFilter('Fast Chargers')" class="nav-link">Power</a>
         </div>
 
-        <!-- Actions (Search, Currency, Cart) -->
         <div class="flex items-center gap-4 lg:gap-6">
             <div class="hidden md:flex items-center gap-2">
                 <select id="currencySelector" onchange="changeCurrency(this.value)">
@@ -68,9 +58,7 @@
                 </select>
                 <div id="google_translate_element"></div>
             </div>
-            
             <button onclick="toggleSearch()" class="text-slate-600 hover:text-orange-500"><i class="fas fa-search text-lg"></i></button>
-            
             <button onclick="toggleCart()" class="relative bg-slate-900 text-white p-2.5 px-5 rounded-full flex items-center gap-2 shadow-xl hover:bg-orange-600 transition-all">
                 <i class="fas fa-shopping-bag text-sm"></i>
                 <span id="cartBadge" class="text-xs font-bold">0</span>
@@ -79,7 +67,6 @@
     </div>
 </nav>
 
-<!-- Mobile Drawer -->
 <div id="mobileDrawer" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-[7000] transform -translate-x-full transition-transform duration-300 p-8">
     <div class="flex justify-between items-center mb-10">
         <span class="font-black text-xl">MENU</span>
@@ -93,7 +80,6 @@
     </div>
 </div>
 
-<!-- Search Overlay -->
 <div id="searchOverlay" class="fixed inset-0 bg-white/95 z-[8000] hidden flex-col items-center justify-center p-6">
     <button onclick="toggleSearch()" class="absolute top-10 right-10 text-3xl"><i class="fas fa-times"></i></button>
     <div class="w-full max-w-2xl">
@@ -101,7 +87,6 @@
     </div>
 </div>
 
-<!-- Cart Sidebar -->
 <div id="cartSidebar" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-white shadow-2xl z-[9000] transform translate-x-full transition-transform duration-300 flex flex-col">
     <div class="p-6 border-b flex justify-between items-center bg-slate-900 text-white">
         <h2 class="font-black italic uppercase">Shopping Bag</h2>
@@ -119,7 +104,6 @@
     </div>
 </div>
 
-<!-- Hero Section -->
 <section id="heroSec" class="bg-[#f8f9fb] py-16 px-6 overflow-hidden">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center">
         <div class="lg:w-1/2 space-y-8 text-center lg:text-left">
@@ -130,12 +114,11 @@
             <button onclick="window.scrollTo(0, 800)" class="bg-slate-900 text-white px-10 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:bg-orange-500 transition-all">Explore Now</button>
         </div>
         <div class="lg:w-1/2 mt-12 lg:mt-0">
-            <img src="" id="syncBanner" class="w-full h-auto object-contain max-h-[500px] drop-shadow-2xl">
+            <img src="https://via.placeholder.com/800x600?text=Loading+Banners..." id="syncBanner" class="w-full h-auto object-contain max-h-[500px] drop-shadow-2xl transition-opacity duration-700">
         </div>
     </div>
 </section>
 
-<!-- Main Grid -->
 <main class="max-w-7xl mx-auto px-6 py-20">
     <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
         <div>
@@ -144,51 +127,13 @@
         </div>
     </div>
 
-    <!-- Skeleton Loader -->
     <div id="skeletonLoader" class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="skeleton h-80"></div>
-        <div class="skeleton h-80"></div>
-        <div class="skeleton h-80"></div>
-        <div class="skeleton h-80"></div>
+        <div class="skeleton h-80"></div><div class="skeleton h-80"></div>
+        <div class="skeleton h-80"></div><div class="skeleton h-80"></div>
     </div>
 
-    <!-- Product Grid -->
     <div id="accessoriesGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-10"></div>
 </main>
-
-<!-- Footer -->
-<footer class="bg-white border-t border-slate-100 py-20 px-6">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-        <div class="space-y-4">
-            <h4 class="text-xl font-black uppercase">Haider<span class="text-orange-500">Store.</span></h4>
-            <p class="text-slate-500 text-sm font-medium">Premium mobile accessories store delivering quality tech across Pakistan.</p>
-        </div>
-        <div>
-            <h4 class="font-black uppercase text-xs tracking-widest mb-6">Explore</h4>
-            <ul class="space-y-3 text-sm font-bold text-slate-400">
-                <li><a onclick="setFilter('Earbuds')" class="hover:text-orange-500 cursor-pointer">Earbuds</a></li>
-                <li><a onclick="setFilter('Smart Watches')" class="hover:text-orange-500 cursor-pointer">Smart Watches</a></li>
-                <li><a onclick="setFilter('Fast Chargers')" class="hover:text-orange-500 cursor-pointer">Chargers</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="font-black uppercase text-xs tracking-widest mb-6">Support</h4>
-            <ul class="space-y-3 text-sm font-bold text-slate-400">
-                <li><a href="#" class="hover:text-orange-500">Shipping Policy</a></li>
-                <li><a href="#" class="hover:text-orange-500">Return Policy</a></li>
-                <li><a href="#" class="hover:text-orange-500">Contact Us</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="font-black uppercase text-xs tracking-widest mb-6">Follow Us</h4>
-            <div class="flex gap-4">
-                <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"><i class="fab fa-youtube"></i></a>
-            </div>
-        </div>
-    </div>
-</footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -213,7 +158,6 @@
         PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, AED: { s: "Dh", r: 0.013 }
     };
 
-    // --- Core Functions ---
     window.formatPrice = (val) => {
         const c = currencyData[currentCurrency] || currencyData.PKR;
         return `${c.s} ${(val * c.r).toLocaleString()}`;
@@ -234,8 +178,12 @@
         setTimeout(() => t.classList.remove('show'), 2500);
     };
 
-    // --- Firebase Sync ---
-    onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
+    // --- Banner Sync (Fixed Path) ---
+    onValue(ref(db, 'settings/bannerUrl'), snap => { 
+        if(snap.exists()) document.getElementById('syncBanner').src = snap.val(); 
+    });
+
+    // --- Products Sync ---
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
@@ -244,11 +192,10 @@
         }
     });
 
-    // --- Render Engine ---
     window.renderProducts = (products) => {
         const grid = document.getElementById('accessoriesGrid');
         grid.innerHTML = products.map(p => `
-            <div class="bg-white p-4 lg:p-6 rounded-[2rem] border border-slate-50 shadow-sm hover:shadow-2xl transition-all group relative">
+            <div class="bg-white p-4 lg:p-6 rounded-[2rem] border border-slate-50 shadow-sm hover:shadow-2xl transition-all group relative cursor-pointer" onclick="window.location.href='product.php?id=${p.id}'">
                 ${p.oldPrice ? `<span class="absolute top-4 left-4 bg-orange-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase z-10">Sale</span>` : ''}
                 <div class="aspect-square bg-slate-50 rounded-[1.5rem] p-4 mb-6 overflow-hidden flex items-center justify-center">
                     <img src="${p.img}" class="max-h-full group-hover:scale-110 transition-transform duration-500">
@@ -260,7 +207,7 @@
                         <p class="text-[10px] text-slate-400 line-through font-bold">${p.oldPrice ? formatPrice(p.oldPrice) : ''}</p>
                         <p class="font-black text-slate-900">${formatPrice(p.price)}</p>
                     </div>
-                    <button onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "")}', ${p.price}, '${p.img}')" class="bg-slate-900 text-white w-10 h-10 rounded-full hover:bg-orange-500 transition-colors">
+                    <button onclick="event.stopPropagation(); addToCart('${p.id}', '${p.name.replace(/'/g, "")}', ${p.price}, '${p.img}')" class="bg-slate-900 text-white w-10 h-10 rounded-full hover:bg-orange-500 transition-colors">
                         <i class="fas fa-plus text-xs"></i>
                     </button>
                 </div>
@@ -268,13 +215,11 @@
         `).join('');
     };
 
-    // --- Search & Filter ---
     window.setFilter = (cat) => {
         document.getElementById('gridTitle').innerHTML = cat === 'ALL' ? `Latest <span class="text-orange-500">Arrivals</span>` : cat;
         const filtered = cat === 'ALL' ? allProducts : allProducts.filter(p => p.category === cat);
         renderProducts(filtered);
         document.getElementById('mobileDrawer').classList.add('-translate-x-full');
-        window.scrollTo(0, 700);
     };
 
     window.debounceSearch = () => {
@@ -283,7 +228,6 @@
         renderProducts(filtered);
     };
 
-    // --- Cart Logic ---
     window.addToCart = (id, name, price, img) => {
         const idx = cart.findIndex(i => i.id === id);
         if(idx > -1) cart[idx].qty++;
@@ -301,7 +245,6 @@
         const container = document.getElementById('cartItemsContainer');
         const badge = document.getElementById('cartBadge');
         const totalEl = document.getElementById('cartTotal');
-        
         badge.innerText = cart.reduce((a, b) => a + b.qty, 0);
         
         if(cart.length === 0) {
@@ -345,7 +288,7 @@
 
     window.checkout = () => {
         if(cart.length === 0) return;
-        let msg = `*Order from Haider Store*%0A%0A`;
+        let msg = `*New Order - Haider Store*%0A%0A`;
         cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
         const total = cart.reduce((a, b) => a + (b.price * b.qty), 0);
         msg += `%0A*Total: ${formatPrice(total)}*`;
@@ -355,7 +298,6 @@
     updateCartUI();
 </script>
 
-<!-- Google Translate Init -->
 <script type="text/javascript">
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ur,ar,hi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
