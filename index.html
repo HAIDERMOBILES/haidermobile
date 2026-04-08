@@ -1,309 +1,639 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haider Store | Premium Tech</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfc; scroll-behavior: smooth; top: 0px !important; }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .nav-link { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #1e293b; transition: 0.3s; cursor: pointer; }
-        .nav-link:hover { color: #f97316; }
-        
-        @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
-        .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 800px 100%; animation: shimmer 1.5s infinite linear; border-radius: 1rem; }
-        
-        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #0f172a; color: white; padding: 1rem 2rem; border-radius: 1rem; z-index: 9999; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 10px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        .toast.show { transform: translateX(-50%) translateY(0); }
-        
-        #currencySelector, .goog-te-combo { background: #f1f5f9 !important; border: none !important; padding: 5px 10px !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 700 !important; cursor: pointer; outline: none; }
-        .goog-te-gadget span { display: none !important; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haider Store | Premium Tech Accessories</title>
+    <meta name="description" content="Shop premium tech accessories — earbuds, headphones, chargers, smart watches & more. Fast shipping across Pakistan.">
+    <meta property="og:title" content="Haider Store | Premium Tech Accessories">
+    <meta property="og:description" content="Shop premium tech accessories at the best prices.">
+    <meta property="og:type" content="website">
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Haider Store">
+    <link rel="icon" type="image/png" href="YOUR_LOGO_URL_HERE">
+    <link rel="apple-touch-icon" href="YOUR_LOGO_URL_HERE">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root { 
+            --primary: #005f6b; 
+            --header-dark: #004040; 
+            --text-dark: #1a1a1a; 
+            --white: #ffffff; 
+            --accent: #ff4d4d; 
+            --footer-bg: #0d1117;
+            --success: #27ae60;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; top: 0px !important; }
+
+        /* --- INTERNATIONAL TOOLS --- */
+        .intl-controls { display: flex; align-items: center; gap: 8px; margin-right: 5px; }
+        
+        #currencySelector, .goog-te-combo {
+            background: rgba(255,255,255,0.12) !important;
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            padding: 4px 6px !important;
+            border-radius: 4px !important;
+            font-size: 11px !important;
+            cursor: pointer;
+            outline: none;
+            font-family: 'Jost', sans-serif !important;
+        }
+        .goog-te-gadget { font-size: 0 !important; }
+        .goog-te-gadget span { display: none !important; }
+
+        /* --- ANIMATIONS --- */
+        .reveal { opacity: 0; transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .slide-left { transform: translateX(-80px); }
+        .zoom-in { transform: scale(0.85); }
+        .slide-right { transform: translateX(80px); }
+        .active { opacity: 1; transform: translateX(0) scale(1); }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #222; color: white; padding: 12px 24px; border-radius: 8px;
+            font-size: 14px; font-weight: 500; z-index: 20000;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast i { color: var(--success); }
+
+        /* --- SKELETON LOADING --- */
+        @keyframes shimmer {
+            0% { background-position: -400px 0; }
+            100% { background-position: 400px 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 800px 100%;
+            animation: shimmer 1.5s infinite linear;
+            border-radius: 10px;
+        }
+        .skeleton-card {
+            height: 340px; border-radius: 12px;
+        }
+        .skeleton-banner {
+            width: 100%; height: 200px; border-radius: 12px; margin-bottom: 30px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--header-dark); 
+            padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 3000;
+        }
+        .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; letter-spacing: 1px; }
+        .logo span { color: var(--accent); } 
+        
+        .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
+        .nav-link { text-decoration: none; color: var(--white) !important; font-weight: 500; font-size: 15px; cursor: pointer; transition: 0.3s; opacity: 0.9; }
+        .nav-link:hover { color: var(--accent) !important; opacity: 1; }
+        
+        header .fas { color: var(--white) !important; }
+
+        /* MEGA MENU */
+        .nav-item { position: static; }
+        .mega-menu {
+            position: absolute; top: 100%; left: 0; width: 100%; background: var(--white);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 1px solid #eee;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+            padding: 30px 10%; opacity: 0; visibility: hidden; transition: 0.3s ease; z-index: 2500;
+        }
+        .nav-item:hover .mega-menu, .nav-item.tap-open .mega-menu { opacity: 1; visibility: visible; }
+        .menu-col h4 { font-size: 13px; margin-bottom: 12px; color: var(--primary); border-bottom: 1px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
+        .menu-col a { display: block; color: var(--text-dark); text-decoration: none; font-size: 14px; padding: 6px 0; cursor: pointer; transition: 0.2s; }
+        .menu-col a:hover { color: var(--accent); padding-left: 5px; }
+
+        /* SEARCH OVERLAY */
+        .search-overlay {
+            position: fixed; top: -100%; left: 0; width: 100%; height: 110px;
+            background: var(--white); z-index: 5000; display: flex; align-items: center;
+            justify-content: center; transition: 0.4s ease-in-out; box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .search-overlay.active { top: 0; }
+        .search-container { width: 90%; max-width: 800px; display: flex; align-items: center; gap: 15px; }
+        .search-container input { 
+            width: 100%; padding: 12px 25px; border: 2px solid #f0f0f0; border-radius: 30px; 
+            font-size: 16px; outline: none; font-family: 'Jost', sans-serif; transition: 0.3s;
+        }
+        .search-container input:focus { border-color: var(--primary); }
+
+        /* MOBILE DRAWER */
+        .menu-btn { display: none; font-size: 22px; cursor: pointer; color: var(--white) !important; }
+        .mobile-drawer {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+            background: var(--white); z-index: 4000; transition: 0.4s ease;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1); padding: 25px; overflow-y: auto;
+        }
+        .mobile-drawer.open { left: 0; }
+        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3500; display: none; }
+        .drawer-overlay.active { display: block; }
+        .drawer-links h4 { font-size: 12px; color: var(--primary); margin: 20px 0 10px; text-transform: uppercase; }
+        .drawer-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; display: block; padding: 10px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+
+        /* HERO & PRODUCTS */
+        .hero-container { height: 480px; background: linear-gradient(135deg, #f4f4f4 0%, #e8e8e8 100%); overflow: hidden; position: relative; }
+        .hero-container img { opacity: 0; transition: opacity 0.6s ease; }
+        .hero-container img.loaded { opacity: 1; }
+        .section-header { text-align: center; margin: 60px 0 30px; }
+        .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; }
+        .container { padding: 0 5% 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
+        .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; object-fit: cover; opacity: 0; transition: opacity 0.6s ease; }
+        .cat-banner.loaded { opacity: 1; }
+
+        /* GRID UNIFORM SIZE FIX */
+        .p-card { 
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 100%; transition: 0.3s; text-align: center; padding: 15px; cursor: pointer; 
+            border: 1px solid transparent; position: relative; 
+        }
+        .p-card:hover { border: 1px solid #eee; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
+        .p-img-box { width: 100%; height: 240px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
+        .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        
+        .p-card h3 { 
+            font-size: 15px; min-height: 42px; margin: 8px 0; 
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        
+        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
+        
+        .price-box { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 10px; }
+        .old-price { font-size: 13px; color: #888; text-decoration: line-through; font-weight: 400; }
+        .current-price { font-size: 18px; font-weight: 700; color: var(--primary); }
+        .p-brand { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block; }
+
+        /* ADD TO CART BUTTON */
+        .add-btn {
+            width: 100%; margin-top: 10px; padding: 10px; background: var(--primary); 
+            color: white; border: none; border-radius: 5px; cursor: pointer; 
+            font-weight: 600; font-family: 'Jost', sans-serif; font-size: 13px;
+            transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .add-btn:hover { background: #007a88; transform: scale(1.02); }
+
+        /* FOOTER */
+        footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
+        .f-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 40px; }
+        .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--primary); text-transform: uppercase; position: relative; }
+        .f-col h4::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 35px; height: 2px; background: var(--accent); }
+        .f-col ul { list-style: none; }
+        .f-col ul li { margin-bottom: 10px; }
+        .f-col a { text-decoration: none; color: #ffffff; opacity: 0.8; transition: 0.3s; cursor: pointer; }
+        .f-col a:hover { opacity: 1; color: var(--accent); }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; text-decoration: none; }
+        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+
+        /* CART SIDEBAR */
+        .cart-sidebar {
+            position: fixed; top: 0; right: -100%; width: 350px; max-width: 100%; height: 100vh;
+            background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 10000; display: flex; flex-direction: column;
+        }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; background: var(--header-dark); color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
+        .cart-items { flex: 1; padding: 15px; overflow-y: auto; }
+        .cart-item { display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; margin-bottom: 15px; }
+        .cart-item img { width: 60px; height: 60px; object-fit: contain; background: #f9f9f9; border-radius: 8px; padding: 5px; }
+        .cart-empty { text-align: center; padding: 40px 20px; color: #999; }
+        .cart-empty i { font-size: 48px; margin-bottom: 15px; display: block; opacity: 0.3; }
+        .qty-btn {
+            width: 28px; height: 28px; border: 1px solid #ddd; background: white; 
+            border-radius: 4px; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 14px;
+            display: inline-flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .qty-btn:hover { background: #f0f0f0; }
+        .checkout-btn { width: 100%; padding: 15px; background: #25d366; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Jost', sans-serif; }
+        .checkout-btn:hover { background: #20bd5a; }
+        
+        .cart-badge {
+            position: absolute; top: -8px; right: -10px; background: var(--accent);
+            color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark);
+            transition: transform 0.3s;
+        }
+        .cart-badge.bump { animation: bump 0.3s ease; }
+        @keyframes bump { 50% { transform: scale(1.4); } }
+
+        /* NO RESULTS */
+        .no-results { text-align: center; padding: 60px 20px; color: #999; }
+        .no-results i { font-size: 64px; opacity: 0.2; margin-bottom: 20px; display: block; }
+        .no-results p { font-size: 18px; font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .hero-container { height: auto; min-height: 180px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .p-img-box { height: 160px; }
+            .nav-links { display: none; }
+            .menu-btn { display: block; }
+            .f-grid { grid-template-columns: 1fr; text-align: center; }
+            .f-col h4::after { left: 50%; transform: translateX(-50%); }
+            .social-links { justify-content: center; }
+            .intl-controls { gap: 4px; }
+            #currencySelector { max-width: 65px; font-size: 10px; }
+            .cart-sidebar { width: 100%; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="toast" class="toast"><i class="fas fa-check-circle text-orange-500"></i> <span id="toastMsg">Added to cart!</span></div>
+<!-- Toast -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added to cart!</span></div>
 
-<div id="annBar" class="bg-slate-900 text-white text-[10px] font-bold py-2.5 text-center uppercase tracking-[0.2em] relative z-[6000]">
-    Free Delivery on Orders Above Rs. 3000
+<!-- Cart Sidebar -->
+<div id="cartOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; display:none;" onclick="toggleCart()"></div>
+<div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+        <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer; font-size:24px;"></i>
+    </div>
+    <div class="cart-items" id="cartItemsContainer"></div>
+    <div class="cart-footer" style="padding:20px; border-top:1px solid #eee; background:#fafafa;">
+        <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:700; margin-bottom:15px;">
+            <span>Total:</span>
+            <span id="cartTotal" style="color: var(--primary);">Rs. 0</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()"><i class="fab fa-whatsapp"></i> Order on WhatsApp</button>
+    </div>
 </div>
 
-<nav class="glass sticky top-0 z-[5000] border-b border-slate-100">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-6">
-            <button onclick="toggleMenu()" class="lg:hidden text-slate-900"><i class="fas fa-bars-staggered text-xl"></i></button>
-            <a href="index.php" class="text-2xl font-black tracking-tighter text-slate-900 uppercase">
-                HAIDER<span class="text-orange-500">STORE.</span>
-            </a>
-        </div>
-
-        <div class="hidden lg:flex items-center space-x-8">
-            <a onclick="setFilter('ALL')" class="nav-link">Home</a>
-            <a onclick="setFilter('Earbuds')" class="nav-link">Earbuds</a>
-            <a onclick="setFilter('Smart Watches')" class="nav-link">Watches</a>
-            <a onclick="setFilter('Fast Chargers')" class="nav-link">Power</a>
-        </div>
-
-        <div class="flex items-center gap-4 lg:gap-6">
-            <div class="hidden md:flex items-center gap-2">
-                <select id="currencySelector" onchange="changeCurrency(this.value)">
-                    <option value="PKR">PKR</option>
-                    <option value="USD">USD</option>
-                    <option value="AED">AED</option>
-                </select>
-                <div id="google_translate_element"></div>
-            </div>
-            <button onclick="toggleSearch()" class="text-slate-600 hover:text-orange-500"><i class="fas fa-search text-lg"></i></button>
-            <button onclick="toggleCart()" class="relative bg-slate-900 text-white p-2.5 px-5 rounded-full flex items-center gap-2 shadow-xl hover:bg-orange-600 transition-all">
-                <i class="fas fa-shopping-bag text-sm"></i>
-                <span id="cartBadge" class="text-xs font-bold">0</span>
-            </button>
-        </div>
-    </div>
-</nav>
-
-<div id="mobileDrawer" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-[7000] transform -translate-x-full transition-transform duration-300 p-8">
-    <div class="flex justify-between items-center mb-10">
-        <span class="font-black text-xl">MENU</span>
-        <button onclick="toggleMenu()"><i class="fas fa-times text-xl"></i></button>
-    </div>
-    <div class="space-y-6">
-        <a onclick="setFilter('ALL')" class="block font-bold text-slate-500 hover:text-orange-500">HOME</a>
-        <a onclick="setFilter('Earbuds')" class="block font-bold text-slate-500 hover:text-orange-500">EARBUDS</a>
-        <a onclick="setFilter('Smart Watches')" class="block font-bold text-slate-500 hover:text-orange-500">SMART WATCHES</a>
-        <a onclick="setFilter('Fast Chargers')" class="block font-bold text-slate-500 hover:text-orange-500">CHARGERS</a>
-    </div>
+<!-- Search Overlay -->
+<div id="searchOverlay" class="search-overlay">
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for products..." oninput="debounceSearch()" onkeydown="handleSearchKey(event)">
+        <i class="fas fa-times" onclick="toggleSearch()" style="font-size: 22px; cursor: pointer;"></i>
+    </div>
 </div>
 
-<div id="searchOverlay" class="fixed inset-0 bg-white/95 z-[8000] hidden flex-col items-center justify-center p-6">
-    <button onclick="toggleSearch()" class="absolute top-10 right-10 text-3xl"><i class="fas fa-times"></i></button>
-    <div class="w-full max-w-2xl">
-        <input type="text" id="searchInput" oninput="debounceSearch()" placeholder="Search Products..." class="w-full text-4xl font-black border-b-4 border-slate-900 outline-none pb-4 placeholder:text-slate-200">
-    </div>
+<!-- Mobile Drawer -->
+<div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="mobile-drawer" id="drawer">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="logo" style="color:#000 !important; font-size:20px;">HAIDER <span style="color:var(--accent)">STORE</span></span>
+        <i class="fas fa-times" onclick="toggleMenu()" style="font-size:22px; cursor:pointer; color:#000 !important;"></i>
+    </div>
+    <div class="drawer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <h4>Power</h4>
+        <a onclick="setFilter('Data Cables')">Data Cables</a>
+        <a onclick="setFilter('Fast Chargers')">Fast Chargers</a>
+        <h4>Audio</h4>
+        <a onclick="setFilter('Earbuds')">Earbuds</a>
+        <a onclick="setFilter('Handfree')">Handfree</a>
+        <a onclick="setFilter('Headphones')">Headphones</a>
+        <h4>Life Style</h4>
+        <a onclick="setFilter('Smart Watches')">Smart Watches</a>
+        <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
+    </div>
 </div>
 
-<div id="cartSidebar" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-white shadow-2xl z-[9000] transform translate-x-full transition-transform duration-300 flex flex-col">
-    <div class="p-6 border-b flex justify-between items-center bg-slate-900 text-white">
-        <h2 class="font-black italic uppercase">Shopping Bag</h2>
-        <button onclick="toggleCart()"><i class="fas fa-times text-xl"></i></button>
-    </div>
-    <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-    <div class="p-6 bg-slate-50 border-t">
-        <div class="flex justify-between mb-4">
-            <span class="font-bold text-slate-500">Subtotal</span>
-            <span id="cartTotal" class="font-black text-xl text-slate-900">Rs. 0</span>
-        </div>
-        <button onclick="checkout()" class="w-full bg-green-500 text-white py-5 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-green-600">
-            <i class="fab fa-whatsapp text-xl"></i> Order via WhatsApp
-        </button>
-    </div>
-</div>
+<!-- Header -->
+<header>
+    <div style="display:flex; align-items:center; gap:15px;">
+        <i class="fas fa-bars menu-btn" onclick="toggleMenu()"></i>
+        <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item" id="megaNavItem">
+                <span class="nav-link" onclick="handleMegaTap(event)">Categories <i class="fas fa-chevron-down" style="font-size: 9px;"></i></span>
+                <div class="mega-menu">
+                    <div class="menu-col">
+                        <h4>Power</h4>
+                        <a onclick="setFilter('Data Cables')">Data Cables</a>
+                        <a onclick="setFilter('Fast Chargers')">Fast Chargers</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Audio</h4>
+                        <a onclick="setFilter('Earbuds')">Earbuds</a>
+                        <a onclick="setFilter('Handfree')">Handfree</a>
+                        <a onclick="setFilter('Headphones')">Headphones</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Life Style</h4>
+                        <a onclick="setFilter('Smart Watches')">Smart Watches</a>
+                        <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Shop</h4>
+                        <a onclick="setFilter('ALL')" style="font-weight:bold; color:var(--accent);">View All</a>
+                    </div>
+                </div>
+            </li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+    <div style="display: flex; gap: 12px; align-items: center; color:white;">
+        <div class="intl-controls">
+            <select id="currencySelector" onchange="changeCurrency(this.value)">
+                <optgroup label="Popular">
+                    <option value="PKR">PKR (Rs)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="SAR">SAR (SR)</option>
+                    <option value="AED">AED (Dh)</option>
+                    <option value="INR">INR (₹)</option>
+                    <option value="GBP">GBP (£)</option>
+                </optgroup>
+                <optgroup label="Others">
+                    <option value="EUR">EUR (€)</option>
+                    <option value="CAD">CAD ($)</option>
+                    <option value="TRY">TRY (₺)</option>
+                    <option value="KWD">KWD (KD)</option>
+                </optgroup>
+            </select>
+            <div id="google_translate_element"></div>
+        </div>
+        
+        <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer; font-size: 16px;" aria-label="Search products"></i>
+        <div style="position:relative; cursor:pointer;" onclick="toggleCart()" aria-label="Open cart">
+            <i class="fas fa-shopping-bag" style="font-size: 16px;"></i>
+            <span id="cartBadge" class="cart-badge">0</span>
+        </div>
+    </div>
+</header>
 
-<section id="heroSec" class="bg-[#f8f9fb] py-16 px-6 overflow-hidden">
-    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center">
-        <div class="lg:w-1/2 space-y-8 text-center lg:text-left">
-            <h2 class="text-7xl lg:text-9xl font-black leading-[0.8] italic tracking-tighter uppercase text-slate-900">
-                Premium<br><span class="text-orange-500">Tech.</span>
-            </h2>
-            <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">Original Accessories • Fast Shipping</p>
-            <button onclick="window.scrollTo(0, 800)" class="bg-slate-900 text-white px-10 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:bg-orange-500 transition-all">Explore Now</button>
-        </div>
-        <div class="lg:w-1/2 mt-12 lg:mt-0">
-            <img src="https://via.placeholder.com/800x600?text=Loading+Banners..." id="syncBanner" class="w-full h-auto object-contain max-h-[500px] drop-shadow-2xl transition-opacity duration-700">
-        </div>
-    </div>
+<!-- Hero -->
+<section class="hero-container" aria-label="Promotional banner">
+    <img src="" id="syncBanner" alt="Haider Store promotional banner" style="width: 100%; height: 100%; object-fit: cover;">
 </section>
 
-<main class="max-w-7xl mx-auto px-6 py-20">
-    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-        <div>
-            <span class="text-orange-500 font-black text-xs uppercase tracking-[0.3em]">Featured Collection</span>
-            <h3 id="gridTitle" class="text-4xl font-black italic uppercase text-slate-900 mt-2">Latest <span class="text-orange-500">Arrivals</span></h3>
-        </div>
-    </div>
+<!-- Main Content -->
+<div id="mainContent">
 
-    <div id="skeletonLoader" class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="skeleton h-80"></div><div class="skeleton h-80"></div>
-        <div class="skeleton h-80"></div><div class="skeleton h-80"></div>
-    </div>
+    <!-- Skeleton Loaders (shown before Firebase loads) -->
+    <div id="skeletonLoader">
+        <div class="section-header"><h2>&nbsp;</h2></div>
+        <div class="container">
+            <div class="skeleton skeleton-banner"></div>
+            <div class="grid">
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+            </div>
+            <div class="section-header" style="margin-top:50px"><h2>&nbsp;</h2></div>
+            <div class="grid">
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+            </div>
+        </div>
+    </div>
 
-    <div id="accessoriesGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-10"></div>
-</main>
+    <!-- Real Sections (hidden until data loads) -->
+    <div id="earbudsSec" style="display:none;">
+        <div class="section-header reveal slide-left"><h2>Wireless Earbuds</h2></div>
+        <div class="container reveal slide-left">
+            <img src="" id="earBannerSync" class="cat-banner" alt="Earbuds collection banner">
+            <div id="earbudsGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="headSec" style="display:none;">
+        <div class="section-header reveal zoom-in"><h2>Wireless Headphones</h2></div>
+        <div class="container reveal zoom-in">
+            <img src="" id="headBannerSync" class="cat-banner" alt="Headphones collection banner">
+            <div id="headphoneGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="chargerSec" style="display:none;">
+        <div class="section-header reveal slide-right"><h2>Chargers & Data Cables</h2></div>
+        <div class="container reveal slide-right">
+            <img src="" id="chargerBannerSync" class="cat-banner" alt="Chargers and cables collection banner">
+            <div id="chargerGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="accessoriesSec" style="display:none;">
+        <div class="section-header reveal zoom-in"><h2 id="accTitle">Premium Accessories</h2></div>
+        <div class="container reveal zoom-in">
+            <div id="accessoriesGrid" class="grid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="f-grid">
+        <div class="f-col">
+            <h4 style="color: #fff; border:none;">HAIDER STORE</h4>
+            <p>Premium Tech Accessories in Pakistan.</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/HaiderStudio.co" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/h.m4213803/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@HaiderStore-0066" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="f-col">
+            <h4>Shop</h4>
+            <ul>
+                <li><a onclick="setFilter('Earbuds')">Earbuds</a></li>
+                <li><a onclick="setFilter('Handfree')">Handfree</a></li>
+                <li><a onclick="setFilter('Smart Watches')">Smart Watches</a></li>
+            </ul>
+        </div>
+        <div class="f-col">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="shipping.html">Shipping Policy</a></li>
+                <li><a href="return.html">Return Policy</a></li>
+            </ul>
+        </div>
+        <div class="f-col">
+            <h4>Contact</h4>
+            <p><i class="fas fa-phone" style="margin-right:8px; opacity:0.6;"></i>+92 327 9518790</p>
+            <p style="margin-top:8px;"><i class="fas fa-envelope" style="margin-right:8px; opacity:0.6;"></i>info@haiderstore.com</p>
+        </div>
+    </div>
+    <div style="text-align:center; padding-top:40px; font-size:13px; color:#636e72; border-top:1px solid #1a1f26; margin-top:40px;">
+        &copy; 2025 <b>Haider Store</b>. Designed by Rashid Iqbal Haider.
+    </div>
+</footer>
+
+<!-- Google Translate Init -->
+<script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar,hi,ur,tr', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false }, 'google_translate_element');
+    }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    let allProducts = [];
-    let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-    let currentCurrency = localStorage.getItem('haiderCurrency') || 'PKR';
+    let allProducts = [];
+    let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
+    let searchTimer = null;
 
-    const currencyData = {
-        PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, AED: { s: "Dh", r: 0.013 }
-    };
+    // --- 💰 CURRENCY ENGINE ---
+    const currencyData = {
+        PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, SAR: { s: "SR", r: 0.013 },
+        AED: { s: "Dh", r: 0.013 }, INR: { s: "₹", r: 0.30 }, GBP: { s: "£", r: 0.0028 },
+        EUR: { s: "€", r: 0.0033 }, CAD: { s: "C$", r: 0.0048 }, TRY: { s: "₺", r: 0.11 }, KWD: { s: "KD", r: 0.0011 }
+    };
+    let currentCurrency = localStorage.getItem('haiderCurrency') || 'PKR';
 
-    window.formatPrice = (val) => {
-        const c = currencyData[currentCurrency] || currencyData.PKR;
-        return `${c.s} ${(val * c.r).toLocaleString()}`;
-    };
+    window.changeCurrency = (code) => {
+        currentCurrency = code;
+        localStorage.setItem('haiderCurrency', code);
+        renderProducts(allProducts, 'ALL');
+        updateCartUI();
+    };
 
-    window.toggleMenu = () => document.getElementById('mobileDrawer').classList.toggle('-translate-x-full');
-    window.toggleCart = () => document.getElementById('cartSidebar').classList.toggle('translate-x-full');
-    window.toggleSearch = () => {
-        const s = document.getElementById('searchOverlay');
-        s.classList.toggle('hidden');
-        if(!s.classList.contains('hidden')) document.getElementById('searchInput').focus();
-    };
+    function formatPrice(val) {
+        const c = currencyData[currentCurrency] || currencyData.PKR;
+        return `${c.s} ${(val * c.r).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+    }
 
-    window.showToast = (msg) => {
-        const t = document.getElementById('toast');
-        document.getElementById('toastMsg').innerText = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2500);
-    };
+    // --- 🔔 TOAST ---
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastMsg').textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2200);
+    }
 
-    // --- Banner Sync (Fixed Path) ---
-    onValue(ref(db, 'settings/bannerUrl'), snap => { 
-        if(snap.exists()) document.getElementById('syncBanner').src = snap.val(); 
-    });
+    // --- 🖼️ SAFE IMAGE LOADER ---
+    function safeLoadImage(imgEl, url) {
+        if (!url || url === '') {
+            imgEl.style.display = 'none';
+            return;
+        }
+        const tempImg = new Image();
+        tempImg.onload = () => {
+            imgEl.src = url;
+            imgEl.classList.add('loaded');
+        };
+        tempImg.onerror = () => { imgEl.style.display = 'none'; };
+        tempImg.src = url;
+    }
 
-    // --- Products Sync ---
-    onValue(ref(db, 'products'), snap => {
-        if (snap.exists()) {
-            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            document.getElementById('skeletonLoader').style.display = 'none';
-            renderProducts(allProducts);
-        }
-    });
+    // --- ✨ REVEAL ANIMATIONS ---
+    function reveal() {
+        document.querySelectorAll(".reveal").forEach(r => {
+            if (r.getBoundingClientRect().top < window.innerHeight - 80) r.classList.add("active");
+        });
+    }
+    window.addEventListener("scroll", reveal);
+    // FIX #2: Call reveal on load so in-viewport elements animate immediately
+    setTimeout(reveal, 100);
 
-    window.renderProducts = (products) => {
-        const grid = document.getElementById('accessoriesGrid');
-        grid.innerHTML = products.map(p => `
-            <div class="bg-white p-4 lg:p-6 rounded-[2rem] border border-slate-50 shadow-sm hover:shadow-2xl transition-all group relative cursor-pointer" onclick="window.location.href='product.php?id=${p.id}'">
-                ${p.oldPrice ? `<span class="absolute top-4 left-4 bg-orange-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase z-10">Sale</span>` : ''}
-                <div class="aspect-square bg-slate-50 rounded-[1.5rem] p-4 mb-6 overflow-hidden flex items-center justify-center">
-                    <img src="${p.img}" class="max-h-full group-hover:scale-110 transition-transform duration-500">
-                </div>
-                <p class="text-[9px] font-black text-orange-500 uppercase tracking-widest mb-1">${p.category}</p>
-                <h4 class="font-bold text-slate-900 text-sm truncate mb-4">${p.name}</h4>
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] text-slate-400 line-through font-bold">${p.oldPrice ? formatPrice(p.oldPrice) : ''}</p>
-                        <p class="font-black text-slate-900">${formatPrice(p.price)}</p>
-                    </div>
-                    <button onclick="event.stopPropagation(); addToCart('${p.id}', '${p.name.replace(/'/g, "")}', ${p.price}, '${p.img}')" class="bg-slate-900 text-white w-10 h-10 rounded-full hover:bg-orange-500 transition-colors">
-                        <i class="fas fa-plus text-xs"></i>
-                    </button>
-                </div>
-            </div>
-        `).join('');
-    };
+    // --- 📱 MEGA MENU TOUCH SUPPORT ---
+    let isTouchDevice = false;
+    window.addEventListener('touchstart', () => { isTouchDevice = true; }, { once: true });
 
-    window.setFilter = (cat) => {
-        document.getElementById('gridTitle').innerHTML = cat === 'ALL' ? `Latest <span class="text-orange-500">Arrivals</span>` : cat;
-        const filtered = cat === 'ALL' ? allProducts : allProducts.filter(p => p.category === cat);
-        renderProducts(filtered);
-        document.getElementById('mobileDrawer').classList.add('-translate-x-full');
-    };
+    window.handleMegaTap = (e) => {
+        if (!isTouchDevice) return;
+        e.preventDefault();
+        const navItem = document.getElementById('megaNavItem');
+        navItem.classList.toggle('tap-open');
+    };
+    // Close mega menu on outside tap
+    document.addEventListener('click', (e) => {
+        const navItem = document.getElementById('megaNavItem');
+        if (isTouchDevice && !navItem.contains(e.target)) {
+            navItem.classList.remove('tap-open');
+        }
+    });
 
-    window.debounceSearch = () => {
-        const term = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term));
-        renderProducts(filtered);
-    };
+    // --- TOGGLES ---
+    window.toggleMenu = () => {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('active');
+    };
+    
+    window.toggleSearch = () => {
+        const searchBox = document.getElementById('searchOverlay');
+        searchBox.classList.toggle('active');
+        if (searchBox.classList.contains('active')) {
+            setTimeout(() => document.getElementById('searchInput').focus(), 150);
+        } else {
+            document.getElementById('searchInput').value = '';
+        }
+    };
 
-    window.addToCart = (id, name, price, img) => {
-        const idx = cart.findIndex(i => i.id === id);
-        if(idx > -1) cart[idx].qty++;
-        else cart.push({id, name, price, img, qty: 1});
-        saveCart();
-        showToast("Added to Bag!");
-    };
+    window.toggleCart = () => {
+        const sidebar = document.getElementById('cartSidebar');
+        sidebar.classList.toggle('open');
+        document.getElementById('cartOverlay').style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        updateCartUI();
+    };
 
-    function saveCart() {
-        localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
-        updateCartUI();
-    }
+    // --- 🔍 DEBOUNCED SEARCH ---
+    window.debounceSearch = () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (term.length > 0) {
+                const filtered = allProducts.filter(p => 
+                    p.name.toLowerCase().includes(term) || 
+                    (p.brand && p.brand.toLowerCase().includes(term)) ||
+                    (p.category && p.category.toLowerCase().includes(term))
+                );
+                document.querySelector('.hero-container').style.display = 'none';
+                document.getElementById('accTitle').innerText = `Search: "${term}"`;
+                renderProducts(filtered, 'SEARCH');
+            } else {
+                setFilter('ALL');
+            }
+        }, 300);
+    };
 
-    window.updateCartUI = () => {
-        const container = document.getElementById('cartItemsContainer');
-        const badge = document.getElementById('cartBadge');
-        const totalEl = document.getElementById('cartTotal');
-        badge.innerText = cart.reduce((a, b) => a + b.qty, 0);
-        
-        if(cart.length === 0) {
-            container.innerHTML = `<div class="text-center py-20 text-slate-300 font-bold uppercase text-xs">Bag is Empty</div>`;
-            totalEl.innerText = formatPrice(0);
-            return;
-        }
+    window.handleSearchKey = (e) => {
+        if (e.key === 'Enter') {
+            clearTimeout(searchTimer);
+            toggleSearch();
+            document.getElementById('mainContent').scrollIntoView({ behavior: "smooth" });
+        }
+    };
 
-        let total = 0;
-        container.innerHTML = cart.map((item, i) => {
-            total += (item.price * item.qty);
-            return `
-                <div class="flex gap-4 bg-slate-50 p-4 rounded-2xl">
-                    <img src="${item.img}" class="w-16 h-16 object-contain bg-white rounded-lg p-1">
-                    <div class="flex-1">
-                        <h5 class="text-xs font-black truncate w-40">${item.name}</h5>
-                        <p class="text-xs font-bold text-orange-500 mt-1">${formatPrice(item.price)}</p>
-                        <div class="flex items-center gap-3 mt-2">
-                            <button onclick="updateQty(${i}, -1)" class="w-6 h-6 bg-white rounded border text-xs">-</button>
-                            <span class="text-xs font-black">${item.qty}</span>
-                            <button onclick="updateQty(${i}, 1)" class="w-6 h-6 bg-white rounded border text-xs">+</button>
-                        </div>
-                    </div>
-                </div>`;
-        }).join('');
-        totalEl.innerText = formatPrice(total);
-    };
+    // --- 🔥 FIREBASE SYNC ---
+    // FIX #3: Safe image loading for banners
+    onValue(ref(db, 'settings/heroBanner'), s => { 
+        if (s.exists()) safeLoadImage(document.getElementById('syncBanner'), s.val()); 
+    });
+    onValue(ref(db, 'settings/earbudsBanner'), s => { 
+        if (s.exists()) safeLoadImage(document.getElementById('earBannerSync'), s.val()); 
+    });
+    onValue(ref(db, 'settings/headphoneBanner'), s => { 
+        if (s.exists()) safeLoadImage(document.getElementById('headBannerSync'), s.val()); 
+    });
+    onValue(ref(db, 'settings/chargerBanner'), s => { 
+        if (s.exists()) safeLoadImage(document.getElementById('chargerBannerSync'), s.val()); 
+    });
 
-    window.updateQty = (i, c) => {
-        cart[i].qty += c;
-        if(cart[i].qty <= 0) cart.splice(i, 1);
-        saveCart();
-    };
-
-    window.changeCurrency = (c) => {
-        currentCurrency = c;
-        localStorage.setItem('haiderCurrency', c);
-        renderProducts(allProducts);
-        updateCartUI();
-    };
-
-    window.checkout = () => {
-        if(cart.length === 0) return;
-        let msg = `*New Order - Haider Store*%0A%0A`;
-        cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
-        const total = cart.reduce((a, b) => a + (b.price * b.qty), 0);
-        msg += `%0A*Total: ${formatPrice(total)}*`;
-        window.open(`https://wa.me/923279518790?text=${msg}`);
-    };
-
-    updateCartUI();
-</script>
-
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ur,ar,hi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-    }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-</body>
-</html>
+    onValue(ref(db, 'products'), snap => {
+        if (snap.exists()) {
+            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            document.getElementById('currencySelector').value = currentCurrency;
