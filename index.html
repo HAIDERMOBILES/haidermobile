@@ -15,16 +15,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
-        /* --- ✨ UPDATED ROSE QUARTZ & OCEAN GREEN THEME --- */
         :root { 
-            --primary: #2d6a4f;        /* Ocean Green */
-            --header-dark: #ffffff;    /* Clean White Header */
-            --text-dark: #1b4332;      /* Deep Green Text */
+            --primary: #a17903; 
+            --header-dark: #a35c1d; 
+            --text-dark: #1a1a1a; 
             --white: #ffffff; 
-            --accent: #ff85a2;         /* Rose Quartz Pink */
-            --footer-bg: #081c15;      /* Deepest Green */
-            --success: #40916c;
-            --bg-light: #fff5f7;       /* Very light pink tint for background */
+            --accent: #40705f; 
+            --footer-bg: #202c3d;
+            --success: #175054;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,9 +32,9 @@
         .intl-controls { display: flex; align-items: center; gap: 8px; margin-right: 5px; }
         
         #currencySelector, .goog-te-combo {
-            background: #f0f0f0 !important;
-            color: var(--text-dark) !important;
-            border: 1px solid #ddd !important;
+            background: rgba(255,255,255,0.12) !important;
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
             padding: 4px 6px !important;
             border-radius: 4px !important;
             font-size: 11px !important;
@@ -52,35 +50,34 @@
         .slide-right { transform: translateX(80px); }
         .active { opacity: 1; transform: translateX(0) scale(1); }
 
-        /* --- HEADER (Modern Minimalist) --- */
+        /* --- HEADER --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
             justify-content: space-between; align-items: center;
-            border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; z-index: 3000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 3000;
         }
-        .logo { font-size: 24px; font-weight: 700; color: var(--text-dark) !important; text-decoration: none; letter-spacing: 1px; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; letter-spacing: 1px; }
         .logo span { color: var(--accent); } 
         
         .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dark) !important; font-weight: 500; font-size: 15px; cursor: pointer; transition: 0.3s; opacity: 0.8; }
-        .nav-link:hover { color: var(--primary) !important; opacity: 1; }
+        .nav-link { text-decoration: none; color: var(--white) !important; font-weight: 500; font-size: 15px; cursor: pointer; transition: 0.3s; opacity: 0.9; }
+        .nav-link:hover { color: var(--accent) !important; opacity: 1; }
         
-        header .fas, header .fab { color: var(--text-dark) !important; }
+        header .fas { color: var(--white) !important; }
 
         /* MEGA MENU */
         .nav-item { position: static; }
         .mega-menu {
             position: absolute; top: 100%; left: 0; width: 100%; background: var(--white);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-top: 2px solid var(--accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 1px solid #eee;
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
             padding: 30px 10%; opacity: 0; visibility: hidden; transition: 0.3s ease; z-index: 2500;
         }
         .nav-item:hover .mega-menu { opacity: 1; visibility: visible; }
-        .menu-col h4 { font-size: 13px; margin-bottom: 12px; color: var(--accent); border-bottom: 1px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
+        .menu-col h4 { font-size: 13px; margin-bottom: 12px; color: var(--primary); border-bottom: 1px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
         .menu-col a { display: block; color: var(--text-dark); text-decoration: none; font-size: 14px; padding: 6px 0; cursor: pointer; transition: 0.2s; }
-        .menu-col a:hover { color: var(--primary); padding-left: 5px; }
+        .menu-col a:hover { color: var(--accent); padding-left: 5px; }
 
         /* SEARCH OVERLAY */
         .search-overlay {
@@ -96,7 +93,7 @@
         }
 
         /* MOBILE DRAWER */
-        .menu-btn { display: none; font-size: 22px; cursor: pointer; color: var(--text-dark) !important; }
+        .menu-btn { display: none; font-size: 22px; cursor: pointer; color: var(--white) !important; }
         .mobile-drawer {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
             background: var(--white); z-index: 4000; transition: 0.4s ease;
@@ -105,14 +102,16 @@
         .mobile-drawer.open { left: 0; }
         .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3500; display: none; }
         .drawer-overlay.active { display: block; }
+        .drawer-links h4 { font-size: 12px; color: var(--primary); margin: 20px 0 10px; text-transform: uppercase; }
+        .drawer-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; display: block; padding: 10px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
 
         /* HERO & PRODUCTS */
-        .hero-container { height: 480px; background: #fffafb; overflow: hidden; position: relative; }
+        .hero-container { height: 480px; background: #f4f4f4; overflow: hidden; position: relative; }
         .section-header { text-align: center; margin: 60px 0 30px; }
-        .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: var(--text-dark); letter-spacing: 2px; }
+        .section-header h2 { font-size: 28px; font-weight: 600; text-transform: uppercase; color: #222; }
         .container { padding: 0 5% 40px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .cat-banner { width: 100%; border-radius: 20px; margin-bottom: 30px; cursor: pointer; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .cat-banner { width: 100%; border-radius: 12px; margin-bottom: 30px; cursor: pointer; object-fit: cover; }
 
         /* GRID UNIFORM SIZE FIX */
         .p-card { 
@@ -120,37 +119,41 @@
             flex-direction: column;
             justify-content: space-between;
             height: 100%; 
-            transition: 0.4s; text-align: center; padding: 20px; cursor: pointer; 
-            border: 1px solid #f0f0f0; position: relative; 
-            border-radius: 15px; background: #fff;
+            transition: 0.3s; text-align: center; padding: 15px; cursor: pointer; border: 1px solid transparent; position: relative; 
         }
-        .p-card:hover { border: 1px solid var(--accent); box-shadow: 0 15px 35px rgba(255,133,162,0.15); transform: translateY(-8px); }
-        .p-img-box { width: 100%; height: 240px; background: #fff; display: flex; align-items: center; justify-content: center; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
-        .p-img-box img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        .p-card:hover { border: 1px solid #eee; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
+        .p-img-box { width: 100%; height: 240px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
+        .p-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
         
         .p-card h3 { 
-            font-size: 16px; 
+            font-size: 15px; 
             min-height: 42px;
             margin: 8px 0; 
-            color: #333;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
         
-        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 30px; z-index: 5; text-transform: uppercase; }
+        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 5; text-transform: uppercase; }
         
         .price-box { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 10px; }
-        .old-price { font-size: 13px; color: #b0b0b0; text-decoration: line-through; font-weight: 400; }
-        .current-price { font-size: 19px; font-weight: 700; color: var(--primary); }
-        .p-brand { font-size: 11px; color: var(--accent); font-weight: 600; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .old-price { font-size: 13px; color: #888; text-decoration: line-through; font-weight: 400; }
+        .current-price { font-size: 18px; font-weight: 700; color: var(--primary); }
+        .p-brand { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         /* FOOTER */
-        footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 8px solid var(--accent); }
+        footer { background: var(--footer-bg); color: #ffffff; padding: 80px 8% 20px; margin-top: 100px; border-top: 5px solid var(--primary); }
         .f-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 40px; }
-        .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--accent); text-transform: uppercase; position: relative; }
-        .f-col h4::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 35px; height: 2px; background: var(--white); }
+        .f-col h4 { font-size: 16px; font-weight: 600; margin-bottom: 25px; color: var(--primary); text-transform: uppercase; position: relative; }
+        .f-col h4::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 35px; height: 2px; background: var(--accent); }
+        .f-col ul { list-style: none; }
+        .f-col ul li { margin-bottom: 10px; }
+        .f-col a { text-decoration: none; color: #ffffff; opacity: 0.8; transition: 0.3s; cursor: pointer; }
+        .f-col a:hover { opacity: 1; color: var(--accent); }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a { color: #fff; background: rgba(255,255,255,0.1); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
+        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
 
         /* CART SIDEBAR */
         .cart-sidebar {
@@ -159,32 +162,423 @@
             z-index: 10000; display: flex; flex-direction: column;
         }
         .cart-sidebar.open { right: 0; }
-        .cart-header { padding: 20px; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
-        .checkout-btn { width: 100%; padding: 15px; background: #25d366; color: white; border: none; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .cart-header { padding: 20px; background: var(--header-dark); color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
+        .cart-items { flex: 1; padding: 15px; overflow-y: auto; }
+        .cart-item { display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; margin-bottom: 15px; }
+        .cart-item img { width: 60px; height: 60px; object-fit: contain; background: #f9f9f9; border-radius: 8px; padding: 5px; }
+        .checkout-btn { width: 100%; padding: 15px; background: #25d366; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; }
         
         .cart-badge {
             position: absolute; top: -8px; right: -10px; background: var(--accent);
             color: white; font-size: 10px; font-weight: 700; width: 18px; height: 18px;
-            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--header-dark);
         }
-
-        /* Buttons Update */
-        .p-card button {
-            width:100%; margin-top:10px; padding:12px; 
-            background: var(--primary); color:white; border:none; 
-            border-radius:30px; cursor:pointer; font-weight:600; 
-            transition: 0.3s;
-        }
-        .p-card button:hover { background: var(--accent); transform: scale(1.02); }
 
         @media (max-width: 768px) {
             .hero-container { height: auto; min-height: 180px; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .nav-links { display: none; }
             .menu-btn { display: block; }
             .f-grid { grid-template-columns: 1fr; text-align: center; }
             .f-col h4::after { left: 50%; transform: translateX(-50%); }
+            .social-links { justify-content: center; }
+            .intl-controls { gap: 4px; }
+            #currencySelector { max-width: 65px; font-size: 10px; }
         }
     </style>
 </head>
-<!-- REST OF YOUR HTML AND SCRIPT CODE REMAINS EXACTLY THE SAME -->
+<body>
+
+<div id="cartOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; display:none;" onclick="toggleCart()"></div>
+<div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+        <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer; font-size:24px;"></i>
+    </div>
+    <div class="cart-items" id="cartItemsContainer"></div>
+    <div class="cart-footer" style="padding:20px; border-top:1px solid #eee; background:#fafafa;">
+        <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:700; margin-bottom:15px;">
+            <span>Total:</span>
+            <span id="cartTotal" style="color: var(--primary);">Rs. 0</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()"><i class="fab fa-whatsapp"></i> Order on WhatsApp</button>
+    </div>
+</div>
+
+<div id="searchOverlay" class="search-overlay">
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for products..." onkeyup="handleSearch(event)">
+        <i class="fas fa-times" onclick="toggleSearch()" style="font-size: 22px; cursor: pointer;"></i>
+    </div>
+</div>
+
+<div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="mobile-drawer" id="drawer">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="logo" style="color:#000 !important; font-size:20px;">HAIDER <span style="color:var(--accent)">STORE</span></span>
+        <i class="fas fa-times" onclick="toggleMenu()" style="font-size:22px; cursor:pointer; color:#000 !important;"></i>
+    </div>
+    <div class="drawer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <h4>Power</h4>
+        <a onclick="setFilter('Data Cables')">Data Cables</a>
+        <a onclick="setFilter('Fast Chargers')">Fast Chargers</a>
+        <h4>Audio</h4>
+        <a onclick="setFilter('Earbuds')">Earbuds</a>
+        <a onclick="setFilter('Handfree')">Handfree</a>
+        <a onclick="setFilter('Headphones')">Headphones</a>
+        <h4>Life Style</h4>
+        <a onclick="setFilter('Smart Watches')">Smart Watches</a>
+        <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
+    </div>
+</div>
+
+<header>
+    <div style="display:flex; align-items:center; gap:15px;">
+        <i class="fas fa-bars menu-btn" onclick="toggleMenu()"></i>
+        <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item">
+                <span class="nav-link">Categories <i class="fas fa-chevron-down" style="font-size: 9px;"></i></span>
+                <div class="mega-menu">
+                    <div class="menu-col">
+                        <h4>Power</h4>
+                        <a onclick="setFilter('Data Cables')">Data Cables</a>
+                        <a onclick="setFilter('Fast Chargers')">Fast Chargers</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Audio</h4>
+                        <a onclick="setFilter('Earbuds')">Earbuds</a>
+                        <a onclick="setFilter('Handfree')">Handfree</a>
+                        <a onclick="setFilter('Headphones')">Headphones</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Life Style</h4>
+                        <a onclick="setFilter('Smart Watches')">Smart Watches</a>
+                        <a onclick="setFilter('Wireless MIC')">Wireless MIC</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Shop</h4>
+                        <a onclick="setFilter('ALL')" style="font-weight:bold; color:var(--accent);">View All</a>
+                    </div>
+                </div>
+            </li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+    <div style="display: flex; gap: 12px; align-items: center; color:white;">
+        <div class="intl-controls">
+            <select id="currencySelector" onchange="changeCurrency(this.value)">
+                <optgroup label="Popular">
+                    <option value="PKR">PKR (Rs)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="SAR">SAR (SR)</option>
+                    <option value="AED">AED (Dh)</option>
+                    <option value="INR">INR (₹)</option>
+                    <option value="GBP">GBP (£)</option>
+                </optgroup>
+                <optgroup label="Others">
+                    <option value="EUR">EUR (€)</option>
+                    <option value="CAD">CAD ($)</option>
+                    <option value="TRY">TRY (₺)</option>
+                    <option value="KWD">KWD (KD)</option>
+                </optgroup>
+            </select>
+            <div id="google_translate_element"></div>
+        </div>
+        
+        <i class="fas fa-search" onclick="toggleSearch()" style="cursor: pointer; font-size: 16px;"></i>
+        <div style="position:relative; cursor:pointer;" onclick="toggleCart()">
+            <i class="fas fa-shopping-bag" style="font-size: 16px;"></i>
+            <span id="cartBadge" class="cart-badge">0</span>
+        </div>
+    </div>
+</header>
+
+<section class="hero-container">
+    <img src="" id="syncBanner" style="width: 100%; height: 100%; object-fit: cover; background: #f0f0f0;">
+</section>
+
+<div id="mainContent">
+    <div id="earbudsSec" style="display:none;">
+        <div class="section-header reveal slide-left"><h2>Wireless Earbuds</h2></div>
+        <div class="container reveal slide-left">
+            <img src="" id="earBannerSync" class="cat-banner">
+            <div id="earbudsGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="headSec" style="display:none;">
+        <div class="section-header reveal zoom-in"><h2>Wireless Headphones</h2></div>
+        <div class="container reveal zoom-in">
+            <img src="" id="headBannerSync" class="cat-banner">
+            <div id="headphoneGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="chargerSec" style="display:none;">
+        <div class="section-header reveal slide-right"><h2>Chargers & Data Cables</h2></div>
+        <div class="container reveal slide-right">
+            <img src="" id="chargerBannerSync" class="cat-banner">
+            <div id="chargerGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="accessoriesSec" style="display:none;">
+        <div class="section-header reveal zoom-in"><h2 id="accTitle">Premium Accessories</h2></div>
+        <div class="container reveal zoom-in">
+            <div id="accessoriesGrid" class="grid"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="f-grid">
+        <div class="f-col">
+            <h4 style="color: #fff; border:none;">HAIDER STORE</h4>
+            <p>Premium Tech Accessories in Pakistan.</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/HaiderStudio.co" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/h.m4213803/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@HaiderStore-0066" target="_blank"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="f-col">
+            <h4>Shop</h4>
+            <ul>
+                <li><a onclick="setFilter('Earbuds')">Earbuds</a></li>
+                <li><a onclick="setFilter('Handfree')">Handfree</a></li>
+                <li><a onclick="setFilter('Smart Watches')">Smart Watches</a></li>
+            </ul>
+        </div>
+        <div class="f-col">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="shipping.html">Shipping Policy</a></li>
+                <li><a href="return.html">Return Policy</a></li>
+            </ul>
+        </div>
+        <div class="f-col">
+            <h4>Contact</h4>
+            <p>+92 327 9518790</p>
+            <p>info@haiderstore.com</p>
+        </div>
+    </div>
+    <div style="text-align:center; padding-top:40px; font-size:13px; color:#636e72; border-top:1px solid #1a1f26; margin-top:40px;">
+        &copy; 2026 <b>Haider Store</b>. Designed by Rashid Iqbal Haider.
+    </div>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
+        authDomain: "web-app-4f3a1.firebaseapp.com",
+        projectId: "web-app-4f3a1",
+        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
+        appId: "1:222099203820:web:778e204d2960181dfba7c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let allProducts = [];
+    let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
+
+    // --- 🌍 CURRENCY ENGINE ---
+    const currencyData = {
+        PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, SAR: { s: "SR", r: 0.013 },
+        AED: { s: "Dh", r: 0.013 }, INR: { s: "₹", r: 0.30 }, GBP: { s: "£", r: 0.0028 },
+        EUR: { s: "€", r: 0.0033 }, CAD: { s: "C$", r: 0.0048 }, TRY: { s: "₺", r: 0.11 }, KWD: { s: "KD", r: 0.0011 }
+    };
+    let currentCurrency = localStorage.getItem('haiderCurrency') || 'PKR';
+
+    window.changeCurrency = (code) => {
+        currentCurrency = code;
+        localStorage.setItem('haiderCurrency', code);
+        renderProducts(allProducts, 'ALL');
+        updateCartUI();
+    };
+
+    function formatPrice(val) {
+        const c = currencyData[currentCurrency] || currencyData.PKR;
+        return `${c.s} ${(val * c.r).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}`;
+    }
+
+    // --- UI Logic ---
+    function reveal() {
+        document.querySelectorAll(".reveal").forEach(r => {
+            if (r.getBoundingClientRect().top < window.innerHeight - 80) r.classList.add("active");
+        });
+    }
+    window.addEventListener("scroll", reveal);
+
+    window.toggleMenu = () => {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('active');
+    };
+    
+    window.toggleSearch = () => {
+        const searchBox = document.getElementById('searchOverlay');
+        searchBox.classList.toggle('active');
+        if(searchBox.classList.contains('active')) {
+            setTimeout(() => document.getElementById('searchInput').focus(), 100);
+        }
+    };
+
+    window.toggleCart = () => {
+        const sidebar = document.getElementById('cartSidebar');
+        sidebar.classList.toggle('open');
+        document.getElementById('cartOverlay').style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        updateCartUI();
+    };
+
+    // --- Firebase Sync ---
+    onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
+    onValue(ref(db, 'settings/earbudsBanner'), s => { if(s.exists()) document.getElementById('earBannerSync').src = s.val(); });
+    onValue(ref(db, 'settings/headphoneBanner'), s => { if(s.exists()) document.getElementById('headBannerSync').src = s.val(); });
+    onValue(ref(db, 'settings/chargerBanner'), s => { if(s.exists()) document.getElementById('chargerBannerSync').src = s.val(); });
+
+    onValue(ref(db, 'products'), snap => {
+        if (snap.exists()) {
+            allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
+            document.getElementById('currencySelector').value = currentCurrency;
+            renderProducts(allProducts, 'ALL');
+        }
+    });
+
+    function renderProducts(data, filterType = 'ALL') {
+        const grids = {
+            ear: document.getElementById('earbudsGrid'),
+            head: document.getElementById('headphoneGrid'),
+            char: document.getElementById('chargerGrid'),
+            acc: document.getElementById('accessoriesGrid')
+        };
+        Object.values(grids).forEach(g => g.innerHTML = '');
+        let counts = { ear:0, head:0, char:0, acc:0 };
+
+        data.forEach(p => {
+            let discountBadge = "";
+            if (p.oldPrice && Number(p.oldPrice) > Number(p.price)) {
+                let discPercent = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100);
+                discountBadge = `<span class="discount-badge">-${discPercent}% OFF</span>`;
+            }
+
+            const card = `
+                <div class="p-card">
+                    <div>
+                        ${discountBadge}
+                        <span class="p-brand">${p.brand || ''}</span>
+                        <div onclick="location.href='product.html?id=${p.id}'">
+                            <div class="p-img-box"><img src="${p.img}"></div>
+                            <h3>${p.name}</h3>
+                            <div class="price-box">
+                                ${p.oldPrice ? `<span class="old-price">${formatPrice(p.oldPrice)}</span>` : ''}
+                                <span class="current-price">${formatPrice(p.price)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:600;">ADD TO CART</button>
+                </div>`;
+
+            if(filterType !== 'ALL' && filterType !== 'SEARCH') {
+                 grids.acc.innerHTML += card; counts.acc++;
+            } else {
+                if (p.category === 'Earbuds') { grids.ear.innerHTML += card; counts.ear++; }
+                else if (p.category === 'Headphones') { grids.head.innerHTML += card; counts.head++; }
+                else if (p.category === 'Fast Chargers' || p.category === 'Data Cables') { grids.char.innerHTML += card; counts.char++; }
+                else { grids.acc.innerHTML += card; counts.acc++; }
+            }
+        });
+
+        const isFiltered = filterType !== 'ALL' && filterType !== 'SEARCH';
+        document.getElementById('earbudsSec').style.display = !isFiltered && counts.ear > 0 ? 'block' : 'none';
+        document.getElementById('headSec').style.display = !isFiltered && counts.head > 0 ? 'block' : 'none';
+        document.getElementById('chargerSec').style.display = !isFiltered && counts.char > 0 ? 'block' : 'none';
+        document.getElementById('accessoriesSec').style.display = counts.acc > 0 ? 'block' : 'none';
+        reveal();
+    }
+
+    window.setFilter = (category) => {
+        document.getElementById('drawer').classList.remove('open');
+        document.getElementById('overlay').classList.remove('active');
+        let filtered = category === 'ALL' ? allProducts : allProducts.filter(p => p.category === category);
+        document.getElementById('accTitle').innerText = category === 'ALL' ? 'Premium Accessories' : category + ' Products';
+        document.querySelector('.hero-container').style.display = category === 'ALL' ? 'block' : 'none';
+        renderProducts(filtered, category);
+        setTimeout(() => document.getElementById('mainContent').scrollIntoView({behavior: "smooth"}), 100);
+    };
+
+    window.handleSearch = (e) => {
+        const term = e.target.value.toLowerCase();
+        if(term.length > 0) {
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || (p.brand && p.brand.toLowerCase().includes(term)));
+            document.querySelector('.hero-container').style.display = 'none';
+            document.getElementById('accTitle').innerText = `Search: "${term}"`;
+            renderProducts(filtered, 'SEARCH');
+        } else {
+            setFilter('ALL');
+        }
+        if(e.key === 'Enter') { toggleSearch(); document.getElementById('mainContent').scrollIntoView({behavior: "smooth"}); }
+    };
+
+    window.addToCart = (id) => {
+        const p = allProducts.find(x => x.id === id);
+        const exist = cart.find(x => x.id === id);
+        if(exist) exist.quantity++;
+        else cart.push({ id: p.id, name: p.name, price: p.price, image: p.img, quantity: 1 });
+        updateCartUI();
+        toggleCart();
+    };
+
+    function updateCartUI() {
+        const container = document.getElementById('cartItemsContainer');
+        const badge = document.getElementById('cartBadge');
+        const totalEl = document.getElementById('cartTotal');
+        container.innerHTML = cart.length ? '' : '<p style="text-align:center; padding:20px;">Cart is empty!</p>';
+        let total = 0, count = 0;
+        cart.forEach((item, i) => {
+            total += (item.price * item.quantity);
+            count += item.quantity;
+            container.innerHTML += `
+                <div class="cart-item">
+                    <img src="${item.image}">
+                    <div style="flex:1;">
+                        <div style="font-size:14px; font-weight:600;">${item.name}</div>
+                        <div>${formatPrice(item.price)}</div>
+                        <div style="margin-top:5px;">
+                            <button onclick="changeQty(${i},-1)" style="padding:2px 8px;">-</button> 
+                            <span style="margin:0 10px;">${item.quantity}</span> 
+                            <button onclick="changeQty(${i},1)" style="padding:2px 8px;">+</button>
+                        </div>
+                    </div>
+                    <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
+                </div>`;
+        });
+        badge.innerText = count;
+        totalEl.innerText = formatPrice(total);
+        localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
+    }
+
+    window.changeQty = (i, d) => { cart[i].quantity += d; if(cart[i].quantity < 1) cart.splice(i, 1); updateCartUI(); };
+    window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
+    window.checkout = () => {
+        if(cart.length === 0) return;
+        let msg = "🛍️ *New Order - Haider Store*%0A";
+        cart.forEach(item => msg += `• ${item.name} (x${item.quantity}) - ${formatPrice(item.price)}%0A`);
+        msg += `%0A💰 *Total: ${document.getElementById('cartTotal').innerText}*`;
+        window.open(`https://wa.me/923279518790?text=${msg}`);
+    };
+    updateCartUI();
+</script>
+    
+</body>
+</html>
