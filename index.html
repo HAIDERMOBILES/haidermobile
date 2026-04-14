@@ -25,7 +25,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); }
 
-        /* --- RESTORED ORIGINAL HEADER --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -38,7 +37,6 @@
         .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
         .nav-link { text-decoration: none; color: white !important; font-size: 14px; font-weight: 500; cursor: pointer; }
 
-        /* Mega Menu Fix */
         .nav-item { position: static; }
         .mega-menu {
             position: absolute; top: 100%; left: 0; width: 100%; background: white;
@@ -49,14 +47,6 @@
         .menu-col h4 { color: var(--primary); margin-bottom: 10px; font-size: 13px; text-transform: uppercase; }
         .menu-col a { display: block; text-decoration: none; color: #333; padding: 5px 0; font-size: 14px; cursor: pointer; }
 
-        /* Controls */
-        .intl-controls { display: flex; align-items: center; gap: 8px; }
-        #currencySelector, .goog-te-combo {
-            background: rgba(255,255,255,0.1) !important; color: white !important;
-            border: 1px solid rgba(255,255,255,0.2) !important; padding: 3px; border-radius: 4px; font-size: 11px;
-        }
-
-        /* --- SLIDER STYLING --- */
         .section-header { text-align: left; margin: 50px 5% 20px; }
         .section-header h2 { font-size: 28px; font-weight: 700; }
         
@@ -74,7 +64,6 @@
         .price-box { font-weight: 700; color: var(--primary); font-size: 18px; }
         .add-btn { background: var(--primary); color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; margin-top: 10px; cursor: pointer; }
 
-        /* Cart & Drawer (Restored) */
         .cart-sidebar { position: fixed; top: 0; right: -100%; width: 350px; height: 100%; background: #fff; z-index: 10000; transition: 0.4s; box-shadow: -5px 0 20px rgba(0,0,0,0.1); }
         .cart-sidebar.open { right: 0; }
 
@@ -112,17 +101,10 @@
                     </div>
                 </div>
             </li>
-            <li><a href="about.html" class="nav-link">About</a></li>
+            <li><a href="profile.html" class="nav-link">My Profile</a></li>
         </ul>
     </nav>
-    <div class="intl-controls">
-        <select id="currencySelector" onchange="changeCurrency(this.value)">
-            <option value="PKR">PKR</option>
-            <option value="USD">USD</option>
-            <option value="SAR">SAR</option>
-        </select>
-        <div id="google_translate_element"></div>
-    </div>
+
     <div style="display: flex; gap: 15px; align-items: center; color:white;">
         <i class="fas fa-shopping-bag" onclick="toggleCart()" style="cursor:pointer;"></i>
         <span id="cartBadge" style="background:var(--accent); padding:2px 6px; border-radius:50%; font-size:10px;">0</span>
@@ -179,13 +161,9 @@
 
     let allProducts = [];
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
-    let currentCurrency = localStorage.getItem('haiderCurrency') || 'PKR';
-    const currencyData = { PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, SAR: { s: "SR", r: 0.013 } };
 
-    window.changeCurrency = (code) => { currentCurrency = code; localStorage.setItem('haiderCurrency', code); renderProducts(); };
     window.toggleCart = () => $('#cartSidebar').toggleClass('open');
 
-    // Firebase Sync
     onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
@@ -204,7 +182,6 @@
     function renderCategory(catName, targetId, multipleCats = null) {
         let filtered = multipleCats ? allProducts.filter(p => multipleCats.includes(p.category)) : allProducts.filter(p => p.category === catName);
         let html = '';
-        const c = currencyData[currentCurrency];
 
         filtered.forEach(p => {
             html += `
@@ -212,7 +189,7 @@
                     <div onclick="location.href='product.html?id=${p.id}'">
                         <div class="p-img-box"><img src="${p.img}"></div>
                         <h3>${p.name}</h3>
-                        <div class="price-box">${c.s} ${Math.round(p.price * c.r)}</div>
+                        <div class="price-box">Rs. ${p.price}</div>
                     </div>
                     <button class="add-btn" onclick="addToCart('${p.id}')">ADD TO CART</button>
                 </div>`;
@@ -237,12 +214,12 @@
         const container = document.getElementById('cartItemsContainer');
         let total = 0, count = 0;
         container.innerHTML = cart.length ? '' : '<p>Cart is empty</p>';
-        cart.forEach((item, i) => {
+        cart.forEach((item) => {
             total += (item.price * item.quantity); count += item.quantity;
-            container.innerHTML += `<div style="display:flex; margin-bottom:10px;"><img src="${item.img}" width="40"> <div style="flex:1; margin-left:10px;">${item.name}<br>${currentCurrency} ${item.price}</div></div>`;
+            container.innerHTML += `<div style="display:flex; margin-bottom:10px;"><img src="${item.img}" width="40"> <div style="flex:1; margin-left:10px;">${item.name}<br>Rs. ${item.price}</div></div>`;
         });
         document.getElementById('cartBadge').innerText = count;
-        document.getElementById('cartTotal').innerText = `Total: ${currentCurrency} ${total}`;
+        document.getElementById('cartTotal').innerText = `Total: Rs. ${total}`;
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
     }
 
@@ -252,11 +229,6 @@
         window.open(`https://wa.me/923279518790?text=${msg}`);
     };
 </script>
-
-<script type="text/javascript">
-    function googleTranslateElementInit() { new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element'); }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
