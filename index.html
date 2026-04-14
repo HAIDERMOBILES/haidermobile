@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haider Store | Premium Tech Accessories</title>
     
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-apple-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Haider Store">
-    
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
@@ -19,17 +15,17 @@
         :root { 
             --primary: #a17903; 
             --header-dark: #a35c1d; 
-            --text-dark: #1d1d1f; 
+            --text-dark: #1a1a1a; 
             --white: #ffffff; 
             --accent: #40705f; 
-            --apple-bg: #f5f5f7;
             --footer-bg: #202c3d;
+            --apple-bg: #f5f5f7;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
+        body { font-family: 'Jost', sans-serif; background-color: var(--white); color: var(--text-dark); }
 
-        /* --- HEADER & CONTROLS --- */
+        /* --- RESTORED ORIGINAL HEADER --- */
         header {
             background: var(--header-dark); 
             padding: 15px 5%; display: flex;
@@ -37,136 +33,131 @@
             position: sticky; top: 0; z-index: 3000;
         }
         .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; }
-        .logo span { color: var(--accent); } 
+        .logo span { color: var(--accent); }
         
+        .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+        .nav-link { text-decoration: none; color: white !important; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+        /* Mega Menu Fix */
+        .nav-item { position: static; }
+        .mega-menu {
+            position: absolute; top: 100%; left: 0; width: 100%; background: white;
+            display: grid; grid-template-columns: repeat(4, 1fr); padding: 30px 10%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .nav-item:hover .mega-menu { opacity: 1; visibility: visible; }
+        .menu-col h4 { color: var(--primary); margin-bottom: 10px; font-size: 13px; text-transform: uppercase; }
+        .menu-col a { display: block; text-decoration: none; color: #333; padding: 5px 0; font-size: 14px; cursor: pointer; }
+
+        /* Controls */
         .intl-controls { display: flex; align-items: center; gap: 8px; }
         #currencySelector, .goog-te-combo {
-            background: rgba(255,255,255,0.12) !important;
-            color: white !important;
-            border: 1px solid rgba(255,255,255,0.2) !important;
-            padding: 4px 6px !important;
-            border-radius: 4px !important;
-            font-size: 11px !important;
+            background: rgba(255,255,255,0.1) !important; color: white !important;
+            border: 1px solid rgba(255,255,255,0.2) !important; padding: 3px; border-radius: 4px; font-size: 11px;
         }
 
-        /* --- APPLE STYLE LAYOUT --- */
-        .section-title { font-size: 2.5rem; font-weight: 700; margin: 60px 0 20px 5%; letter-spacing: -1px; }
-        .section-title span { color: #86868b; font-weight: 400; }
-        .slider-container { padding-left: 5%; margin-bottom: 60px; }
+        /* --- SLIDER STYLING --- */
+        .section-header { text-align: left; margin: 50px 5% 20px; }
+        .section-header h2 { font-size: 28px; font-weight: 700; }
         
-        .apple-card { 
-            background: var(--apple-bg); border-radius: 28px; padding: 25px; 
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); text-align: center; 
-            margin: 10px; cursor: pointer; height: 450px;
-            display: flex; flex-direction: column; justify-content: space-between;
+        .slider-container { padding: 0 4%; margin-bottom: 40px; }
+        .p-card { 
+            background: var(--apple-bg); border-radius: 20px; padding: 20px; 
+            margin: 10px; text-align: center; transition: 0.3s; cursor: pointer;
+            height: 400px; display: flex; flex-direction: column; justify-content: space-between;
         }
-        .apple-card:hover { transform: scale(1.02); }
-        .img-wrapper { height: 230px; display: flex; align-items: center; justify-content: center; }
-        .img-wrapper img { max-height: 100%; max-width: 90%; object-fit: contain; }
+        .p-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .p-img-box { height: 200px; display: flex; align-items: center; justify-content: center; }
+        .p-img-box img { max-height: 100%; max-width: 90%; object-fit: contain; }
         
-        .price { color: var(--primary); font-weight: 700; font-size: 1.2rem; margin: 10px 0; }
-        .buy-btn { background: #0071e3; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 500; cursor: pointer; }
+        .p-card h3 { font-size: 15px; margin: 10px 0; height: 40px; overflow: hidden; }
+        .price-box { font-weight: 700; color: var(--primary); font-size: 18px; }
+        .add-btn { background: var(--primary); color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; margin-top: 10px; cursor: pointer; }
 
-        /* --- CART SIDEBAR --- */
-        .cart-sidebar {
-            position: fixed; top: 0; right: -100%; width: 350px; max-width: 100%; height: 100vh;
-            background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: 0.4s; z-index: 10000;
-        }
+        /* Cart & Drawer (Restored) */
+        .cart-sidebar { position: fixed; top: 0; right: -100%; width: 350px; height: 100%; background: #fff; z-index: 10000; transition: 0.4s; box-shadow: -5px 0 20px rgba(0,0,0,0.1); }
         .cart-sidebar.open { right: 0; }
-        .checkout-btn { width: 100%; padding: 15px; background: #25d366; color: white; border: none; font-weight: 700; cursor: pointer; }
-
-        /* --- FOOTER --- */
-        footer { background: var(--footer-bg); color: #ffffff; padding: 60px 8% 20px; border-top: 5px solid var(--primary); margin-top: 80px; }
-        .f-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
-        .f-col h4 { color: var(--primary); margin-bottom: 20px; }
-        .f-col ul { list-style: none; }
-        .f-col a { color: white; text-decoration: none; opacity: 0.8; line-height: 2; }
 
         @media (max-width: 768px) {
-            .section-title { font-size: 1.8rem; }
+            .nav-links { display: none; }
+            .section-header h2 { font-size: 22px; }
             .cart-sidebar { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-<div id="cartSidebar" class="cart-sidebar">
-    <div style="padding:20px; background:var(--header-dark); color:white; display:flex; justify-content:space-between;">
-        <h3>Your Cart</h3>
-        <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer;"></i>
-    </div>
-    <div id="cartItemsContainer" style="padding:20px; height:calc(100% - 180px); overflow-y:auto;"></div>
-    <div style="padding:20px; border-top:1px solid #eee;">
-        <h4 id="cartTotal">Total: Rs. 0</h4>
-        <button class="checkout-btn" onclick="checkout()"><i class="fab fa-whatsapp"></i> Order on WhatsApp</button>
-    </div>
-</div>
-
 <header>
     <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
-    
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item">
+                <span class="nav-link">Categories <i class="fas fa-chevron-down"></i></span>
+                <div class="mega-menu">
+                    <div class="menu-col">
+                        <h4>Power</h4>
+                        <a onclick="setFilter('Data Cables')">Data Cables</a>
+                        <a onclick="setFilter('Fast Chargers')">Fast Chargers</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Audio</h4>
+                        <a onclick="setFilter('Earbuds')">Earbuds</a>
+                        <a onclick="setFilter('Handfree')">Handfree</a>
+                        <a onclick="setFilter('Headphones')">Headphones</a>
+                    </div>
+                    <div class="menu-col">
+                        <h4>Life Style</h4>
+                        <a onclick="setFilter('Smart Watches')">Smart Watches</a>
+                    </div>
+                </div>
+            </li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
     <div class="intl-controls">
         <select id="currencySelector" onchange="changeCurrency(this.value)">
-            <option value="PKR">PKR (Rs)</option>
-            <option value="USD">USD ($)</option>
-            <option value="SAR">SAR (SR)</option>
+            <option value="PKR">PKR</option>
+            <option value="USD">USD</option>
+            <option value="SAR">SAR</option>
         </select>
         <div id="google_translate_element"></div>
     </div>
-
     <div style="display: flex; gap: 15px; align-items: center; color:white;">
-        <div id="userInfo" style="display:none; font-size:12px;">
-            <span id="userNameDisplay"></span>
-            <i class="fas fa-sign-out-alt" onclick="logout()" style="margin-left:8px; cursor:pointer;"></i>
-        </div>
-        <i class="fas fa-search"></i>
-        <div style="position:relative; cursor:pointer;" onclick="toggleCart()">
-            <i class="fas fa-shopping-bag"></i>
-            <span id="cartBadge" style="position:absolute; top:-10px; right:-10px; background:var(--accent); font-size:10px; padding:2px 6px; border-radius:50%;">0</span>
-        </div>
+        <i class="fas fa-shopping-bag" onclick="toggleCart()" style="cursor:pointer;"></i>
+        <span id="cartBadge" style="background:var(--accent); padding:2px 6px; border-radius:50%; font-size:10px;">0</span>
     </div>
 </header>
 
-<main>
-    <section style="margin: 20px 5%;">
-        <img id="syncBanner" src="" style="width: 100%; border-radius: 35px; height: 400px; object-fit: cover; background: #eee;">
-    </section>
+<main id="mainContent">
+    <section style="margin: 20px 5%;"><img id="syncBanner" src="" style="width: 100%; border-radius: 20px; min-height: 200px; object-fit: cover;"></section>
 
-    <h2 class="section-title">New Arrivals. <span>Latest accessories.</span></h2>
-    <div class="slider-container"><div id="newArrivalsSlider"></div></div>
+    <div id="earbudsSec">
+        <div class="section-header"><h2>Wireless Earbuds</h2></div>
+        <div class="slider-container"><div id="earbudsGrid" class="product-slider"></div></div>
+    </div>
 
-    <h2 class="section-title">Audio. <span>Pure sound quality.</span></h2>
-    <div class="slider-container"><div id="audioSlider"></div></div>
+    <div id="headSec">
+        <div class="section-header"><h2>Headphones</h2></div>
+        <div class="slider-container"><div id="headphoneGrid" class="product-slider"></div></div>
+    </div>
 
-    <h2 class="section-title">Power. <span>Stay charged.</span></h2>
-    <div class="slider-container"><div id="powerSlider"></div></div>
+    <div id="chargerSec">
+        <div class="section-header"><h2>Chargers & Cables</h2></div>
+        <div class="slider-container"><div id="chargerGrid" class="product-slider"></div></div>
+    </div>
 </main>
 
-<footer>
-    <div class="f-grid">
-        <div class="f-col">
-            <h4>HAIDER STORE</h4>
-            <p>Premium Tech Accessories in Hyderabad & across Pakistan.</p>
-            <p><i class="fas fa-phone"></i> +92 327 9518790</p>
-        </div>
-        <div class="f-col">
-            <h4>Support</h4>
-            <ul>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="return.html">Return Policy</a></li>
-                <li><a href="shipping.html">Shipping Policy</a></li>
-            </ul>
-        </div>
-        <div class="f-col">
-            <h4>Follow Us</h4>
-            <div style="display:flex; gap:15px; font-size:20px; margin-top:10px;">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-            </div>
-        </div>
+<div id="cartSidebar" class="cart-sidebar">
+    <div style="padding:20px; background:var(--header-dark); color:white; display:flex; justify-content:space-between;">
+        <h3>Your Cart</h3><i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer;"></i>
     </div>
-</footer>
+    <div id="cartItemsContainer" style="padding:20px; height:70%; overflow-y:auto;"></div>
+    <div style="padding:20px; border-top:1px solid #eee;">
+        <h4 id="cartTotal">Total: Rs. 0</h4>
+        <button onclick="checkout()" style="width:100%; padding:15px; background:#25d366; color:white; border:none; border-radius:8px; font-weight:700; margin-top:10px;"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
@@ -174,7 +165,6 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
@@ -186,123 +176,85 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const auth = getAuth(app);
 
     let allProducts = [];
     let cart = JSON.parse(localStorage.getItem('haiderStoreCart')) || [];
     let currentCurrency = localStorage.getItem('haiderCurrency') || 'PKR';
-
     const currencyData = { PKR: { s: "Rs.", r: 1 }, USD: { s: "$", r: 0.0036 }, SAR: { s: "SR", r: 0.013 } };
 
-    // Currency & Translation Functions
-    window.changeCurrency = (code) => {
-        currentCurrency = code;
-        localStorage.setItem('haiderCurrency', code);
-        renderAll();
-    };
+    window.changeCurrency = (code) => { currentCurrency = code; localStorage.setItem('haiderCurrency', code); renderProducts(); };
+    window.toggleCart = () => $('#cartSidebar').toggleClass('open');
 
-    function formatPrice(val) {
-        const c = currencyData[currentCurrency] || currencyData.PKR;
-        return `${c.s} ${Math.round(val * c.r)}`;
-    }
-
-    // Sync from Firebase
+    // Firebase Sync
     onValue(ref(db, 'settings/heroBanner'), s => { if(s.exists()) document.getElementById('syncBanner').src = s.val(); });
-
     onValue(ref(db, 'products'), snap => {
         if (snap.exists()) {
             allProducts = Object.keys(snap.val()).map(id => ({ id, ...snap.val()[id] })).reverse();
-            renderAll();
+            renderProducts();
         }
     });
 
-    function renderAll() {
-        renderSlider(allProducts.slice(0, 10), '#newArrivalsSlider');
-        renderSlider(allProducts.filter(p => p.category === 'Earbuds' || p.category === 'Headphones'), '#audioSlider');
-        renderSlider(allProducts.filter(p => p.category === 'Fast Chargers' || p.category === 'Data Cables'), '#powerSlider');
+    function renderProducts() {
+        renderCategory('Earbuds', '#earbudsGrid');
+        renderCategory('Headphones', '#headphoneGrid');
+        renderCategory('Chargers', '#chargerGrid', ['Fast Chargers', 'Data Cables']);
         updateCartUI();
     }
 
-    function renderSlider(data, targetId) {
+    function renderCategory(catName, targetId, multipleCats = null) {
+        let filtered = multipleCats ? allProducts.filter(p => multipleCats.includes(p.category)) : allProducts.filter(p => p.category === catName);
         let html = '';
-        data.forEach(p => {
+        const c = currencyData[currentCurrency];
+
+        filtered.forEach(p => {
             html += `
-                <div class="apple-card">
+                <div class="p-card">
                     <div onclick="location.href='product.html?id=${p.id}'">
-                        <div class="img-wrapper"><img src="${p.img}"></div>
+                        <div class="p-img-box"><img src="${p.img}"></div>
                         <h3>${p.name}</h3>
-                        <p class="price">${formatPrice(p.price)}</p>
+                        <div class="price-box">${c.s} ${Math.round(p.price * c.r)}</div>
                     </div>
-                    <button class="buy-btn" onclick="addToCart('${p.id}')">Add to Cart</button>
+                    <button class="add-btn" onclick="addToCart('${p.id}')">ADD TO CART</button>
                 </div>`;
         });
+
         const $el = $(targetId);
         if ($el.hasClass('slick-initialized')) $el.slick('unslick');
         $el.html(html).slick({
-            dots: false, infinite: false, slidesToShow: 3.5, slidesToScroll: 1,
+            slidesToShow: 4, slidesToScroll: 1, infinite: false, arrows: true,
             responsive: [{ breakpoint: 1024, settings: { slidesToShow: 2.5 } }, { breakpoint: 768, settings: { slidesToShow: 1.2, arrows: false } }]
         });
     }
 
-    // Cart Logic
-    window.toggleCart = () => $('#cartSidebar').toggleClass('open');
-
     window.addToCart = (id) => {
         const p = allProducts.find(x => x.id === id);
         const exist = cart.find(x => x.id === id);
-        if(exist) exist.quantity++;
-        else cart.push({ ...p, quantity: 1 });
-        updateCartUI();
-        if(!$('#cartSidebar').hasClass('open')) toggleCart();
+        if(exist) exist.quantity++; else cart.push({...p, quantity: 1});
+        updateCartUI(); toggleCart();
     };
 
-    window.updateCartUI = () => {
+    function updateCartUI() {
         const container = document.getElementById('cartItemsContainer');
         let total = 0, count = 0;
-        container.innerHTML = '';
+        container.innerHTML = cart.length ? '' : '<p>Cart is empty</p>';
         cart.forEach((item, i) => {
-            total += (item.price * item.quantity);
-            count += item.quantity;
-            container.innerHTML += `
-                <div style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
-                    <img src="${item.img}" width="50">
-                    <div style="flex:1;">
-                        <div style="font-size:13px; font-weight:600;">${item.name}</div>
-                        <div>${formatPrice(item.price)} x ${item.quantity}</div>
-                    </div>
-                    <i class="fas fa-trash" onclick="removeFromCart(${i})" style="color:red; cursor:pointer;"></i>
-                </div>`;
+            total += (item.price * item.quantity); count += item.quantity;
+            container.innerHTML += `<div style="display:flex; margin-bottom:10px;"><img src="${item.img}" width="40"> <div style="flex:1; margin-left:10px;">${item.name}<br>${currentCurrency} ${item.price}</div></div>`;
         });
         document.getElementById('cartBadge').innerText = count;
-        document.getElementById('cartTotal').innerText = `Total: ${formatPrice(total)}`;
+        document.getElementById('cartTotal').innerText = `Total: ${currentCurrency} ${total}`;
         localStorage.setItem('haiderStoreCart', JSON.stringify(cart));
-    };
-
-    window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
+    }
 
     window.checkout = () => {
-        let msg = "🛍️ *New Order - Haider Store*%0A";
+        let msg = "🛍️ *New Order*%0A";
         cart.forEach(item => msg += `• ${item.name} (x${item.quantity})%0A`);
-        msg += `%0A💰 *Total: ${document.getElementById('cartTotal').innerText}*`;
         window.open(`https://wa.me/923279518790?text=${msg}`);
     };
-
-    // Auth
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            document.getElementById('userInfo').style.display = 'flex';
-            document.getElementById('userNameDisplay').innerText = user.displayName || 'User';
-        }
-    });
-
-    window.logout = () => signOut(auth).then(() => location.reload());
-
 </script>
 
 <script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-    }
+    function googleTranslateElementInit() { new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element'); }
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
