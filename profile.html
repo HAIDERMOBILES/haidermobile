@@ -4,87 +4,273 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile | Haider Store</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
-        body { font-family: 'Jost', sans-serif; background: #f8f9fa; padding: 20px; }
-        .container { max-width: 500px; margin: 30px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h2 { color: #005f6b; margin-bottom: 20px; text-align: center; }
-        label { display: block; margin-top: 15px; font-weight: 500; font-size: 14px; }
-        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
-        .btn { width: 100%; padding: 15px; background: #005f6b; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 25px; font-weight: 600; font-size: 16px; transition: 0.3s; }
-        .btn:hover { background: #004040; }
-        .back-link { display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 14px; }
+        :root { 
+            --primary: #a17903; 
+            --header-dark: #a35c1d; 
+            --text-dark: #1a1a1a; 
+            --white: #ffffff; 
+            --accent: #40705f; 
+            --apple-bg: #f5f5f7;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Jost', sans-serif; background-color: #fafafa; color: var(--text-dark); }
+
+        /* --- HEADER (Matching Index) --- */
+        header {
+            background: var(--header-dark); 
+            padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 3000;
+        }
+        .logo { font-size: 24px; font-weight: 700; color: var(--white) !important; text-decoration: none; }
+        .logo span { color: var(--accent); }
+        
+        .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+        .nav-link { text-decoration: none; color: white !important; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+        /* --- PROFILE LAYOUT --- */
+        .profile-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar Card */
+        .profile-sidebar {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            height: fit-content;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px;
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--apple-bg);
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin: 25px 0;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Main Content Area */
+        .main-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: var(--apple-bg);
+            border-radius: 18px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .order-item:hover {
+            background: #ececef;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-delivered { background: #d1fae5; color: #065f46; }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary { background: var(--header-dark); color: white; }
+        .btn-outline { background: transparent; border: 1px solid #ddd; margin-top: 10px; }
+
+        @media (max-width: 900px) {
+            .profile-container { grid-template-columns: 1fr; }
+            .profile-sidebar { margin-bottom: 0; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2><i class="fas fa-user-circle"></i> Customer Profile</h2>
-    <p id="userEmail" style="text-align: center; color: #888; font-size: 13px;"></p>
+<header>
+    <a href="index.html" class="logo">HAIDER <span>STORE</span></a>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+    <div style="color:white; cursor:pointer;">
+        <i class="fas fa-shopping-bag"></i>
+    </div>
+</header>
 
-    <label>Full Name</label>
-    <input type="text" id="custName" placeholder="Enter your full name">
+<div class="profile-container">
+    
+    <aside class="profile-sidebar">
+        <div class="avatar-wrapper">
+            <img src="https://ui-avatars.com/api/?name=Haider+Ali&background=a17903&color=fff" id="userImg">
+            <label class="upload-btn" for="fileInput">
+                <i class="fas fa-camera"></i>
+            </label>
+            <input type="file" id="fileInput" hidden>
+        </div>
+        
+        <h2 style="font-size: 24px;">Haider Ali</h2>
+        <p style="color: #777; font-size: 14px;">Customer since 2024</p>
+        
+        <div class="user-stats">
+            <div>
+                <div style="font-weight: 700;">12</div>
+                <div style="font-size: 12px; color: #888;">Orders</div>
+            </div>
+            <div style="border-left: 1px solid #eee;">
+                <div style="font-weight: 700;">5</div>
+                <div style="font-size: 12px; color: #888;">Wishlist</div>
+            </div>
+        </div>
+        
+        <div style="text-align: left; margin-bottom: 25px;">
+            <div style="margin-bottom: 12px; font-size: 14px;">
+                <i class="fas fa-envelope" style="width: 25px; color: var(--primary);"></i> haider@example.com
+            </div>
+            <div style="margin-bottom: 12px; font-size: 14px;">
+                <i class="fas fa-phone" style="width: 25px; color: var(--primary);"></i> +92 327 9518790
+            </div>
+            <div style="margin-bottom: 12px; font-size: 14px;">
+                <i class="fas fa-map-marker-alt" style="width: 25px; color: var(--primary);"></i> Karachi, Pakistan
+            </div>
+        </div>
+        
+        <button class="action-btn btn-primary">Edit Profile</button>
+        <button class="action-btn btn-outline" onclick="logout()">Logout</button>
+    </aside>
 
-    <label>WhatsApp Number</label>
-    <input type="number" id="custPhone" placeholder="03xxxxxxxxx">
+    <main>
+        <div class="main-card">
+            <h3 style="margin-bottom: 20px;">Recent Orders</h3>
+            
+            <div class="order-item">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="background: white; padding: 10px; border-radius: 12px;">
+                        <i class="fas fa-headphones" style="color: var(--primary); font-size: 20px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600;">M10 Wireless Earbuds</div>
+                        <div style="font-size: 12px; color: #888;">Oct 12, 2023 • #HS-8829</div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-weight: 700; color: var(--primary);">Rs. 1,550</div>
+                    <span class="status-badge status-delivered">Delivered</span>
+                </div>
+            </div>
 
-    <label>Delivery Address</label>
-    <textarea id="custAddress" rows="3" placeholder="Full home address (House #, Street, City)"></textarea>
+            <div class="order-item">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="background: white; padding: 10px; border-radius: 12px;">
+                        <i class="fas fa-bolt" style="color: var(--primary); font-size: 20px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600;">20W Fast Charger</div>
+                        <div style="font-size: 12px; color: #888;">Sep 28, 2023 • #HS-8710</div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-weight: 700; color: var(--primary);">Rs. 1,200</div>
+                    <span class="status-badge status-delivered">Delivered</span>
+                </div>
+            </div>
+        </div>
 
-    <button class="btn" id="saveBtn">SAVE PROFILE DETAILS</button>
-    <a href="index.html" class="back-link">← Back to Store</a>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div class="main-card" style="margin-bottom: 0; cursor: pointer; text-align: center;">
+                <i class="fas fa-heart" style="color: #e74c3c; font-size: 24px; margin-bottom: 10px;"></i>
+                <h4>Wishlist</h4>
+                <p style="font-size: 12px; color: #888;">5 items saved</p>
+            </div>
+            <div class="main-card" style="margin-bottom: 0; cursor: pointer; text-align: center;">
+                <i class="fas fa-shield-alt" style="color: var(--accent); font-size: 24px; margin-bottom: 10px;"></i>
+                <h4>Privacy</h4>
+                <p style="font-size: 12px; color: #888;">Manage security</p>
+            </div>
+        </div>
+    </main>
+
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCYzkMGDwWZGx_PlrNfjloYZ6PVQRne9wg",
-        authDomain: "web-app-4f3a1.firebaseapp.com",
-        projectId: "web-app-4f3a1",
-        databaseURL: "https://web-app-4f3a1-default-rtdb.firebaseio.com",
-        appId: "1:222099203820:web:778e204d2960181dfba7c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            document.getElementById('userEmail').innerText = user.email;
-            // Load existing data
-            get(ref(db, 'users/' + user.uid)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    document.getElementById('custName').value = data.name || '';
-                    document.getElementById('custPhone').value = data.phone || '';
-                    document.getElementById('custAddress').value = data.address || '';
-                }
-            });
-        } else {
-            window.location.href = 'auth.html';
+<script>
+    function logout() {
+        if(confirm("Are you sure you want to logout?")) {
+            window.location.href = "index.html";
         }
-    });
+    }
 
-    document.getElementById('saveBtn').onclick = () => {
-        const user = auth.currentUser;
-        if (!user) return;
-
-        const data = {
-            name: document.getElementById('custName').value,
-            phone: document.getElementById('custPhone').value,
-            address: document.getElementById('custAddress').value,
-            email: user.email
-        };
-
-        set(ref(db, 'users/' + user.uid), data).then(() => {
-            alert("✅ Profile details saved successfully!");
-            window.location.href = 'index.html';
-        }).catch(err => alert(err.message));
-    };
+    // Image preview simple logic
+    document.getElementById('fileInput').onchange = function(evt) {
+        const [file] = this.files;
+        if (file) {
+            document.getElementById('userImg').src = URL.createObjectURL(file);
+        }
+    }
 </script>
+
 </body>
 </html>
